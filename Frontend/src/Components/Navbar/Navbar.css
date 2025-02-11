@@ -1,0 +1,232 @@
+
+/* General Navbar Styling */
+.navbar {
+    width: 100%;
+    background-color: #1b1f29;
+    z-index: 1000;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  color: wheat;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  border-bottom: 3px solid #f4b500; /* Added Bottom Border for a Professional Look */
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    transition: all 0.3s ease;
+  }
+  
+  .navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 40px;
+    max-width: 1700px;
+    margin: 0 auto;
+  }
+  
+  /* Logo Section */
+  .logo img {
+    height: 50px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+
+  
+  /* Desktop Navigation Links */
+  .nav-links {
+    display: flex;
+    gap: 20px;
+    list-style: none;
+    align-items: center;
+  }
+  
+  .nav-links a {
+    text-decoration: none;
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+  }
+  
+  .nav-links a:hover {
+    color: #ffffff;
+    background-color: #e94e77;
+  }
+  
+  .nav-icon {
+    font-size: 1.2rem;
+  }
+  
+  /* Right Buttons */
+  .nav-buttons {
+    display: flex;
+    gap: 18px;
+  }
+  
+  .nav-buttons button {
+    border: none;
+    padding: 8px 16px;
+    border-radius: 25px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .nav-buttons .sign-in {
+    background-color: #e94e77;
+    color: #ffffff;
+  }
+  
+  .nav-buttons .sign-in:hover {
+    background-color: #d43e69;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .nav-buttons .submit-property {
+    background-color: #ffffff;
+    color: #e94e77;
+    border: 2px solid #e94e77;
+  }
+  
+  .nav-buttons .submit-property:hover {
+    background-color: #e94e77;
+    color: #ffffff;
+  }
+  
+  /* Mobile Menu Icon */
+  .menu-icon {
+    display: none;
+    font-size: 2rem;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+  
+  .menu-icon:hover {
+    transform: rotate(90deg);
+  }
+  
+  /* Mobile Menu Styling */
+  .mobile-menu {
+    display: none;
+    background-color: #1b1f29;
+    position: absolute;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    animation: slideIn 0.3s ease;
+    border-top: 2px solid #e94e77;
+  }
+  
+  .mobile-menu.show {
+    display: block;
+  }
+  
+  .mobile-menu ul {
+    list-style: none;
+  }
+  
+  .mobile-menu ul li {
+    border-bottom: 1px dashed #e94e77; /* Dashed border for each item */
+    padding: 12px 20px;
+  }
+  
+  .mobile-menu ul a {
+    text-decoration: none;
+    color: #333333;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: color 0.3s ease;
+  }
+  
+  .mobile-menu ul a:hover {
+    color: #e94e77;
+  }
+  
+  .mobile-menu button {
+    width: 100%;
+    text-align: left;
+    border: none;
+    padding: 12px 20px;
+    background: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .mobile-menu button:hover {
+    color: #e94e77;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .nav-links {
+      display: none;
+    }
+  
+    .menu-icon {
+      display: block;
+    }
+  
+    .nav-buttons {
+      display: none;
+    }
+  
+    /* Mobile Menu Links Styling */
+    .mobile-menu ul li a {
+      color: white;
+      font-size: 0.85rem; /* Smaller font size for mobile */
+      padding: 12px 20px;
+      border-radius: 6px;
+    }
+  
+    .mobile-menu ul li a:hover {
+      background-color: #e94e77;
+      color: white;
+    }
+  
+    .mobile-menu button {
+      color: white;
+      font-size: 0.85rem;
+      padding: 10px 15px;
+      border-radius: 6px;
+    }
+  
+    .mobile-menu ul li {
+      border-bottom: 1px dashed #e94e77; /* Dashed border for mobile sections */
+      padding: 10px 15px;
+    }
+  }
+  
+  /* Keyframes */
+  @keyframes slideIn {
+    from {
+      transform: translateY(-10px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+.mobile-login{
+  display: flex;
+  justify-content: center;
+  width: 90%;
+  padding: 12px 25px;
+  font-size: 1.1rem;
+  font-weight: 800;
+
+}

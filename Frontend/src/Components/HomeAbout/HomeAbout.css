@@ -1,0 +1,484 @@
+/* HomeAbout Section */
+.home-about {
+    position: relative;
+    padding: 100px 0;
+    background: linear-gradient(135deg, #ffffff 30%, #f9f9f9 100%);
+    animation: fadeIn 2s ease-in-out;
+}
+
+/* HomeAbout Container */
+.home-about-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: auto;
+    position: relative;
+    padding: 20px;
+    gap: 50px;
+}
+
+/* Left Side Images */
+.about-images {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: slideInLeft 2s ease-out;
+}
+
+.about-main-img {
+    width: 340px;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    animation: fadeInImage 3s ease-in-out;
+}
+
+.about-secondary-img {
+    position: absolute;
+    bottom: -50px;
+    right: -150px;
+    width: 300px;
+    height: auto;
+    border-radius: 12px;
+    z-index: 1;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    animation: slideUp 2s ease-in-out;
+}
+
+/* Certified Badge */
+.certified-badge {
+    position: absolute;
+    left: 50px;
+    bottom: -49px;
+    max-width: 221px;
+    width: 100%;
+    padding: 40px 39px 39px;
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0px 5px 30px 0px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+    animation: fadeIn 3s ease-in-out;
+}
+
+.certified-badge::before {
+    content: "";
+    position: absolute;
+    top: 13px;
+    left: 13px;
+    right: 13px;
+    bottom: 13px;
+    background-color: black;
+    border: 3px solid #8b6c42;
+    color: white;
+    z-index: -1;
+}
+
+.certified-text {
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+}
+
+/* Right Side Content */
+.about-content {
+    max-width: 500px;
+    position: relative;
+    animation: slideInRight 2s ease-out;
+}
+
+.about-subtitle {
+    color: #f9be17;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+.about-title {
+    font-size: 38px;
+    font-weight: bold;
+    color: #222;
+    margin-bottom: 12px;
+}
+
+.about-highlight {
+    font-size: 20px;
+    font-weight: bold;
+    color: #f9be17;
+    margin-bottom: 22px;
+}
+
+.about-description {
+    font-size: 17px;
+    color: #555;
+    margin-bottom: 22px;
+    line-height: 1.6;
+}
+
+/* Features */
+.about-features {
+    display: flex;
+    gap: 25px;
+    margin-bottom: 25px;
+}
+
+.feature-item {
+    flex-direction: column;
+}
+
+.feature-item p {
+    margin-top: 10px;
+}
+
+.down-arrow {
+    color: #f3b100;
+    font-size: 20px;
+}
+
+/* Progress Bar Styling */
+.progress-bar {
+    margin-top: 20px;
+}
+
+.progress-label {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 28px;
+    color: black;
+    margin-bottom: 7px;
+    display: block;
+}
+
+.progress-track {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 9px;
+    background: #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    position: relative;
+    display: block;
+    width: 77%;
+    height: 9px;
+    background-image: linear-gradient(90deg, rgb(4, 23, 26) 0%, rgb(249, 190, 23) 100%);
+    transition: all 1.5s ease;
+}
+
+.progress-percent {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--pitoon-black);
+    margin-top: 5px;
+    display: block;
+}
+
+/* Discover More Button */
+.discover-btn {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    background-color: #f9be17;
+    color: #04171a;
+    font-size: 16px;
+    font-weight: 800;
+    padding: 16px 50px 17px;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.5s linear;
+    z-index: 1;
+    margin-top: 20px;
+}
+
+.discover-btn:hover {
+    background-color: #04171a;
+    color: #f9be17;
+}
+
+/* Keyframe Animations */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInImage {
+    0% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes slideUp {
+    0% {
+        transform: translateY(100px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Continuous Animation for Left Images */
+@keyframes continuousSlideLeft {
+    0% {/* HomeAbout Section */
+        .home-about {
+            position: relative;
+            padding: 100px 0;
+            background: linear-gradient(135deg, #ffffff 30%, #f9f9f9 100%);
+        }
+        
+        /* HomeAbout Container */
+        .home-about-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: auto;
+            position: relative;
+            padding: 20px;
+            gap: 50px;
+            overflow: hidden;
+        }
+        
+        /* Left Side Images with Slide-In Animation */
+        .about-images {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transform: translateX(-100%);
+            opacity: 0;
+            transition: all 1.2s ease-in-out;
+        }
+        
+        
+        .about-secondary-img {
+            position: absolute;
+            bottom: -50px;
+            right: -150px;
+            width: 300px;
+            height: auto;
+            border-radius: 12px;
+            z-index: 1;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Certified Badge */
+        .certified-badge {
+            position: absolute;
+            left: 50px;
+            bottom: -49px;
+            max-width: 221px;
+            width: 100%;
+            padding: 40px 39px 39px;
+            background-color: rgb(255, 255, 255);
+            box-shadow: 0px 5px 30px 0px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+        }
+        
+        .certified-text {
+            font-size: 16px;
+            font-weight: bold;
+            color: black;
+            text-align: center;
+        }
+        
+        /* Right Side Content with Slide-In Animation */
+        .about-content {
+            max-width: 500px;
+            position: relative;
+            transform: translateX(100%);
+            opacity: 0;
+            transition: all 1.2s ease-in-out;
+        }
+        
+        .home-about.animate .about-content {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        
+        .about-subtitle {
+            color: #f9be17;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        
+        .about-title {
+            font-size: 38px;
+            font-weight: bold;
+            color: #222;
+            margin-bottom: 12px;
+        }
+        
+        .about-highlight {
+            font-size: 20px;
+            font-weight: bold;
+            color: #f9be17;
+            margin-bottom: 22px;
+        }
+        
+        .about-description {
+            font-size: 17px;
+            color: #555;
+            margin-bottom: 22px;
+            line-height: 1.6;
+        }
+        
+        /* Media Queries for Proper Responsive Look */
+        @media (max-width: 1024px) {
+            .home-about-container {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+        
+            .about-images {
+                transform: translateX(0);
+            }
+            
+            .about-content {
+                transform: translateX(0);
+                text-align: center;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .home-about {
+                padding: 50px 20px;
+            }
+            .about-main-img {
+                width: 280px;
+            }
+            .about-secondary-img {
+                width: 220px;
+                right: -80px;
+                bottom: -30px;
+            }
+            .about-title {
+                font-size: 32px;
+            }
+            .about-highlight {
+                font-size: 18px;
+            }
+            .about-description {
+                font-size: 16px;
+            }
+        }
+        
+    transform: translateX(-10px);
+    }
+    50% {
+        transform: translateX(10px);
+    }
+    100% {
+        transform: translateX(-10px);
+    }
+}
+
+/* Left images will animate with continuous sliding when visible */
+.about-images.animate-images .about-main-img,
+.about-images.animate-images .about-secondary-img {
+    animation: continuousSlideLeft 3s infinite ease-in-out;
+}
+
+/* Animation for the section when it comes into view */
+.home-about.animate {
+    animation: fadeIn 2s ease-in-out;
+}
+
+/* Scroll Down and Scroll Up Animations */
+@keyframes slideInFromBottom {
+    0% {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Apply scroll animation */
+.home-about.animate {
+    animation: slideInFromBottom 2s ease-in-out;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+    .certified-badge{
+        left: -40px;
+        max-width: 210px;
+    }
+    .home-about{
+        padding: 0px 0px;
+    }
+    .home-about-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .about-images {
+        margin-bottom: 20px;
+    }
+
+    .about-main-img {
+        width: 230px;
+    }
+
+    .about-secondary-img {
+        width: 250px;
+        right: -80px;
+        bottom: -30px;
+    }
+
+    .about-content {
+        text-align: center;
+    }
+
+    .progress-bar {
+        margin-top: 15px;
+    }
+
+    .discover-btn {
+        width: 100%;
+        padding: 15px;
+    }
+}
+
+@media (max-width: 500px) {
+   
+    .about-title {
+        font-size: 32px;
+    }
+
+    .about-highlight {
+        font-size: 18px;
+    }
+
+    .about-description {
+        font-size: 16px;
+    }
+
+    .discover-btn {
+        padding: 14px 40px;
+    }
+}
