@@ -3,8 +3,11 @@ import './Home.css';
 import { FaFacebookF, FaTwitter, FaYoutube, FaInstagram } from 'react-icons/fa';
 
 // Import assets
-import stackimg from '../../assets/stack-image-1.webp';
+import stackimg from '../../assets/banner-img.png';
 import HomeAbout from '../../Components/HomeAbout/HomeAbout';
+import WhyChooseUs from '../../Components/HomeWhyChooseus/WhyChooseUs';
+import MeetOurAgent from '../../Components/MeetOurAgent/MeetOurAgent';
+import HomeFaq from '../../Components/HomeFaq/HomeFaq';
 
 const Home = () => {
   return (
@@ -38,6 +41,9 @@ const Home = () => {
       </section>
     </div>
     <HomeAbout />
+    <WhyChooseUs />
+    <MeetOurAgent />
+    <HomeFaq />
     </>
   );
 };
