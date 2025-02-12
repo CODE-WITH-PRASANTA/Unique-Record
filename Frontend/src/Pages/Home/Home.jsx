@@ -8,6 +8,8 @@ import HomeAbout from '../../Components/HomeAbout/HomeAbout';
 import WhyChooseUs from '../../Components/HomeWhyChooseus/WhyChooseUs';
 import MeetOurAgent from '../../Components/MeetOurAgent/MeetOurAgent';
 import HomeFaq from '../../Components/HomeFaq/HomeFaq';
+import FreeQuotes from '../../Components/GetFreeQuotes/FreeQuotes';
+import StyledBlog from '../../Components/LatestBlog/LatestBlog';
 
 const Home = () => {
   return (
@@ -44,6 +46,8 @@ const Home = () => {
     <WhyChooseUs />
     <MeetOurAgent />
     <HomeFaq />
+    <StyledBlog />
+    <FreeQuotes />
     </>
   );
 };
