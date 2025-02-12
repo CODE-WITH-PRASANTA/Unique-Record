@@ -4,10 +4,10 @@
     width: 100%;
     background-color: #041e22;
     z-index: 1000;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  color: wheat;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
-  border-bottom: 3px solid #f4b500; /* Added Bottom Border for a Professional Look */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    color: wheat;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    border-bottom: 3px solid #f4b500; /* Added Bottom Border for a Professional Look */
     position: sticky;
     top: 0;
     z-index: 1000;
