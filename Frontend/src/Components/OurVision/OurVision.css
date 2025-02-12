@@ -1,0 +1,209 @@
+/* === Main Section === */
+.vision-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 10%;
+    position: relative;
+    background-color: #04171a;
+    overflow: hidden;
+    background-image: url("../../assets/dot-graphic.png");
+    background-position: 91% 80%;
+    background-repeat: no-repeat;
+    background-size: 18% auto;
+  }
+  
+  /* Overlay for a professional look */
+  .vision-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.1);
+    z-index: 1;
+  }
+  
+  /* Container */
+  .vision-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    width: 100%;
+    position: relative;
+    z-index: 2;
+  }
+  
+  /* === Left Content === */
+  .vision-content {
+    flex: 1;
+    max-width: 50%;
+    padding-right: 40px;
+  }
+  
+  .vision-heading-small {
+    font-size: 15px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #4dffa3;
+    letter-spacing: 1.2px;
+    margin-bottom: 12px;
+    border-left: 4px solid #4dffa3;
+    padding-left: 12px;
+  }
+  
+  .vision-heading-large {
+    font-size: 42px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 20px;
+    line-height: 1.3;
+  }
+  
+  .vision-heading-large span {
+    color: #50b3ff;
+  }
+  
+  .vision-description {
+    font-size: 18px;
+    color: #ffffff;
+    line-height: 1.7;
+    margin-bottom: 25px;
+  }
+  
+  /* Vision & Mission List */
+  .vision-points {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .vision-item, .mission-item {
+    font-size: 17px;
+    color: #333;
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 18px;
+    padding: 12px 15px;
+    border-radius: 12px;
+    background-color: #ffffff;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .vision-item:hover, .mission-item:hover {
+    transform: translateY(-5px);
+  }
+  
+  .vision-label {
+    margin-right: 10px;
+    color: #0056b3;
+    font-weight: 700;
+  }
+  
+  .mission-label {
+    margin-right: 10px;
+    color: #00A650;
+    font-weight: 700;
+  }
+  
+  /* === Right Image Section === */
+  .vision-image-container {
+    flex: 1;
+    max-width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+  
+  .vision-image {
+    width: 90%;
+    border-radius: 250px 250px 12px 12px;
+    overflow: hidden;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+    animation: continuousSliderLeft 4s infinite ease-in-out; /* Continuous animation */
+  }
+  
+  .main-image {
+    width: 100%;
+    display: block;
+    object-fit: cover;
+  }
+  
+  /* Decorative Round Graphic */
+  .round-graphic {
+    position: absolute;
+    bottom: -50px;
+    right: -20px;
+    width: 150px;
+    height: 150px;
+    opacity: 0.7;
+    animation: rotateGraphic 6s linear infinite;
+    animation: continuousSliderLeft 4s infinite ease-in-out; /* Continuous animation */
+
+  }
+  
+  /* Animation */
+  @keyframes rotateGraphic {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  /* === Responsive Design === */
+  @media (max-width: 1024px) {
+    .vision-container {
+      flex-direction: column;
+      text-align: center;
+    }
+  
+    .vision-content, .vision-image-container {
+      max-width: 100%;
+    }
+  
+    .vision-content {
+      padding-right: 0;
+      margin-bottom: 40px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .vision-section{
+        padding: 40px 20px;
+        background-size: 38% auto;    
+        background-position: 91% 99%;
+    }
+    .vision-heading-small{
+        text-align: start;
+    }
+    .vision-heading-large {
+        text-align: start;
+      font-size: 36px;
+    }
+  
+    .vision-description {
+        text-align: start;
+      font-size: 16px;
+    }
+  
+    .vision-item, .mission-item {
+      font-size: 15px;
+      padding: 10px;
+    }
+  
+    .vision-image {
+      width: 85%;
+    }
+  
+    .round-graphic {
+        bottom: -30px;
+      width: 100px;
+      height: 100px;
+      right: 10px;
+    }
+  }
+  

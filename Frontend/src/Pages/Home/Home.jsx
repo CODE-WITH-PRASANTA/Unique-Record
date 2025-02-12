@@ -10,6 +10,8 @@ import MeetOurAgent from '../../Components/MeetOurAgent/MeetOurAgent';
 import HomeFaq from '../../Components/HomeFaq/HomeFaq';
 import FreeQuotes from '../../Components/GetFreeQuotes/FreeQuotes';
 import StyledBlog from '../../Components/LatestBlog/LatestBlog';
+import OurVision from '../../Components/OurVision/OurVision';
+import Rotation from '../../Components/Rotation/Rotation';
 
 const Home = () => {
   return (
@@ -45,9 +47,12 @@ const Home = () => {
     <HomeAbout />
     <WhyChooseUs />
     <MeetOurAgent />
-    <HomeFaq />
+    <Rotation />
     <StyledBlog />
+    <OurVision />
     <FreeQuotes />
+    <HomeFaq />
+
     </>
   );
 };

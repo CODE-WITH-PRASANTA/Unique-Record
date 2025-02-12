@@ -1,0 +1,136 @@
+/* Main container to hide the overflow */
+/* Section wrapper */
+.rotation-section {
+    border-top: 3px solid black;
+    text-align: center;
+    padding: 20px 10px;
+    background: #04171a; /* Subtle gradient background for the section */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* Soft shadow for the section */
+}
+
+/* Heading styling */
+.rotation-heading {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #e8c177; /* Eye-catching pinkish color for the heading */
+    text-transform: uppercase; /* All caps for a bold statement */
+    letter-spacing: 2px; /* Add spacing for a modern look */
+    display: inline-block; /* Keeps the underline tight to the text */
+}
+
+/* Media queries for heading responsiveness */
+@media (max-width: 768px) {
+    .rotation-heading {
+        font-size: 1.5rem;
+        letter-spacing: 1.5px;
+    }
+}
+
+.rotation-container {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    background: linear-gradient(135deg, #f9f9f9, #ececec); /* Gradient background for more depth */
+    padding: 20px 0; /* Add vertical padding for spacing */
+    display: flex;
+    border-radius: 20px;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Stronger shadow for depth */
+}
+
+/* Wrapper for the animation */
+.rotation-wrapper {
+    display: flex;
+    align-items: center;
+    animation: autoScroll linear infinite; /* Continuous smooth scrolling */
+    gap: 20px; /* Space between items */
+    will-change: transform; /* Optimization for smoother animation */
+}
+
+/* Each image container */
+.rotation-item {
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, filter 0.3s ease-in-out; /* Smooth hover animations */
+    border-radius: 12px; /* Rounded corners for each item */
+    overflow: hidden; /* Ensures no overflow for rounded corners */
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5); /* Enhanced shadow around images */
+}
+
+/* Image styling */
+.rotation-item img {
+    width: 250px; /* Uniform image size */
+    height: auto; /* Maintain aspect ratio */
+    max-width: 100%; /* Prevent overflow */
+    object-fit: cover; /* Ensure proper fitting */
+    display: block;
+    transition: transform 0.3s ease, filter 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effect */
+    filter: brightness(0.9); /* Slightly muted brightness by default */
+    border-radius: 8px; /* Border radius to maintain consistency */
+}
+
+/* Hover effect for images */
+.rotation-item:hover {
+    transform: scale(1.05); /* Slight zoom on hover for the container */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
+}
+
+.rotation-item img:hover {
+    transform: scale(1.1); /* Additional zoom on the image */
+    filter: brightness(1); /* Restore brightness on hover */
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Subtle shadow when hovering image */
+}
+
+/* Animation for infinite scrolling */
+@keyframes autoScroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-100%); /* Move left for scrolling */
+    }
+}
+
+/* Media query for mobile responsiveness */
+@media (max-width: 768px) {
+    .rotation-wrapper {
+        gap: 10px; /* Reduce gap between items */
+    }
+
+    .rotation-item img {
+        width: 150px; /* Smaller image size for mobile */
+    }
+
+    .rotation-item {
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Softer shadow for mobile */
+    }
+
+    /* Adjust animation speed for mobile */
+    .rotation-wrapper {
+        animation-duration: 20s; /* Slower animation on smaller screens */
+    }
+}
+
+/* Media query for smaller phones */
+@media (max-width: 480px) {
+    .rotation-heading {
+        font-size: 1.2rem; /* Smaller heading size */
+    }
+
+    .rotation-container {
+        padding: 10px 0; /* Less padding for smaller screens */
+    }
+
+    .rotation-item img {
+        width: 120px; /* Further reduce image size */
+    }
+
+    .rotation-wrapper {
+        animation-duration: 25s; /* Further slow animation */
+    }
+}
