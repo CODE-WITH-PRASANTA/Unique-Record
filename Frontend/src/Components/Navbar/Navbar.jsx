@@ -36,7 +36,7 @@ const Navbar = () => {
           <li><a href="#"><FiAward className="nav-icon" /> Achievements</a></li>
           <li><a href="#"><FiBell className="nav-icon" /> Notice</a></li>
           <li><a href="#"><FiBookOpen className="nav-icon" /> Blog</a></li>
-          <li><a href="#"><FiHelpCircle className="nav-icon" /> FAQ</a></li>
+          <li><a href="/faq"><FiHelpCircle className="nav-icon" /> FAQ</a></li>
           <li><a href="/contact"><FiPhone className="nav-icon" /> Contact Us</a></li>
         </ul>
 
@@ -62,7 +62,7 @@ const Navbar = () => {
           <li><a href="#"><FiAward className="nav-icon" /> Achievements</a></li>
           <li><a href="#"><FiBell className="nav-icon" /> Notice</a></li>
           <li><a href="#"><FiBookOpen className="nav-icon" /> Blog</a></li>
-          <li><a href="#"><FiHelpCircle className="nav-icon" /> FAQ</a></li>
+          <li><a href="/faq"><FiHelpCircle className="nav-icon" /> FAQ</a></li>
           <li><a href="/contact"><FiPhone className="nav-icon" /> Contact Us</a></li>
         </ul>
         

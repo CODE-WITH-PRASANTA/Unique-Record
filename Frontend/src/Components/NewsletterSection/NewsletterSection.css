@@ -1,0 +1,129 @@
+/* NewsletterSection.css */
+
+.newsletter-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #04171a;
+    padding: 50px 20px;
+    color: #ffffff;
+    text-align: center;
+    position: relative;
+  }
+  
+  .newsletter-wrapper {
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    background-color: #062a2f;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .newsletter-subtitle {
+    font-size: 1rem;
+    letter-spacing: 2px;
+    color: #00e6b8;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+  }
+  
+  .newsletter-title {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    line-height: 1.4;
+  }
+  
+  .newsletter-description {
+    font-size: 1rem;
+    color: #c7d1d4;
+    margin-bottom: 30px;
+    line-height: 1.6;
+  }
+  
+  .newsletter-form {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .newsletter-input-field {
+    width: 100%;
+    max-width: 400px;
+    padding: 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    outline: none;
+    color: #04171a;
+    background-color: #ffffff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+  
+  .newsletter-input-field:focus {
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  .newsletter-input-field::placeholder {
+    color: #666;
+  }
+  
+  .newsletter-submit-btn {
+    background-color: #00e6b8;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    padding: 0 25px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  
+  .newsletter-submit-btn:hover {
+    background-color: #00cfa3;
+    transform: translateY(-3px);
+  }
+  
+  .newsletter-icon {
+    font-size: 1.4rem;
+  }
+  
+  @media (max-width: 768px) {
+    .newsletter-title {
+      font-size: 2.4rem;
+    }
+  
+    .newsletter-description {
+      font-size: 0.9rem;
+    }
+  
+    .newsletter-input-field {
+      padding: 12px;
+    }
+  
+    .newsletter-submit-btn {
+      padding: 0 20px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .newsletter-title {
+      font-size: 2rem;
+    }
+  
+    .newsletter-description {
+      font-size: 0.8rem;
+    }
+  
+    .newsletter-input-field {
+      max-width: 300px;
+      padding: 10px;
+    }
+  }
+  
