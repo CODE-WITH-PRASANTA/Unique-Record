@@ -1,0 +1,113 @@
+/* General Styling */
+.about-why-choose-us {
+    margin: 0 auto;
+    padding: 60px 20px;
+    text-align: center;
+    background: #04171a;
+  }
+  
+  .about-why-choose-us-title {
+    font-size: 2.8rem;
+    font-weight: bold;
+    color: #ffffff;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+  
+  .about-why-choose-us-title span {
+    background: linear-gradient(to right, #ffcc00, #ffac06, #ff2f00, #ff2a00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: bold;
+  }
+  
+  .about-why-choose-us-subtitle {
+    font-size: 1.3rem;
+    color: #fffefe;
+    margin-bottom: 2.5rem;
+  }
+  
+  /* Desktop View */
+  .desktop-view {
+    display: block;
+  }
+  
+  .mobile-view {
+    display: none;
+  }
+  
+  .about-why-choose-us-cards {
+    display: flex;
+    justify-content: center;
+    gap: 2.5rem;
+    flex-wrap: wrap;
+  }
+  
+  .card {
+    background: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    border-radius: 12px;
+    padding: 25px;
+    text-align: center;
+    max-width: 280px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .icon-container {
+    font-size: 3.5rem;
+    margin-bottom: 1.2rem;
+  }
+  
+  .card h3 {
+    font-size: 1.6rem;
+    color: #333;
+    margin-bottom: 0.8rem;
+  }
+  
+  .card p {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.6;
+  }
+  
+  /* Specific card styles */
+  .card.trusted .icon-container {
+    color: #ff5733;
+  }
+  
+  .card.properties .icon-container {
+    color: #3498db;
+  }
+  
+  .card.financing .icon-container {
+    color: #27ae60;
+  }
+  
+  .card.security .icon-container {
+    color: #f39c12;
+  }
+  
+  .card.support .icon-container {
+    color: #9b59b6;
+  }
+  
+  /* Mobile View */
+  @media (max-width: 768px) {
+    .desktop-view {
+      display: none;
+    }
+  
+    .mobile-view {
+      display: block;
+    }
+    .card{
+        margin: auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+    }
+    .about-why-choose-us{
+        padding: 20px 10px;
+
+    }
+  }
+  

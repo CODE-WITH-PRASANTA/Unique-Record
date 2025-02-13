@@ -1,0 +1,200 @@
+/* Main Section Styling */
+.section-about-heading-section {
+  width: 100%;
+  height: 60vh;
+  background: url('../../assets/AboutUsBgImg.webp') no-repeat center center/cover;
+  display: flex;
+  align-items: flex-start;
+  position: relative;
+  overflow: hidden;
+}
+
+.section-about-content {
+  margin-top: 100px;
+  margin-left: 50px;
+  text-align: left;
+  color: #ffffff;
+  z-index: 2;
+  opacity: 0; /* Hidden initially for fade-in */
+  animation: fade-in 1.5s ease-in-out forwards;
+}
+
+/* Badge Styling */
+.badge {
+  background-color: #ff8c00;
+  color: #ffffff;
+  display: inline-block;
+  padding: 8px 20px;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: bold;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transform: translateX(-50px); /* Start slightly off-screen */
+  opacity: 0; /* Hidden initially */
+  animation: slide-in 1s ease-out 0.5s forwards; /* Slide in effect */
+}
+
+/* Heading Styling */
+.about-heading {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-style: italic;
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin: 20px 0;
+  color: #f5f5f5;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+  transform: translateY(30px); /* Start below */
+  opacity: 0; /* Hidden initially */
+  animation: slide-up 1s ease-out 0.8s forwards;
+}
+
+/* Description Styling */
+.about-description {
+  font-weight: normal;
+  font-size: 1.2rem;
+  margin: 15px 0 25px;
+  line-height: 1.6;
+  color: #dcdcdc;
+  transform: translateY(30px); /* Start below */
+  opacity: 0; /* Hidden initially */
+  animation: slide-up 1s ease-out 1s forwards;
+}
+
+/* Button Styling */
+.start-btn {
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-style: italic;
+  background-color: #0066ff;
+  color: #ffffff;
+  padding: 12px 25px;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease, transform 0.3s ease; /* Smooth hover effect */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  animation: bounce 2s infinite; /* Add bounce effect */
+}
+
+.start-btn:hover {
+  background-color: #0052cc;
+  transform: translateY(-2px) scale(1.05); /* Lift and enlarge slightly */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Animations */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+  .section-about-heading-section {
+    height: 50vh;
+    background-position: center top;
+  }
+
+  .section-about-content {
+    max-width: 70%;
+    margin-top: 80px;
+    margin-left: 0px;
+  }
+
+  .about-heading {
+    font-size: 2.5rem;
+  }
+
+  .about-description {
+    font-size: 1rem;
+  }
+
+  .start-btn {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .section-about-heading-section {
+    height: 40vh;
+  }
+
+  .about-heading {
+    font-size: 2rem;
+  }
+
+  .about-description {
+    font-size: 0.9rem;
+  }
+
+  .start-btn {
+    padding: 8px 18px;
+    font-size: 0.8rem;
+  }
+
+  .badge {
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-about-heading-section {
+    height: 30vh;
+  }
+
+  .section-about-content {
+    max-width: 70%;
+    padding: 10px;
+    margin-top: 40px;
+  }
+
+  .about-heading {
+    font-size: 1.5rem;
+  }
+
+  .about-description {
+    font-size: 0.8rem;
+  }
+
+  .start-btn {
+    padding: 6px 15px;
+    font-size: 0.7rem;
+  }
+}

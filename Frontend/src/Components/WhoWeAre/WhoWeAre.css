@@ -1,0 +1,252 @@
+/* Main section styling */
+.about-agency {
+    position: relative;
+    padding: 50px 20px;
+    background: #04171a; /* Dark background */
+    color: #fff; /* White text */
+    border-top: 3px solid #f2f2f2;
+    overflow: hidden;
+  }
+  
+  .about-agency:before {
+    content: "";
+    background: url('../../assets/dot-bg.png');
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    opacity: 0.8;
+    z-index: 1;
+  }
+  
+  @keyframes moveDots {
+    0% {
+      background-position: 0 0;
+    }
+    100% {
+      background-position: 100px 100px;
+    }
+  }
+  
+  /* Ensuring all inner content sits above the pseudo-element */
+  .who-section * {
+    position: relative;
+    z-index: 2;
+  }
+  
+  /* Wrapper styles */
+  .who-wrapper {
+    display: flex;
+    max-width: 1300px;
+    align-items: center;
+    gap: 50px;
+    flex-wrap: wrap;
+    margin: 0 auto;
+  }
+  
+  /* Image wrapper and styles */
+  .who-image-wrapper {
+    flex: 1;
+  }
+  
+  .who-image {
+    width: 95%;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+    animation: continuousSliderLeft 4s infinite ease-in-out;
+  }
+  
+  /* Text content styling */
+  .who-text-content {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Text headings and descriptions */
+  .who-subheading {
+    font-size: 14px;
+    font-weight: bold;
+    color: #e94e77; /* Pink text */
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  }
+  
+  .who-heading {
+    font-size: 36px;
+    font-weight: 700;
+    color: #cde94e; /* Lime green text */
+    margin: 10px 0;
+    line-height: 1.4;
+  }
+  
+  .who-description {
+    font-size: 16px;
+    color: #e0e0e0;
+    line-height: 1.8;
+    margin-bottom: 20px;
+  }
+  
+  /* Info box styling */
+  .who-info-box {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 25px;
+    border-radius: 12px;
+    margin-top: 20px;
+    border-left: 5px solid #e94e77; /* Pink border */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  .who-info-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #cde94e; /* Lime green text */
+    margin-bottom: 10px;
+  }
+  
+  .who-info-list {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0 0;
+  }
+  
+  .who-info-item {
+    font-size: 16px;
+    color: #e0e0e0;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .who-info-item::before {
+    content: '\2022';
+    color: #e94e77; /* Pink bullet point */
+    font-size: 18px;
+    margin-right: 10px;
+  }
+  
+  /* Stats container styling */
+  .who-stats-container {
+    display: flex;
+    justify-content: start;
+    width: 100%;
+    max-width: 1200px;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 30px;
+    margin: auto;
+  }
+  
+  .who-stat-box {
+    text-align: center;
+    padding: 30px 20px;
+    background: linear-gradient(135deg, #e94e77, #cde94e); /* Gradient with pink and lime green */
+    color: #ffffff;
+    margin: 10px;
+    border-radius: 12px;
+    min-width: 220px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+  }
+  
+  .who-stat-box:hover {
+    transform: translateY(-10px);
+  }
+  
+  .who-stat-number {
+    font-size: 32px;
+    font-weight: bold;
+  }
+  
+  .who-stat-text {
+    font-size: 16px;
+    margin-top: 5px;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+
+  /* Media Queries for responsiveness */
+
+/* For tablets (768px and above) */
+@media (max-width: 1024px) {
+    .who-wrapper {
+      flex-direction: column;
+      text-align: center;
+      gap: 30px;
+    }
+  
+    .who-image-wrapper {
+      flex: unset;
+    }
+  
+    .who-image {
+      max-width: 90%;
+      margin: 0 auto;
+    }
+  
+    .who-text-content {
+      padding: 20px;
+      margin: 0 auto;
+      text-align: center;
+    }
+  
+    .who-heading {
+      font-size: 28px;
+    }
+  
+    .who-description {
+      font-size: 14px;
+    }
+  
+    .who-info-box {
+      margin-top: 15px;
+    }
+  
+    .who-stats-container {
+      flex-direction: column;
+      gap: 15px;
+    }
+  
+    .who-stat-box {
+      min-width: unset;
+      padding: 20px 15px;
+    }
+  
+   
+  }
+  
+  /* For mobile phones (max-width: 768px) */
+  @media (max-width: 768px) {
+    .about-agency {
+      padding: 30px 10px;
+    }
+  
+    .who-image {
+      width: 100%;
+    }
+  
+    .who-text-content {
+    text-align: start;
+      padding: 15px;
+    }
+  
+    .who-stats-container {
+      margin-top: 20px;
+      gap: 10px;
+    }
+  
+  }
+  
+  /* For very small mobile devices (max-width: 480px) */
+  @media (max-width: 480px) {
+    .who-stat-box {
+      padding: 10px 8px;
+    }
+  }
+  

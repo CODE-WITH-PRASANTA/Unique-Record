@@ -31,7 +31,7 @@ const Navbar = () => {
         {/* Desktop Navigation */}
         <ul className={`nav-links ${menuOpen ? "open" : ""}`}>
           <li><a href="/"><FiHome className="nav-icon" /> Home</a></li>
-          <li><a href="#"><FiInfo className="nav-icon" /> About Us</a></li>
+          <li><a href="/about"><FiInfo className="nav-icon" /> About Us</a></li>
           <li><a href="#"><FiEye className="nav-icon" /> Our Vision</a></li>
           <li><a href="#"><FiAward className="nav-icon" /> Achievements</a></li>
           <li><a href="#"><FiBell className="nav-icon" /> Notice</a></li>
@@ -57,7 +57,7 @@ const Navbar = () => {
       <div className={`mobile-menu ${menuOpen ? "show" : ""}`}>
         <ul>
           <li><a href="/"><FiHome className="nav-icon" /> Home</a></li>
-          <li><a href="#"><FiInfo className="nav-icon" /> About Us</a></li>
+          <li><a href="/about"><FiInfo className="nav-icon" /> About Us</a></li>
           <li><a href="#"><FiEye className="nav-icon" /> Our Vision</a></li>
           <li><a href="#"><FiAward className="nav-icon" /> Achievements</a></li>
           <li><a href="#"><FiBell className="nav-icon" /> Notice</a></li>
