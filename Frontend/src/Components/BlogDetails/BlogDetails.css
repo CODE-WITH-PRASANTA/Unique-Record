@@ -1,0 +1,389 @@
+
+/* Blog Details Container */
+.Blog-Details-Container {
+    display: flex;
+    justify-content: space-between;
+    max-width: 1400px;
+    margin: auto;
+    padding: 50px 20px;
+    padding-top: 10px;
+    gap: 40px;
+}
+
+/* Blog Content */
+.Blog-Details-Content {
+    width: 65%;
+    background: #fff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.Blog-Details-Title {
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 20px;
+}
+
+.Blog-Details-Meta {
+    font-size: 1rem;
+    color: #777;
+    margin-bottom: 30px;
+    font-weight: 500;
+}
+
+.Blog-Details-Description,
+.Blog-Details-Text {
+    font-size: 1.2rem;
+    color: #444;
+    line-height: 1.9;
+    margin-bottom: 30px;
+}
+
+.Blog-Details-MainImage,
+.Blog-Details-SecondaryImage {
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 550px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease-in-out;
+}
+
+
+.Blog-Details-Quote {
+    font-style: italic;
+    background: #f7f7f7;
+    padding: 25px;
+    border-left: 6px solid #e94e77;
+    margin: 35px 0;
+    font-size: 1.3rem;
+    color: #555;
+}
+
+.Blog-Details-QuoteAuthor {
+    font-size: 1rem;
+    text-align: right;
+    color: #777;
+    font-weight: bold;
+}
+
+/* Sidebar */
+.Blog-Details-Sidebar {
+    width: 30%;
+}
+
+.Blog-Details-Sidebar div {
+    background: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 25px;
+}
+
+.Blog-Details-SearchBar input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: 0.3s;
+}
+
+.Blog-Details-SearchBar input:focus {
+    border-color: #e94e77;
+    outline: none;
+}
+
+.Blog-Details-Categories h3,
+.Blog-Details-FeaturedListings h3,
+.Blog-Details-Newsletter h3,
+.Blog-Details-PopularTags h3 {
+    font-size: 1.4rem;
+    margin-bottom: 18px;
+    color: #222;
+    font-weight: 700;
+    border-bottom: 2px solid #e94e77;
+    padding-bottom: 5px;
+}
+
+.Blog-Details-Categories ul {
+    list-style: none;
+    padding: 0;
+    font-size: 1.1rem;
+}
+
+.Blog-Details-Categories li {
+    padding: 12px 0;
+    color: #555;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.Blog-Details-Categories li:hover {
+    color: #e94e77;
+    font-weight: bold;
+    padding-left: 5px;
+}
+
+.Blog-Details-FeaturedItem {
+    display: flex;
+    align-items: center;
+    margin-bottom: 18px;
+    gap: 15px;
+}
+
+.Blog-Details-FeaturedItem img {
+    width: 70px;
+    height: 70px;
+    border-radius: 6px;
+}
+
+.Blog-Details-FeaturedItem p{
+    font-size: 1rem;
+    font-weight: 800;
+    text-align: start;
+}
+.Blog-Details-FeaturedItem span {
+    font-size: 0.7rem;
+    text-align: right;
+}
+.Blog-Details-Newsletter input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+    margin-bottom: 12px;
+}
+
+.Blog-Details-Newsletter button {
+    width: 100%;
+    background: #e94e77;
+    color: #fff;
+    padding: 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.Blog-Details-Newsletter button:hover {
+    background: #d0436a;
+}
+.Blog-Details-Newsletter p{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.Blog-Details-Tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.Blog-Details-Tags span {
+    background: #f1f1f1;
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.Blog-Details-Tags span:hover {
+    background: #e94e77;
+    color: white;
+    font-weight: bold;
+}
+
+/* Leave a Comment Section */
+.Blog-Details-CommentSection {
+    margin-top: 50px;
+    padding: 30px;
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.Blog-Details-CommentSection h2 {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #333;
+}
+
+.Blog-Details-CommentSection p {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 20px;
+}
+
+/* Form Styling */
+.Blog-Details-CommentForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Input Fields */
+.Comment-Row {
+    display: flex;
+    gap: 15px;
+}
+
+.Blog-Details-CommentForm input,
+.Blog-Details-CommentForm textarea {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    background: #f8f8f8;
+}
+
+.Blog-Details-CommentForm input:focus,
+.Blog-Details-CommentForm textarea:focus {
+    border-color: #1e64e4;
+    background: #fff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(30, 100, 228, 0.2);
+}
+
+.Blog-Details-CommentForm textarea {
+    height: 140px;
+    resize: none;
+}
+
+/* Submit Button */
+.Blog-Details-CommentForm button {
+    background: #1e64e4;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.Blog-Details-CommentForm button:hover {
+    background: #144bb8;
+    box-shadow: 0 3px 8px rgba(30, 100, 228, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .Comment-Row {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .Blog-Details-Container {
+        flex-direction: column;
+        padding: 30px 15px;
+        gap: 20px;
+    }
+
+    .Blog-Details-Content {
+        width: 100%;
+        padding: 30px;
+    }
+
+    .Blog-Details-Sidebar {
+        width: 100%;
+    }
+
+    .Blog-Details-MainImage,
+    .Blog-Details-SecondaryImage {
+        width: 100%;
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .Blog-Details-Container {
+        padding: 20px 10px;
+    }
+
+    .Blog-Details-Content {
+        padding: 20px;
+    }
+
+    .Blog-Details-Title {
+        font-size: 2rem;
+    }
+
+    .Blog-Details-Meta,
+    .Blog-Details-Description,
+    .Blog-Details-Text {
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+
+    .Blog-Details-Quote {
+        font-size: 1.1rem;
+        padding: 20px;
+    }
+
+    .Blog-Details-CommentSection {
+        padding: 20px;
+    }
+
+    .Blog-Details-CommentSection h2 {
+        font-size: 22px;
+    }
+
+    .Comment-Row {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .Blog-Details-Title {
+        font-size: 1.8rem;
+    }
+
+    .Blog-Details-Content {
+        padding: 15px;
+    }
+
+    .Blog-Details-MainImage,
+    .Blog-Details-SecondaryImage {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .Blog-Details-Sidebar div {
+        padding: 15px;
+    }
+
+    .Blog-Details-Newsletter button {
+        font-size: 0.9rem;
+        padding: 12px;
+    }
+
+    .Blog-Details-CommentForm input,
+    .Blog-Details-CommentForm textarea {
+        font-size: 14px;
+        padding: 12px;
+    }
+
+    .Blog-Details-CommentForm button {
+        font-size: 14px;
+        padding: 12px;
+    }
+}

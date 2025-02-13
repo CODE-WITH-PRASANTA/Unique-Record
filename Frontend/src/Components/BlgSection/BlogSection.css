@@ -1,0 +1,239 @@
+/* Blog Section */
+.blog-section {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 60px 20px;
+    padding-top: 0px;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.blog-header {
+    font-size: 2.2rem;
+    font-weight: bold;
+    color: #222;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.blog-subtext {
+    font-size: 1.1rem;
+    color: #666;
+    margin-bottom: 40px;
+}
+
+/* Blog Container */
+.blog-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+    justify-content: center;
+    padding: 20px;
+}
+
+/* Blog Card */
+.blog-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.blog-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Blog Image */
+.blog-image {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}
+
+/* Blog Content */
+.blog-content {
+    padding: 20px;
+    text-align: left;
+}
+
+.blog-date {
+    font-size: 13px;
+    font-weight: bold;
+    color: #e94e77;
+    display: inline-block;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+.blog-meta {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 10px;
+}
+
+.blog-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #222;
+    line-height: 1.5;
+    transition: color 0.3s;
+    text-decoration: none;
+    display: block;
+}
+
+.blog-title a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.blog-title a:hover {
+    color: #e94e77;
+}
+
+.blog-description {
+    font-size: 15px;
+    color: #444;
+    line-height: 1.6;
+    margin-bottom: 12px;
+}
+
+/* Read More Button */
+.read-more {
+    font-size: 14px;
+    color: #e94e77;
+    font-weight: bold;
+    text-decoration: none;
+    display: inline-block;
+    transition: color 0.3s ease-in-out;
+    border-bottom: 2px solid transparent;
+    padding-bottom: 2px;
+}
+
+.read-more:hover {
+    color: #c81e5a;
+    border-bottom: 2px solid #c81e5a;
+}
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .blog-section {
+        padding: 50px 15px;
+    }
+
+    .blog-header {
+        font-size: 2rem;
+    }
+
+    .blog-subtext {
+        font-size: 1rem;
+    }
+
+    .blog-container {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 25px;
+    }
+
+    .blog-image {
+        height: 200px;
+    }
+
+    .blog-content {
+        padding: 18px;
+    }
+
+    .blog-title {
+        font-size: 18px;
+    }
+
+    .blog-description {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 768px) {
+    .blog-section {
+        padding: 40px 10px;
+    }
+
+    .blog-header {
+        font-size: 1.8rem;
+    }
+
+    .blog-subtext {
+        font-size: 0.95rem;
+        margin-bottom: 30px;
+    }
+
+    .blog-container {
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 20px;
+    }
+
+    .blog-card {
+        border-radius: 10px;
+    }
+
+    .blog-image {
+        height: 180px;
+    }
+
+    .blog-content {
+        padding: 15px;
+    }
+
+    .blog-title {
+        font-size: 17px;
+    }
+
+    .blog-description {
+        font-size: 13px;
+    }
+
+    .read-more {
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 480px) {
+    .blog-header {
+        font-size: 1.6rem;
+    }
+
+    .blog-subtext {
+        font-size: 0.9rem;
+    }
+
+    .blog-container {
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 15px;
+    }
+
+    .blog-card {
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .blog-image {
+        height: 160px;
+    }
+
+    .blog-content {
+        padding: 12px;
+    }
+
+    .blog-title {
+        font-size: 16px;
+    }
+
+    .blog-description {
+        font-size: 12.5px;
+    }
+
+    .read-more {
+        font-size: 12px;
+    }
+}
