@@ -14,7 +14,7 @@ const Media = () => {
         </h1>
         <p>Photos & Videos Of Our Achivments</p>
       </div>
-    </div>
+  </div>
 
     <MediaGalary />
 

@@ -1,0 +1,164 @@
+/* Container Styling */
+.mission-org-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px 50px;
+    gap: 50px;
+    background-color: #f9fafb;
+  }
+  
+  /* Left Content Styling */
+  .mission-org-content {
+    max-width: 50%;
+  }
+  
+  /* Title Styling */
+  .mission-org-title {
+    font-size: 34px;
+    font-weight: bold;
+    color: #1f2937;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  /* Subtitle Styling */
+  .mission-org-subtitle {
+    font-size: 18px;
+    color: #4b5563;
+    margin-bottom: 35px;
+    line-height: 1.6;
+  }
+  
+  /* Items Container */
+  .mission-org-items {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+  
+  /* Single Item Layout */
+  .mission-org-item {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 20px;
+    border-radius: 12px;
+    background: #ffffff;
+    box-shadow: 0px 5px 12px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  }
+  
+  .mission-org-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 8px 18px rgba(0, 0, 0, 0.12);
+  }
+  
+  /* Icon Wrapper */
+  .mission-org-icon-wrapper {
+    background: linear-gradient(135deg, #047857, #065f46);
+    padding: 14px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 55px;
+    height: 55px;
+    transition: background 0.3s ease-in-out;
+  }
+  
+  .mission-org-item:hover .mission-org-icon-wrapper {
+    background: linear-gradient(135deg, #065f46, #034436);
+  }
+  
+  /* Icon Styling */
+  .mission-org-icon {
+    color: white;
+    font-size: 24px;
+  }
+  
+  /* Heading Styling */
+  .mission-org-heading {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 6px;
+  }
+  
+  /* Description Text */
+  .mission-org-text {
+    font-size: 16px;
+    color: #4b5563;
+    line-height: 1.5;
+  }
+  
+  /* Right Side Image */
+  .mission-org-image img {
+    max-width: 90%;
+    height: auto;
+    display: block;
+    border-radius: 12px;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 1024px) {
+    .mission-org-container {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 50px 40px;
+    }
+  
+    .mission-org-content {
+      max-width: 100%;
+    }
+  
+    .mission-org-items {
+      align-items: center;
+    }
+  
+    .mission-org-item {
+      max-width: 90%;
+    }
+  
+    .mission-org-image {
+      margin-top: 30px;
+    }
+  
+    .mission-org-image img {
+      max-width: 100%;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .mission-org-title {
+      font-size: 28px;
+    }
+  
+    .mission-org-subtitle {
+      font-size: 16px;
+    }
+  
+    .mission-org-item {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+    }
+  
+    .mission-org-icon-wrapper {
+      width: 50px;
+      height: 50px;
+      padding: 10px;
+    }
+  
+    .mission-org-heading {
+      font-size: 18px;
+    }
+  
+    .mission-org-text {
+      font-size: 14px;
+    }
+  }
+  

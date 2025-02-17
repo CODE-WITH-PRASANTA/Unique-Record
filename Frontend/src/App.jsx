@@ -10,6 +10,8 @@ import Media from "./Pages/Media/Media";
 import Blog from "./Pages/Blog/Blog";
 import BlogDetails from "./Components/BlogDetails/BlogDetails";
 import { useState, useEffect } from "react";
+import Vision from "./Pages/Vision/Vision";
+import OurAchivments from "./Pages/OurAchivments/OurAchivments";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -17,7 +19,7 @@ function App() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 1200); // Adjust the timeout duration as needed
+    }, 1000); // Adjust the timeout duration as needed
 
     return () => clearTimeout(timer);
   }, []);
@@ -34,6 +36,8 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/faq" element={<FaqPage />} />
             <Route path="/media" element={<Media />} />
+            <Route path="/vision" element={<Vision />}/>
+            <Route path="/achivments" element={<OurAchivments />}/>
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:id" element={<BlogDetails />} />
           </Routes>
