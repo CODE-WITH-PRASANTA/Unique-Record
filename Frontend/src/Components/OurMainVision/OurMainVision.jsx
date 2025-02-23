@@ -20,7 +20,7 @@ const OurMainVision = () => {
           The main objective of our vision is to encourage people to digitally preserve their extraordinary work and achievements. So that the coming generation can take inspiration from them and develop a spirit of achieving something in them.
           </p>
           <div className="main-vision-buttons">
-            <button className="main-vision-btn-donate">Donate Now</button>
+            <button className="main-vision-btn-donate">Explore Now</button>
             <a
               href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
               target="_blank"

@@ -2,7 +2,7 @@ import React from "react";
 import "./WhyChooseUs.css";
 
 // Assets
-import rightsideimg from "../../assets/why-choose-one-img-1.jpg";
+import rightsideimg from "../../assets/why-choose-one-img-1.jpeg";
 import { FaCheck } from "react-icons/fa";
 import { FaUsers } from "react-icons/fa6";
 
@@ -15,16 +15,16 @@ const WhyChooseUs = () => {
           <div className="feature">
             <div className="why-icon"><FaCheck /></div>
             <div className="text">
-              <h3>Highest Success Rates</h3>
-              <p>We ensure exceptional growth with expert strategies and innovative solutions.</p>
+              <h3>A new Dimension of Success</h3>
+              <p>A symbol of inspiration, certification, recognition and celebration. A confluence of the world's unique, rare talents.</p>
             </div>
           </div>
           <div className="divider"></div>
           <div className="feature">
             <div className="why-icon"><FaCheck /></div>
             <div className="text">
-              <h3>We Grow Businesses</h3>
-              <p>Unlock your potential with tailored financial plans and market insights.</p>
+              <h3>Universal Recognition of Exceptional Work</h3>
+              <p>Make your mark digitally in the digital age. Immortalize your amazing, unique work in the digital our universe</p>
             </div>
           </div>
         </div>
@@ -34,7 +34,7 @@ const WhyChooseUs = () => {
           <div className="experience-box">
             <div className="experience-text">
               <div className="people-why-icon"><FaUsers /></div>
-              <p>We’ve Over 26 Years of Experience</p>
+              <p>Our Years-old Experienced Team is Ready to Help You.</p>
             </div>
           </div>
           <img src={rightsideimg} alt="Experience Team" className="rightside-img" />
@@ -44,9 +44,9 @@ const WhyChooseUs = () => {
       {/* Business Steps Section */}
       <div className="business-steps">
         <div className="tab-buttons">
-          <div className="tab-btn tab-black"><span>Business Growth</span></div>
-          <div className="tab-btn tab-white"><span>Financial Advice</span></div>
-          <div className="tab-btn tab-yellow"><span>Marketing Solution</span></div>
+          <div className="tab-btn tab-black"><span>Unique Work</span></div>
+          <div className="tab-btn tab-white"><span>Dedication </span></div>
+          <div className="tab-btn tab-yellow"><span>Prosperity</span></div>
         </div>
       </div>
     </section>

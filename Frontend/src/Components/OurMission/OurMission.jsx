@@ -1,10 +1,10 @@
 import React from "react";
 import "./OurMission.css";
 import {
-  FaTint,
-  FaAppleAlt,
-  FaGraduationCap,
-  FaHeartbeat,
+  FaLightbulb,
+  FaBuilding,
+  FaGlobe,
+  FaRoad,
   FaQuoteLeft,
   FaQuoteRight,
 } from "react-icons/fa";
@@ -16,24 +16,24 @@ import { Pagination } from "swiper/modules";
 const OurMission = () => {
   const missionItems = [
     {
-      icon: <FaTint className="mission-icon" />,
-      title: "Clean Water",
-      description: "An organization’s mission statement should clearly communicate",
+      icon: <FaLightbulb className="mission-icon" />, // Represents inspiration
+      title: "Flame of inspiration",
+      description: "Light the lamp of inspiration, shine with your unique achievements",
     },
     {
-      icon: <FaAppleAlt className="mission-icon" />,
-      title: "Healthy Food",
-      description: "An organization’s mission statement should clearly communicate",
+      icon: <FaBuilding className="mission-icon" />, // Represents foundation
+      title: "Foundation of Excellence",
+      description: "Honoring unique works, building future generations",
     },
     {
-      icon: <FaGraduationCap className="mission-icon" />,
-      title: "Free Education",
-      description: "An organization’s mission statement should clearly communicate",
+      icon: <FaGlobe className="mission-icon" />, // Represents universal recognition
+      title: "Cosmic Recognition",
+      description: "The Unique Record of Universe, witness to your achievements",
     },
     {
-      icon: <FaHeartbeat className="mission-icon" />,
-      title: "Medical Facilities",
-      description: "An organization’s mission statement should clearly communicate",
+      icon: <FaRoad className="mission-icon" />, // Represents the path to success
+      title: "Path to Success",
+      description: "On the road to success, Unique Record of Universe is with you",
     },
   ];
 
@@ -44,7 +44,7 @@ const OurMission = () => {
           <h4>WHAT WE DO?</h4>
           <h2>
             <FaQuoteLeft className="quote-icon left" />
-            We Are In A Mission To Help The Helpless
+            Your Hard Work, Your Identity, Recorded in the Unique Record of Universe.
             <FaQuoteRight className="quote-icon right" />
           </h2>
         </div>

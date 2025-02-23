@@ -4,7 +4,6 @@ import "./OurVision.css";
 // Assets
 import mainvisionimg from "../../assets/Vision-pic.jpg";
 import roundGraphic from "../../assets/round-graphic.png";
-import bgPattern from "../../assets/dot-graphic.png";
 
 const OurVision = () => {
   return (

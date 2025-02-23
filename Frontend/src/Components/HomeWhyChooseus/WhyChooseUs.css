@@ -27,7 +27,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 1200px;
+    max-width: 1300px;
     margin: auto;
     padding: 0 20px;
   }
@@ -36,8 +36,7 @@
   .left-content {
     flex: 1;
     text-align: left;
-    padding-right: 40px;
-    max-width: 500px;
+    max-width: 600px;
   }
   
   .feature {

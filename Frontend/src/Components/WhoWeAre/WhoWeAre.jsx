@@ -13,16 +13,16 @@ const WhoWeAre = () => {
         </div>
         <div className="who-text-content">
           <p className="who-subheading">WHO WE ARE</p>
-          <h2 className="who-heading">WE ARE BEST & PROFESSIONAL TEAM CONSTRUCTION</h2>
+          <h2 className="who-heading">Unique Records of Universe™</h2>
           <p className="who-description">
-            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
+          "Unique Records of Universe™" is a unit of Divya Prerak Kahaniyan Humanity Research Centre Trust  (DPKHRC Trust) which is created to recognize unique and extraordinary talents from around the world and to digitally record and showcase their work. We provide universal recognition to your unique records or activities. This process of registration and recognition has been developed very simple and easy. Its ideator is Dr. Avishek Kumar who is the Founder Chairman and Chief Managing Director of Divya Prerak Kahaniyan Humanity Research Centre Trust (DPKHRC Trust). He is a renowned litterateur and a great thinker, social worker and nature lover.
           </p>
           <div className="who-info-box">
-            <p className="who-info-title">WE BUILD YOUR FUTURE DREAM BUILDING CONSTRUCTION</p>
+            <p className="who-info-title">About URU Web Portal Development</p>
             <ul className="who-info-list">
-              <li className="who-info-item">Certification Worker</li>
+              <li className="who-info-item">Certification</li>
               <li className="who-info-item">License Card</li>
-              <li className="who-info-item">5+ Years Experience Worker</li>
+              <li className="who-info-item">5+ Years Experience</li>
             </ul>
           </div>
         </div>

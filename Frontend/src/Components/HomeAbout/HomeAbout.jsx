@@ -49,7 +49,7 @@ const HomeAbout = () => {
         {/* Right Side with Text */}
         <div className="about-content">
           <p className="about-subtitle">🟡🟡🟡 GET TO KNOW US</p>
-          <h2 className="about-title">The Best Agency in Downtown</h2>
+          <h2 className="about-title">Digitally Marked as a URU Holder</h2>
           <p className="about-highlight">
             We’re Committed to Deliver High Quality Projects
           </p>

@@ -13,40 +13,42 @@ const AboutMission = () => {
     <div className="about-mission-container">
       {/* Mission Content Section */}
       <div className="about-mission-content">
-        <h2 className="mission-title">Our Mission <span>Is To FindHouse</span> </h2>
+        <h2 className="mission-title">About Divine<span>Grand Launch</span> & About DPKHRC Trust
+        </h2>
         <p className="mission-intro">
-          Mauris ac consectetur ante, dapibus gravida tellus. Nullam aliquet
-          eleifend dapibus. Cras sagittis, ex euismod lacinia tempor.
+        The divine, grand launch of the "Unique Record of Universe™" Web Portal was done on 25 June 2025 during the Hindi-Thai Culture Mahasammelan program organized at the International forum in the capital Bangkok, Thailand. This program was organized successful with the joint effort of Devanagari Utthan Foundation, (Hyderabad, Telangana) Dharadham International (Gorakhpur, Uttar Pradesh) and DPHRC Trust (Azamgarh, Uttar Pradesh). In which more than 250 extraordinary people from government and government institutions from all over the world participated.        </p>
+        <p className="mission-text">
+        Divya Prerak Kahaniyan Humanity Research Centre is the first research institute of the country/world which is committed to establish high ideals of humanity and morality in humans along with unique and new initiatives. For world peace, progress, development, it will change the lives of people by freeing their mentality from enemies like lust, anger, pride, attachment, greed, ego, jealousy, hatred, deceit, fraud, deception etc. and will drenched them with the sweet juice of truth, love, non-violence, goodwill, cooperation and human unity, brotherhood and is an important catalytic center point for economic, social, intellectual change.
+<br />
+This research institute has the option of doing free research on more than 120 topics related to humanity in the practical world. So far, 98 researchers have registered for research on various topics of humanity through this research institute.
+<br />
+ISO 21001:2018 certified Divya Prerak Kahaniyan Humanity Research Centre was registered on 03/05/2023 at the Sub-Registrar's Office Lalganj under Azamgarh district of Uttar Pradesh state under the Indian Trust Act Law-1882. Whose registration number is- 04/36/2023. The main objective of this research center is to conduct practical research on hundreds of topics related to humanity and to establish the high values ​​of humanity.
+
         </p>
         <p className="mission-text">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque quis
-          ligula eu luctus vulputate porttitor sed feugiat nunc. Mauris ac
-          consectetur ante, dapibus gravida tellus. Nullam aliquet eleifend
-          dapibus. Cras sagittis, ex euismod lacinia tempor, lectus orci
-          elementum augue, eget auctor metus ante sit amet velit.
-        </p>
-        <p className="mission-text">
-          Maecenas quis viverra metus, et efficitur ligula. Nam congue augue et
-          ex congue, sed luctus lectus congue. Integer convallis condimentum
-          sem. Duis elementum tortor eget condimentum tempor.
+        It is known that under the banner of the brand name Divine Prerak Kahaniyan™ its foundation was laid on 01/06/2021 with two objectives of Sahitya Vidya Reading and E-Publication Center. Later, to make the writings of the authors reach the national/international level with ease and through minimal resources and efforts and to bring them fame, other services like free blog post writing and reading on hundreds of topics, ISBN (International Standard Book Number), book design, printing, copyright, Indian Language Coordination and Cooperation Council, internship, Digital Bookkeeping Management System™ (DBMS Online), accounting software and Unique Record of Universe™ were started.
+<br />
+The founder Chairman/Chief Managing Director/Chief Trustee of this Trust/Humanity Research Center is Dr. Avishek Kumar, National Writer, Bharat Sahitya Ratna awardee. Secretary- Mrs. Manju Kashyap and Treasurer- Mr. Anil.
+<br />
+With time, this research institute was registered with the Department of Micro, Small and Medium Enterprises, RRRNA and Vidyanjali Higher Education Program of the Government of India, Ministry of Education, AICTE, NITI Aayog, 80G, 12A Income Tax Department for various related recognitions and all the activities done through this trust were also copyrighted with the Government of India.
         </p>
 
         {/* Mission Statistics */}
         <div className="mission-stats">
           <div className="stat-item">
             <FaUser className="stat-icon" />
-            <h3>80,123</h3>
-            <p>Customers to date</p>
+            <h3>100 +</h3>
+            <p>Record Category</p>
           </div>
           <div className="stat-item">
             <FaDollarSign className="stat-icon" />
-            <h3>$74 Billion</h3>
-            <p>In home sales</p>
+            <h3>100 +</h3>
+            <p>URU Post Classification</p>
           </div>
           <div className="stat-item">
             <FaDollarSign className="stat-icon" />
-            <h3>$468 Million</h3>
-            <p>In Savings</p>
+            <h3>900 +</h3>
+            <p>Volunteers</p>
           </div>
         </div>
       </div>

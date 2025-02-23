@@ -22,10 +22,10 @@ const VisionSuccessCount = () => {
 
   const startCounting = () => {
     const targetCounts = {
-      donations: 6500,
-      funds: 60,
-      volunteers: 250,
-      projects: 110,
+      donations: 100 ,
+      funds: 100 ,
+      volunteers: 190 ,
+      projects: 900 
     };
 
     const interval = 20; // Interval in milliseconds
@@ -71,19 +71,19 @@ const VisionSuccessCount = () => {
       <div className="success-metrics">
         <div className="metric-item">
           <h2 className="metric-value">{Math.floor(counts.donations)}+</h2>
-          <p className="metric-label">Donations</p>
+          <p className="metric-label">Record Category</p>
         </div>
         <div className="metric-item">
-          <h2 className="metric-value">${Math.floor(counts.funds)}+</h2>
-          <p className="metric-label">Funds Raised</p>
+          <h2 className="metric-value">{Math.floor(counts.funds)}+</h2>
+          <p className="metric-label">URU Post Classification</p>
         </div>
         <div className="metric-item">
           <h2 className="metric-value">{Math.floor(counts.volunteers)}</h2>
-          <p className="metric-label">Volunteers</p>
+          <p className="metric-label">Country Target</p>
         </div>
         <div className="metric-item">
           <h2 className="metric-value">{Math.floor(counts.projects)}</h2>
-          <p className="metric-label">Projects</p>
+          <p className="metric-label">Volunteers</p>
         </div>
       </div>
     </div>

@@ -49,7 +49,7 @@
     border-radius: 12px;
     padding: 25px;
     text-align: center;
-    max-width: 280px;
+    max-width: 300px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
   
@@ -65,7 +65,8 @@
   }
   
   .card p {
-    font-size: 1rem;
+    text-align: justify;
+    font-size: 15px;
     color: #555;
     line-height: 1.6;
   }
