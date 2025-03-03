@@ -14,7 +14,7 @@ const AboutUs = () => {
         <div className="section-about-content">
           <div className="badge">A digital archive of unique achievements, an endless source of inspiration. </div>
           <h1 className="about-heading"> Digital document of extraordinary achievements !  </h1>
-          <p className="about-description">
+          <p className="main-about-description">
           Every unique work gets a unique recognition. Prove yourself, inspire the world.
           </p>
           <button className="start-btn" >

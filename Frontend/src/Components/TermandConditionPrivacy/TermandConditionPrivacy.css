@@ -1,0 +1,73 @@
+/* Wrapper for full page styling */
+.privacy-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 50px 20px;
+    background-color: #f4f4f4;
+  }
+  
+  /* Container for privacy content */
+  .privacy-container {
+    width: 90%;
+    max-width: 1600px;
+    background: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Privacy page title */
+  .privacy-title {
+    text-align: center;
+    color: #e94e77;
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  /* Sections for structured content */
+  .privacy-section {
+    margin-bottom: 30px;
+  }
+  
+  /* Section headings */
+  .privacy-heading {
+    font-size: 22px;
+    color: #333;
+    font-weight: bold;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #e94e77;
+    padding-bottom: 5px;
+  }
+  
+  /* Text content */
+  .privacy-text {
+    font-size: 16px;
+    color: #555;
+    line-height: 1.7;
+    margin-bottom: 15px;
+  }
+  
+  /* List items */
+  .privacy-list {
+    list-style-type: disc;
+    padding-left: 20px;
+  }
+  
+  .privacy-list li {
+    font-size: 18px;
+    color: #444;
+    margin-bottom: 8px;
+  }
+  
+  /* Contact information */
+  .privacy-contact {
+    font-size: 16px;
+    font-weight: bold;
+    color: #222;
+    margin-top: 10px;
+  }
+  
+  .privacy-intro{
+    font-size: 19px;
+  }

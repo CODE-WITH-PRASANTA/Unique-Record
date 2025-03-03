@@ -1,0 +1,165 @@
+/* Container Styling */
+.LearnMore-Certificate-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px 50px;
+    gap: 50px;
+    background-color: #f9fafb;
+    border-top: 6px solid #f4b500;
+  }
+  
+  /* Left Content Styling */
+  .LearnMore-Certificate-content {
+    max-width: 50%;
+  }
+  
+  /* Title Styling */
+  .LearnMore-Certificate-title {
+    font-size: 34px;
+    font-weight: bold;
+    color: #1f2937;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  /* Subtitle Styling */
+  .LearnMore-Certificate-subtitle {
+    font-size: 18px;
+    color: #4b5563;
+    margin-bottom: 35px;
+    line-height: 1.6;
+  }
+  
+  /* Items Container */
+  .LearnMore-Certificate-items {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+  
+  /* Single Item Layout */
+  .LearnMore-Certificate-item {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 20px;
+    border-radius: 12px;
+    background: #ffffff;
+    box-shadow: 0px 5px 12px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  }
+  
+  .LearnMore-Certificate-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 8px 18px rgba(0, 0, 0, 0.12);
+  }
+  
+  /* Icon Wrapper */
+  .LearnMore-Certificate-icon-wrapper {
+    background: linear-gradient(135deg, #047857, #065f46);
+    padding: 14px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 55px;
+    height: 55px;
+    transition: background 0.3s ease-in-out;
+  }
+  
+  .LearnMore-Certificate-item:hover .LearnMore-Certificate-icon-wrapper {
+    background: linear-gradient(135deg, #065f46, #034436);
+  }
+  
+  /* Icon Styling */
+  .LearnMore-Certificate-icon {
+    color: white;
+    font-size: 24px;
+  }
+  
+  /* Heading Styling */
+  .LearnMore-Certificate-heading {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 6px;
+  }
+  
+  /* Description Text */
+  .LearnMore-Certificate-text {
+    font-size: 16px;
+    color: #4b5563;
+    line-height: 1.5;
+  }
+  
+  /* Right Side Image */
+  .LearnMore-Certificate-image img {
+    max-width: 90%;
+    height: auto;
+    display: block;
+    border-radius: 12px;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 1024px) {
+    .LearnMore-Certificate-container {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 50px 40px;
+    }
+  
+    .LearnMore-Certificate-content {
+      max-width: 100%;
+    }
+  
+    .LearnMore-Certificate-items {
+      align-items: center;
+    }
+  
+    .LearnMore-Certificate-item {
+      max-width: 90%;
+    }
+  
+    .LearnMore-Certificate-image {
+      margin-top: 30px;
+    }
+  
+    .LearnMore-Certificate-image img {
+      max-width: 100%;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .LearnMore-Certificate-title {
+      font-size: 28px;
+    }
+  
+    .LearnMore-Certificate-subtitle {
+      font-size: 16px;
+    }
+  
+    .LearnMore-Certificate-item {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+    }
+  
+    .LearnMore-Certificate-icon-wrapper {
+      width: 50px;
+      height: 50px;
+      padding: 10px;
+    }
+  
+    .LearnMore-Certificate-heading {
+      font-size: 18px;
+    }
+  
+    .LearnMore-Certificate-text {
+      font-size: 14px;
+    }
+  }
+  

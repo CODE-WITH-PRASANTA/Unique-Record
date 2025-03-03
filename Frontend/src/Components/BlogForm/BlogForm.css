@@ -1,0 +1,134 @@
+.blog-editing-sec-container {
+    max-width: 1300px;
+    width: 100%;
+    padding: 20px 30px;
+    background-color: #f9f9f9;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    font-family: 'Poppins', sans-serif;
+    margin: 20px auto;
+    border: 1px solid #dedede;
+  }
+  
+  .blog-editing-sec-form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+  }
+  
+  .blog-editing-sec-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .blog-editing-sec-label {
+    font-weight: 600;
+    font-size: 1rem;
+    color: #444;
+  }
+
+  
+  .blog-editing-sec-input,
+  .blog-editing-sec-textarea,
+  .blog-editing-sec-select {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #333;
+    background-color: #ffffff;
+    transition: all 0.3s ease;
+  }
+  
+
+  .blog-editing-sec-input:focus,
+  .blog-editing-sec-textarea:focus,
+  .blog-editing-sec-select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+    outline: none;
+  }
+  
+  .blog-editing-sec-textarea {
+    resize: vertical;
+    height: 120px;
+  }
+  
+  .blog-editing-sec-tags {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .blog-editing-sec-tags-input {
+    display: flex;
+    gap: 12px;
+  }
+  
+  .blog-editing-sec-add-tag-btn {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+  }
+  
+  .blog-editing-sec-add-tag-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  .blog-editing-sec-tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .blog-editing-sec-tag {
+    display: flex;
+    align-items: center;
+    background-color: #e9f7ff;
+    padding: 8px 16px;
+    border-radius: 16px;
+    font-size: 0.9rem;
+    color: #0277bd;
+    gap: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .blog-editing-sec-remove-tag-btn {
+    background: none;
+    border: none;
+    color: #d32f2f;
+    font-size: 1.2rem;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  
+  /* Additional Styling for Small Screens */
+  @media (max-width: 768px) {
+    .blog-editing-sec-container {
+      padding: 20px;
+    }
+  
+    .blog-editing-sec-title {
+      font-size: 1.5rem;
+    }
+  
+    .blog-editing-sec-input,
+    .blog-editing-sec-textarea,
+    .blog-editing-sec-select {
+      font-size: 0.9rem;
+    }
+  
+    .blog-editing-sec-submit-btn {
+      font-size: 1rem;
+    }
+  }
+  

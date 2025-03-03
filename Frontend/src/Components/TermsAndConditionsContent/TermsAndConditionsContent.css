@@ -1,0 +1,111 @@
+/* General Page Styles */
+.terms-page {
+    padding: 40px 20px;
+    max-width: 1600px;
+    margin: auto;
+    border-radius: 10px;
+  }
+  
+  /* Header Styling */
+  .terms-header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  .terms-header h2 {
+    font-size: 28px;
+    color: #333;
+    font-weight: bold;
+  }
+  
+  .terms-header p {
+    font-size: 14px;
+    color: #666;
+  }
+  
+  /* Terms Container */
+  .terms-container {
+    background-color: #fff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Section Styling */
+  .terms-container section {
+    margin-bottom: 20px;
+    padding: 15px;
+    border-left: 4px solid #e94e77;
+    background: #fafafa;
+    border-radius: 5px;
+  }
+  
+  .terms-container h3 {
+    font-size: 20px;
+    color: #222;
+    margin-bottom: 10px;
+  }
+  
+  .terms-container p {
+    font-size: 22px;
+    color: #444;
+    line-height: 1.7;
+    text-align: justify;
+  }
+  
+  /* Specific Section Styling */
+  .terms-intro {
+    background: #eef2f7;
+  }
+  
+  .terms-usage {
+    background: #fdf3f3;
+  }
+  
+  .terms-warranty {
+    background: #eafaf1;
+  }
+  
+  .terms-risk {
+    background: #f8f2ff;
+  }
+  
+  .terms-copyright {
+    background: #f7f7f7;
+  }
+  
+  .terms-unauthorized {
+    background: #fff2e6;
+  }
+  
+  .terms-links {
+    background: #eefaff;
+  }
+  
+  .terms-dispute {
+    background: #ffebee;
+  }
+  
+  .terms-liability {
+    background: #f2f2f2;
+  }
+  
+  /* Responsive Styling */
+  @media (max-width: 768px) {
+    .terms-page {
+      padding: 20px;
+    }
+  
+    .terms-container {
+      padding: 15px;
+    }
+  
+    .terms-container h3 {
+      font-size: 18px;
+    }
+  
+    .terms-container p {
+      font-size: 14px;
+    }
+  }
+  

@@ -1,0 +1,83 @@
+/* Wrapper for full-page styling */
+.cancellation-wrapper {
+    background-color: #f9f9f9;
+    padding: 40px 0;
+  }
+  
+  /* Main container for the policy content */
+  .cancellation-container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Title styling */
+  .cancellation-title {
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+    color: #E94e77;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #E94e77;
+    padding-bottom: 10px;
+  }
+  
+  /* Introduction section */
+  .policy-intro p {
+    font-size: 20px;
+    color: #444;
+    line-height: 1.6;
+    text-align: justify;
+    margin-bottom: 20px;
+  }
+  
+  /* Individual sections */
+  .policy-section {
+    margin-bottom: 25px;
+  }
+  
+  /* Section headings */
+  .policy-heading {
+    font-size: 22px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+    border-left: 5px solid #E94e77;
+    padding-left: 10px;
+  }
+  
+  /* List styling */
+  .policy-list {
+    list-style-type: disc;
+    margin-left: 25px;
+  }
+  
+  .policy-list li {
+    margin-bottom: 10px;
+    font-size: 20px;
+    color: #555;
+    line-height: 1.6;
+  }
+  
+  /* Responsive Design */
+  @media screen and (max-width: 768px) {
+    .cancellation-container {
+      padding: 20px;
+    }
+  
+    .cancellation-title {
+      font-size: 24px;
+    }
+  
+    .policy-heading {
+      font-size: 20px;
+    }
+  
+    .policy-list li {
+      font-size: 14px;
+    }
+  }
+  

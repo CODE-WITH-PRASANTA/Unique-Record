@@ -195,23 +195,30 @@
     padding: 5px;
     background-color: rgba(96, 165, 250, 0.1);
 }
-
 /* Footer Links */
 .footer-links {
     display: flex;
-    gap: 35px;
-    font-size: 15px;
+    flex-wrap: wrap; /* Ensures responsiveness */
+    gap: 25px; /* Reduced gap slightly for better spacing */
+    font-size: 14px; /* Slightly reduced for better alignment */
     text-transform: uppercase;
     font-weight: 600;
-    margin-bottom: 30px;  /* Increased margin to space out from the bottom text */
+    margin-bottom: 25px; /* Adjusted spacing */
     justify-content: center;
     color: #e2e8f0;
 }
 
+.footer-links a {
+    text-decoration: none; /* Ensures no default underline */
+    color: inherit; /* Keeps the color consistent */
+}
+
 .footer-links span {
     cursor: pointer;
-    transition: color 0.3s, text-decoration 0.3s;
+    transition: color 0.3s ease-in-out, text-decoration 0.3s ease-in-out;
     position: relative;
+    display: inline-block;
+    padding: 5px 0; /* Adds slight padding for better hover effect */
 }
 
 .footer-links span:hover {
@@ -224,14 +231,27 @@
     height: 2px;
     background: #60a5fa;
     position: absolute;
-    bottom: -5px;
+    bottom: -3px;
     left: 50%;
     transform: translateX(-50%);
-    transition: width 0.3s;
+    transition: width 0.3s ease-in-out;
 }
 
 .footer-links span:hover::after {
     width: 100%;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .footer-links {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px; /* Adjusted for better spacing on mobile */
+    }
+
+    .footer-links span {
+        font-size: 13px; /* Slightly smaller for mobile */
+    }
 }
 
 /* Footer Bottom Text */

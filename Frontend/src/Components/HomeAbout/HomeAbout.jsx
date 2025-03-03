@@ -42,43 +42,48 @@ const HomeAbout = () => {
           <img src={aboutoneimg} alt="Business Team" className="about-main-img" />
           <img src={abouttwoimg} alt="Discussion" className="about-secondary-img" />
           <div className="certified-badge">
-            <p className="certified-text">📜 Certified Digital Marketing</p>
+            <p className="certified-text">📜 Certified Digital Certificate</p>
           </div>
         </div>
 
         {/* Right Side with Text */}
         <div className="about-content">
           <p className="about-subtitle">🟡🟡🟡 GET TO KNOW US</p>
-          <h2 className="about-title">Digitally Marked as a URU Holder</h2>
+          <h2 className="about-title">Unique Records of Universe</h2>
           <p className="about-highlight">
-            We’re Committed to Deliver High Quality Projects
+          Celebrating Amazing Achievements in 100+ Categories
           </p>
           <p className="about-description">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+          Unique Records of Universe is a platform that celebrates human excellence and diversity. It recognizes unique and extraordinary achievements across 100+ broad categories, spanning nature, compound power, science, arts, humanities, and social sectors. It's a place where exceptional individuals who challenge the limits of talent, dedication, and innovation are honored.
+          <br />
+          The purpose of these 100+ categories is not just to record world records, but to inspire individuals and groups to go beyond their limits and achieve something extraordinary. It is a platform that encourages creativity, knowledge, and amazing, unique and extraordinary human endeavors. It should be clearly noted that we do not encourage anyone to create records by risking their lives.
           </p>
 
           {/* Features */}
           <div className="about-features">
             <div className="feature-item">
-              <span className="down-arrow">↙️</span> <strong>Design Freedom</strong>
-              <p>Lorem ipsum dolor sit notted consectetur.</p>
+              <span className="down-arrow">↙️</span> <strong>Reputation and Identity </strong>
+            <p>The three stars in the URU symbol (Green, Orange, Red) represent quality, prestige and high standards. It indicates that this platform honours special merit and extraordinary work.
+            </p>
             </div>
             <div className="feature-item">
-              <span className="down-arrow">↙️</span> <strong>Marketing Rules</strong>
-              <p>Lorem ipsum dolor sit notted consectetur.</p>
+              <span className="down-arrow">↙️</span> <strong>Universe and Us
+              </strong>
+              <p>The solar system depicted in the centre of the URU Symbol represents spiritual and scientific thinking, exploration, harmony and stability and the rainbow colours represent diversity, harmony and balance.
+            </p>
             </div>
           </div>
 
           {/* Progress Bar */}
           <div className="progress-bar">
-            <span className="progress-label">Success 89%</span> 
+            <span className="progress-label">Success 100%</span> 
             <div className="progress-track">
               <div className="progress-fill" style={{ width: '77%' }}></div>
             </div>
           </div>
 
           {/* Discover More Button */}
-          <button className="discover-btn">Discover More</button>
+         <a href="/learnmore"> <button  className="discover-btn" >Learn More</button></a>
         </div>
       </div>
     </div>

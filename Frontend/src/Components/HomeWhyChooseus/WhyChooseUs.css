@@ -120,7 +120,7 @@
   }
   
   .rightside-img {
-
+    margin-left: 45px;
     width: 520px;
     height: auto;
     border-radius: 4px;
@@ -320,6 +320,7 @@
     }
   
     .rightside-img {
+      margin-left: 0px;
       width: 100%;
       max-width: 400px;
     }

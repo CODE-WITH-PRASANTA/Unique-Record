@@ -14,7 +14,7 @@ import {
 } from "react-icons/fi";
 
 import "./Navbar.css";
-import CompanyLogo from "../../assets/UN QUE.png";
+import CompanyLogo from "../../assets/UNQUE.png";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);

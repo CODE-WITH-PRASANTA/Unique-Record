@@ -1,7 +1,7 @@
 import React from 'react';
-import { FaFacebookF, FaLinkedinIn, FaXTwitter, FaPinterestP, FaInstagram, FaYoutube } from "react-icons/fa6";
+import { FaFacebookF, FaLinkedinIn, FaXTwitter, FaTelegram  , FaInstagram, FaYoutube } from "react-icons/fa6";
 import { FaMapMarkerAlt, FaPhoneAlt, FaEnvelope } from "react-icons/fa";
-import footerlogo from "../../assets/UN QUE.png";
+import footerlogo from "../../assets/UNQUE.png"
 import "./Footer.css";
 
 const Footer = () => {
@@ -53,18 +53,20 @@ const Footer = () => {
       {/* Footer Bottom */}
       <div className="footer-bottom">
     <div className="footer-icons">
-        <FaFacebookF className="social-icon" />
+       <a href="https://www.facebook.com/groups/637109025434460/?ref=share&mibextid=lOuIew"><FaFacebookF className="social-icon" /></a> 
+        <a href="https://ig.me/j/AbYpK-z9eMj7dSAv/"><FaInstagram className="social-icon" /></a>
+       <a href="https://t.me/+jsAV_YA1yXgyN2Q1"> <FaTelegram  className="social-icon" /></a>
+
         <FaLinkedinIn className="social-icon" />
         <FaXTwitter className="social-icon" />
-        <FaPinterestP className="social-icon" />
-        <FaInstagram className="social-icon" />
         <FaYoutube className="social-icon" />
     </div>
     
     <div className="footer-links">
-        <span>Terms Of Services</span>
-        <span>Privacy Policy</span>
-        <span>Cookie Policy</span>
+       <a href="/termandcondition"><span>Terms Of Services</span></a> 
+        <a href="/termandcondition"><span>Privacy Policy</span></a>
+       <a href="/termandcondition"> <span>Cancellation & Refund </span></a>
+        <a href="/termandcondition"><span>Shipping & Delivery </span></a>
     </div>
     
     <p className="footer-bottom-text">Copyright © All Rights Reserved © 2025. Powered by <span> | ♡ PR Webstock </span></p>
