@@ -12,6 +12,7 @@ import FreeQuotes from '../../Components/GetFreeQuotes/FreeQuotes';
 import StyledBlog from '../../Components/LatestBlog/LatestBlog';
 import OurVision from '../../Components/OurVision/OurVision';
 import Rotation from '../../Components/Rotation/Rotation';
+import AboutOwner from '../../Components/AboutOwner/AboutOwner';
 
 const Home = () => {
   return (
@@ -48,6 +49,7 @@ const Home = () => {
     <WhyChooseUs />
     <MeetOurAgent />
     <Rotation />
+    <AboutOwner />
     <StyledBlog />
     <OurVision />
     <FreeQuotes />

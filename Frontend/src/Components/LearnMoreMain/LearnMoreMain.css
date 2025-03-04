@@ -30,15 +30,15 @@
   }
   
   /* Ensuring all inner content sits above the pseudo-element */
-  .who-section * {
+  .LearnMore-Main-section * {
     position: relative;
     z-index: 2;
   }
   
   /* Wrapper styles */
-  .who-wrapper {
+  .LearnMore-Main-wrapper {
     display: flex;
-    max-width: 1500px;
+    max-width: 1300px;
     align-items: center;
     gap: 50px;
     flex-wrap: wrap;
@@ -46,11 +46,11 @@
   }
   
   /* Image wrapper and styles */
-  .who-image-wrapper {
+  .LearnMore-Main-image-wrapper {
     flex: 1;
   }
   
-  .who-image {
+  .LearnMore-Main-image {
     width: 95%;
     border-radius: 15px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
@@ -59,7 +59,7 @@
   }
   
   /* Text content styling */
-  .who-text-content {
+  .LearnMore-Main-text-content {
     flex: 1;
     background: rgba(255, 255, 255, 0.1);
     padding: 25px;
@@ -68,7 +68,7 @@
   }
   
   /* Text headings and descriptions */
-  .who-subheading {
+  .LearnMore-Main-subheading {
     font-size: 14px;
     font-weight: bold;
     color: #e94e77; /* Pink text */
@@ -76,7 +76,7 @@
     letter-spacing: 1.5px;
   }
   
-  .who-heading {
+  .LearnMore-Main-heading {
     font-size: 36px;
     font-weight: 700;
     color: #cde94e; /* Lime green text */
@@ -84,7 +84,7 @@
     line-height: 1.4;
   }
   
-  .who-description {
+  .LearnMore-Main-description {
     font-size: 16px;
     color: #e0e0e0;
     line-height: 1.8;
@@ -92,7 +92,7 @@
   }
   
   /* Info box styling */
-  .who-info-box {
+  .LearnMore-Main-info-box {
     background: rgba(255, 255, 255, 0.2);
     padding: 25px;
     border-radius: 12px;
@@ -101,25 +101,20 @@
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   }
   
-  .who-info-title {
+  .LearnMore-Main-info-title {
     font-size: 20px;
     font-weight: bold;
     color: #cde94e; /* Lime green text */
     margin-bottom: 10px;
   }
-  .who-info-title-content {
-    font-size: 16px;
-    color: #f2f2f2;
-    line-height: 1.6;
-  }
   
-  .who-info-list {
+  .LearnMore-Main-info-list {
     list-style: none;
     padding: 0;
     margin: 10px 0 0;
   }
   
-  .who-info-item {
+  .LearnMore-Main-info-item {
     font-size: 16px;
     color: #e0e0e0;
     margin-bottom: 8px;
@@ -127,7 +122,7 @@
     align-items: center;
   }
   
-  .who-info-item::before {
+  .LearnMore-Main-info-item::before {
     content: '\2022';
     color: #e94e77; /* Pink bullet point */
     font-size: 18px;
@@ -135,7 +130,7 @@
   }
   
   /* Stats container styling */
-  .who-stats-container {
+  .LearnMore-Main-stats-container {
     display: flex;
     justify-content: start;
     width: 100%;
@@ -146,7 +141,7 @@
     margin: auto;
   }
   
-  .who-stat-box {
+  .LearnMore-Main-stat-box {
     text-align: center;
     padding: 30px 20px;
     background: linear-gradient(135deg, #e94e77, #cde94e); /* Gradient with pink and lime green */
@@ -158,16 +153,16 @@
     transition: transform 0.3s ease;
   }
   
-  .who-stat-box:hover {
+  .LearnMore-Main-stat-box:hover {
     transform: translateY(-10px);
   }
   
-  .who-stat-number {
+  .LearnMore-Main-stat-number {
     font-size: 32px;
     font-weight: bold;
   }
   
-  .who-stat-text {
+  .LearnMore-Main-stat-text {
     font-size: 16px;
     margin-top: 5px;
     color: #ffffff;
@@ -180,45 +175,45 @@
 
 /* For tablets (768px and above) */
 @media (max-width: 1024px) {
-    .who-wrapper {
+    .LearnMore-Main-wrapper {
       flex-direction: column;
       text-align: center;
       gap: 30px;
     }
   
-    .who-image-wrapper {
+    .LearnMore-Main-image-wrapper {
       flex: unset;
     }
   
-    .who-image {
+    .LearnMore-Main-image {
       max-width: 90%;
       margin: 0 auto;
     }
   
-    .who-text-content {
+    .LearnMore-Main-text-content {
       padding: 20px;
       margin: 0 auto;
       text-align: center;
     }
   
-    .who-heading {
+    .LearnMore-Main-heading {
       font-size: 28px;
     }
   
-    .who-description {
+    .LearnMore-Main-description {
       font-size: 14px;
     }
   
-    .who-info-box {
+    .LearnMore-Main-info-box {
       margin-top: 15px;
     }
   
-    .who-stats-container {
+    .LearnMore-Main-stats-container {
       flex-direction: column;
       gap: 15px;
     }
   
-    .who-stat-box {
+    .LearnMore-Main-stat-box {
       min-width: unset;
       padding: 20px 15px;
     }
@@ -232,16 +227,16 @@
       padding: 30px 10px;
     }
   
-    .who-image {
+    .LearnMore-Main-image {
       width: 100%;
     }
   
-    .who-text-content {
+    .LearnMore-Main-text-content {
     text-align: start;
       padding: 15px;
     }
   
-    .who-stats-container {
+    .LearnMore-Main-stats-container {
       margin-top: 20px;
       gap: 10px;
     }
@@ -250,7 +245,7 @@
   
   /* For very small mobile devices (max-width: 480px) */
   @media (max-width: 480px) {
-    .who-stat-box {
+    .LearnMore-Main-stat-box {
       padding: 10px 8px;
     }
   }

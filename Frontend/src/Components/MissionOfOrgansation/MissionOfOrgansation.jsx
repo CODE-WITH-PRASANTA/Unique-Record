@@ -4,6 +4,7 @@ import {
   FaLightbulb,
   FaClipboardCheck,
   FaRegHandshake,
+  FaBalanceScale 
 } from "react-icons/fa";
 import Drawimg from "../../assets/draw-img-vision.png";
 
@@ -53,6 +54,20 @@ const MissionOfOrganisation = () => {
               <h3 className="mission-org-heading">Think about this vision!</h3>
               <p className="mission-org-text">
               If you have done or are doing something out of the box in the country, world, society, then this platform will prove to be very useful and inspiring for you. At the same time, this platform reminds us that we should never give up on our dreams and should always try to do something big, amazing, undoubtedly we will get success.
+              </p>
+            </div>
+          </div>
+
+          {/* Inspire Through Action */}
+          <div className="mission-org-item">
+            <div className="mission-org-icon-wrapper">
+              <FaBalanceScale  className="mission-org-icon" />
+            </div>
+            <div>
+              <h3 className="mission-org-heading">Because</h3>
+              <p className="mission-org-text">
+              No matter how much darkness the path is, if there is enough enthusiasm and courage to move forward on the path of self-confidence and positivity, then nature itself will arrange for light.
+              The desire to earn a lot of name and money without doing enough hard work gives rise to crime which leads to degradation after a period of time. On the other hand, becoming famous and earning a name for amazing, unique and virtuous deeds not only provides wealth, property, fame and glory in this world but it also improves the other world and gives salvation in the next birth as well.
               </p>
             </div>
           </div>

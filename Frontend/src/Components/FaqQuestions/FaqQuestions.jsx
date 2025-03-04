@@ -36,13 +36,14 @@ const FaqQuestion = () => {
       question: 'What is the process for registering a record in the Unique Records of Universe?',
       answer: 'One must visit the official website www.ouruniverse.in, create a login ID and password, and submit an online application. Supporting evidence in the form of links, files, and other documents related to the unique record or activity must be uploaded. After submission, the admin team verifies and certifies the record.',
     },
-  ];
-
-  const tourPackagesQuestions = [
     {
       question: 'What types of achievements are recorded?',
       answer: 'The records include extraordinary performances in various fields such as sports, arts, science, technology, human achievements, literature, spirituality, and other diverse areas.',
     },
+  ];
+
+  const tourPackagesQuestions = [
+   
     {
       question: 'Is there a fee for registering a record?',
       answer: ' Yes, in this Kaliyug, no one gives importance to free goods and services. Since, for maintaining your record related data on the server of the web portal for an indefinite time, you will have to pay a one-time fee of Rs. 3,693/-. If for any reason or in case of ineligibility, your record is not registered, then your payment will be refunded to the same account.',
@@ -54,6 +55,18 @@ const FaqQuestion = () => {
     {
       question: ' What benefits do record holders get?',
       answer: 'Record holders receive digital and physical certificates, media coverage, and universal recognition.',
+    },
+    {
+      question: ' Do record holders receive any awards?',
+      answer: 'In some cases, special awards or honors are given during events organized in different states. Additionally, awards and recognition materials may be sent to their homes via post.',
+    },
+    {
+      question: ' What is the process for breaking a record?',
+      answer: 'It involves presenting new evidence and undergoing the verification process again.',
+    },
+    {
+      question: ' Can a record be challenged?',
+      answer: ' Yes, if new evidence is submitted that disproves an existing record, it can be modified or annulled accordingly.',
     },
   ];
 
@@ -67,6 +80,10 @@ const FaqQuestion = () => {
       answer: 'Yes, regional offices are being established in various countries and states across India.',
     },
     {
+      question: 'Does the Unique Records of Universe have an official website?',
+      answer: 'Yes, its official website is www.ouruniverse.in, where more information on record registration and application processes can be found.',
+    },
+    {
       question: ' Does the Unique Records of Universe publish an annual book?',
       answer: 'Not currently. Since it is a digital initiative, all new and old records are available on the website in a date-wise manner, accessible anytime from anywhere. However, an annual publication may be considered in the future if necessary.',
     },
@@ -74,13 +91,15 @@ const FaqQuestion = () => {
       question: 'Does the Unique Records of Universe organize events?',
       answer: 'Yes, various events are held to honor record holders and establish new records.',
     },
-  ];
-
-  const tourPackagesQuestionstwo = [
     {
       question: 'Does the Unique Records of Universe have social media accounts?',
       answer: 'Yes, it is active on social media platforms such as Facebook, WhatsApp, Instagram, YouTube, X (formerly Twitter), etc.',
     },
+    
+  ];
+
+  const tourPackagesQuestionstwo = [
+  
     {
       question: ' Can the Unique Records of Universe be viewed online?',
       answer: 'Yes, the records can be viewed on its official website and social media platforms.',
@@ -92,6 +111,14 @@ const FaqQuestion = () => {
     {
       question: ' Can the records and activities of the Unique Records of Universe be used in education?',
       answer: 'Yes, they can inspire students and enhance knowledge.',
+    },
+    {
+      question: 'Can the records and achievements of the Unique Records of Universe be used for commercial purposes?',
+      answer: 'In some cases, they can be used with proper licensing and permissions.',
+    },
+    {
+      question: 'What is the significance of the numbers 3, 6, and 9 in the registration fee and certificate number?',
+      answer: 'The deep secret of the universe is hidden in the 3, 6, 9 digits. Along with being powerful, these numbers are the key to the universe. This number occupies an important place in mathematics, science, astrology and spirituality. If you want to understand the mystery of the universe, think about energy, frequency and vibrations. If you understand the secret of 3, 6 and 9, you will get the key to the universe. You can get more information in this context from the literature of Vedas, Puranas, Shastras, Upanishads and the great scientist Nikola Tesla.',
     },
   ];
 

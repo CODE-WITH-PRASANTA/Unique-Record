@@ -19,22 +19,8 @@ const WhoWeAre = () => {
           </p>
           <div className="who-info-box">
             <p className="who-info-title">About URU Web Portal Development</p>
-            <ul className="who-info-list">
-              <li className="who-info-item">Certification</li>
-              <li className="who-info-item">License Card</li>
-              <li className="who-info-item">5+ Years Experience</li>
-            </ul>
+            <p className='who-info-title-content'>The web portal "Unique Records of Universe™" has been developed by Mr. Prashant Khuntia from Bhubaneswar, Odisha. The project was initiated by DPKHRC Trust, which is authorized to conduct internships through All India Council for Technical Education (AICTE) Ministry of Education, Government of India. A proposal for web development was submitted on February 15, 2025 through the AICTE internship portal with the ID INTERNSHIP_173958448267aff3e297096. 64 applicants applied. Mr. Khuntia was selected to perform this task after the interview held between March 6 and 10, 2025.</p>
           </div>
-        </div>
-      </div>
-      <div className="who-stats-container">
-        <div className="who-stat-box">
-          <p className="who-stat-number">15Y</p>
-          <p className="who-stat-text">Business Work</p>
-        </div>
-        <div className="who-stat-box">
-          <p className="who-stat-number">500+</p>
-          <p className="who-stat-text">Success Building</p>
         </div>
       </div>
     </section>

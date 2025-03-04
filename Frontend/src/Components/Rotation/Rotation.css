@@ -1,7 +1,6 @@
-/* Main container to hide the overflow */
 /* Section wrapper */
 .rotation-section {
-    border-top: 3px solid black;
+    border-top: 4px solid #e8c177;
     text-align: center;
     padding: 20px 10px;
     background: #04171a; /* Subtle gradient background for the section */

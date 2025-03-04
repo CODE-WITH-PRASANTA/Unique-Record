@@ -49,14 +49,12 @@ const HomeAbout = () => {
         {/* Right Side with Text */}
         <div className="about-content">
           <p className="about-subtitle">🟡🟡🟡 GET TO KNOW US</p>
-          <h2 className="about-title">Unique Records of Universe</h2>
+          <h2 className="about-title">Digital Marked as a  URU Holder</h2>
           <p className="about-highlight">
-          Celebrating Amazing Achievements in 100+ Categories
+          We Reflect the Spirit of Connecting Different Cultures, Beliefs and Abilities.
           </p>
           <p className="about-description">
-          Unique Records of Universe is a platform that celebrates human excellence and diversity. It recognizes unique and extraordinary achievements across 100+ broad categories, spanning nature, compound power, science, arts, humanities, and social sectors. It's a place where exceptional individuals who challenge the limits of talent, dedication, and innovation are honored.
-          <br />
-          The purpose of these 100+ categories is not just to record world records, but to inspire individuals and groups to go beyond their limits and achieve something extraordinary. It is a platform that encourages creativity, knowledge, and amazing, unique and extraordinary human endeavors. It should be clearly noted that we do not encourage anyone to create records by risking their lives.
+          It is a symbol of extraordinary achievement, diversity, inclusiveness and universal unity, and an important link in the universe that will inspire others.
           </p>
 
           {/* Features */}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaFacebookF, FaLinkedinIn, FaXTwitter, FaTelegram  , FaInstagram, FaYoutube } from "react-icons/fa6";
+import { FaFacebookF, FaWhatsapp , FaXTwitter, FaTelegram  , FaInstagram, FaYoutube } from "react-icons/fa6";
 import { FaMapMarkerAlt, FaPhoneAlt, FaEnvelope } from "react-icons/fa";
 import footerlogo from "../../assets/UNQUE.png"
 import "./Footer.css";
@@ -13,9 +13,11 @@ const Footer = () => {
           <img src={footerlogo} alt="Company Logo" className="footer-logo" />
           <p className="footer-text">Specializes in providing high-class tours for those in need. Contact Us</p>
           <div className="footer-contact">
-            <p className="footer-item"><FaMapMarkerAlt className="icon" />101 E 129th St, East Chicago, IN 46312, US</p>
-            <p className="footer-item"><FaPhoneAlt className="icon" />1-333-345-6868</p>
-            <p className="footer-item"><FaEnvelope className="icon" />themesflat@gmail.com</p>
+            <p className="footer-item"><FaMapMarkerAlt className="icon" />Jaihind Tendua, District- Aurangabad, Bihar </p>
+            <p className="footer-item"><FaMapMarkerAlt className="icon" /> Thekma, District- Azamgarh, Uttar Pradesh </p>
+            <p className="footer-item"><FaMapMarkerAlt className="icon" /> Nandgran, District- Una, Himachal Pradesh </p>
+            <p className="footer-item"><FaPhoneAlt className="icon" />+91 9472351693</p>
+            <p className="footer-item"><FaEnvelope className="icon" />uruonline2025@gmail.com</p>
           </div>
         </div>
         {/* Categories */}
@@ -56,8 +58,7 @@ const Footer = () => {
        <a href="https://www.facebook.com/groups/637109025434460/?ref=share&mibextid=lOuIew"><FaFacebookF className="social-icon" /></a> 
         <a href="https://ig.me/j/AbYpK-z9eMj7dSAv/"><FaInstagram className="social-icon" /></a>
        <a href="https://t.me/+jsAV_YA1yXgyN2Q1"> <FaTelegram  className="social-icon" /></a>
-
-        <FaLinkedinIn className="social-icon" />
+        <a href="https://chat.whatsapp.com/LrCIxNdOMdYDNOlFPA073k"><FaWhatsapp  className="social-icon" /></a>
         <FaXTwitter className="social-icon" />
         <FaYoutube className="social-icon" />
     </div>

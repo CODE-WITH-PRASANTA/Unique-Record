@@ -5,6 +5,7 @@ import LearnMoreContent from '../../Components/LearnMoreContent/LearnMoreContent
 import LearnMoreCertificate from '../../Components/LearnMoreCertificate/LearnMoreCertificate'
 import LearnMoreDigitalCertificate from '../../Components/LearnMoreDigitalCertificate/LearnMoreDigitalCertificate'
 import LearnMoreLogo from '../../Components/LearnMoreLogo/LearnMoreLogo'
+import LearnMoreMain from '../../Components/LearnMoreMain/LearnMoreMain'
 
 
 const LearnMore = () => {
@@ -19,6 +20,7 @@ const LearnMore = () => {
         <p>Unique Records of Universe </p>
       </div>
     </div>
+    <LearnMoreMain />
     <LearnMoreBenifit />
     <LearnMoreContent />
     <LearnMoreCertificate />
