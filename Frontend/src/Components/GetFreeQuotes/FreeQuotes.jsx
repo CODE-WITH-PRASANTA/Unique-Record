@@ -21,7 +21,7 @@ const FreeQuotes = () => {
       <div className="free-quotes-right" style={{ backgroundImage: `url(${rightShape})` }}>
         <div className="free-quotes-content">
           <p className="free-quotes-title">🟡Contact Us🟡</p>
-          <h2 className="free-quotes-heading">Get a Free Advice</h2>
+          <h2 className="free-quotes-heading">Give Your Opinion or Suggestion.</h2>
 
           <form className="free-quotes-form">
             <div className="free-quotes-row">
@@ -40,6 +40,25 @@ const FreeQuotes = () => {
               <input 
                 type="tel" 
                 placeholder="Phone" 
+                className="free-quotes-input"
+              />
+            </div>
+            <div className="free-quotes-row">
+            <input 
+                type="tel" 
+                placeholder="Age" 
+                className="free-quotes-input"
+              />
+            <input 
+                type="text" 
+                placeholder="Designation " 
+                className="free-quotes-input"
+              />
+            </div>
+            <div className="free-quotes-row">
+              <input 
+                type="text" 
+                placeholder="Address" 
                 className="free-quotes-input"
               />
             </div>

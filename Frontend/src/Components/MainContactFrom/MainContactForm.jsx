@@ -18,23 +18,21 @@ const MainContactForm = () => {
               <FaMapMarkerAlt className="main-contact-form-icon" />
               <div>
                 <h4 className="main-contact-form-subheading">OUR LOCATION</h4>
-                <p>11 New Avenue, Lane 08, New York, USA</p>
+                <p>Thekma, District- Azamgarh, Uttar Pradesh </p>
               </div>
             </div>
             <div className="main-contact-form-item">
               <FaPhoneAlt className="main-contact-form-icon" />
               <div>
                 <h4 className="main-contact-form-subheading">24/7 SUPPORT</h4>
-                <p>+1800-corona-help</p>
-                <p>+1 9988 1010 10</p>
+                <p>+91 9472351693</p>
               </div>
             </div>
             <div className="main-contact-form-item">
               <FaEnvelope className="main-contact-form-icon" />
               <div>
                 <h4 className="main-contact-form-subheading">EMAIL US</h4>
-                <p>help@veneno.com</p>
-                <p>support@veneno.com</p>
+                <p> uruonline2025@gmail.com</p>
               </div>
             </div>
           </div>

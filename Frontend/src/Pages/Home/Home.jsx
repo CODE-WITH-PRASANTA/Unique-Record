@@ -1,9 +1,9 @@
 import React from 'react';
 import './Home.css';
-import { FaFacebookF, FaTwitter, FaYoutube, FaInstagram } from 'react-icons/fa';
+import { FaFacebookF, FaWhatsapp, FaYoutube, FaInstagram } from 'react-icons/fa';
 
 // Import assets
-import stackimg from '../../assets/banner-img.png';
+import stackimg from '../../assets/banner-img.jpg';
 import HomeAbout from '../../Components/HomeAbout/HomeAbout';
 import WhyChooseUs from '../../Components/HomeWhyChooseus/WhyChooseUs';
 import MeetOurAgent from '../../Components/MeetOurAgent/MeetOurAgent';
@@ -21,10 +21,10 @@ const Home = () => {
       <section className="banner-section">
         <div className="banner-social-area">
           <ul className="social-icons">
-            <li><a href="#0"><FaFacebookF /></a></li>
-            <li><a href="#0"><FaTwitter /></a></li>
+            <li><a href="https://www.facebook.com/groups/637109025434460/?ref=share&mibextid=lOuIew"><FaFacebookF /></a></li>
+            <li><a href="https://chat.whatsapp.com/LrCIxNdOMdYDNOlFPA073k"><FaWhatsapp /></a></li>
             <li><a href="#0"><FaYoutube /></a></li>
-            <li><a href="#0"><FaInstagram /></a></li>
+            <li><a href="https://ig.me/j/AbYpK-z9eMj7dSAv/"><FaInstagram /></a></li>
           </ul>
         </div>
         <div className="home-container">
@@ -36,7 +36,7 @@ const Home = () => {
             </p>
             <div className="banner-buttons">
               <a href="#make-your-trip" className="btn btn-primary">Apply Now</a>
-              <a href="#request-quote" className="btn btn-secondary">See The Demo</a>
+              <a href="#request-quote" className="btn btn-secondary">See The Records</a>
             </div>
           </div>
           <div className="banner-image">

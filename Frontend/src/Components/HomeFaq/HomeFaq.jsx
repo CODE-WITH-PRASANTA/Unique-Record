@@ -11,20 +11,20 @@ const HomeFaq = () => {
 
   const faqs = [
     { 
-      question: "What is Digital Marketing Services?", 
-      answer: "Digital marketing services include SEO, social media, and paid ads to promote businesses online." 
+      question: "What is the Unique Records of Universe?", 
+      answer: "The Unique Records of Universe is an initiative that documents, preserves, and certifies extraordinary, inspiring, and unique events, achievements, and records occurring in the universe by individuals or groups. It includes digital documentation and recognizes exceptional talents and accomplishments worldwide." 
     },
     { 
-      question: "What are the Benefits of Large Scale Marketing?", 
-      answer: "Large-scale marketing reaches a broader audience, increasing brand awareness and potential sales." 
+      question: "What is the purpose of maintaining such records?", 
+      answer: "The objective is to understand the diversity of various fields in the universe, preserve the unique skills, talents, and feats of extraordinary individuals, and serve as a source of inspiration for future generations." 
     },
     { 
-      question: "What should we do if sales are decreasing?", 
-      answer: "Analyze data, adjust strategies, and improve customer engagement to boost sales." 
+      question: "What is the difference between Unique Records of Universe and World Book of Records?", 
+      answer: "Unique Records of Universe is a modern advanced and digital concept that is a departure from the traditional World Book of Records concept. While both organizations register world records, Unique Records of Universe also records unique works or activities. The criteria, categories and verification processes of Unique Records of Universe are different and distinct from other similar organizations." 
     },
     { 
-      question: "Which services are required to build a website?", 
-      answer: "Services include domain registration, web design, development, hosting, and SEO." 
+      question: "What is the process for registering a record in the Unique Records of Universe?", 
+      answer: " One must visit the official website www.ouruniverse.in, create a login ID and password, and submit an online application. Supporting evidence in the form of links, files, and other documents related to the unique record or activity must be uploaded. After submission, the admin team verifies and certifies the record." 
     },
   ];
 
@@ -39,11 +39,11 @@ const HomeFaq = () => {
             Need help? Find quick answers to common questions below.
           </p>
           <ul className="faq-list">
-            <li> High-quality marketing solutions</li>
-            <li> 24/7 customer support</li>
-            <li> Affordable pricing</li>
-            <li> Proven success in digital marketing</li>
-            <li> Trusted by 10,000+ clients</li>
+            <li>Globally recognized record-keeping platform</li>
+            <li>Dedicated support team available 24/7</li>
+            <li>Transparent and seamless registration process</li>
+            <li>Celebrating unique talents and achievements worldwide</li>
+            <li>Trusted by thousands of record holders</li>
           </ul>
         </div>
 
@@ -61,7 +61,7 @@ const HomeFaq = () => {
                   {openIndex === index ? <FaChevronUp /> : <FaChevronDown />}
                 </span>
               </div>
-              <div className="faq-answer" style={{ maxHeight: openIndex === index ? "100px" : "0px" }}>
+              <div className="home-faq-answer" style={{ maxHeight: openIndex === index ? "200px" : "0px" }}>
                 {faq.answer}
               </div>
             </div>

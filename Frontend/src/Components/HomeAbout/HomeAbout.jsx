@@ -4,7 +4,6 @@ import './HomeAbout.css';
 // Assets
 import aboutoneimg from '../../assets/about-one-img-1.jpg';
 import abouttwoimg from '../../assets/about-one-img-2.jpg';
-import yellowarrowshape from '../../assets/about-one-shape-1.png';
 
 const HomeAbout = () => {
   const sectionRef = useRef(null);

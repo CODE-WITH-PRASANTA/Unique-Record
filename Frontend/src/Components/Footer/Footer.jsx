@@ -11,7 +11,7 @@ const Footer = () => {
         {/* Company Info */}
         <div className="footer-section">
           <img src={footerlogo} alt="Company Logo" className="footer-logo" />
-          <p className="footer-text">Specializes in providing high-class tours for those in need. Contact Us</p>
+          <p className="footer-text">Digitally Marking The Extraordinary Achievement.</p>
           <div className="footer-contact">
             <p className="footer-item"><FaMapMarkerAlt className="icon" />Jaihind Tendua, District- Aurangabad, Bihar </p>
             <p className="footer-item"><FaMapMarkerAlt className="icon" /> Thekma, District- Azamgarh, Uttar Pradesh </p>
@@ -32,7 +32,7 @@ const Footer = () => {
           </ul>
         </div>
         {/* Our Company */}
-        <div className="footer-section">
+        {/* <div className="footer-section">
           <h4 className="footer-heading">Our Achivement</h4>
           <ul className="footer-list">
             <li>xxxxxxxxx</li>
@@ -40,7 +40,7 @@ const Footer = () => {
             <li>xxxxxxxxxx</li>
             <li>xxxxxxxxxx</li>
           </ul>
-        </div>
+        </div> */}
         
         {/* Newsletter */}
         <div className="footer-section">
@@ -70,7 +70,10 @@ const Footer = () => {
         <a href="/termandcondition"><span>Shipping & Delivery </span></a>
     </div>
     
-    <p className="footer-bottom-text">Copyright © All Rights Reserved © 2025. Powered by <span> | ♡ PR Webstock </span></p>
+    <p className="footer-bottom-text">
+  Copyright © 2025. Powered by: <span>DPKHRC Trust</span> | Design & Develop <span> | ♡ PR Webstock</span>
+</p>
+
 </div>
 
     </footer>

@@ -49,11 +49,13 @@
 }
 
 .about-owner-text p {
+  text-align: justify;
     font-size: 17px;
   color: #fff;
 }
 
 .about-owner-text h3{
+  text-align: justify;
     color: #fff;
 }
 
@@ -208,7 +210,7 @@
     font-size: 14px;
   }
 .about-owner-text h3{
-    text-align: start;
+    text-align: justify;
   margin-top: 10px;
 }
   .about-owner-text p {

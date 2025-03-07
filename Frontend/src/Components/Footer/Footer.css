@@ -84,6 +84,7 @@
 
 /* Footer Lists */
 .footer-list {
+    text-align: center;
     list-style: none;
     padding: 0;
 }

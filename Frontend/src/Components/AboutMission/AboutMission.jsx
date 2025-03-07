@@ -13,10 +13,11 @@ const AboutMission = () => {
     <div className="about-mission-container">
       {/* Mission Content Section */}
       <div className="about-mission-content">
-        <h2 className="mission-title">About Divine<span>Grand Launch</span> & About DPKHRC Trust
+        <h2 className="mission-title">About Divine<span>Grand Launch</span>
         </h2>
         <p className="mission-intro">
         The divine, grand launch of the "Unique Record of Universe™" Web Portal was done on 25 June 2025 during the Hindi-Thai Culture Mahasammelan program organized at the International forum in the capital Bangkok, Thailand. This program was organized successful with the joint effort of Devanagari Utthan Foundation, (Hyderabad, Telangana) Dharadham International (Gorakhpur, Uttar Pradesh) and DPHRC Trust (Azamgarh, Uttar Pradesh). In which more than 250 extraordinary people from government and government institutions from all over the world participated.        </p>
+        <h2 className="mission-title">About DPKHRC <span>Trust</span> </h2>
         <p className="mission-text">
         Divya Prerak Kahaniyan Humanity Research Centre is the first research institute of the country/world which is committed to establish high ideals of humanity and morality in humans along with unique and new initiatives. For world peace, progress, development, it will change the lives of people by freeing their mentality from enemies like lust, anger, pride, attachment, greed, ego, jealousy, hatred, deceit, fraud, deception etc. and will drenched them with the sweet juice of truth, love, non-violence, goodwill, cooperation and human unity, brotherhood and is an important catalytic center point for economic, social, intellectual change.
 <br />

@@ -8,13 +8,22 @@ const NewsletterSection = () => {
       <div className="newsletter-wrapper">
         <h5 className="newsletter-subtitle">NEWSLETTER</h5>
         <h1 className="newsletter-title">
-          Simplicity In Our Approach Without Wasting Time
+        You can Easily get the Latest Updates through our Communication Channels.
         </h1>
         <p className="newsletter-description">
-          Subscribe to our newsletter and stay updated with the latest trends,
-          tips, and offers to simplify your journey with us.
+        Subscribe to our newsletter and stay updated with the latest trends, tips and upcoming awards ceremonies to make your journey with us simpler.
         </p>
         <div className="newsletter-form">
+          <input
+            className="newsletter-input-field"
+            type="text"
+            placeholder="Enter Your Name"
+          />
+          <input
+            className="newsletter-input-field"
+            type="tel"
+            placeholder="Enter Your Phone"
+          />
           <input
             className="newsletter-input-field"
             type="email"
