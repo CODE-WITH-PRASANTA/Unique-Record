@@ -14,6 +14,7 @@ import AdminNavbar from "./AdminPannel/AdminNavbar/AdminNavbar";
 import "./App.css" ;
 import LearnMore from "./Pages/LearnMore/LearnMore";
 import TermandCondition from "./Pages/TermandCondition/TermandCondition";
+import Notice from "./Pages/Notice/Notice";
 
 function Layout() {
   const location = useLocation();
@@ -28,6 +29,7 @@ function Layout() {
         <Route path="/termandcondition" element={<TermandCondition />}/>
         <Route path="/about" element={<AboutUs />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/notice" element={<Notice />} />
         <Route path="/faq" element={<FaqPage />} />
         <Route path="/media" element={<Media />} />
         <Route path="/vision" element={<Vision />} />

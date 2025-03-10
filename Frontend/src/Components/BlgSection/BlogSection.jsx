@@ -29,7 +29,7 @@ const BlogSection = () => {
   return (
     <section className="blog-section">
       <h2 className="blog-header">Latest Insights & Trends</h2>
-      <p className="blog-subtext">Stay updated with the latest in real estate, interior design, and investment trends.</p>
+      <p className="blog-subtext">Stay updated with "Unique Records of Universe" and all the unique, amazing, innovative information of the country and the world</p>
       
       <div className="blog-container">
         {blogs.map((blog) => (

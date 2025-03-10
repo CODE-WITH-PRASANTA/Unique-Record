@@ -144,22 +144,23 @@ const FaqQuestion = () => {
     <div className="faq-questions-section-wrapper">
       <div className="faq-questions-section">
         <div className="faq-questions-category">
-          <h2>General Questions</h2>
+          <h2>How are Records Registered?          </h2>
           {renderQuestions(managingQuestions, activeQuestions.general, 'general')}
         </div>
         <div className="faq-questions-category">
-          <h2>Managing Your Deals</h2>
+          <h2>What do Record Holders Receive?
+          </h2>
           {renderQuestions(tourPackagesQuestions, activeQuestions.booking, 'booking')}
         </div>
       </div>
     <div className="second-question-section">
       <div className="faq-questions-section ">
         <div className="faq-questions-category">
-          <h2>Main Questions</h2>
+          <h2>Breaking a Record</h2>
           {renderQuestions(managingQuestionstwo, activeQuestions.tour, 'tour')}
         </div>
         <div className="faq-questions-category">
-          <h2>Managing Your Everything</h2>
+          <h2>Breaking a Record </h2>
           {renderQuestions(tourPackagesQuestionstwo, activeQuestions.package, 'package')}
         </div>
       </div>

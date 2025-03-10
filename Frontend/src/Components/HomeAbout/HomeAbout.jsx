@@ -75,7 +75,7 @@ const HomeAbout = () => {
           <div className="progress-bar">
             <span className="progress-label">Success 100%</span> 
             <div className="progress-track">
-              <div className="progress-fill" style={{ width: '77%' }}></div>
+              <div className="progress-fill" style={{ width: '100%' }}></div>
             </div>
           </div>
 

@@ -11,6 +11,7 @@ import {
   FiHelpCircle,
   FiImage  ,
   FiPhone,
+  FiClipboard
 } from "react-icons/fi";
 
 import "./Navbar.css";
@@ -34,8 +35,9 @@ const Navbar = () => {
           <li><a href="/about"><FiInfo className="nav-icon" /> About Us</a></li>
           <li><a href="/vision"><FiEye className="nav-icon" /> Our Vision</a></li>
           <li><a href="/achivments"><FiAward className="nav-icon" /> Achievements</a></li>
+          <li><a href="/notice"><FiClipboard className="nav-icon" /> Notice</a></li>
           <li><a href="/media"><FiImage   className="nav-icon" /> Media</a></li>
-          <li><a href="/blog"><FiBookOpen className="nav-icon" /> Blog</a></li>
+          <li><a href="/blog"><FiBookOpen className="nav-icon" /> URU Post</a></li>
           <li><a href="/faq"><FiHelpCircle className="nav-icon" /> FAQ</a></li>
           <li><a href="/contact"><FiPhone className="nav-icon" /> Contact Us</a></li>
         </ul>
@@ -60,8 +62,9 @@ const Navbar = () => {
           <li><a href="/about"><FiInfo className="nav-icon" /> About Us</a></li>
           <li><a href="/vision"><FiEye className="nav-icon" /> Our Vision</a></li>
           <li><a href="/achivments"><FiAward className="nav-icon" /> Achievements</a></li>
+          <li><a href="/notice"><FiClipboard className="nav-icon" /> Notice</a></li>
           <li><a href="/media"><FiImage className="nav-icon" /> Media</a></li>
-          <li><a href="/blog"><FiBookOpen className="nav-icon" /> Blog</a></li>
+          <li><a href="/blog"><FiBookOpen className="nav-icon" /> URU Post</a></li>
           <li><a href="/faq"><FiHelpCircle className="nav-icon" /> FAQ</a></li>
           <li><a href="/contact"><FiPhone className="nav-icon" /> Contact Us</a></li>
         </ul>

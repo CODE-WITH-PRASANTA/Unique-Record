@@ -9,7 +9,7 @@ const Blog = () => {
     <div className="Blog-section">
       <div className="Blog-content">
         <h1>
-          Blogs
+        URU Post 
         </h1>
         <p>Latest News , Updates & Blogs</p>
       </div>

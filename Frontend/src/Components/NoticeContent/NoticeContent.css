@@ -1,0 +1,134 @@
+/* General Styling */
+.notice-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 50px 20px;
+  }
+  
+  /* Notice Card Styling */
+  .notice-card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .notice-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Notice Image */
+  .notice-image {
+    position: relative;
+    width: 100%;
+  }
+  
+  .notice-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+  }
+  
+  /* Date Box */
+  .notice-date {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: #ff5722;
+    color: #fff;
+    padding: 10px 12px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+  
+  .notice-date span:first-child {
+    font-size: 22px;
+  }
+  
+  .notice-date span:last-child {
+    font-size: 14px;
+  }
+  
+  /* Notice Content */
+  .notice-content {
+    padding: 22px;
+  }
+  
+  /* Meta Info */
+  .notice-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 12px;
+  }
+  
+  .notice-meta span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+  }
+  
+  /* Notice Title */
+  .notice-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 12px;
+    color: #333;
+  }
+  
+  /* Notice Description */
+  .notice-description {
+    font-size: 15px;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 18px;
+  }
+  
+  /* link More Button */
+  .link-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 20px;
+    border: 2px solid #ff5722;
+    color: #ff5722;
+    font-weight: bold;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: 0.3s ease;
+    font-size: 14px;
+  }
+  
+  .link-more:hover {
+    background: #ff5722;
+    color: #ffffff;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 1024px) {
+    .notice-section {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .notice-section {
+      grid-template-columns: repeat(1, 1fr);
+    }
+  }
+  
