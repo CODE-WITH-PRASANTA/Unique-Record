@@ -44,9 +44,9 @@ const Navbar = () => {
 
         {/* Right Section */}
         <div className="nav-buttons">
-          <button className="sign-in">
+         <a href="/login"> <button className="sign-in">
             <FiUsers className="button-icon" /> Login
-          </button>
+          </button></a>
         </div>
 
         {/* Mobile Menu Icon */}
@@ -70,11 +70,12 @@ const Navbar = () => {
         </ul>
         
         {/* Mobile Login Button */}
-        <div className="mobile-login">
+        <a href="/login"> <div className="mobile-login">
           <button className="mobile-sign-in">
             <FiUsers className="button-icon" /> Login
           </button>
-        </div>
+        </div></a>
+       
         
 
          </div>

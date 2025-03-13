@@ -6,7 +6,7 @@ const MainContactForm = () => {
   return (
     <section className="main-contact-form-section">
       <div className="main-contact-form-container">
-      <div className="main-contact-form-info">
+        <div className="main-contact-form-info">
           <h2 className="main-contact-form-heading">HOW WE CAN HELP?</h2>
           <p className="main-contact-form-description">
             Have a new question beyond this FAQs? Call Us, Email Us or use
@@ -18,7 +18,7 @@ const MainContactForm = () => {
               <FaMapMarkerAlt className="main-contact-form-icon" />
               <div>
                 <h4 className="main-contact-form-subheading">OUR LOCATION</h4>
-                <p>Thekma, District- Azamgarh, Uttar Pradesh </p>
+                <p>Thekma, District- Azamgarh, Uttar Pradesh</p>
               </div>
             </div>
             <div className="main-contact-form-item">
@@ -32,24 +32,38 @@ const MainContactForm = () => {
               <FaEnvelope className="main-contact-form-icon" />
               <div>
                 <h4 className="main-contact-form-subheading">EMAIL US</h4>
-                <p> uruonline2025@gmail.com</p>
+                <p>uruonline2025@gmail.com</p>
               </div>
             </div>
           </div>
         </div>
 
-        
         <div className="main-contact-form-form">
           <form>
             <div className="main-contact-form-group">
-              <input type="text" placeholder="eg. John Doe" required />
-              <input type="email" placeholder="name@website.com" required />
+              <div className="input-field">
+                <label>Name</label>
+                <input type="text" placeholder="e.g. John Doe" required />
+              </div>
+              <div className="input-field">
+                <label>Email</label>
+                <input type="email" placeholder="name@website.com" required />
+              </div>
             </div>
             <div className="main-contact-form-group">
-              <input type="text" placeholder="Mobile number" required />
-              <input type="text" placeholder="Enter zip/pin code" required />
+              <div className="input-field">
+                <label>Mobile Number</label>
+                <input type="text" placeholder="Mobile number" required />
+              </div>
+              <div className="input-field">
+                <label>Zip/Pin Code</label>
+                <input type="text" placeholder="Enter zip/pin code" required />
+              </div>
             </div>
-            <textarea placeholder="Write your question" required></textarea>
+            <div className="input-field">
+              <label>Message</label>
+              <textarea placeholder="Write your question" required></textarea>
+            </div>
             <button type="submit" className="main-contact-form-button">SUBMIT NOW</button>
           </form>
         </div>

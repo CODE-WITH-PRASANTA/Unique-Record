@@ -15,6 +15,7 @@ import "./App.css" ;
 import LearnMore from "./Pages/LearnMore/LearnMore";
 import TermandCondition from "./Pages/TermandCondition/TermandCondition";
 import Notice from "./Pages/Notice/Notice";
+import Login from "./Components/Login/Login";
 
 function Layout() {
   const location = useLocation();
@@ -37,6 +38,7 @@ function Layout() {
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:id" element={<BlogDetails />} />
         <Route path="/admin/*" element={<AdminNavbar />} />
+        <Route path="/login" element={<Login />}/>
       </Routes>
       {!hideNavbarFooter && <Footer />}
     </>

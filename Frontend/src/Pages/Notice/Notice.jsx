@@ -10,7 +10,7 @@ const Notice = () => {
         <h1>
           Notice Page
         </h1>
-        <p>Here is all news & notice</p>
+        <p>Check out all the official notifications here</p>
       </div>
   </div>
 

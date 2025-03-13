@@ -12,7 +12,7 @@ const FaqPage = () => {
         <h1>
           Faq
         </h1>
-        <p>Frequently Asked Questions</p>
+        <p>Frequently Asked Questions about URU</p>
       </div>
     </div>
 

@@ -8,7 +8,7 @@ import noticeImg3 from "../../assets/Notice-img.png";
 const notices = [
   {
     id: 1,
-    date: { day: "31", month: "May" },
+    date: { day: "31", month: "May" , year:"2025" },
     img: noticeImg1,
     title: "New Features Added to Our Web Platform",
     description:
@@ -16,7 +16,7 @@ const notices = [
   },
   {
     id: 2,
-    date: { day: "15", month: "Jun" },
+    date: { day: "15", month: "Jun" , year:"2025" },
     img: noticeImg2,
     title: "Important Security Update Released",
     description:
@@ -24,7 +24,7 @@ const notices = [
   },
   {
     id: 3,
-    date: { day: "05", month: "Jul" },
+    date: { day: "05", month: "Jul" , year:"2025" },
     img: noticeImg3,
     title: "Upcoming Maintenance Notice",
     description:
@@ -32,7 +32,7 @@ const notices = [
   },
   {
     id: 1,
-    date: { day: "31", month: "May" },
+    date: { day: "31", month: "May" , year:"2025"},
     img: noticeImg1,
     title: "New Features Added to Our Web Platform",
     description:
@@ -40,7 +40,7 @@ const notices = [
   },
   {
     id: 2,
-    date: { day: "15", month: "Jun" },
+    date: { day: "15", month: "Jun" , year:"2025" },
     img: noticeImg2,
     title: "Important Security Update Released",
     description:
@@ -48,7 +48,7 @@ const notices = [
   },
   {
     id: 3,
-    date: { day: "05", month: "Jul" },
+    date: { day: "05", month: "Jul" , year:"2025" },
     img: noticeImg3,
     title: "Upcoming Maintenance Notice",
     description:
@@ -66,6 +66,7 @@ const NoticeSection = () => {
             <div className="notice-date">
               <span>{notice.date.day}</span>
               <span>{notice.date.month}</span>
+              <span>{notice.date.year}</span>
             </div>
           </div>
           <div className="notice-content">

@@ -258,3 +258,16 @@
     }
   }
   
+
+  .input-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .input-field label {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #333;
+  }
+  
