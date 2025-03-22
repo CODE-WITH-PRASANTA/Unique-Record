@@ -1,134 +1,272 @@
 /* General Styling */
 .notice-section {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 24px;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 50px 20px;
-  }
-  
-  /* Notice Card Styling */
-  .notice-card {
-    background: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-  
-  .notice-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-  }
-  
-  /* Notice Image */
-  .notice-image {
-    position: relative;
-    width: 100%;
-  }
-  
-  .notice-image img {
-    width: 100%;
-    height: auto;
-    display: block;
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
-  }
-  /* Updated Date Box */
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 60px 20px;
+}
+
+/* Notice Card Styling */
+.notice-card {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  padding: 25px;
+  border-left: 6px solid #e94e77; /* Emphasizing the notice */
+  position: relative;
+}
+
+.notice-card:hover {
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* Notice Image */
+.notice-image {
+  position: relative;
+  max-width: 45%;
+}
+
+.notice-image img {
+  width: 400px;
+  height: auto;
+  border-radius: 12px;
+  display: block;
+}
+
+/* Notice Date Box */
 .notice-date {
   position: absolute;
   top: 15px;
   left: 15px;
-  background: #ff5722;
+  background: #e94e77;
   color: #fff;
-  padding: 8px 14px;
-  font-size: 14px;
+  padding: 10px 16px;
+  font-size: 16px;
   font-weight: bold;
   text-align: center;
-  border-radius: 8px;
+  border-radius: 6px;
   display: flex;
-  flex-direction: row; /* Change to row for full line display */
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  white-space: nowrap;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Make sure all parts of the date are in a single line */
 .notice-date span {
-  font-size: 16px;
+  font-size: 18px;
+  font-weight: 600;
 }
 
-  
-  /* Notice Content */
+/* Notice Content */
+.notice-content {
+  flex: 2;
+  padding: 25px;
+  text-align: left;
+}
+
+/* Meta Info */
+.notice-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 14px;
+}
+
+.notice-meta span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+}
+
+/* Notice Title */
+.notice-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #222;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+
+/* Notice Description */
+.notice-description {
+  font-size: 16px;
+  color: #444;
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+/* Notice Footer */
+.notice-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Read More Button */
+.link-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px;
+  border: 2px solid #e94e77;
+  color: #e94e77;
+  font-weight: bold;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: 0.3s ease;
+  font-size: 15px;
+}
+
+.link-more:hover {
+  background: #e94e77;
+  color: #ffffff;
+}
+
+/* Responsive Styles */
+
+/* Large Tablets & Small Laptops (max-width: 1024px) */
+@media (max-width: 1024px) {
+  .notice-section {
+    padding: 40px 15px;
+  }
+
+  .notice-card {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+  }
+
+  .notice-image {
+    max-width: 100%;
+    width: 100%;
+    text-align: center;
+  }
+
+  .notice-image img {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+  }
+
   .notice-content {
-    padding: 22px;
+    padding: 20px 0 0;
   }
-  
-  /* Meta Info */
-  .notice-meta {
-    display: flex;
-    justify-content: space-between;
-    font-size: 14px;
-    color: #666;
-    margin-bottom: 12px;
-  }
-  
-  .notice-meta span {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-weight: 500;
-  }
-  
-  /* Notice Title */
+
   .notice-title {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 12px;
-    color: #333;
+    font-size: 22px;
   }
-  
-  /* Notice Description */
+
   .notice-description {
     font-size: 15px;
-    color: #555;
-    line-height: 1.6;
-    margin-bottom: 18px;
   }
-  
-  /* link More Button */
+}
+
+/* Tablets (max-width: 768px) */
+@media (max-width: 768px) {
+  .notice-section {
+    gap: 20px;
+    padding: 30px 12px;
+  }
+
+  .notice-card {
+    padding: 18px;
+    border-left-width: 4px;
+  }
+
+  .notice-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: 13px;
+  }
+
+  .notice-title {
+    font-size: 20px;
+  }
+
+  .notice-description {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
   .link-more {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 10px 20px;
-    border: 2px solid #ff5722;
-    color: #ff5722;
-    font-weight: bold;
-    border-radius: 8px;
-    text-decoration: none;
-    transition: 0.3s ease;
+    font-size: 14px;
+    padding: 10px 18px;
+  }
+}
+
+/* Mobile (max-width: 480px) */
+@media (max-width: 480px) {
+  .notice-section {
+    padding: 20px 10px;
+  }
+
+  .notice-card {
+    padding: 15px;
+  }
+
+  .notice-date {
+    top: 10px;
+    left: 10px;
+    padding: 8px 12px;
     font-size: 14px;
   }
-  
-  .link-more:hover {
-    background: #ff5722;
-    color: #ffffff;
+
+  .notice-date span {
+    font-size: 16px;
   }
-  
-  /* Responsive Design */
-  @media (max-width: 1024px) {
-    .notice-section {
-      grid-template-columns: repeat(2, 1fr);
-    }
+
+  .notice-meta {
+    font-size: 12px;
   }
-  
-  @media (max-width: 768px) {
-    .notice-section {
-      grid-template-columns: repeat(1, 1fr);
-    }
+
+  .notice-title {
+    font-size: 18px;
+    margin-bottom: 8px;
   }
-  
+
+  .notice-description {
+    font-size: 13px;
+    line-height: 1.4;
+    margin-bottom: 15px;
+  }
+
+  .link-more {
+    font-size: 13px;
+    padding: 8px 16px;
+  }
+}
+
+/* Download Button */
+.download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px;
+  border: 2px solid #28a745;
+  color: #28a745;
+  font-weight: bold;
+  border-radius: 8px;
+  text-decoration: none;
+  background: transparent;
+  transition: 0.3s ease;
+  font-size: 15px;
+  cursor: pointer;
+  margin-left: 30px;
+}
+
+.download-btn:hover {
+  background: #28a745;
+  color: #ffffff;
+}
+
+.download-btn svg {
+  font-size: 18px;
+}

@@ -1,0 +1,330 @@
+/* Admin Manage Notice Container */
+.Admin-Notice-Container {
+    padding: 20px;
+    font-family: 'Poppins', sans-serif;
+    background-color: #f4f7fc;
+    min-height: 100vh;
+}
+
+/* Header */
+.Admin-Notice-Header {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Table Styling */
+.Admin-Notice-Table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 20px;
+}
+
+/* Table Header */
+.Admin-Notice-TableHead {
+    background-color: #E94E77;
+    color: white;
+    text-transform: uppercase;
+}
+
+.Admin-Notice-TableHeader {
+    padding: 16px;
+    font-weight: bold;
+    text-align: left;
+    border-bottom: 3px solid #ddd;
+    letter-spacing: 0.8px;
+}
+
+/* Table Body */
+.Admin-Notice-TableBody .Admin-Notice-TableRow:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.Admin-Notice-TableData {
+    padding: 14px;
+    border-bottom: 1px solid #ddd;
+    color: #333;
+    transition: background 0.3s ease;
+}
+
+/* Notice Link */
+.Admin-Notice-Link {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.Admin-Notice-Link:hover {
+    text-decoration: underline;
+    color: #0056b3;
+}
+
+/* Action Buttons */
+.Admin-Notice-EditBtn,
+.Admin-Notice-DeleteBtn {
+    border: none;
+    padding: 10px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-right: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.3s ease-in-out;
+    font-weight: 500;
+}
+
+.Admin-Notice-EditBtn {
+    background-color: #28a745;
+    color: white;
+}
+
+.Admin-Notice-DeleteBtn {
+    background-color: #dc3545;
+    color: white;
+}
+
+.Admin-Notice-EditBtn:hover {
+    background-color: #218838;
+    transform: scale(1.05);
+}
+
+.Admin-Notice-DeleteBtn:hover {
+    background-color: #c82333;
+    transform: scale(1.05);
+}
+
+/* Edit Popup */
+.Admin-Notice-EditPopup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.Admin-Notice-EditPopup.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.Admin-Notice-EditContent {
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    width: 600px;
+    text-align: center;
+    transform: translateY(-50px);
+    opacity: 0;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+.Admin-Notice-EditPopup.show .Admin-Notice-EditContent {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.Admin-Notice-EditContent h3 {
+    margin-bottom: 15px;
+    font-size: 22px;
+    font-weight: 600;
+    color: #333;
+}
+
+.Admin-Notice-EditContent label {
+    display: block;
+    text-align: left;
+    margin: 10px 0 5px;
+    font-weight: 600;
+    color: #555;
+}
+
+.Admin-Notice-EditContent input,
+.Admin-Notice-EditContent textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    outline: none;
+    transition: border 0.3s ease;
+}
+
+.Admin-Notice-EditContent input:focus,
+.Admin-Notice-EditContent textarea:focus {
+    border: 1px solid #007bff;
+}
+
+.Admin-Notice-EditActions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+.Admin-Notice-SaveBtn,
+.Admin-Notice-CancelBtn {
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    margin-top: 30px;
+}
+
+.Admin-Notice-SaveBtn {
+    background-color: #007bff;
+    color: white;
+    margin-right: 30px;
+}
+
+.Admin-Notice-CancelBtn {
+    background-color: #6c757d;
+    color: white;
+}
+
+.Admin-Notice-SaveBtn:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+.Admin-Notice-CancelBtn:hover {
+    background-color: #5a6268;
+    transform: scale(1.05);
+}
+
+/* Responsive Design */
+
+/* Tablet View (Max Width: 1024px) */
+@media (max-width: 1024px) {
+    .Admin-Notice-Container {
+        padding: 15px;
+    }
+
+    .Admin-Notice-Header {
+        font-size: 24px;
+    }
+
+    .Admin-Notice-TableHeader,
+    .Admin-Notice-TableData {
+        padding: 12px;
+        font-size: 14px;
+    }
+
+    .Admin-Notice-EditContent {
+        width: 90%;
+    }
+}
+
+/* Mobile View (Max Width: 768px) */
+@media (max-width: 768px) {
+    .Admin-Notice-Container {
+        padding: 10px;
+    }
+
+    .Admin-Notice-Header {
+        font-size: 22px;
+    }
+
+    .Admin-Notice-Table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .Admin-Notice-TableHeader,
+    .Admin-Notice-TableData {
+        padding: 10px;
+        font-size: 13px;
+    }
+
+    .Admin-Notice-EditBtn,
+    .Admin-Notice-DeleteBtn {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+
+    .Admin-Notice-EditContent {
+        width: 95%;
+        padding: 20px;
+    }
+
+    .Admin-Notice-EditContent h3 {
+        font-size: 20px;
+    }
+
+    .Admin-Notice-EditActions {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .Admin-Notice-SaveBtn,
+    .Admin-Notice-CancelBtn {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+}
+
+/* Small Mobile View (Max Width: 480px) */
+@media (max-width: 480px) {
+    .Admin-Notice-Header {
+        font-size: 20px;
+    }
+
+    .Admin-Notice-Table {
+        width: 100%;
+    }
+
+    .Admin-Notice-TableHeader,
+    .Admin-Notice-TableData {
+        padding: 8px;
+        font-size: 12px;
+    }
+
+    .Admin-Notice-EditBtn,
+    .Admin-Notice-DeleteBtn {
+        padding: 6px 10px;
+        font-size: 11px;
+    }
+
+    .Admin-Notice-EditContent {
+        width: 100%;
+        padding: 15px;
+    }
+
+    .Admin-Notice-EditContent h3 {
+        font-size: 18px;
+    }
+
+    .Admin-Notice-EditContent input,
+    .Admin-Notice-EditContent textarea {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .Admin-Notice-SaveBtn,
+    .Admin-Notice-CancelBtn {
+        font-size: 13px;
+        padding: 7px 10px;
+    }
+}

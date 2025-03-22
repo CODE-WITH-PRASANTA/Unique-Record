@@ -1,15 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./MeetOurAgent.css";
+import { API_URL } from "../../Api"; // Adjust path if needed
+
 
 // Icons
 import { FaFacebookF, FaTwitter, FaLinkedinIn, FaInstagram } from "react-icons/fa";
 import { MdCall, MdEmail } from "react-icons/md";
-
-// Assets
-import Agent1 from "../../assets/agent-1.jpg";
-import Agent2 from "../../assets/agent-2.jpg";
-import Agent3 from "../../assets/agent-3.jpg";
-import Agent4 from "../../assets/agent-4.jpg";
 
 // Swiper imports
 import { Swiper as AgentSwiper, SwiperSlide as AgentSwiperSlide } from "swiper/react";
@@ -17,17 +13,26 @@ import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination } from "swiper/modules";
 
-const initialAgents = [
-  { id: 1, name: "Chris Patt", role: "Administrative Staff", img: Agent1 },
-  { id: 2, name: "Marvin McKinney", role: "Administrative Staff", img: Agent2 },
-  { id: 3, name: "Wade Warren", role: "Administrative Staff", img: Agent3 },
-  { id: 4, name: "Devon Lane", role: "Administrative Staff", img: Agent4 },
-];
-
 const MeetOurAgent = () => {
-  const [agents, setAgents] = useState(initialAgents);
+  const [agents, setAgents] = useState([]);
   const sectionRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
+
+
+  useEffect(() => {
+    const fetchAgents = async () => {
+      try {
+        const response = await fetch(`${API_URL}/team/all`);
+        const data = await response.json();
+        setAgents(data);
+      } catch (error) {
+        console.error("Error fetching team members:", error);
+      }
+    };
+  
+    fetchAgents();
+  }, []);
+  
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -52,107 +57,123 @@ const MeetOurAgent = () => {
 
   return (
     <div className="meetouragent">
-    <div ref={sectionRef} className={`meet-our-agent ${isVisible ? "animate" : ""}`}>
-      <h3>OUR TEAMS</h3>
-      <h2>Meet Our Team</h2>
+      <div ref={sectionRef} className={`meet-our-agent ${isVisible ? "animate" : ""}`}>
+        <h3>OUR TEAMS</h3>
+        <h2>Meet Our Team</h2>
 
-      <div className="agents-container">
-        {/* Mobile View: Swiper */}
-        <div className="meet-mobile-view">
-          <AgentSwiper
-            spaceBetween={20}
-            pagination={{ clickable: true }}
-            modules={[Pagination]}
-            breakpoints={{
-              0: { slidesPerView: 1 }, // Mobile view
-              768: { slidesPerView: 2 }, // Tablet view
-              1024: { slidesPerView: 3 }, // Desktop view
-            }}
-            className="agent-swiper"
-          >
-            {agents.map((agent) => (
-              <AgentSwiperSlide key={agent.id}>
-                <div className="agent-card">
-                  <div className="agent-image">
-                    <img src={agent.img} alt={agent.name} />
-                    <div className="meet-social-icons">
-                      <a href="#">
+        <div className="agents-container">
+          {/* Mobile View: Swiper */}
+          <div className="meet-mobile-view">
+            <AgentSwiper
+              spaceBetween={20}
+              pagination={{ clickable: true }}
+              modules={[Pagination]}
+              breakpoints={{
+                0: { slidesPerView: 1 }, // Mobile view
+                768: { slidesPerView: 2 }, // Tablet view
+                1024: { slidesPerView: 3 }, // Desktop view
+              }}
+              className="agent-swiper"
+            >
+              {agents.map((agent) => (
+                <AgentSwiperSlide key={agent._id}>
+                  <div className="agent-card">
+                    <div className="agent-image">
+                      <img src={agent.profilePic} alt={agent.memberName} />
+                      <div className="meet-social-icons">
+                        {agent.facebook && (
+                          <a href={agent.facebook} target="_blank" rel="noopener noreferrer">
+                            <FaFacebookF />
+                          </a>
+                        )}
+                        {agent.twitter && (
+                          <a href={agent.twitter} target="_blank" rel="noopener noreferrer">
+                            <FaTwitter />
+                          </a>
+                        )}
+                        {agent.linkedin && (
+                          <a href={agent.linkedin} target="_blank" rel="noopener noreferrer">
+                            <FaLinkedinIn />
+                          </a>
+                        )}
+                        {agent.instagram && (
+                          <a href={agent.instagram} target="_blank" rel="noopener noreferrer">
+                            <FaInstagram />
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                    <div className="agent-info">
+                      <h4>{agent.memberName}</h4>
+                      <p>{agent.designation}</p>
+                      <div className="contact-icons">
+                        <a href={`tel:${agent.phoneNumber}`}>
+                          <MdCall />
+                        </a>
+                        <a href={`mailto:${agent.email}`}>
+                          <MdEmail />
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </AgentSwiperSlide>
+              ))}
+            </AgentSwiper>
+          </div>
+
+          {/* Desktop & Tablet View: Grid */}
+          <div className="desktop-tablet-view">
+            {agents.map((agent, index) => (
+              <div
+                className={`agent-card ${isVisible ? "animate-card" : ""}`}
+                key={agent._id}
+                style={{ animationDelay: `${index * 0.2}s` }}
+              >
+                <div className="agent-image">
+                  <img src={agent.profilePic} alt={agent.memberName} />
+                  <div className="meet-social-icons">
+                    {agent.facebook && (
+                      <a href={agent.facebook} target="_blank" rel="noopener noreferrer">
                         <FaFacebookF />
                       </a>
-                      <a href="#">
+                    )}
+                    {agent.twitter && (
+                      <a href={agent.twitter} target="_blank" rel="noopener noreferrer">
                         <FaTwitter />
                       </a>
-                      <a href="#">
+                    )}
+                    {agent.linkedin && (
+                      <a href={agent.linkedin} target="_blank" rel="noopener noreferrer">
                         <FaLinkedinIn />
                       </a>
-                      <a href="#">
+                    )}
+                    {agent.instagram && (
+                      <a href={agent.instagram} target="_blank" rel="noopener noreferrer">
                         <FaInstagram />
                       </a>
-                    </div>
-                  </div>
-                  <div className="agent-info">
-                    <h4>{agent.name}</h4>
-                    <p>{agent.role}</p>
-                    <div className="contact-icons">
-                      <a href="#">
-                        <MdCall />
-                      </a>
-                      <a href="#">
-                        <MdEmail />
-                      </a>
-                    </div>
+                    )}
                   </div>
                 </div>
-              </AgentSwiperSlide>
+                <div className="agent-info">
+                  <h4>{agent.memberName}</h4>
+                  <p>{agent.designation}</p>
+                  <div className="contact-icons">
+                    <a href={`tel:${agent.phoneNumber}`}>
+                      <MdCall />
+                    </a>
+                    <a href={`mailto:${agent.email}`}>
+                      <MdEmail />
+                    </a>
+                  </div>
+                </div>
+              </div>
             ))}
-          </AgentSwiper>
+          </div>
         </div>
-
-        {/* Desktop & Tablet View: Grid */}
-        <div className="desktop-tablet-view">
-          {agents.map((agent, index) => (
-            <div
-              className={`agent-card ${isVisible ? "animate-card" : ""}`}
-              key={agent.id}
-              style={{ animationDelay: `${index * 0.2}s` }}
-            >
-              <div className="agent-image">
-                <img src={agent.img} alt={agent.name} />
-                <div className="meet-social-icons">
-                  <a href="#">
-                    <FaFacebookF />
-                  </a>
-                  <a href="#">
-                    <FaTwitter />
-                  </a>
-                  <a href="#">
-                    <FaLinkedinIn />
-                  </a>
-                  <a href="#">
-                    <FaInstagram />
-                  </a>
-                </div>
-              </div>
-              <div className="agent-info">
-                <h4>{agent.name}</h4>
-                <p>{agent.role}</p>
-                <div className="contact-icons">
-                  <a href="#">
-                    <MdCall />
-                  </a>
-                  <a href="#">
-                    <MdEmail />
-                  </a>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+        <p className="footer-text">
+          Become an agent and get the commission you deserve. <a href="#">Contact us</a>
+        </p>
       </div>
-      <p className="footer-text">
-        Become an agent and get the commission you deserve. <a href="#">Contact us</a>
-      </p>
-    </div>
     </div>
   );
 };

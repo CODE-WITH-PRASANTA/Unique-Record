@@ -1,0 +1,212 @@
+/* AdminEditEvent.css */
+
+.Admin-edit-event-container {
+  width: 100%;
+  padding: 30px;
+  background-color: #f8f9fa;
+  font-family: 'Poppins', sans-serif;
+}
+
+.Admin-edit-event-title {
+  text-align: center;
+  font-size: 28px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 25px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.Admin-edit-event-table-container {
+  overflow-x: auto;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.Admin-edit-event-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 16px;
+}
+
+.Admin-edit-event-table th,
+.Admin-edit-event-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.Admin-edit-event-table th {
+  background-color: #007bff;
+  color: white;
+  text-transform: uppercase;
+}
+
+.Admin-edit-event-row:nth-child(even) {
+  background-color: #f1f1f1;
+}
+
+.Admin-edit-event-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.Admin-edit-event-edit-btn,
+.Admin-edit-event-delete-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  padding: 8px;
+  border-radius: 5px;
+  transition: all 0.3s ease-in-out;
+}
+
+.Admin-edit-event-edit-btn {
+  color: #28a745;
+}
+
+.Admin-edit-event-delete-btn {
+  color: #dc3545;
+}
+
+.Admin-edit-event-edit-btn:hover,
+.Admin-edit-event-delete-btn:hover {
+  transform: scale(1.2);
+  background: rgba(0, 0, 0, 0.05);
+}
+
+
+/* Modal Overlay */
+.Admin-edit-event-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out;
+}
+
+/* Show the modal smoothly */
+.Admin-edit-event-modal.show {
+  opacity: 1;
+  visibility: visible;
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+/* Modal Content Box */
+.Admin-edit-event-modal-content {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+  width: 420px;
+  max-width: 90%;
+  transform: scale(0.9);
+  opacity: 0;
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+/* Smooth scale and fade-in */
+.Admin-edit-event-modal.show .Admin-edit-event-modal-content {
+  transform: scale(1);
+  opacity: 1;
+  animation: scaleUp 0.3s ease-in-out;
+}
+
+/* Keyframe animations for smooth transitions */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleUp {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+
+/* Modal Title */
+.Admin-edit-event-modal-title {
+  font-size: 22px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Input Fields */
+.Admin-edit-event-modal-content input,
+.Admin-edit-event-modal-content textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  transition: border 0.3s ease-in-out;
+}
+
+.Admin-edit-event-modal-content input:focus,
+.Admin-edit-event-modal-content textarea:focus {
+  border-color: #007bff;
+}
+
+/* Button Container */
+.Admin-edit-event-modal-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+/* Save & Cancel Buttons */
+.Admin-edit-event-save-btn,
+.Admin-edit-event-cancel-btn {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+  transition: all 0.3s ease-in-out;
+}
+
+.Admin-edit-event-save-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.Admin-edit-event-save-btn:hover {
+  background-color: #218838;
+}
+
+.Admin-edit-event-cancel-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.Admin-edit-event-cancel-btn:hover {
+  background-color: #c82333;
+}

@@ -1,0 +1,93 @@
+.Adminadd-Notice-Container {
+    max-width: 900px;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    
+    /* Centering */
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+    /* Optional: Ensuring responsiveness */
+    width: 90%;
+    max-width: 800px;
+}
+
+  .Adminadd-Notice-Heading {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .Adminadd-Notice-Form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .Adminadd-Notice-Row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  
+  .Adminadd-Notice-Group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+    flex: 1;
+    position: relative;
+  }
+  
+  .Adminadd-Notice-Label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .Adminadd-Notice-Icon {
+    margin-right: 8px;
+    color: #007bff;
+  }
+  
+  .Adminadd-Notice-Input,
+  .Adminadd-Notice-Textarea {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+  }
+  
+  .Adminadd-Notice-Textarea {
+    resize: none;
+    height: 100px;
+  }
+  
+  .Adminadd-Notice-SubmitBtn {
+    width: 100%;
+    padding: 10px;
+    background: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .Adminadd-Notice-SubmitBtn:hover {
+    background: #218838;
+  }
+  
+  .Adminadd-Notice-Success {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+    border: 1px solid #c3e6cb;
+}

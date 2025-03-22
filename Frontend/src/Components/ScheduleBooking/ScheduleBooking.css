@@ -1,0 +1,321 @@
+.Schedule-Booking-Container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    padding: 50px;
+    flex-wrap: wrap;
+    background: url('../../assets/bg-booking-sheduled.png') no-repeat center center;
+    background-size: cover;
+    border-top: 5px solid #f4b500;
+    border-bottom: 5px solid #f4b500;
+  }
+  
+  .Schedule-Booking-Form {
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+    width: 650px;
+    max-width: 100%;
+  }
+  
+  .Schedule-Booking-Title {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 25px;
+    text-align: center;
+    color: #333;
+  }
+  
+  .Schedule-Booking-InputGroup {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .Schedule-Booking-InputWrapper {
+    display: flex;
+    align-items: center;
+    background: #f1f1f1;
+    padding: 12px;
+    border-radius: 8px;
+    flex: 1;
+    border: 1px solid #ccc;
+    transition: 0.3s ease-in-out;
+  }
+  
+  .Schedule-Booking-InputWrapper:focus-within {
+    border-color: #e94e77;
+    background: #fff;
+  }
+  
+  .Schedule-Booking-Icon {
+    margin-right: 12px;
+    color: #777;
+    font-size: 16px;
+  }
+  
+  .Schedule-Booking-Input,
+  .Schedule-Booking-Select {
+    border: none;
+    outline: none;
+    background: transparent;
+    width: 100%;
+    font-size: 16px;
+    color: #333;
+    font-family: "Arial", sans-serif;
+  }
+  
+  .Schedule-Booking-Select {
+    appearance: none;
+    cursor: pointer;
+  }
+  
+  .Schedule-Booking-TextAreaWrapper {
+    margin-bottom: 20px;
+  }
+  
+  .Schedule-Booking-TextArea {
+    width: 100%;
+    height: 100px;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    resize: none;
+    transition: 0.3s ease-in-out;
+  }
+  
+  .Schedule-Booking-TextArea:focus {
+    border-color: #e94e77;
+    background: #fff;
+  }
+  
+  .Schedule-Booking-Button {
+    width: 100%;
+    padding: 14px;
+    background: #e94e77;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+    font-weight: bold;
+  }
+  
+  .Schedule-Booking-Button:hover {
+    background: #d83c66;
+  }
+  
+  .Schedule-Booking-Image {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .Schedule-Booking-Img {
+    max-width: 650px;
+    border-radius: 12px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+  }
+ 
+
+  .Schedule-Booking-Container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    padding: 50px;
+    flex-wrap: wrap;
+    background: url('../../assets/bg-booking-sheduled.png') no-repeat center center;
+    background-size: cover;
+    border-top: 5px solid #f4b500;
+    border-bottom: 5px solid #f4b500;
+  }
+  
+  .Schedule-Booking-Form {
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+    width: 650px;
+    max-width: 100%;
+  }
+  
+  .Schedule-Booking-Title {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 25px;
+    text-align: center;
+    color: #333;
+  }
+  
+  .Schedule-Booking-InputGroup {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .Schedule-Booking-InputWrapper {
+    display: flex;
+    align-items: center;
+    background: #f1f1f1;
+    padding: 12px;
+    border-radius: 8px;
+    flex: 1;
+    border: 1px solid #ccc;
+    transition: 0.3s ease-in-out;
+  }
+  
+  .Schedule-Booking-InputWrapper:focus-within {
+    border-color: #e94e77;
+    background: #fff;
+  }
+  
+  .Schedule-Booking-Icon {
+    margin-right: 12px;
+    color: #777;
+    font-size: 16px;
+  }
+  
+  .Schedule-Booking-Input,
+  .Schedule-Booking-Select {
+    border: none;
+    outline: none;
+    background: transparent;
+    width: 100%;
+    font-size: 16px;
+    color: #333;
+    font-family: "Arial", sans-serif;
+  }
+  
+  .Schedule-Booking-Select {
+    appearance: none;
+    cursor: pointer;
+  }
+  
+  .Schedule-Booking-TextAreaWrapper {
+    margin-bottom: 20px;
+  }
+  
+  .Schedule-Booking-TextArea {
+    width: 100%;
+    height: 100px;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    resize: none;
+    transition: 0.3s ease-in-out;
+  }
+  
+  .Schedule-Booking-TextArea:focus {
+    border-color: #e94e77;
+    background: #fff;
+  }
+  
+  .Schedule-Booking-Button {
+    width: 100%;
+    padding: 14px;
+    background: #e94e77;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+    font-weight: bold;
+  }
+  
+  .Schedule-Booking-Button:hover {
+    background: #d83c66;
+  }
+  
+  .Schedule-Booking-Image {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .Schedule-Booking-Img {
+    max-width: 650px;
+    border-radius: 12px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Media Queries */
+  @media screen and (max-width: 1024px) {
+    .Schedule-Booking-Container {
+      flex-direction: column;
+      padding: 30px;
+      gap: 30px;
+    }
+    
+    .Schedule-Booking-Form {
+      padding: 30px;
+      width: 90%;
+    }
+    
+    .Schedule-Booking-Img {
+      max-width: 90%;
+    }
+  }
+  
+  @media screen and (max-width: 768px) {
+    .Schedule-Booking-Container {
+      padding: 20px;
+    }
+  
+    .Schedule-Booking-Form {
+      padding: 25px;
+      width: 100%;
+    }
+  
+    .Schedule-Booking-Title {
+      font-size: 20px;
+    }
+  
+    .Schedule-Booking-InputGroup {
+      flex-direction: column;
+      gap: 10px;
+    }
+  
+    .Schedule-Booking-Button {
+      font-size: 16px;
+      padding: 12px;
+    }
+  
+    .Schedule-Booking-Img {
+      max-width: 100%;
+    }
+  }
+  
+  @media screen and (max-width: 480px) {
+    .Schedule-Booking-Container {
+      padding: 15px;
+      gap: 20px;
+    }
+  
+    .Schedule-Booking-Form {
+      padding: 20px;
+    }
+  
+    .Schedule-Booking-Title {
+      font-size: 18px;
+    }
+  
+    .Schedule-Booking-Input {
+      font-size: 14px;
+    }
+  
+    .Schedule-Booking-TextArea {
+      height: 80px;
+    }
+  
+    .Schedule-Booking-Button {
+      font-size: 14px;
+      padding: 10px;
+    }
+  }
+  

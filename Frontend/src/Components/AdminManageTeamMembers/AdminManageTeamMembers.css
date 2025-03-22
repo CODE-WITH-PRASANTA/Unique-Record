@@ -1,0 +1,298 @@
+.admin-team-container {
+    padding: 20px;
+    text-align: center;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .admin-team-title {
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .admin-team-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .admin-team-table th,
+  .admin-team-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: center;
+  }
+  
+  .admin-team-table th {
+    background: #007bff;
+    color: white;
+    text-transform: uppercase;
+  }
+  
+  .admin-team-row:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  .admin-team-profile-pic {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid #007bff;
+  }
+  
+  .admin-team-social-icons a {
+    color: #007bff;
+    font-size: 18px;
+    margin: 0 5px;
+    transition: color 0.3s ease;
+  }
+  
+  .admin-team-social-icons a:hover {
+    color: #0056b3;
+  }
+  
+  .admin-team-edit-btn,
+  .admin-team-delete-btn {
+    border: none;
+    padding: 8px 12px;
+    margin: 0 5px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+  }
+  
+  .admin-team-edit-btn {
+    background-color: #28a745;
+    color: white;
+  }
+  
+  .admin-team-delete-btn {
+    background-color: #dc3545;
+    color: white;
+  }
+  /* Modal Container */
+.admin-team-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  /* Modal Content */
+  .admin-team-modal-content {
+    background: #fff;
+    width: 450px;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+    position: relative;
+    animation: fadeIn 0.3s ease-in-out;
+  }
+  
+  /* Modal Heading */
+  .admin-team-modal-content h3 {
+    margin-bottom: 20px;
+    font-size: 22px;
+    font-weight: 600;
+    color: #333;
+    text-align: center;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 10px;
+  }
+  
+  /* Close Button */
+  .admin-team-modal-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    border: none;
+    background: none;
+    font-size: 20px;
+    color: #333;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+  
+  .admin-team-modal-close:hover {
+    color: #e74c3c;
+  }
+  
+  /* Labels */
+  .admin-team-modal-content label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    margin-top: 10px;
+    color: #555;
+  }
+  
+  /* Input Fields */
+  .admin-team-modal-content input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .admin-team-modal-content input:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
+  
+  /* Modal Buttons */
+  .admin-team-modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  /* Save Button */
+  .admin-team-save-btn {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .admin-team-save-btn:hover {
+    background-color: #218838;
+  }
+  
+  /* Cancel Button */
+  .admin-team-cancel-btn {
+    background-color: #dc3545;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .admin-team-cancel-btn:hover {
+    background-color: #c82333;
+  }
+  
+  /* Modal Animation */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  /* Responsive Design for Small Screens */
+@media (max-width: 768px) {
+    .admin-team-container {
+      padding: 15px;
+    }
+  
+    .admin-team-table {
+      display: block;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+  
+    .admin-team-table th,
+    .admin-team-table td {
+      padding: 10px;
+      font-size: 14px;
+    }
+  
+    .admin-team-modal-content {
+      width: 90%;
+      padding: 20px;
+    }
+  
+    .admin-team-modal-content h3 {
+      font-size: 20px;
+    }
+  
+    .admin-team-modal-close {
+      font-size: 18px;
+      top: 8px;
+      right: 10px;
+    }
+  
+    .admin-team-modal-buttons {
+      flex-direction: column;
+      gap: 10px;
+    }
+  
+    .admin-team-save-btn,
+    .admin-team-cancel-btn {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+    }
+  }
+  
+  /* Further Optimization for Mobile (max-width: 480px) */
+  @media (max-width: 480px) {
+    .admin-team-container {
+      padding: 10px;
+    }
+  
+    .admin-team-title {
+      font-size: 18px;
+    }
+  
+    .admin-team-profile-pic {
+      width: 40px;
+      height: 40px;
+    }
+  
+    .admin-team-social-icons a {
+      font-size: 16px;
+      margin: 0 3px;
+    }
+  
+    .admin-team-modal-content {
+      width: 95%;
+      padding: 15px;
+    }
+  
+    .admin-team-modal-content h3 {
+      font-size: 18px;
+    }
+  
+    .admin-team-modal-close {
+      font-size: 16px;
+      top: 5px;
+      right: 8px;
+    }
+  
+    .admin-team-modal-buttons {
+      flex-direction: column;
+      gap: 8px;
+    }
+  
+    .admin-team-save-btn,
+    .admin-team-cancel-btn {
+      width: 100%;
+      padding: 10px;
+      font-size: 14px;
+    }
+  }
+  

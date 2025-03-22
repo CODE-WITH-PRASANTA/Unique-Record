@@ -1,0 +1,224 @@
+.Event-Glary-container {
+    max-width: 1300px;
+    width: 90%;
+    margin: 50px auto; /* Centers the container horizontally */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centers the content */
+    justify-content: center; /* Centers vertically */
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+
+.Event-Glary-title {
+    text-align: center;
+    color: #333;
+}
+
+/* 📌 Main Flexbox Layout */
+.Event-Glary-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    margin-top: 20px;
+    width: 1000px;
+}
+
+/* 📌 Form Section */
+.Event-Glary-form {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.Event-Glary-form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.Event-Glary-label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+input[type="file"],
+input[type="url"] {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.Event-Glary-submit-btn {
+    padding: 10px;
+    background: #4caf50;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+.Event-Glary-submit-btn:hover {
+    background: #45a049;
+}
+
+/* 📌 Table Section */
+.Event-Glary-table-container {
+    flex: 2;
+    overflow-x: auto;
+}
+
+.Event-Glary-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.Event-Glary-table th,
+.Event-Glary-table td {
+    padding: 15px;
+    text-align: center;
+    border: 1px solid #ddd;
+    font-size: 16px;
+}
+
+.Event-Glary-table th {
+    background: #007bff;
+    color: white;
+}
+
+.Event-Glary-thumbnail {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+/* 📌 Delete Button */
+.Event-Glary-delete-btn {
+    padding: 8px 15px;
+    background: #e53935;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.Event-Glary-delete-btn:hover {
+    background: #c62828;
+}
+
+/* 📌 Responsive Styles */
+@media (max-width: 1024px) {
+    .Event-Glary-content {
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+
+    .Event-Glary-form,
+    .Event-Glary-table-container {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .Event-Glary-container {
+        width: 95%;
+        padding: 15px;
+    }
+
+    .Event-Glary-title {
+        font-size: 22px;
+    }
+
+    .Event-Glary-content {
+        width: 100%;
+        gap: 15px;
+    }
+
+    .Event-Glary-form {
+        padding: 15px;
+    }
+
+    .Event-Glary-label {
+        font-size: 14px;
+    }
+
+    input[type="file"],
+    input[type="url"] {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .Event-Glary-submit-btn,
+    .Event-Glary-delete-btn {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+
+    .Event-Glary-table th,
+    .Event-Glary-table td {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .Event-Glary-thumbnail {
+        width: 80px;
+        height: 80px;
+    }
+}
+
+@media (max-width: 480px) {
+    .Event-Glary-container {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .Event-Glary-title {
+        font-size: 20px;
+    }
+
+    .Event-Glary-form {
+        padding: 10px;
+    }
+
+    .Event-Glary-label {
+        font-size: 13px;
+    }
+
+    input[type="file"],
+    input[type="url"] {
+        font-size: 13px;
+        padding: 6px;
+    }
+
+    .Event-Glary-submit-btn,
+    .Event-Glary-delete-btn {
+        font-size: 12px;
+        padding: 6px 10px;
+    }
+
+    .Event-Glary-table th,
+    .Event-Glary-table td {
+        font-size: 12px;
+        padding: 8px;
+    }
+
+    .Event-Glary-thumbnail {
+        width: 60px;
+        height: 60px;
+    }
+}

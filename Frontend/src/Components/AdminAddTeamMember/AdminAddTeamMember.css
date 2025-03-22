@@ -1,0 +1,220 @@
+/* Container Styling */
+.Admin-Team-Member-Container {
+    max-width: 900px;
+    margin: 50px auto;
+    padding: 30px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+    transition: 0.3s ease-in-out;
+}
+
+.Admin-Team-Member-Container:hover {
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Heading */
+.Admin-Team-Member-Heading {
+    text-align: center;
+    color: #222;
+    margin-bottom: 25px;
+    font-size: 28px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* Form Layout */
+.Admin-Team-Member-Form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Rows for Form */
+.Admin-Team-Member-Row {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+/* Form Group */
+.Admin-Team-Member-Group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 250px;
+}
+
+/* Full Width Field */
+.Admin-Team-Member-Group.full-width {
+    width: 100%;
+}
+
+/* Labels */
+.Admin-Team-Member-Label {
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 8px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+}
+
+/* Input Fields */
+.Admin-Team-Member-Group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+    outline: none;
+    transition: all 0.3s ease-in-out;
+    background: #f9f9f9;
+}
+
+.Admin-Team-Member-Group input:focus {
+    border-color: #007bff;
+    box-shadow: 0px 0px 5px rgba(0, 123, 255, 0.3);
+    background: #fff;
+}
+
+/* File Upload */
+input[type="file"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+}
+
+input[type="file"]:hover {
+    border-color: #007bff;
+}
+
+/* Social Media Heading */
+.Admin-Team-Member-Social-Heading {
+    margin-top: 25px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 5px;
+    text-transform: uppercase;
+}
+
+/* Submit Button */
+.Admin-Team-Member-SubmitBtn {
+    width: 100%;
+    background: #007bff;
+    color: white;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+    text-transform: uppercase;
+}
+
+.Admin-Team-Member-SubmitBtn:hover {
+    background: #0056b3;
+    transform: scale(1.02);
+}
+
+/* Icon Styling */
+.Admin-Team-Member-Icon {
+    margin-right: 8px;
+    color: #007bff;
+    font-size: 18px;
+}
+/* Responsive Design */
+@media screen and (max-width: 1024px) {
+
+    .Admin-Team-Member-Heading {
+        font-size: 26px;
+    }
+
+    .Admin-Team-Member-Row {
+        gap: 10px;
+    }
+
+    .Admin-Team-Member-Group {
+        min-width: 200px;
+    }
+
+    .Admin-Team-Member-SubmitBtn {
+        padding: 12px;
+        font-size: 17px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .Admin-Team-Member-Container{
+        margin: 0px;
+    }
+
+    .Admin-Team-Member-Heading {
+        font-size: 24px;
+    }
+
+    .Admin-Team-Member-Row {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .Admin-Team-Member-Group {
+        width: 100%;
+    }
+
+    .Admin-Team-Member-SubmitBtn {
+        font-size: 16px;
+        padding: 12px;
+    }
+}
+
+@media screen and (max-width: 576px) {
+
+    .Admin-Team-Member-Heading {
+        font-size: 22px;
+    }
+
+    .Admin-Team-Member-Social-Heading {
+        font-size: 18px;
+    }
+
+    .Admin-Team-Member-Label {
+        font-size: 14px;
+    }
+
+    .Admin-Team-Member-Group input {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .Admin-Team-Member-SubmitBtn {
+        font-size: 15px;
+        padding: 10px;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .Admin-Team-Member-Heading {
+        font-size: 20px;
+    }
+
+    .Admin-Team-Member-Social-Heading {
+        font-size: 16px;
+    }
+
+    .Admin-Team-Member-Group input {
+        font-size: 13px;
+        padding: 8px;
+    }
+
+    .Admin-Team-Member-SubmitBtn {
+        font-size: 14px;
+        padding: 9px;
+    }
+}
