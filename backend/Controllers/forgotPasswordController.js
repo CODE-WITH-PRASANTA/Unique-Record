@@ -1,7 +1,8 @@
-const User = require('../Model/User');
-const Otp = require('../Model/Otp');
-const generateOtp = require('../Utils/otp');
-const sendEmail = require('../Utils/email');
+const path = require('path');
+const User = require(path.resolve(__dirname, '../Model/User.js'));
+const generateOtp = require(path.resolve(__dirname, '../Utils/otp.js'));
+const Otp = require(path.resolve(__dirname, '../Model/Otp.js'));
+const sendEmail = require(path.resolve(__dirname, '../Utils/email.js'));
 const bcrypt = require('bcrypt');
 
 exports.forgotPassword = async (req, res) => {
