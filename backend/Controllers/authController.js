@@ -1,5 +1,5 @@
 const User = require("../Model/User");
-const bcrypt = require("bcryptjs");
+const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 // Store blacklisted tokens (in-memory, replace with Redis in production)
