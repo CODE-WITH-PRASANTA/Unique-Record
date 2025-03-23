@@ -15,7 +15,7 @@ const Vision = () => {
         <h1>
           Our Vision
         </h1>
-        <p>Our Mission & Vision </p>
+        <p>Our Holistic Humanist Mission & Vision        </p>
       </div>
     </div>
 <OurMission />

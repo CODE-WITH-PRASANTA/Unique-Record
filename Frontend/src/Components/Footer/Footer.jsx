@@ -23,14 +23,31 @@ const Footer = () => {
         {/* Categories */}
         
         <div className="footer-section">
-          <h4 className="footer-heading">Categories</h4>
-          <ul className="footer-list">
-            <li>Our Vision</li>
-            <li>Our Services</li>
-            <li>About Us</li>
-            <li>Contact Us</li>
-          </ul>
-        </div>
+    <h4 className="footer-heading">Useful Service</h4>
+    <ul className="footer-list">
+        <li>
+            <a href="https://www.dpkavishek.in" target="_blank" rel="noopener noreferrer">
+                Divya Prerak Kahaniyan™
+            </a>
+        </li>
+        <li>
+            <a href="https://www.dbmsonline.in" target="_blank" rel="noopener noreferrer">
+                DBMS Online™
+            </a>
+        </li>
+        <li>
+            <a href="https://ouruniverse.in/" target="_blank" rel="noopener noreferrer">
+                International Institute of Internship™
+            </a>
+        </li>
+        <li>
+            <a href="contact.html" target="_blank" rel="noopener noreferrer">
+                Contact Us
+            </a>
+        </li>
+    </ul>
+</div>
+
         {/* Our Company */}
         {/* <div className="footer-section">
           <h4 className="footer-heading">Our Achivement</h4>

@@ -8,6 +8,7 @@ const Blog = () => {
 
     <div className="Blog-section">
       <div className="Blog-content">
+      <p className="sanskrit-text">अक्षरम परमं ब्रह्म ज्योति रूपम सनातनम्</p>
         <h1>
         URU Post 
         </h1>

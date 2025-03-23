@@ -8,5 +8,7 @@ router.post("/register", register);
 router.post("/login", login);
 router.get("/user", authenticateUser, isTokenBlacklisted, getUser);
 router.post("/logout", authenticateUser, logout);  // ✅ Add logout route
+router.get("/user/details", authenticateUser, isTokenBlacklisted, getUser);
+
 
 module.exports = router;

@@ -17,8 +17,8 @@ const Event = () => {
       </div>
     </div>
 
-    <EventInformation />
     <AllEvents />
+    <EventInformation />
     <EventGalary />
     <ScheduleBooking />
     </div>

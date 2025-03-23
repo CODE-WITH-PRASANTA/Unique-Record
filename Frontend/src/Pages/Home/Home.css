@@ -269,9 +269,6 @@
     .sub-title {
         font-size: 1.5rem;
     }
-    .description {
-        font-size: 0.95rem;
-    }
     .banner-buttons {
         gap: 15px;
     }
@@ -299,10 +296,6 @@
     }
     .sub-title {
         font-size: 1.8rem;
-    }
-    .description {
-        text-align: start;
-        font-size: 0.85rem;
     }
     .banner-buttons {
         gap: 10px;

@@ -44,7 +44,7 @@ const OurMission = () => {
           <h4>WHAT WE DO?</h4>
           <h2>
             <FaQuoteLeft className="quote-icon left" />
-            Your Hard Work, Your Identity, Recorded in the Unique Record of Universe.
+            Your Hard Work, Your Identity, Recorded in the Unique Records of Universe.
             <FaQuoteRight className="quote-icon right" />
           </h2>
         </div>

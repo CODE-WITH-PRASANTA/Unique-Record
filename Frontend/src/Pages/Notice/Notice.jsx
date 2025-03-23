@@ -10,7 +10,7 @@ const Notice = () => {
         <h1>
           Notice Page
         </h1>
-        <p>Check out all the official notifications here</p>
+        <p>Check out "Unique Records of the Universe" and other Event related information here.</p>
       </div>
   </div>
 

@@ -6,51 +6,114 @@
     position: relative;
     overflow: hidden;
   }
+/* Login Page Left Section */
+.login-page-left-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 60px;
+  border-radius: 12px;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease-in-out;
+}
 
+/* Welcome Text */
+.login-page-welcome-text {
+  font-size: 42px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #ffcc00;
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+/* Login Page Title */
+.login-page-title {
+  font-size: 48px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #ffffff;
+  text-shadow: 3px 3px 7px rgba(0, 0, 0, 0.5);
+  max-width: 600px;
+}
+
+/* Brand Highlight */
+.login-page-brand {
+  color: #ffcc00;
+  font-style: italic;
+  font-weight: 500;
+}
+
+/* Description */
+.login-page-description {
+  font-size: 18px;
+  max-width: 500px;
+  margin-top: 18px;
+  opacity: 0.9;
+  color: #e0e0e0;
+  line-height: 1.7;
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+}
+
+
+/* Responsive Design */
+@media screen and (max-width: 1024px) {
   .login-page-left-section {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    padding: 80px;
-    border-radius: 15px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+      padding: 50px;
   }
-  
+
   .login-page-welcome-text {
-    font-size: 50px;
-    font-weight: 600;
-    margin-bottom: 20px;
-    color: #ffcc00;
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+      font-size: 36px;
   }
-  
+
   .login-page-title {
-    font-size: 56px;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: #ffffff;
-    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+      font-size: 40px;
   }
-  
-  .login-page-brand {
-    color: #ffcc00;
-    font-style: italic;
-  }
-  
+
   .login-page-description {
-    text-align: center;
-    font-size: 20px;
-    max-width: 500px;
-    margin-top: 20px;
-    opacity: 0.95;
-    color: #ffffff;
-    line-height: 1.6;
-    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+      font-size: 16px;
   }
+}
+
+@media screen and (max-width: 768px) {
+  .login-page-left-section {
+      padding: 40px;
+  }
+
+  .login-page-welcome-text {
+      font-size: 30px;
+  }
+
+  .login-page-title {
+      font-size: 32px;
+  }
+
+  .login-page-description {
+      font-size: 15px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .login-page-left-section {
+      padding: 30px;
+  }
+
+  .login-page-welcome-text {
+      font-size: 26px;
+  }
+
+  .login-page-title {
+      font-size: 28px;
+  }
+
+  .login-page-description {
+      font-size: 14px;
+  }
+}
+
   
 
   .login-page-right-section {

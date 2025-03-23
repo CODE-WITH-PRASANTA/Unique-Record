@@ -1,53 +1,91 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import axios from "axios"; // Import axios for API requests
+import axios from "axios";
 import "./Sidebar.css";
-import profileImg from "../../assets/profile-pic.png";
+import profileImg from "../../assets/diffult-profile-pic.png";
 import {
-  FaBars, FaTimes, FaFileAlt, FaEdit, FaDownload, FaTrophy,
-  FaCalendarCheck, FaUserEdit, FaClipboardList, FaSignOutAlt
+  FaBars,
+  FaTimes,
+  FaFileAlt,
+  FaEdit,
+  FaDownload,
+  FaTrophy,
+  FaCalendarCheck,
+  FaUserEdit,
+  FaClipboardList,
+  FaSignOutAlt,
 } from "react-icons/fa";
-import { API_URL } from "../../Api"; // Import API URL
-
+import { API_URL } from "../../Api"; // API Base URL
 
 const Sidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
+  const [user, setUser] = useState(null);
+  const [profilePicture, setProfilePicture] = useState(null);
+  const [profilePicturePreview, setProfilePicturePreview] = useState(profileImg);
 
-  const toggleSidebar = () => {
-    setIsOpen(!isOpen);
-  };
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          navigate("/login");
+          return;
+        }
+
+        const response = await axios.get(`${API_URL}/auth/user`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        setUser(response.data);
+      } catch (error) {
+        console.error(
+          "Error fetching user details:",
+          error.response?.data?.message || error.message
+        );
+
+        if (error.response?.status === 401) {
+          localStorage.removeItem("token");
+          navigate("/login");
+        }
+      }
+    };
+
+    fetchUserDetails();
+  }, [navigate]);
 
   const handleLogout = async () => {
     try {
       const token = localStorage.getItem("token");
-
       if (!token) {
-        console.error("No token found in localStorage");
         navigate("/login");
         return;
       }
 
-      console.log("Token being sent:", token);
-
-      await axios.post(
-        `${API_URL}/auth/logout`, // Use API_URL here
-        {}, 
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      await axios.post(`${API_URL}/auth/logout`, {}, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       localStorage.removeItem("token");
       navigate("/login");
     } catch (error) {
       console.error("Logout failed:", error.response?.data?.message || error.message);
+
+      if (error.response?.status === 401) {
+        localStorage.removeItem("token");
+        navigate("/login");
+      }
     }
   };
-  
-  
-  
+
+
+
+
+  // ✅ Sidebar Toggle Function
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen);
+  };
 
   return (
     <>
@@ -58,12 +96,26 @@ const Sidebar = () => {
 
       <div className={`sidebar-container ${isOpen ? "open" : ""}`}>
         {/* Profile Section */}
-        <div className="sidebar-profile">
-          <img src={profileImg} alt="Profile" className="sidebar-profile-img" />
-          <h3 className="sidebar-username">Prasant Kumar Khuntia</h3>
-          <p className="sidebar-user-info">🔹 Unique ID: 23OS48943072</p>
-          <p className="sidebar-user-info">⏳ Last Login: 21-03-2025 13:38:06</p>
-        </div>
+<div className="sidebar-profile">
+  <label htmlFor="profile-picture-upload">
+    <img
+      src={profilePicturePreview}
+      alt="Profile"
+      className="sidebar-profile-img"
+    />
+  </label>
+  {user ? (
+    <>
+      <h3 className="sidebar-username">{user.fullName}</h3>
+      <p className="sidebar-user-info">🔹 Unique ID: {user.uniqueId}</p>
+      <p className="sidebar-user-info">📧 Email: {user.email}</p> {/* Display Email */}
+      <p className="sidebar-user-info">⏳ Last Login: {user.lastLogin || "Never Logged In"}</p>
+    </>
+  ) : (
+    <p className="sidebar-user-info">Loading user data...</p>
+  )}
+</div>
+
 
         {/* Navigation Sections */}
         <nav className="sidebar-nav">
@@ -73,13 +125,13 @@ const Sidebar = () => {
             <Link to="/dashboard" className={location.pathname === "/dashboard" ? "sidebar-active" : ""}>
               <FaFileAlt /> Apply for "URU" Holder
             </Link>
-            <Link to="#" className={location.pathname === "/application-status" ? "sidebar-active" : ""}>
+            <Link to="/application-status" className={location.pathname === "/application-status" ? "sidebar-active" : ""}>
               <FaClipboardList /> Application Status
             </Link>
-            <Link to="#" className={location.pathname === "/edit-application" ? "sidebar-active" : ""}>
+            <Link to="/edit-application" className={location.pathname === "/edit-application" ? "sidebar-active" : ""}>
               <FaEdit /> Edit Application Form
             </Link>
-            <Link to="#" className={location.pathname === "/download-application" ? "sidebar-active" : ""}>
+            <Link to="/download-application" className={location.pathname === "/download-application" ? "sidebar-active" : ""}>
               <FaDownload /> Download Application Form
             </Link>
           </div>
@@ -90,13 +142,13 @@ const Sidebar = () => {
             <Link to="/dashboard/event-registration" className={location.pathname === "/dashboard/event-registration" ? "sidebar-active" : ""}>
               <FaClipboardList /> Register for Event
             </Link>
-            <Link to="#" className={location.pathname === "/event-status" ? "sidebar-active" : ""}>
+            <Link to="/event-status" className={location.pathname === "/event-status" ? "sidebar-active" : ""}>
               <FaClipboardList /> Registration Status
             </Link>
-            <Link to="#" className={location.pathname === "/edit-event" ? "sidebar-active" : ""}>
+            <Link to="/edit-event" className={location.pathname === "/edit-event" ? "sidebar-active" : ""}>
               <FaUserEdit /> Edit Event Form
             </Link>
-            <Link to="#" className={location.pathname === "/download-event" ? "sidebar-active" : ""}>
+            <Link to="/download-event" className={location.pathname === "/download-event" ? "sidebar-active" : ""}>
               <FaDownload /> Download Event Form
             </Link>
           </div>

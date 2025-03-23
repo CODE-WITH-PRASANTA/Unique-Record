@@ -161,6 +161,18 @@ const handleDeleteEvent = async (id) => {
             <input type="date" name="openingDate" value={editEvent.openingDate.split("T")[0]} onChange={handleEditChange} />
             <input type="date" name="closingDate" value={editEvent.closingDate.split("T")[0]} onChange={handleEditChange} />
             <input type="number" name="pricePerTicket" value={editEvent.pricePerTicket} onChange={handleEditChange} placeholder="Price" />
+            <select
+              name="currentStatus"
+              value={editEvent.currentStatus}
+              onChange={handleEditChange}
+              className="Admin-edit-event-status"
+            >
+              <option value="Ongoing">Ongoing</option>
+              <option value="Date Over">Date Over</option>
+            </select>
+
+
+
             <div className="Admin-edit-event-modal-actions">
               <button className="Admin-edit-event-save-btn" onClick={handleSaveChanges}>Save</button>
               <button className="Admin-edit-event-cancel-btn" onClick={closeEditModal}>Cancel</button>

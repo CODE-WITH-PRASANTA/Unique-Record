@@ -12,7 +12,7 @@ const Media = () => {
         <h1>
           Media Galary
         </h1>
-        <p>Photos & Videos Of Our Achivments</p>
+        <p>Photos & Videos Of Our Progress </p>
       </div>
   </div>
 

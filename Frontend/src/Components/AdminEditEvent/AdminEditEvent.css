@@ -210,3 +210,28 @@
 .Admin-edit-event-cancel-btn:hover {
   background-color: #c82333;
 }
+/* Style for the status dropdown */
+.Admin-edit-event-status {
+  width: 100%;
+  padding: 8px;
+  font-size: 16px;
+  border: 2px solid #4caf50;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Hover effect */
+.Admin-edit-event-status:hover {
+  background-color: #e8f5e9;
+}
+
+/* Focus effect */
+.Admin-edit-event-status:focus {
+  outline: none;
+  border-color: #388e3c;
+  background-color: #fff;
+}
+

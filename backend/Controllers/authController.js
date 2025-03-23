@@ -1,9 +1,12 @@
 const User = require("../Model/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto"); // For generating unique ID
+
 
 // Store blacklisted tokens (in-memory, replace with Redis in production)
 const tokenBlacklist = new Set();
+
 
 exports.register = async (req, res) => {
   try {
@@ -19,15 +22,20 @@ exports.register = async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({ fullName, phoneNumber, email, password: hashedPassword });
+
+    // Generate a Unique User ID (Format: 23OS48943072)
+    const uniqueId = `${new Date().getFullYear().toString().slice(2)}OS${crypto.randomInt(100000, 999999)}`;
+
+    const newUser = new User({ fullName, phoneNumber, email, password: hashedPassword, uniqueId });
     await newUser.save();
 
-    res.status(201).json({ message: "User registered successfully" });
+    res.status(201).json({ message: "User registered successfully", uniqueId });
 
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
   }
 };
+
 
 exports.login = async (req, res) => {
   try {
@@ -48,7 +56,24 @@ exports.login = async (req, res) => {
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
-    res.json({ token, user: { id: user._id, fullName: user.fullName, email: user.email } });
+    // Update last login timestamp
+    const currentDate = new Date();
+    user.lastLogin = currentDate;
+    await user.save();
+
+    // Format lastLogin date for better readability
+    const formattedLastLogin = `${currentDate.getDate().toString().padStart(2, "0")}-${(currentDate.getMonth() + 1).toString().padStart(2, "0")}-${currentDate.getFullYear()} ${currentDate.getHours().toString().padStart(2, "0")}:${currentDate.getMinutes().toString().padStart(2, "0")}:${currentDate.getSeconds().toString().padStart(2, "0")}`;
+
+    res.json({
+      token,
+      user: {
+        id: user._id,
+        fullName: user.fullName,
+        email: user.email,
+        uniqueId: user.uniqueId,
+        lastLogin: formattedLastLogin, // Send formatted date
+      },
+    });
 
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
@@ -63,7 +88,6 @@ exports.getUser = async (req, res) => {
     res.status(500).json({ message: "Server error", error });
   }
 };
-
 
 
 exports.logout = async (req, res) => {
@@ -97,8 +121,6 @@ exports.logout = async (req, res) => {
 };
 
 
-
-
 // ✅ Middleware to check if token is blacklisted
 exports.isTokenBlacklisted = (req, res, next) => {
   const token = req.header("Authorization")?.split(" ")[1];
@@ -108,4 +130,33 @@ exports.isTokenBlacklisted = (req, res, next) => {
   }
 
   next();
+};
+
+exports.getUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select("fullName uniqueId email lastLogin");
+    
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json({
+      fullName: user.fullName,
+      uniqueId: user.uniqueId,
+      email: user.email,  // Include email in response
+      lastLogin: user.lastLogin
+        ? `${user.lastLogin.getDate().toString().padStart(2, "0")}-${(user.lastLogin.getMonth() + 1)
+            .toString()
+            .padStart(2, "0")}-${user.lastLogin.getFullYear()} ${user.lastLogin
+            .getHours()
+            .toString()
+            .padStart(2, "0")}:${user.lastLogin.getMinutes().toString().padStart(2, "0")}:${user.lastLogin
+            .getSeconds()
+            .toString()
+            .padStart(2, "0")}`
+        : "Never Logged In",
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
 };

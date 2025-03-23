@@ -120,6 +120,10 @@ const FaqQuestion = () => {
       question: 'What is the significance of the numbers 3, 6, and 9 in the registration fee and certificate number?',
       answer: 'The deep secret of the universe is hidden in the 3, 6, 9 digits. Along with being powerful, these numbers are the key to the universe. This number occupies an important place in mathematics, science, astrology and spirituality. If you want to understand the mystery of the universe, think about energy, frequency and vibrations. If you understand the secret of 3, 6 and 9, you will get the key to the universe. You can get more information in this context from the literature of Vedas, Puranas, Shastras, Upanishads and the great scientist Nikola Tesla.',
     },
+    {
+      question: 'Unique Records of Universe" or its mother organization DPKHRC Trust organize any other programs or felicitation/awards ceremonies?',
+      answer: 'Yes, "Unique Records of Universe" and DPKHRC Trust organize various types of programs and felicitation/award ceremonies related to education, economic, social, intellectual, yoga, meditation and spirituality. You can apply online for these by visiting the event registration page of this website. Participation in some programs is completely free, while in some programs you may have to pay a nominal fee for participation.',
+    },
   ];
 
   const renderQuestions = (questions, activeIndex, category) => {
@@ -156,11 +160,11 @@ const FaqQuestion = () => {
     <div className="second-question-section">
       <div className="faq-questions-section ">
         <div className="faq-questions-category">
-          <h2>Breaking a Record</h2>
+          <h2>"Utility, Participation and Mystery"</h2>
           {renderQuestions(managingQuestionstwo, activeQuestions.tour, 'tour')}
         </div>
         <div className="faq-questions-category">
-          <h2>Breaking a Record </h2>
+          <h2>"Utility, Participation and Mystery"</h2>
           {renderQuestions(tourPackagesQuestionstwo, activeQuestions.package, 'package')}
         </div>
       </div>

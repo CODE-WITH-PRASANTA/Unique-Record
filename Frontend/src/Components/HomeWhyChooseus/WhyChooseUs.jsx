@@ -45,7 +45,7 @@ const WhyChooseUs = () => {
       <div className="business-steps">
         <div className="tab-buttons">
           <div className="tab-btn tab-black"><span>Unique Work</span></div>
-          <div className="tab-btn tab-white"><span>Dedication & Famous </span></div>
+          <div className="tab-btn tab-white"><span>Dedication 🔜  Famous </span></div>
           <div className="tab-btn tab-yellow"><span>Prosperity</span></div>
         </div>
       </div>

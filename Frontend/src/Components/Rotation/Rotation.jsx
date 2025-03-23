@@ -30,7 +30,7 @@ const Rotation = ({ speed = 12 }) => {
 
   return (
     <div className="rotation-section">
-      <h2 className="rotation-heading">Our Achievements</h2>
+      <h2 className="rotation-heading">Our Events & Photo Gallery</h2>
       <div className="rotation-container">
         <div className="rotation-wrapper" style={{ animationDuration: `${speed}s` }}>
           {duplicatedImages.map((image, index) => (

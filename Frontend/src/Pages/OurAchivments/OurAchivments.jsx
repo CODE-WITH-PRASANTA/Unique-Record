@@ -11,9 +11,9 @@ const OurAchivments = () => {
     <div className="Achivements-section">
       <div className="Achivements-content">
         <h1>
-          Our Achivements
+        Achievements of Extraordinary  People
         </h1>
-        <p>Our Mission & Achivements </p>
+        <p>Unique Records & Unique Activity</p>
       </div>
     </div>
 <OurAchivmentsRecords />

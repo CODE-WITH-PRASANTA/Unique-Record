@@ -63,56 +63,80 @@
     color: #60a5fa;
     font-size: 16px;
 }
-
-/* Footer Headings */
+/* Footer Heading */
 .footer-heading {
-    text-align: center;
-    font-size: 20px;
-    font-weight: 600;
-    margin-bottom: 16px;
+    font-size: 22px;
+    font-weight: 700;
     text-transform: uppercase;
     color: #ffffff;
     border-bottom: 3px solid #60a5fa;
     padding-bottom: 6px;
     display: inline-block;
-    transition: border-color 0.3s;
+    transition: all 0.3s ease-in-out;
 }
 
 .footer-heading:hover {
     border-color: #3b82f6;
 }
 
-/* Footer Lists */
+/* Footer List */
 .footer-list {
-    text-align: center;
+    text-align: start;
     list-style: none;
     padding: 0;
+    margin-top: 10px;
 }
 
 .footer-list li {
-    font-size: 15px;
+    font-size: 16px;
+    font-weight: 500;
     margin-bottom: 10px;
     cursor: pointer;
-    transition: color 0.3s ease-in-out, transform 0.3s;
     position: relative;
+    transition: transform 0.3s ease-in-out;
 }
 
 .footer-list li::before {
     content: "→";
     position: absolute;
-    left: -15px;
+    left: -18px;
     opacity: 0;
     transition: opacity 0.3s, transform 0.3s;
 }
 
-.footer-list li:hover {
+/* Style for Links */
+.footer-list li a {
+    text-decoration: none;
+    color: #ffffff;
+    transition: color 0.3s ease-in-out;
+}
+
+.footer-list li a:hover {
     color: #60a5fa;
+}
+
+.footer-list li:hover {
     transform: translateX(6px);
 }
 
 .footer-list li:hover::before {
     opacity: 1;
     transform: translateX(5px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .footer-section {
+        padding: 15px;
+    }
+
+    .footer-heading {
+        font-size: 18px;
+    }
+
+    .footer-list li {
+        font-size: 14px;
+    }
 }
 
 /* Newsletter */

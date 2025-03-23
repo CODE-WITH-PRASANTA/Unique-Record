@@ -8,4 +8,5 @@ router.post("/upload", upload.single("image"), uploadEvent);
 router.get("/", getEvents);
 router.delete("/:id", deleteEvent);
 
+
 module.exports = router;

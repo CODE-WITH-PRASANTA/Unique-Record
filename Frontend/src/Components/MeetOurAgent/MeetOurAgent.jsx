@@ -170,9 +170,6 @@ const MeetOurAgent = () => {
             ))}
           </div>
         </div>
-        <p className="footer-text">
-          Become an agent and get the commission you deserve. <a href="#">Contact us</a>
-        </p>
       </div>
     </div>
   );

@@ -125,65 +125,91 @@
   }
 }
 
-/* Responsive Adjustments */
+/* Responsive Design */
+
+/* Medium Screens (Tablets & Small Laptops) */
 @media (max-width: 1024px) {
   .section-about-heading-section {
-    height: 50vh;
-    background-position: center top;
+    height: 50vh; /* Reduce height for smaller screens */
   }
 
   .section-about-content {
-    max-width: 70%;
     margin-top: 80px;
-    margin-left: 0px;
+    margin-left: 30px;
   }
 
   .about-heading {
-    font-size: 2.5rem;
+    font-size: 2.5rem; /* Decrease heading size */
+    max-width: 700px;
   }
 
-  .about-description {
+  .main-about-description {
+    font-size: 1.1rem;
+  }
+
+  .start-btn {
+    padding: 10px 22px;
+    font-size: 0.95rem;
+  }
+}
+
+/* Small Screens (Phones) */
+@media (max-width: 768px) {
+  .section-about-heading-section {
+    height: 45vh;
+    align-items: center; /* Center content vertically */
+    text-align: start;
+    padding: 20px;
+  }
+
+  .section-about-content {
+    margin: 0;
+    text-align: start;
+  }
+
+  .badge {
+    font-size: 0.9rem;
+    padding: 6px 15px;
+    border-radius: 20px;
+  }
+
+  .about-heading {
+    font-size: 2rem;
+    max-width: 90%;
+    margin: 15px auto;
+  }
+
+  .main-about-description {
     font-size: 1rem;
+    line-height: 1.5;
+    margin: 10px 0 20px;
   }
 
   .start-btn {
     padding: 10px 20px;
     font-size: 0.9rem;
+    border-radius: 20px;
   }
 }
 
-@media (max-width: 768px) {
+/* Extra Small Screens (Mobile Phones - Portrait Mode) */
+@media (max-width: 480px) {
   .section-about-heading-section {
     height: 40vh;
+    padding: 15px;
   }
 
   .about-heading {
-    font-size: 2rem;
+    font-size: 1.8rem;
+    max-width: 100%;
   }
 
-  .about-description {
-    font-size: 0.9rem;
+  .main-about-description {
+    font-size: 0.95rem;
   }
 
   .start-btn {
     padding: 8px 18px;
-    font-size: 0.8rem;
-  }
-
-  .badge {
-    font-size: 0.8rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .section-about-content {
-    max-width: 70%;
-    padding: 10px;
-    margin-top: 20px;
-  }
-
-  .start-btn {
-    padding: 6px 15px;
-    font-size: 0.7rem;
+    font-size: 0.85rem;
   }
 }

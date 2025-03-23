@@ -12,8 +12,6 @@ const teamMemberRoutes = require("./Routes/teamMemberRoutes");
 
 
 
-
-
 dotenv.config();
 connectDB();
 
@@ -29,9 +27,6 @@ app.use("/api/eventsgalary", eventGalleryRoutes);
 app.use("/api/auth", authRoutes);
 app.use('/api/forgot-password', forgotPasswordRoutes);
 app.use("/api/team", teamMemberRoutes);
-
-
-
 
 
 const PORT = process.env.PORT || 5002;

@@ -14,8 +14,8 @@ const GoogleMapSection = () => {
         loading="lazy"
       ></iframe>
       <div className="address-box">
-        <h3>Office Address</h3>
-        <p>Lalganj, Uttar Pradesh 276303</p>
+        <h3>Regd. Office  Address</h3>
+        <p>Thekma, District- Azamgarh, Uttar Pradesh, India, Pin- 27630</p>
       </div>
     </div>
   );

@@ -35,7 +35,7 @@ const Navbar = () => {
           <li><a href="/"><FiHome className="nav-icon" /> Home</a></li>
           <li><a href="/about"><FiInfo className="nav-icon" /> About Us</a></li>
           <li><a href="/vision"><FiEye className="nav-icon" /> Our Vision</a></li>
-          <li><a href="/achivments"><FiAward className="nav-icon" /> Achievements</a></li>
+          {/* <li><a href="/achivments"><FiAward className="nav-icon" /> Achievements</a></li> */}
           <li><a href="/notice"><FiClipboard className="nav-icon" /> Notice</a></li>
           <li><a href="/event"><FiCalendar   className="nav-icon" /> Event</a></li>
           <li><a href="/media"><FiImage   className="nav-icon" /> Media</a></li>
@@ -63,7 +63,7 @@ const Navbar = () => {
           <li><a href="/"><FiHome className="nav-icon" /> Home</a></li>
           <li><a href="/about"><FiInfo className="nav-icon" /> About Us</a></li>
           <li><a href="/vision"><FiEye className="nav-icon" /> Our Vision</a></li>
-          <li><a href="/achivments"><FiAward className="nav-icon" /> Achievements</a></li>
+          {/* <li><a href="/achivments"><FiAward className="nav-icon" /> Achievements</a></li> */}
           <li><a href="/notice"><FiClipboard className="nav-icon" /> Notice</a></li>
           <li><a href="/event"><FiCalendar   className="nav-icon" /> Event</a></li>
           <li><a href="/media"><FiImage className="nav-icon" /> Media</a></li>

@@ -65,10 +65,10 @@ const Login = () => {
       <div className="login-page-left-section">
         <h2 className="login-page-welcome-text">Welcome To</h2>
         <h1 className="login-page-title">
-          Our <span className="login-page-brand">URU</span>
+        Unique Records of Universe <span className="login-page-brand"> Login Portal</span>
         </h1>
         <p className="login-page-description">
-          Elevate your experience with cutting-edge solutions. Join us and explore the future of technology with Xmee.
+        Create your account and login to register your name as "Unique Records of the Universe" holder and apply online to participate in various events and felicitation/award ceremonies
         </p>
       </div>
 
