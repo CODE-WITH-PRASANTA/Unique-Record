@@ -1,0 +1,330 @@
+/* Donate Section Styling */
+.Donate-container {
+    background-color: #222;
+    color: white;
+    padding: 50px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(255, 255, 0, 0.4);
+    border: 3px solid yellow;
+    max-width: 1600px;
+    margin: auto;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Title */
+.Donate-title {
+    background-color: darkred;
+    color: yellow;
+    font-size: 28px;
+    font-weight: bold;
+    padding: 20px;
+    border-radius: 10px;
+    display: inline-block;
+    margin-bottom: 25px;
+    box-shadow: 0px 4px 10px rgba(255, 255, 0, 0.5);
+}
+
+/* Description */
+.Donate-description {
+    font-size: 20px;
+    line-height: 1.8;
+    margin-bottom: 30px;
+    opacity: 0.9;
+    text-align: justify;
+    padding: 0 20px;
+}
+
+/* Quote Section */
+.Donate-quote {
+    font-size: 18px;
+    font-style: italic;
+    color: yellow;
+    margin-top: 25px;
+    border-left: 5px solid yellow;
+    padding-left: 15px;
+    font-weight: bold;
+}
+
+/* Headings */
+.Donate-heading {
+    font-size: 24px;
+    color: #ffcc00;
+    margin-top: 35px;
+    text-transform: uppercase;
+    font-weight: bold;
+    text-decoration: underline;
+    letter-spacing: 1px;
+}
+
+/* Highlighted Text */
+.Donate-highlight {
+    font-size: 20px;
+    margin-top: 20px;
+    line-height: 1.6;
+    color: #ddd;
+    font-weight: 600;
+}
+
+.Donate-text-highlight {
+    font-weight: bold;
+    color: #ff33cc;
+    text-shadow: 0px 0px 8px rgba(255, 51, 204, 0.1);
+}
+
+/* Buttons */
+.Donate-btn-section {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.Donate-btn, .Donate-charity-btn {
+    background-color: darkred;
+    color: yellow;
+    border: none;
+    padding: 14px 30px;
+    font-size: 20px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0px 4px 10px rgba(255, 255, 0, 0.6);
+}
+
+.Donate-btn:hover {
+    background-color: #990000;
+    transform: scale(1.08);
+    box-shadow: 0px 5px 15px rgba(255, 255, 0, 0.8);
+}
+
+.Donate-charity-btn {
+    background-color: #ff4500;
+}
+
+.Donate-charity-btn:hover {
+    background-color: #e63e00;
+    transform: scale(1.08);
+    box-shadow: 0px 5px 15px rgba(255, 140, 0, 0.8);
+}
+
+/* Tax Information */
+.Donate-tax-info {
+    font-size: 16px;
+    margin-top: 25px;
+    color: lightgray;
+    font-style: italic;
+    border-top: 2px dashed yellow;
+    padding-top: 15px;
+}
+
+/* Form Styling */
+.Donate-form {
+    background-color: #111;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(255, 255, 0, 0.5);
+    max-width: 800px;
+    margin: 40px auto;
+    text-align: left;
+}
+
+.Donate-form label {
+    font-size: 18px;
+    font-weight: bold;
+    color: #ffcc00;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.Donate-form input, 
+.Donate-form select, 
+.Donate-form textarea {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border: 2px solid yellow;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    background: #222;
+    color: white;
+}
+
+.Donate-form input:focus, 
+.Donate-form select:focus, 
+.Donate-form textarea:focus {
+    outline: none;
+    border-color: #ffcc00;
+    box-shadow: 0 0 10px rgba(255, 204, 0, 0.7);
+}
+
+.Donate-form textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* Grid Layout */
+.Donate-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.Donate-field {
+    width: 100%;
+}
+
+.Donate-full-width {
+    grid-column: span 2;
+}
+
+/* Submit Button */
+.Donate-submit {
+    background-color: yellow;
+    color: black;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    transition: 0.3s;
+}
+
+.Donate-submit:hover {
+    background-color: #ffcc00;
+    transform: scale(1.05);
+    box-shadow: 0px 5px 15px rgba(255, 255, 0, 0.8);
+}
+
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .Donate-container {
+        padding: 40px;
+    }
+
+    .Donate-title {
+        padding: 18px;
+    }
+
+    .Donate-description {
+        text-align: justify;
+        padding: 0 15px;
+    }
+
+    .Donate-heading {
+        font-size: 22px;
+    }
+
+    .Donate-highlight {
+        font-size: 18px;
+        text-align: justify;
+    }
+
+    .Donate-btn, .Donate-charity-btn {
+        padding: 12px 25px;
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 992px) {
+    .Donate-container {
+        padding: 30px;
+    }
+
+    .Donate-title {
+      
+        padding: 15px;
+    }
+
+    .Donate-heading {
+        font-size: 20px;
+    }
+
+    .Donate-btn, .Donate-charity-btn {
+        padding: 10px 20px;
+        font-size: 16px;
+    }
+
+    .Donate-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .Donate-container {
+        padding: 25px;
+    }
+
+    .Donate-title {
+        font-size: 22px;
+        padding: 12px;
+    }
+
+    .Donate-description {
+        text-align: center;
+    }
+
+    .Donate-heading {
+        font-size: 18px;
+    }
+
+    .Donate-btn, .Donate-charity-btn {
+        padding: 10px 18px;
+        font-size: 14px;
+    }
+
+    .Donate-form {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 576px) {
+    .Donate-container {
+        padding: 20px;
+    }
+
+    .Donate-title {
+        font-size: 20px;
+        padding: 10px;
+    }
+
+    .Donate-description {
+        text-align: justify;
+    }
+
+    .Donate-btn-section {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .Donate-btn, .Donate-charity-btn {
+        width: 100%;
+        padding: 12px;
+        font-size: 14px;
+    }
+    .Donate-quote{
+        text-align: justify;
+    }
+
+    .Donate-form {
+        padding: 15px;
+    }
+
+    .Donate-form input, 
+    .Donate-form select, 
+    .Donate-form textarea {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .Donate-submit {
+        font-size: 16px;
+        padding: 12px;
+    }
+}
+

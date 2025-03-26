@@ -42,14 +42,20 @@ const Navbar = () => {
           <li><a href="/blog"><FiBookOpen className="nav-icon" /> URU Post</a></li>
           <li><a href="/faq"><FiHelpCircle className="nav-icon" /> FAQ</a></li>
           <li><a href="/contact"><FiPhone className="nav-icon" /> Contact Us</a></li>
+          
         </ul>
 
-        {/* Right Section */}
         <div className="nav-buttons">
-         <a href="/login"> <button className="sign-in">
-            <FiUsers className="button-icon" /> Login
-          </button></a>
-        </div>
+  <a href="/donate">
+    <button className="donate-button">Donate</button>
+  </a>
+  <a href="/login">
+    <button className="sign-in">
+      <FiUsers className="button-icon" /> Login
+    </button>
+  </a>
+</div>
+
 
         {/* Mobile Menu Icon */}
         <div className="menu-icon" onClick={toggleMenu}>
@@ -72,13 +78,17 @@ const Navbar = () => {
           <li><a href="/contact"><FiPhone className="nav-icon" /> Contact Us</a></li>
         </ul>
         
-        {/* Mobile Login Button */}
-        <a href="/login"> <div className="mobile-login">
-          <button className="mobile-sign-in">
-            <FiUsers className="button-icon" /> Login
-          </button>
-        </div></a>
-       
+        <div className="mobile-login">
+  <a href="/donate">
+    <button className="mobile-donate">Donate</button>
+  </a>
+  <a href="/login">
+    <button className="mobile-sign-in">
+      <FiUsers className="button-icon" /> Login
+    </button>
+  </a>
+</div>
+
         
 
          </div>

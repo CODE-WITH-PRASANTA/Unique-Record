@@ -20,9 +20,9 @@ import AdminAddEvent from '../../Components/AdminAddEvent/AdminAddEvent';
 import AdminEditEvent from '../../Components/AdminEditEvent/AdminEditEvent';
 import EventGallery from '../../Components/EventGallery/EventGallery'; // New Component
 import HomeGallery from '../../Components/HomeGallery/HomeGallery'; // New Component
-import './AdminNavbar.css';
 import AdminAddTeamMember from '../../Components/AdminAddTeamMember/AdminAddTeamMember';
 import AdminManageTeamMembers from '../../Components/AdminManageTeamMembers/AdminManageTeamMembers';
+import './AdminNavbar.css';
 
 const NAVIGATION = [
   {

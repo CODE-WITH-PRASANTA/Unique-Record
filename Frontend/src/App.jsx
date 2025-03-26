@@ -22,6 +22,7 @@ import UserDashboard from "./Components/UserDashboard/UserDashboard";
 import Sidebar from "./Components/Sidebar/Sidebar";
 import RegisterForEvent from "./Components/RegisterForEvent/RegisterForEvent";
 import ProtectedRoute from "./Components/ProtectedRoute"; // ✅ Keep only this import
+import Donate from "./Pages/Donate/Donate";
 
 function Layout() {
   const location = useLocation();
@@ -64,6 +65,7 @@ function Layout() {
             <Route path="/blog/:id" element={<BlogDetails />} />
             <Route path="/login" element={<Login />} />
             <Route path="/event" element={<Event />} />
+            <Route path="/donate" element={<Donate />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
 
           

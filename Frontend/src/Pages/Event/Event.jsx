@@ -4,6 +4,7 @@ import EventInformation from '../../Components/EventInformation/EventInformation
 import EventGalary from '../../Components/EventGalary/EventGalary'
 import AllEvents from '../../Components/AllEvents/AllEvents'
 import ScheduleBooking from '../../Components/ScheduleBooking/ScheduleBooking'
+import ExpairEventPage from '../../Components/ExpairEventPage/ExpairEventPage'
 
 const Event = () => {
   return (
@@ -17,9 +18,10 @@ const Event = () => {
       </div>
     </div>
 
-    <AllEvents />
     <EventInformation />
+    <AllEvents />
     <EventGalary />
+    <ExpairEventPage />
     <ScheduleBooking />
     </div>
   )

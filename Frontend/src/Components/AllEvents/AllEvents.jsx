@@ -11,9 +11,9 @@ const AllEvents = () => {
   const navigate = useNavigate(); 
 
   useEffect(() => {
-    const fetchEvents = async () => {
+    const fetchOngoingEvents = async () => {
       try {
-        const response = await axios.get(`${API_URL}/events/all`);
+        const response = await axios.get(`${API_URL}/events/status/Ongoing`);
         console.log("API Response:", response.data);
 
         if (!Array.isArray(response.data.events)) {
@@ -29,24 +29,20 @@ const AllEvents = () => {
       }
     };
 
-    fetchEvents();
+    fetchOngoingEvents();
   }, []);
 
+  const handleRegister = (eventId, eventName, eventPrice) => {
+    navigate(`/dashboard/event-registration?eventId=${eventId}&eventName=${encodeURIComponent(eventName)}&eventPrice=${eventPrice}`);
+  };
 
-const handleRegister = (eventId, eventName, eventPrice) => {
-  navigate(`/dashboard/event-registration?eventId=${eventId}&eventName=${encodeURIComponent(eventName)}&eventPrice=${eventPrice}`);
-};
-
-// ...
-  if (loading) return <p>Loading events...</p>;
+  if (loading) return <p>Loading ongoing events...</p>;
   if (error) return <p className="error">{error}</p>;
 
   return (
     <div className="all-event-container">
-      <p className="all-event-subtitle">Archives</p>
-      <h2 className="all-event-title">
-        Previously Announced Events for which Online Application Date has Expired
-      </h2>
+      <p className="all-event-subtitle">Upcoming Events</p>
+      <h2 className="all-event-title">Ongoing Events Open for Registration</h2>
 
       <div className="all-event-list">
         {events.length > 0 ? (
@@ -56,13 +52,10 @@ const handleRegister = (eventId, eventName, eventPrice) => {
                 <p className="event-serial">Sl. No: {events.length - index}</p>
                 <h3 className="event-name">{event.eventName}</h3>
                 <p className="event-description">{event.eventDescription}</p>
-                <p className="event-status">
-                  <strong>Status:</strong> <span>{event.currentStatus}</span>
-                </p>
                 <p>
                   <strong>Organizer:</strong> {event.eventOrganizer}
                 </p>
-                <p><strong>Price:</strong> ₹{event.pricePerTicket}</p> {/* Show event price */}
+                <p><strong>Price:</strong> ₹{event.pricePerTicket}</p>
                 <div className="event-date-box">
                   <p><strong>Opening Date:</strong> {new Date(event.openingDate).toLocaleDateString()}</p>
                   <p><strong>Closing Date:</strong> {new Date(event.closingDate).toLocaleDateString()}</p>
@@ -70,7 +63,7 @@ const handleRegister = (eventId, eventName, eventPrice) => {
                 <div className="event-buttons">
                   <button
                     className="register-btn"
-                    onClick={() => handleRegister(event._id, event.eventName, event.pricePerTicket)} 
+                    onClick={() => handleRegister(event._id, event.eventName, event.pricePerTicket)}
                   >
                     Register & Apply
                   </button>
@@ -87,7 +80,7 @@ const handleRegister = (eventId, eventName, eventPrice) => {
             </div>
           ))
         ) : (
-          <p>No events found.</p>
+          <p>No ongoing events found.</p>
         )}
       </div>
     </div>

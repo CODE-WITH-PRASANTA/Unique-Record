@@ -78,7 +78,6 @@ exports.getEventsByCategory = async (req, res) => {
   }
 };
 
-
 // Update an event (without changing image unless new one is uploaded)
 exports.updateEvent = async (req, res) => {
   try {
@@ -124,6 +123,22 @@ exports.deleteEvent = async (req, res) => {
     await Event.findByIdAndDelete(id);
 
     res.status(200).json({ message: "Event deleted successfully!" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+// Fetch events by current status (Ongoing or Date Over)
+exports.getEventsByStatus = async (req, res) => {
+  try {
+    const { status } = req.params;
+
+    if (!["Ongoing", "Date Over"].includes(status)) {
+      return res.status(400).json({ message: "Invalid status! Use 'Ongoing' or 'Date Over'." });
+    }
+
+    const events = await Event.find({ currentStatus: status }).sort({ createdAt: -1 });
+    res.status(200).json({ message: `Events with status ${status} fetched successfully!`, events });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }

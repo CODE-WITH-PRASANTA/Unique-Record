@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { API_URL } from "../../Api"; // Adjust the path if needed
 import { useLocation } from "react-router-dom";
 import {
   FaUser,
@@ -12,38 +13,64 @@ import {
   FaCamera,
   FaGraduationCap,
 } from "react-icons/fa";
+import axios from "axios";
 import "./RegisterForEvent.css";
 
 const RegisterForEvent = () => {
-    const location = useLocation();
-    const [eventName, setEventName] = useState("");
-    const [eventPrice, setEventPrice] = useState(0);
-  
-    useEffect(() => {
-      const urlParams = new URLSearchParams(location.search);
-      const eventNameParam = urlParams.get("eventName");
-      const eventPriceParam = urlParams.get("eventPrice");
-  
-      if (eventNameParam && eventPriceParam) {
-        setEventName(decodeURIComponent(eventNameParam));
-        setEventPrice(eventPriceParam);
-      }
-    }, [location.search]);
+  const location = useLocation();
+  const [events, setEvents] = useState([]); // Store ongoing events
+  const [eventName, setEventName] = useState("");
+  const [eventPrice, setEventPrice] = useState(0);
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const eventNameParam = urlParams.get("eventName");
+    const eventPriceParam = urlParams.get("eventPrice");
+
+    if (eventNameParam && eventPriceParam) {
+      setEventName(decodeURIComponent(eventNameParam));
+      setEventPrice(eventPriceParam);
+    }
+
+
+const fetchEvents = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/events/status/Ongoing`);
+    setEvents(response.data.events); // Store fetched events
+  } catch (error) {
+    console.error("Error fetching events:", error);
+  }
+};
+
+
+    fetchEvents();
+  }, [location.search]);
+
+  // Handle event selection
+  const handleEventChange = (e) => {
+    const selectedEvent = events.find(event => event.eventName === e.target.value);
+    setEventName(selectedEvent.eventName);
+    setEventPrice(selectedEvent.pricePerTicket);
+  };
 
   return (
     <div className="event-container">
       <h2 className="event-heading">Event Registration Form</h2>
       <form className="event-form">
         
-        {/* Event, Name, and Sex */}
+        {/* Event Selection */}
         <div className="event-row">
-
-        <div className="event-group">
-          <label>
-            <FaCalendarAlt /> Event Name *
-          </label>
-          <input type="text" value={eventName} readOnly />
-        </div>
+          <div className="event-group">
+            <label><FaCalendarAlt /> Event Name *</label>
+            <select value={eventName} onChange={handleEventChange} required>
+              <option value="">Select an Event</option>
+              {events.map(event => (
+                <option key={event._id} value={event.eventName}>
+                  {event.eventName}
+                </option>
+              ))}
+            </select>
+          </div>
 
           <div className="event-group">
             <label><FaUser /> Applicant Name *</label>
@@ -53,9 +80,9 @@ const RegisterForEvent = () => {
           <div className="event-group">
             <label>Sex *</label>
             <div className="event-radio">
-              <input type="radio" name="sex" value="Male" /> Male
-              <input type="radio" name="sex" value="Female" /> Female
-              <input type="radio" name="sex" value="Transgender" /> Transgender
+              <input type="radio" name="sex" value="Male" required /> Male
+              <input type="radio" name="sex" value="Female" required /> Female
+              <input type="radio" name="sex" value="Transgender" required /> Transgender
             </div>
           </div>
         </div>
@@ -68,11 +95,9 @@ const RegisterForEvent = () => {
           </div>
 
           <div className="event-group">
-          <label>
-            <FaMoneyBillWave /> Price *
-          </label>
-          <input type="text" value={`₹${eventPrice}`} readOnly />
-        </div>
+            <label><FaMoneyBillWave /> Price *</label>
+            <input type="text" value={`₹${eventPrice}`} readOnly />
+          </div>
 
           <div className="event-group">
             <label><FaMobileAlt /> WhatsApp Mobile Number *</label>
