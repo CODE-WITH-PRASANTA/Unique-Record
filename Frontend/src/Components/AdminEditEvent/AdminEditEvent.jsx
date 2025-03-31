@@ -150,36 +150,55 @@ const handleDeleteEvent = async (id) => {
       </div>
 
       {isModalOpen && (
-        <div className={`Admin-edit-event-modal ${isModalOpen ? "show" : ""}`}>
-          <div className="Admin-edit-event-modal-content">
-            <h3 className="Admin-edit-event-modal-title">Edit Event</h3>
-            <input type="text" name="eventName" value={editEvent.eventName} onChange={handleEditChange} placeholder="Event Name" />
-            <input type="text" name="eventLocation" value={editEvent.eventLocation} onChange={handleEditChange} placeholder="Location" />
-            <input type="date" name="eventDate" value={editEvent.eventDate.split("T")[0]} onChange={handleEditChange} />
-            <textarea name="eventDescription" value={editEvent.eventDescription} onChange={handleEditChange} placeholder="Description"></textarea>
-            <input type="text" name="eventOrganizer" value={editEvent.eventOrganizer} onChange={handleEditChange} placeholder="Organizer" />
-            <input type="date" name="openingDate" value={editEvent.openingDate.split("T")[0]} onChange={handleEditChange} />
-            <input type="date" name="closingDate" value={editEvent.closingDate.split("T")[0]} onChange={handleEditChange} />
-            <input type="number" name="pricePerTicket" value={editEvent.pricePerTicket} onChange={handleEditChange} placeholder="Price" />
-            <select
-              name="currentStatus"
-              value={editEvent.currentStatus}
-              onChange={handleEditChange}
-              className="Admin-edit-event-status"
-            >
-              <option value="Ongoing">Ongoing</option>
-              <option value="Date Over">Date Over</option>
-            </select>
+  <div className={`Admin-edit-event-modal ${isModalOpen ? "show" : ""}`}>
+    <div className="Admin-edit-event-modal-content">
+      <h3 className="Admin-edit-event-modal-title">Edit Event</h3>
 
+      <div className="Admin-edit-event-form">
+        <div className="Admin-edit-event-column">
+          <label className="Admin-edit-event-label">Event Name</label>
+          <input type="text" name="eventName" value={editEvent.eventName} onChange={handleEditChange} placeholder="Event Name" />
 
+          <label className="Admin-edit-event-label">Location</label>
+          <input type="text" name="eventLocation" value={editEvent.eventLocation} onChange={handleEditChange} placeholder="Location" />
 
-            <div className="Admin-edit-event-modal-actions">
-              <button className="Admin-edit-event-save-btn" onClick={handleSaveChanges}>Save</button>
-              <button className="Admin-edit-event-cancel-btn" onClick={closeEditModal}>Cancel</button>
-            </div>
-          </div>
+          <label className="Admin-edit-event-label">Event Date</label>
+          <input type="date" name="eventDate" value={editEvent.eventDate.split("T")[0]} onChange={handleEditChange} />
+
+          <label className="Admin-edit-event-label">Opening Date</label>
+          <input type="date" name="openingDate" value={editEvent.openingDate.split("T")[0]} onChange={handleEditChange} />
+
+          <label className="Admin-edit-event-label">Closing Date</label>
+          <input type="date" name="closingDate" value={editEvent.closingDate.split("T")[0]} onChange={handleEditChange} />
         </div>
-      )}
+
+        <div className="Admin-edit-event-column">
+          <label className="Admin-edit-event-label">Description</label>
+          <textarea name="eventDescription" value={editEvent.eventDescription} onChange={handleEditChange} placeholder="Description"></textarea>
+
+          <label className="Admin-edit-event-label">Organizer</label>
+          <input type="text" name="eventOrganizer" value={editEvent.eventOrganizer} onChange={handleEditChange} placeholder="Organizer" />
+
+          <label className="Admin-edit-event-label">Price per Ticket</label>
+          <input type="number" name="pricePerTicket" value={editEvent.pricePerTicket} onChange={handleEditChange} placeholder="Price" />
+
+          <label className="Admin-edit-event-label">Current Status</label>
+          <select name="currentStatus" value={editEvent.currentStatus} onChange={handleEditChange} className="Admin-edit-event-status">
+            <option value="Ongoing">Ongoing</option>
+            <option value="Date Over">Date Over</option>
+          </select>
+        </div>
+      </div>
+
+      <div className="Admin-edit-event-modal-actions">
+        <button className="Admin-edit-event-save-btn" onClick={handleSaveChanges}>Save</button>
+        <button className="Admin-edit-event-cancel-btn" onClick={closeEditModal}>Cancel</button>
+      </div>
+    </div>
+  </div>
+)}
+
+
     </div>
   );
 };

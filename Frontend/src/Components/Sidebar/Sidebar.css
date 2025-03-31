@@ -17,6 +17,7 @@
     transform: translateX(0);
 }
 
+
 /* Menu Button */
 .menu-button {
     position: fixed;
@@ -97,6 +98,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
+    cursor: pointer;
 }
 
 /* Sidebar Links */
@@ -119,6 +121,39 @@
     font-weight: 500;
     padding-left: 20px;
 }
+.sidebar-dropdown {
+    background: #ffffff;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-top: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+    opacity: 0;
+  }
+  
+  .sidebar-dropdown.open {
+    max-height: 200px;
+    padding: 10px;
+    transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+    opacity: 1;
+  }
+  
+  .sidebar-dropdown a {
+    padding: 10px;
+    display: block;
+    color: #333;
+    text-decoration: none;
+    transition: 0.3s ease-in-out;
+    border-radius: 5px;
+  }
+  
+  .sidebar-dropdown a:hover {
+    background: #e0f3ff;
+    color: #007bff;
+  }
 
 /* Responsive Adjustments */
 @media (max-width: 1024px) {
@@ -150,7 +185,6 @@
         width: 220px;
         padding: 20px 10px;
     }
-
     .sidebar-profile-img {
         width: 60px;
         height: 60px;
@@ -186,13 +220,12 @@
     border-radius: 5px;
     cursor: pointer;
     transition: 0.3s;
-  }
-  
-  .sidebar-logout:hover {
+}
+
+.sidebar-logout:hover {
     background-color: #c0395e; /* Darker Shade on Hover */
-  }
-  
-  .sidebar-logout svg {
+}
+
+.sidebar-logout svg {
     margin-right: 8px;
-  }
-  
+}

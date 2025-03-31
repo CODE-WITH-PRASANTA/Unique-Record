@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { API_URL } from "../../Api"; 
 import { FaFacebookF, FaTwitter, FaGoogle, FaLinkedinIn, FaPinterestP } from "react-icons/fa";
+import { FaPhoneAlt, FaWhatsapp } from "react-icons/fa";
 import "./Login.css";
 import RightSideCompanyLogo from "../../assets/UNQUE.png";
 import { useNavigate } from "react-router-dom";
@@ -9,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const navigate = useNavigate();
+  const phoneNumber = "+919472351693"; // Ensure it's in international format
   const [isRegister, setIsRegister] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
@@ -94,14 +96,14 @@ const Login = () => {
 
           {isRegister && (
             <div className="login-page-row">
-              <input type="tel" name="phoneNumber" placeholder="Phone Number" required className="login-page-input half-width" maxLength="10" pattern="[0-9]{10}" onChange={handleChange} />
+              <input type="tel" name="phoneNumber" placeholder="Mobile Number" required className="login-page-input half-width" maxLength="10" pattern="[0-9]{10}" onChange={handleChange} />
               <input type="email" name="email" placeholder="Email Address" required className="login-page-input half-width" onChange={handleChange} />
             </div>
           )}
 
           {!isRegister && <input type="text" name="emailOrPhone" placeholder="Enter Mail / Phone" required className="login-page-input" onChange={handleChange} />}
 
-          <input type="password" name="password" placeholder="Password" required className="login-page-input" onChange={handleChange} />
+          <input type="password" name="password" placeholder="Create Password" required className="login-page-input" onChange={handleChange} />
 
           {isRegister && <input type="password" name="confirmPassword" placeholder="Confirm Password" required className="login-page-input" onChange={handleChange} />}
 
@@ -121,7 +123,16 @@ const Login = () => {
             <FaPinterestP className="login-page-social-icon" />
           </div>
         </form>
-
+        <p className="login-assistance-call">
+      <FaPhoneAlt className="icon phone-icon" />
+      For any Assistance Call or WhatsApp:
+      <a href={`tel:${phoneNumber}`} className="call-link">
+        {phoneNumber}
+      </a>
+      <a href={`https://wa.me/${phoneNumber}`} target="_blank" rel="noopener noreferrer" className="whatsapp-link">
+        <FaWhatsapp className="icon whatsapp-icon" />
+      </a>
+    </p>
         
       </div>
     </div>

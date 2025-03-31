@@ -110,8 +110,8 @@
   padding: 25px;
   border-radius: 12px;
   box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
-  width: 420px;
-  max-width: 90%;
+  width: 1200px;
+  max-width: 100%;
   transform: scale(0.9);
   opacity: 0;
   transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
@@ -235,3 +235,29 @@
   background-color: #fff;
 }
 
+
+
+/* Form Container */
+.Admin-edit-event-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* Columns */
+.Admin-edit-event-column {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Ensure full-width inputs */
+.Admin-edit-event-column input,
+.Admin-edit-event-column textarea,
+.Admin-edit-event-column select {
+  width: 100%;
+}
+
+/* Adjust modal width */
+.Admin-edit-event-modal-content {
+  max-width: 600px;
+}

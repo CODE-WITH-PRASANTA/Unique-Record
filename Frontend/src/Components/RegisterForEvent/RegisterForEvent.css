@@ -23,6 +23,27 @@
     display: inline-block;
     padding-bottom: 5px;
   }
+
+  .event-registaion-page.heading {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #2C3E50; /* Dark shade for a professional look */
+    text-align: center;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.event-registaion-page.heading span {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #E94E77; /* Vibrant color to make it stand out */
+    margin-top: 10px;
+    text-transform: capitalize;
+    letter-spacing: 0.5px;
+}
+
   
   /* Form Styling */
   .event-form {

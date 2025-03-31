@@ -54,6 +54,8 @@ const fetchEvents = async () => {
   };
 
   return (
+    <>
+    <h1 className="event-registaion-page heading">Unique Records of Universe <span>Digitally Marking The Extraordinary Achievement</span></h1>
     <div className="event-container">
       <h2 className="event-heading">Event Registration Form</h2>
       <form className="event-form">
@@ -159,6 +161,7 @@ const fetchEvents = async () => {
         <button type="submit" className="event-submit">Save & Continue</button>
       </form>
     </div>
+    </>
   );
 };
 

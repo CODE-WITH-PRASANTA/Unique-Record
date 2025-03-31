@@ -129,7 +129,7 @@ const AdminAddEvent = () => {
             </select>
           </div>
           <div className="admin-add-event-group admin-add-event-price">
-            <label><FaMoneyBillWave /> Price Per Ticket:</label>
+            <label><FaMoneyBillWave /> Registration Fee:</label>
             <input type="number" name="pricePerTicket" value={eventData.pricePerTicket} onChange={handleChange} required />
           </div>
         </div>

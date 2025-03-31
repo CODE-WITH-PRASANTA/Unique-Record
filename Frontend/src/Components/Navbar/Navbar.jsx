@@ -37,7 +37,7 @@ const Navbar = () => {
           <li><a href="/vision"><FiEye className="nav-icon" /> Our Vision</a></li>
           {/* <li><a href="/achivments"><FiAward className="nav-icon" /> Achievements</a></li> */}
           <li><a href="/notice"><FiClipboard className="nav-icon" /> Notice</a></li>
-          <li><a href="/event"><FiCalendar   className="nav-icon" /> Event</a></li>
+          <li><a href="/event"><FiCalendar   className="nav-icon" /> Event Registration </a></li>
           <li><a href="/media"><FiImage   className="nav-icon" /> Media</a></li>
           <li><a href="/blog"><FiBookOpen className="nav-icon" /> URU Post</a></li>
           <li><a href="/faq"><FiHelpCircle className="nav-icon" /> FAQ</a></li>
@@ -71,7 +71,7 @@ const Navbar = () => {
           <li><a href="/vision"><FiEye className="nav-icon" /> Our Vision</a></li>
           {/* <li><a href="/achivments"><FiAward className="nav-icon" /> Achievements</a></li> */}
           <li><a href="/notice"><FiClipboard className="nav-icon" /> Notice</a></li>
-          <li><a href="/event"><FiCalendar   className="nav-icon" /> Event</a></li>
+          <li><a href="/event"><FiCalendar   className="nav-icon" /> Event Registration </a></li>
           <li><a href="/media"><FiImage className="nav-icon" /> Media</a></li>
           <li><a href="/blog"><FiBookOpen className="nav-icon" /> URU Post</a></li>
           <li><a href="/faq"><FiHelpCircle className="nav-icon" /> FAQ</a></li>

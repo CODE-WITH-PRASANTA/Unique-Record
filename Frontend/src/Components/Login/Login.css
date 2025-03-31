@@ -357,3 +357,62 @@
       font-size: 16px;
     }
   }
+
+  /* Assistance Call Section */
+.login-assistance-call {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  background: #f8f9fa;
+  padding: 12px 15px;
+  border-left: 4px solid #007bff;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-align: center;
+  margin-top: 15px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  transition: background 0.3s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.login-assistance-call:hover {
+  background: #e0f3ff;
+  transform: scale(1.02);
+}
+
+/* Call & WhatsApp Icons */
+.icon {
+  font-size: 18px;
+  color: #007bff;
+  transition: transform 0.3s ease-in-out;
+}
+
+.phone-icon {
+  color: #007bff;
+}
+
+.whatsapp-icon {
+  color: #25D366;
+}
+
+.call-link {
+  color: #e94e77;
+  font-weight: bold;
+  text-decoration: none;
+  transition: color 0.3s ease-in-out;
+}
+
+.call-link:hover {
+  color: #c0395e;
+  text-decoration: underline;
+}
+
+.whatsapp-link {
+  text-decoration: none;
+}
+
+.whatsapp-link:hover .whatsapp-icon {
+  transform: scale(1.2);
+}
