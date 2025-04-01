@@ -23,6 +23,7 @@ import Sidebar from "./Components/Sidebar/Sidebar";
 import RegisterForEvent from "./Components/RegisterForEvent/RegisterForEvent";
 import ProtectedRoute from "./Components/ProtectedRoute"; // ✅ Keep only this import
 import Donate from "./Pages/Donate/Donate";
+import PaymentSuccess from "./Components/PaymentSuccess/PaymentSuccess";
 
 function Layout() {
   const location = useLocation();
@@ -67,6 +68,7 @@ function Layout() {
             <Route path="/event" element={<Event />} />
             <Route path="/donate" element={<Donate />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/payment-success" element={<PaymentSuccess />} />
 
           
               <Route path="/admin/*" element={<AdminNavbar />} />

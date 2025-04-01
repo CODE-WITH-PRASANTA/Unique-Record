@@ -32,8 +32,8 @@ const ExpairEventPage = () => {
   return (
     <div className="expair-event-full-sec">
       <section className="expair-event-section">
-        <h5 className="expair-event-subtitle">Expired Events</h5>
-        <h2 className="expair-event-main-title">Successfully Completed Events</h2>
+        <h5 className="expair-event-subtitle">Archives</h5>
+        <h2 className="expair-event-main-title">Previously Announced Events for which Online Appliction Date has Expired</h2>
 
         {/* Mobile View: Swiper */}
         <div className="expair-event-swiper-container">

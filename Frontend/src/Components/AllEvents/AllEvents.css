@@ -18,6 +18,8 @@
 
 /* Title */
 .all-event-title {
+  max-width: 1200px;
+  margin: auto;
   font-size: 36px;
   font-weight: bold;
   color: #222;

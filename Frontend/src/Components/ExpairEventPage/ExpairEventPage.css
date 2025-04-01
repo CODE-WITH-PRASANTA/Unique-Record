@@ -192,3 +192,9 @@
     color: #c92e5b;
     text-decoration: underline;
 }
+
+
+.expair-event-grid{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}

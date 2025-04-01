@@ -9,6 +9,9 @@ const eventGalleryRoutes = require("./Routes/eventGalleryRoutes");
 const authRoutes = require("./Routes/authRoutes");
 const forgotPasswordRoutes = require('./Routes/forgotPasswordRoutes');
 const teamMemberRoutes = require("./Routes/teamMemberRoutes");
+const paymentRoutes = require("./Routes/paymentRoutes");
+const registerForEventRoutes = require("./Routes/registerForEventRoutes");
+
 
 
 
@@ -27,6 +30,9 @@ app.use("/api/eventsgalary", eventGalleryRoutes);
 app.use("/api/auth", authRoutes);
 app.use('/api/forgot-password', forgotPasswordRoutes);
 app.use("/api/team", teamMemberRoutes);
+app.use("/api/payment", paymentRoutes);
+app.use("/api/registerevent", registerForEventRoutes);
+
 
 
 const PORT = process.env.PORT || 5002;

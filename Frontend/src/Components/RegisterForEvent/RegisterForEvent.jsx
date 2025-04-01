@@ -15,12 +15,22 @@ import {
 } from "react-icons/fa";
 import axios from "axios";
 import "./RegisterForEvent.css";
+import { useNavigate } from "react-router-dom";
+
 
 const RegisterForEvent = () => {
+const [phoneNumber, setPhoneNumber] = useState("");  // State to store phone number
   const location = useLocation();
   const [events, setEvents] = useState([]); // Store ongoing events
   const [eventName, setEventName] = useState("");
   const [eventPrice, setEventPrice] = useState(0);
+const navigate = useNavigate();
+
+const handlePhoneChange = (e) => {
+  setPhoneNumber(e.target.value);
+};
+
+
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
@@ -41,8 +51,6 @@ const fetchEvents = async () => {
     console.error("Error fetching events:", error);
   }
 };
-
-
     fetchEvents();
   }, [location.search]);
 
@@ -52,6 +60,63 @@ const fetchEvents = async () => {
     setEventName(selectedEvent.eventName);
     setEventPrice(selectedEvent.pricePerTicket);
   };
+
+  const handlePayment = async () => {
+    try {
+      const { data } = await axios.post(`${API_URL}/payment/create-order`, {
+        amount: eventPrice,
+        currency: "INR",
+        receipt: `receipt_${Date.now()}`,
+        phone: phoneNumber,  // Pass dynamic phone number
+      });
+  
+      const options = {
+        key: "rzp_live_1gSA9RbSjj0sEj",  // Replace with your Razorpay Key ID
+        amount: data.order.amount,
+        currency: data.order.currency,
+        name: "Unique Records of Universe",
+        description: "Event Registration Fee",
+        order_id: data.order.id,
+        handler: async (response) => {
+          const verifyRes = await axios.post(`${API_URL}/payment/verify-payment`, response);
+          
+          if (verifyRes.data.success) {
+            // Redirect to PaymentSuccess page with order details
+            navigate("/payment-success", {
+              state: {
+                order: {
+                  orderId: response.razorpay_order_id,
+                  paymentId: response.razorpay_payment_id,
+                  amount: data.order.amount / 100,  // Convert from paise to INR
+                  currency: data.order.currency,
+                  phone: phoneNumber,  // Pass phone number
+                  date: new Date().toLocaleString(),
+                  method: "Razorpay",
+                  status: "SUCCESS",
+                },
+              },
+            });
+          } else {
+            alert("Payment Verification Failed!");
+          }
+        },
+        prefill: {
+          name: "User Name",
+          email: "user@example.com",
+          contact: phoneNumber,  // Prefill with the phone number
+        },
+        theme: {
+          color: "#3399cc",
+        },
+      };
+  
+      const razor = new window.Razorpay(options);
+      razor.open();
+    } catch (error) {
+      console.error("Payment Error:", error);
+    }
+  };
+  
 
   return (
     <>
@@ -97,14 +162,16 @@ const fetchEvents = async () => {
           </div>
 
           <div className="event-group">
-            <label><FaMoneyBillWave /> Price *</label>
-            <input type="text" value={`₹${eventPrice}`} readOnly />
-          </div>
+  <label><FaMobileAlt /> WhatsApp Mobile Number *</label>
+  <input
+    type="tel"
+    maxLength="10"
+    value={phoneNumber}
+    onChange={handlePhoneChange}  // Capture user input
+    required
+  />
+</div>
 
-          <div className="event-group">
-            <label><FaMobileAlt /> WhatsApp Mobile Number *</label>
-            <input type="tel" maxLength="10" required />
-          </div>
         </div>
 
         {/* Address Details */}
@@ -144,6 +211,11 @@ const fetchEvents = async () => {
           <label>Your Area of Expertise & Special Skills</label>
           <textarea></textarea>
         </div>
+       
+        <div className="event-group">
+          <label>Your Area of Expertise & Special Skills</label>
+          <textarea></textarea>
+        </div>
 
         {/* File Uploads */}
         <div className="event-row">
@@ -156,9 +228,18 @@ const fetchEvents = async () => {
             <input type="file" accept=".jpg,.jpeg,.png" required />
           </div>
         </div>
+        <div className="event-group">
+          <label>Any Other Information : </label>
+          <input type="text" required />
+        </div>
+        <div className="event-group">
+            <label><FaMoneyBillWave /> Registation Fees *</label>
+            <input type="text" value={`₹${eventPrice}`} readOnly />
+          </div>
 
-        {/* Submit Button */}
-        <button type="submit" className="event-submit">Save & Continue</button>
+       <button type="button" onClick={handlePayment} className="event-submit">
+            Pay ₹{eventPrice} & Register
+          </button>
       </form>
     </div>
     </>

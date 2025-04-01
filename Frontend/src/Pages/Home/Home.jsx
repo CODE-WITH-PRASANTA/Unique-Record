@@ -13,6 +13,7 @@ import StyledBlog from '../../Components/LatestBlog/LatestBlog';
 import OurVision from '../../Components/OurVision/OurVision';
 import Rotation from '../../Components/Rotation/Rotation';
 import AboutOwner from '../../Components/AboutOwner/AboutOwner';
+import EventInformation from '../../Components/EventInformation/EventInformation';
 
 const Home = () => {
   return (
@@ -52,6 +53,7 @@ const Home = () => {
     <AboutOwner />
     <StyledBlog />
     <OurVision />
+    <EventInformation />
     <FreeQuotes />
     <HomeFaq />
 

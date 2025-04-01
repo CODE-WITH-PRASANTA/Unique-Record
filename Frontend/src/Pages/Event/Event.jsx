@@ -18,10 +18,10 @@ const Event = () => {
       </div>
     </div>
 
-    <EventInformation />
+
     <AllEvents />
-    <EventGalary />
     <ExpairEventPage />
+    <EventGalary />
     <ScheduleBooking />
     </div>
   )

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"; 
 import axios from "axios";
 import { API_URL } from "../../Api"; // Import API_URL
 import "./EventInformation.css";
@@ -6,6 +7,7 @@ import "./EventInformation.css";
 const EventInformation = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate(); // Use navigate for redirection
 
   useEffect(() => {
     axios
@@ -32,31 +34,40 @@ const EventInformation = () => {
       {loading ? (
         <p>Loading events...</p>
       ) : events.length > 0 ? (
-        <div className="event-information-cards">
-          {events.map((event, index) => (
-            <div key={index} className="event-information-card">
-              <div className="event-information-image-container">
-                <img src={event.eventImage} alt={event.eventName} className="event-information-image" />
-                <span className={`information-event-status status-${event.currentStatus.toLowerCase()}`}>
-                  {event.currentStatus}
-                </span>
-              </div>
+        <>
+          <div className="event-information-cards">
+            {events.map((event, index) => (
+              <div key={index} className="event-information-card">
+                <div className="event-information-image-container">
+                  <img src={event.eventImage} alt={event.eventName} className="event-information-image" />
+                  <span className={`information-event-status status-${event.currentStatus.toLowerCase()}`}>
+                    {event.currentStatus}
+                  </span>
+                </div>
 
-              <div className="event-information-details">
-                <h3 className="event-information-title">{event.eventName}</h3>
-                <p className="event-information-description">{event.eventDescription}</p>
+                <div className="event-information-details">
+                  <h3 className="event-information-title">{event.eventName}</h3>
+                  <p className="event-information-description">{event.eventDescription}</p>
 
-                <div className="event-information-meta">
-                  <p><strong>📍 Location:</strong> {event.eventLocation}</p>
-                  <p><strong>📅 Event Date:</strong> {new Date(event.eventDate).toDateString()}</p>
-                  <p><strong>👤 Organizer:</strong> {event.eventOrganizer}</p>
-                  <p><strong>🕒 Opening Date:</strong> {new Date(event.openingDate).toDateString()}</p>
-                  <p><strong>🚪 Closing Date:</strong> {new Date(event.closingDate).toDateString()}</p>
+                  <div className="event-information-meta">
+                    <p><strong>📍 Location:</strong> {event.eventLocation}</p>
+                    <p><strong>📅 Event Date:</strong> {new Date(event.eventDate).toDateString()}</p>
+                    <p><strong>👤 Organizer:</strong> {event.eventOrganizer}</p>
+                    <p><strong>🕒 Opening Date:</strong> {new Date(event.openingDate).toDateString()}</p>
+                    <p><strong>🚪 Closing Date:</strong> {new Date(event.closingDate).toDateString()}</p>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+
+          {/* View All Button */}
+          <div className="view-all-container">
+            <button className="view-all-btn" onClick={() => navigate("/event")}>
+              View All Events
+            </button>
+          </div>
+        </>
       ) : (
         <p>No events found in this category.</p>
       )}
