@@ -4,6 +4,9 @@ import { API_URL } from "../../Api"; // Adjust path as needed
 import "./AdminEditEvent.css";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import Swal from "sweetalert2";
+import { Editor } from '@tinymce/tinymce-react';
+import DOMPurify from 'dompurify';
+
 
 
 const AdminEditEvent = () => {
@@ -130,7 +133,10 @@ const handleDeleteEvent = async (id) => {
                 <td className="Admin-edit-event-name">{truncateText(event.eventName, 4)}</td>
                 <td className="Admin-edit-event-location">{event.eventLocation}</td>
                 <td className="Admin-edit-event-date">{event.eventDate.split("T")[0]}</td>
-                <td className="Admin-edit-event-description">{truncateText(event.eventDescription, 4)}</td>
+                <td className="Admin-edit-event-description" dangerouslySetInnerHTML={{
+  __html: DOMPurify.sanitize(truncateText(event.eventDescription, 20))
+}}></td>
+
                 <td className="Admin-edit-event-organizer">{event.eventOrganizer}</td>
                 <td className="Admin-edit-event-opening">{event.openingDate.split("T")[0]}</td>
                 <td className="Admin-edit-event-closing">{event.closingDate.split("T")[0]}</td>
@@ -174,7 +180,37 @@ const handleDeleteEvent = async (id) => {
 
         <div className="Admin-edit-event-column">
           <label className="Admin-edit-event-label">Description</label>
-          <textarea name="eventDescription" value={editEvent.eventDescription} onChange={handleEditChange} placeholder="Description"></textarea>
+          <Editor
+  apiKey="38wljwg2resc6xba8ypjqp4duobboibboshf3czbuyv5iulv"
+  value={editEvent.eventDescription}
+  onEditorChange={(newContent) =>
+    setEditEvent({ ...editEvent, eventDescription: newContent })
+  }
+  init={{
+    height: 400,
+    menubar: true,
+    branding: false,
+    statusbar: true,
+    resize: true,
+    plugins: [
+      'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+      'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+      'insertdatetime', 'media', 'table', 'paste', 'help', 'wordcount',
+      'emoticons', 'autosave', 'directionality'
+    ],
+    toolbar:
+      'undo redo | blocks fontselect fontsizeselect | ' +
+      'bold italic underline strikethrough forecolor backcolor | ' +
+      'alignleft aligncenter alignright alignjustify | ' +
+      'bullist numlist outdent indent | link image media emoticons table | ' +
+      'ltr rtl | removeformat code preview fullscreen help',
+    image_caption: true,
+    image_title: true,
+    image_dimensions: true,
+    media_live_embeds: true,
+    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+  }}
+/>
 
           <label className="Admin-edit-event-label">Organizer</label>
           <input type="text" name="eventOrganizer" value={editEvent.eventOrganizer} onChange={handleEditChange} placeholder="Organizer" />

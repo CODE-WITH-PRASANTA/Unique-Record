@@ -55,8 +55,6 @@ const ExpairEventPage = () => {
                             {expanded[index] ? " Read Less" : " Read More"}
                         </span>
                         </p>
-
-                  <a href="#" className="expair-event-read-more-btn">Event Over</a>
                 </div>
               </AgentSwiperSlide>
             ))}

@@ -1,26 +1,10 @@
 const EventRegistration = require("../Model/eventRegistrationSchema");
-const cloudinary = require("../Config/cloudinary");
-const axios = require("axios");
+const sendEmail = require("../Utils/email");
 
-// Event Registration Controller
-const registerForEvent = async (req, res) => {
+
+exports.registerForEvent = async (req, res) => {
   try {
-    const { phone, eventName, applicantName, sex, dateOfBirth, pinCode, district, state, email, website, education, skills, paymentDetails, bioData, passportPhoto } = req.body;
-
-    // Upload bio-data to Cloudinary
-    const bioDataUpload = await cloudinary.uploader.upload(bioData.path, {
-      folder: "event-registrations",
-      resource_type: "auto",
-    });
-
-    // Upload passport photo to Cloudinary
-    const passportPhotoUpload = await cloudinary.uploader.upload(passportPhoto.path, {
-      folder: "event-registrations",
-      resource_type: "auto",
-    });
-
-    // Create registration document
-    const registration = new EventRegistration({
+    const {
       eventName,
       applicantName,
       sex,
@@ -33,25 +17,140 @@ const registerForEvent = async (req, res) => {
       website,
       education,
       skills,
-      bioDataUrl: bioDataUpload.secure_url,
-      passportPhotoUrl: passportPhotoUpload.secure_url,
-      payment: {
-        orderId: paymentDetails.orderId,
-        amount: paymentDetails.amount,
-        currency: paymentDetails.currency,
-        status: "PENDING",  // Set to "PENDING" initially
-      },
+      bioDataUrl,
+      passportPhotoUrl,
+      orderId,
+      paymentId,
+      amount,
+      currency,
+      method,
+      status,
+    } = req.body;
+
+    // Validate required fields
+    if (!eventName || !applicantName || !phone || !orderId || !paymentId || !amount) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
+
+    // Save event registration details to the database
+    const newRegistration = new EventRegistration({
+      eventName,
+      applicantName,
+      sex,
+      dateOfBirth: dateOfBirth, // Directly save the dateOfBirth value
+      phone,
+      pinCode,
+      district,
+      state,
+      email,
+      website,
+      education,
+      skills,
+      bioDataUrl,
+      passportPhotoUrl,
+      orderId,
+      paymentId,
+      amount,
+      currency,
+      method,
+      status,
     });
 
-    // Save registration
-    await registration.save();
-
-    // Return response
-    res.status(201).json({ message: "Event registration successful", registration });
+    await newRegistration.save();
+    res.status(201).json({ message: "Registration successful", data: newRegistration });
   } catch (error) {
-    console.error("Error registering event:", error);
-    res.status(500).json({ message: "Server error" });
+    console.error("Error in registering for event:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
-module.exports = { registerForEvent };
+// Get all event registrations
+exports.getAllRegistrations = async (req, res) => {
+  try {
+    const registrations = await EventRegistration.find();
+    res.status(200).json({ data: registrations });
+  } catch (error) {
+    console.error("Error fetching registrations:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+// Get single registration by ID
+exports.getRegistrationById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const registration = await EventRegistration.findById(id);
+    if (!registration) {
+      return res.status(404).json({ message: "Registration not found" });
+    }
+    res.status(200).json({ data: registration });
+  } catch (error) {
+    console.error("Error fetching registration:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+
+exports.sendRegistrationEmail = async (req, res) => {
+  try {
+    const registrationId = req.params.id;
+    const registration = await EventRegistration.findById(registrationId);
+
+    if (!registration) {
+      return res.status(404).json({ message: "Registration not found" });
+    }
+
+    const emailContent = `
+    🎉 Registration Confirmed
+    
+    Dear ${registration.applicantName},
+    
+    We are pleased to inform you that your registration for "${registration.eventName}" has been successfully processed! Below are your details:
+    
+    📅 Event Details:
+    --------------------------------
+    Event Name: ${registration.eventName}
+    
+    📝 Registration Details:
+    --------------------------------
+    Applicant Name: ${registration.applicantName}
+    Email: ${registration.email}
+    Phone: ${registration.phone}
+    Pincode: ${registration.pinCode}
+    District: ${registration.district}
+    State: ${registration.state}
+    
+    💰 Payment Summary:
+    --------------------------------
+    Order ID: ${registration.orderId}
+    Payment ID: ${registration.paymentId}
+    Amount: ${registration.amount} ${registration.currency}
+    Payment Method: ${registration.method}
+    
+    📌 Important Instructions:
+    --------------------------------
+    - Please arrive at the venue **30 minutes** before the event.
+    - Carry a **valid ID proof** for verification.
+    - If you have any questions, reach out to our support team.
+    
+    📞 Contact Us:
+    --------------------------------
+    - Email: support@event.com
+    - Phone: +91-XXXXXXXXXX
+    
+    Thank you for registering with us. We look forward to welcoming you at the event!
+    
+    Best Regards,  
+    Unique Records of Universe  
+    Event Team
+    `;
+    
+  
+
+    await sendEmail(registration.email, "Registration Confirmation", emailContent);
+    res.status(200).json({ message: "Email sent successfully" });
+  } catch (error) {
+    console.error("Error sending registration email:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};

@@ -3,7 +3,7 @@ const User = require(path.resolve(__dirname, '../Model/User.js'));
 const generateOtp = require(path.resolve(__dirname, '../Utils/otp.js'));
 const GeneratingOtp = require(path.resolve(__dirname, '../Model/GeneratingOtp.js'));
 const sendEmail = require(path.resolve(__dirname, '../Utils/email.js'));
-const bcrypt = require("bcrypt");
+const bcrypt = require('bcryptjs');
 
 
 

@@ -259,5 +259,6 @@
 
 /* Adjust modal width */
 .Admin-edit-event-modal-content {
-  max-width: 600px;
+  max-width: 1200px;
+  margin-top: 30px;
 }

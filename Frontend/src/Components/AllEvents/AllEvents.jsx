@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../../Api"; 
 import "./AllEvents.css";
+import DOMPurify from 'dompurify';
+
 
 const AllEvents = () => {
   const [events, setEvents] = useState([]); 
@@ -68,20 +70,33 @@ const AllEvents = () => {
               <div className="all-event-content">
                 <p className="event-serial">Sl. No: {events.length - index}</p>
                 <h3 className="event-name">{event.eventName}</h3>
-                <p className="event-description">
-                  {expanded[event._id] ? event.eventDescription : truncateText(event.eventDescription, 50)}
-                  <span 
-                    className="read-more-btn" 
-                    onClick={() => toggleReadMore(event._id)}
-                    style={{ color: "blue", cursor: "pointer", marginLeft: "5px" }}
-                  >
-                    {expanded[event._id] ? "Read Less" : "Read More"}
-                  </span>
-                </p>
-                <p><strong>Organizer:</strong> {event.eventOrganizer}</p>
-                <p><strong>Registration Fee :</strong> ₹{event.pricePerTicket}</p>
-                <p><strong>Event Location :</strong>📍 {event.eventLocation}</p>
-                <p><strong>Event Date : </strong>📅 {new Date(event.eventDate).toDateString()}</p>
+                <div className="event-description">
+  <div
+    className="event-description-html"
+    dangerouslySetInnerHTML={{
+      __html: DOMPurify.sanitize(
+        expanded[event._id]
+          ? event.eventDescription
+          : truncateText(event.eventDescription, 50)
+      ),
+    }}
+  />
+  {event.eventDescription.split(" ").length > 50 && (
+    <span
+      className="all-read-more-btn"
+      onClick={() => toggleReadMore(event._id)}
+    >
+      {expanded[event._id] ? "Read Less ▲" : "Read More ▼"}
+    </span>
+  )}
+</div>
+
+
+                <p className="All-Events-Organizer"><strong>Organizer:</strong> {event.eventOrganizer}</p>
+<p className="All-Events-RegistrationFee"><strong>Registration Fee :</strong> ₹{event.pricePerTicket}</p>
+<p className="All-Events-Location"><strong>Event Location :</strong> 📍 {event.eventLocation}</p>
+<p className="All-Events-Date"><strong>Event Date : </strong> 📅 {new Date(event.eventDate).toDateString()}</p>
+
                 <div className="event-date-box">
                   <p><strong>Opening Date:</strong> {new Date(event.openingDate).toLocaleDateString()}</p>
                   <p><strong>Closing Date:</strong> {new Date(event.closingDate).toLocaleDateString()}</p>

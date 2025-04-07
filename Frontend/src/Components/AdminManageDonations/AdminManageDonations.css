@@ -1,0 +1,134 @@
+.admin-donations-container {
+    padding: 20px;
+    background-color: #f9f9f9;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  .donation-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .donation-header h2 {
+    font-size: 24px;
+    color: #333;
+    margin: 0;
+  }
+  
+  .notification {
+    display: flex;
+    align-items: center;
+    background-color: #e3f2fd;
+    padding: 10px 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    font-size: 14px;
+  }
+  
+  .notification-icon {
+    color: #1976d2;
+    margin-right: 8px;
+  }
+  
+  .donation-table-wrapper {
+    overflow-x: auto;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+  }
+  
+  .donation-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 1000px;
+  }
+  
+  .donation-table th,
+  .donation-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+  
+  .donation-table th {
+    background-color: #1976d2;
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+  
+  .donation-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  .mail-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #1976d2;
+    transition: 0.2s ease;
+  }
+  
+  .mail-btn:hover {
+    transform: scale(1.1);
+    color: #0d47a1;
+  }
+  
+  /* ---------------------- */
+  /* 📱 Responsive Design   */
+  /* ---------------------- */
+  
+  @media (max-width: 768px) {
+    .donation-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .donation-header h2 {
+      font-size: 20px;
+    }
+  
+    .notification {
+      font-size: 13px;
+      padding: 8px 12px;
+    }
+  
+    .donation-table {
+      min-width: 100%;
+      font-size: 13px;
+    }
+  
+    .donation-table th,
+    .donation-table td {
+      padding: 10px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .donation-header h2 {
+      font-size: 18px;
+    }
+  
+    .notification {
+      font-size: 12px;
+      flex-direction: row;
+    }
+  
+    .donation-table th,
+    .donation-table td {
+      padding: 8px;
+      font-size: 12px;
+    }
+  
+    .mail-btn {
+      font-size: 18px;
+    }
+  }
+  

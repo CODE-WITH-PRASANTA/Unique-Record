@@ -3,6 +3,8 @@ import { FaCalendarAlt, FaLocationArrow, FaRegFileAlt, FaUserTie, FaMoneyBillWav
 import { MdEventAvailable, MdEventBusy, MdCategory } from "react-icons/md";
 import "./AdminAddEvent.css";
 import { API_URL } from "../../Api"; // Import API_URL from the config file
+import { Editor } from '@tinymce/tinymce-react';
+
 
 
 const AdminAddEvent = () => {
@@ -29,6 +31,11 @@ const AdminAddEvent = () => {
     const file = e.target.files[0];
     setEventData({ ...eventData, eventImage: file });
   };
+
+  const handleEditorChange = (content) => {
+    setEventData({ ...eventData, eventDescription: content });
+  };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -95,11 +102,43 @@ const AdminAddEvent = () => {
             <label><FaCalendarAlt /> Event Date:</label>
             <input type="date" name="eventDate" value={eventData.eventDate} onChange={handleChange} required />
           </div>
-          <div className="admin-add-event-group admin-add-event-description">
-            <label><FaRegFileAlt /> Event Description:</label>
-            <textarea name="eventDescription" value={eventData.eventDescription} onChange={handleChange} required />
-          </div>
         </div>
+        <div className="admin-add-event-group admin-add-event-description">
+  <label><FaRegFileAlt /> Event Description:</label>
+  <Editor
+  apiKey="38wljwg2resc6xba8ypjqp4duobboibboshf3czbuyv5iulv" // free API key
+  value={eventData.eventDescription}
+  onEditorChange={handleEditorChange}
+  init={{
+    height: 400,
+    menubar: true,
+    branding: false,
+    statusbar: true,
+    resize: true, // Enable manual resizing
+    plugins: [
+      'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+      'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+      'insertdatetime', 'media', 'table', 'paste', 'help', 'wordcount',
+      'emoticons', 'autosave', 'directionality'
+    ],
+    toolbar:
+      'undo redo | blocks fontselect fontsizeselect | ' +
+      'bold italic underline strikethrough forecolor backcolor | ' +
+      'alignleft aligncenter alignright alignjustify | ' +
+      'bullist numlist outdent indent | link image media emoticons table | ' +
+      'ltr rtl | removeformat code preview fullscreen help',
+    image_caption: true,
+    image_title: true,
+    image_dimensions: true,
+    media_live_embeds: true,
+    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+  }}
+/>
+
+
+</div>
+
+
 
         {/* Event Organizer */}
         <div className="admin-add-event-group admin-add-event-organizer">

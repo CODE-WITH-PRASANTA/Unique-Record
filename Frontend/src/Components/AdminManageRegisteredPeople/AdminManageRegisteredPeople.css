@@ -1,0 +1,156 @@
+.AdminManage-Registered-People-container {
+  padding: 20px;
+  background-color: #f4f6f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: 'Arial', sans-serif;
+}
+
+/* Title Styling */
+.AdminManage-Registered-People-title {
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+/* Table Container */
+.AdminManage-Registered-People-table-container {
+  overflow-x: auto;
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Table Styling */
+.AdminManage-Registered-People-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+th, td {
+  padding: 12px 15px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+  white-space: nowrap;
+}
+
+th {
+  background-color: #0056b3;
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+tr:hover {
+  background-color: #f8f9fc;
+  transition: 0.2s ease-in-out;
+}
+
+/* Table Image Styling */
+.AdminManage-Registered-People-img {
+  width: 45px;
+  height: 45px;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+  margin: auto;
+  border: 2px solid #ddd;
+}
+
+/* Payment Status Colors */
+.paid {
+  color: green;
+  font-weight: bold;
+  background: #e6ffe6;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.pending {
+  color: red;
+  font-weight: bold;
+  background: #ffe6e6;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+/* Action Buttons */
+.AdminManage-Registered-People-notification-btn,
+.download-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.2s ease-in-out;
+}
+
+.AdminManage-Registered-People-notification-btn {
+  color: #007bff;
+  padding: 8px 10px;
+  border-radius: 5px;
+  background: #e6f0ff;
+}
+
+.AdminManage-Registered-People-notification-btn:hover {
+  background: #007bff;
+  color: white;
+}
+
+.download-icon {
+  color: #28a745;
+  font-size: 20px;
+}
+
+.download-icon:hover {
+  color: #218838;
+}
+
+/* Notification Section */
+.AdminManage-Registered-People-notifications {
+  margin-top: 20px;
+  background: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.AdminManage-Registered-People-notifications h3 {
+  text-align: center;
+  color: #333;
+  font-size: 20px;
+}
+
+.AdminManage-Registered-People-notification-item {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+  font-size: 14px;
+}
+
+/* Links */
+a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .AdminManage-Registered-People-table {
+      display: block;
+      overflow-x: auto;
+  }
+
+  th, td {
+      font-size: 14px;
+      padding: 10px;
+  }
+}

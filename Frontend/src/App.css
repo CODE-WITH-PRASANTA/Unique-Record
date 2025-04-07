@@ -4,6 +4,10 @@
   box-sizing: border-box;
 }
 
+a {
+  text-decoration: none;
+}
+
 body {
   zoom: 0.9; /* Works in most browsers except Firefox */
 }

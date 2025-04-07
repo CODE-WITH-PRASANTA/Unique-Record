@@ -28,6 +28,12 @@
     padding-bottom: 10px;
 }
 
+.expair-event-grid{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+
 /* Adding a subtle underline effect */
 .expair-event-main-title::after {
     content: "";
@@ -56,11 +62,16 @@
 
 /* Swiper View for Mobile */
 @media (max-width: 768px) {
+
     .expair-event-swiper-container {
         display: block;
     }
     .expair-event-grid {
         display: none;
+    }
+    .expair-event-thumbnail img{
+        height: 100%;
+        width: 100%;
     }
 }
 
@@ -193,8 +204,45 @@
     text-decoration: underline;
 }
 
+/* Responsive Design Media Queries */
 
-.expair-event-grid{
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-}
+/* Tablet View */
+@media (max-width: 1024px) {
+    .expair-event-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+  
+    .expair-event-main-title {
+      font-size: 30px;
+    }
+  
+    .expair-event-card {
+      width: 100%;
+    }
+  
+    .expair-event-thumbnail {
+      height: 200px;
+    }
+  }
+  
+  /* Mobile View */
+  @media (max-width: 768px) {
+  
+    .expair-event-thumbnail {
+      height: 100%;
+      width: 100%;
+    }
+  }
+  
+  /* Small Mobile View */
+  @media (max-width: 480px) {
+  
+    .expair-event-thumbnail {
+      height: 100%;
+      width: 100%;
+    }
+  }
+  
+
+

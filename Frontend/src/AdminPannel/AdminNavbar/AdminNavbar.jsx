@@ -21,8 +21,9 @@ import AdminEditEvent from '../../Components/AdminEditEvent/AdminEditEvent';
 import EventGallery from '../../Components/EventGallery/EventGallery'; // New Component
 import HomeGallery from '../../Components/HomeGallery/HomeGallery'; // New Component
 import AdminAddTeamMember from '../../Components/AdminAddTeamMember/AdminAddTeamMember';
-import AdminManageTeamMembers from '../../Components/AdminManageTeamMembers/AdminManageTeamMembers';
+import AdminManageRegisteredPeople from '../../Components/AdminManageRegisteredPeople/AdminManageRegisteredPeople';
 import './AdminNavbar.css';
+import AdminManageDonations from '../../Components/AdminManageDonations/AdminManageDonations';
 
 const NAVIGATION = [
   {
@@ -99,8 +100,14 @@ const NAVIGATION = [
         title: 'Edit Event',
         icon: <EditIcon style={{ color: '#ff9800' }} />,
       },
+      {
+        segment: 'manage-registered',
+        title: 'Manage Registered People',
+        icon: <ListIcon style={{ color: '#3f51b5' }} />, // Icon for managing registered users
+      },
     ],
   },
+  
   {
     kind: 'divider',
   },
@@ -152,6 +159,25 @@ const NAVIGATION = [
   {
     kind: 'divider',
   },
+  {
+    kind: 'header',
+    title: 'Donation Manage',
+  },
+  {
+    segment: 'donation',
+    title: 'Donations',
+    icon: <AddCircleIcon style={{ color: '#f44336' }} />, // You can use a different icon if you like
+    children: [
+      {
+        segment: 'manage',
+        title: 'Manage Donations',
+        icon: <ListIcon style={{ color: '#2196f3' }} />,
+      },
+    ],
+  },
+  
+
+
   
 ];
 
@@ -225,7 +251,10 @@ export default function DashboardLayoutBasic({ window }) {
             {router.pathname === '/gallery/home-gallery' && <HomeGallery />}
             {router.pathname === '/team/add' && <AdminAddTeamMember />}
             {router.pathname === '/team/manage' && <AdminManageTeamMembers />}
-
+            {router.pathname === '/event/manage-registered' && <AdminManageRegisteredPeople />}
+            
+{/* ✅ New Donation Manage Section */}
+{router.pathname === '/donation/manage' && <AdminManageDonations />}
           </PageContainer>
         </DashboardLayout>
       </AppProvider>

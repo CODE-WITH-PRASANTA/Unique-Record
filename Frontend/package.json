@@ -28,7 +28,8 @@
     "react-toastify": "^11.0.5",
     "sass": "^1.84.0",
     "sweetalert2": "^11.17.2",
-    "swiper": "^11.2.2"
+    "swiper": "^11.2.2",
+    "tinymce": "^7.7.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",

@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"; 
 import axios from "axios";
-import { API_URL } from "../../Api"; // Import API_URL
+import { API_URL } from "../../Api";
 import "./EventInformation.css";
 
 const EventInformation = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate(); // Use navigate for redirection
+  const [showMoreStates, setShowMoreStates] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
-      .get(`${API_URL}/events/category/Top%20Category`) // Use API_URL
+      .get(`${API_URL}/events/category/Top%20Category`)
       .then((response) => {
-        setEvents(response.data.events || []); // Ensure it's an array
+        const fetchedEvents = response.data.events || [];
+        setEvents(fetchedEvents);
+        setShowMoreStates(new Array(fetchedEvents.length).fill(false));
         setLoading(false);
       })
       .catch((error) => {
@@ -21,6 +24,19 @@ const EventInformation = () => {
         setLoading(false);
       });
   }, []);
+
+  const toggleReadMore = (index) => {
+    const updatedStates = [...showMoreStates];
+    updatedStates[index] = !updatedStates[index];
+    setShowMoreStates(updatedStates);
+  };
+
+  const truncateText = (text, index) => {
+    if (showMoreStates[index] || text.length <= 250) {
+      return text;
+    }
+    return text.substring(0, 250) + "...";
+  };
 
   return (
     <div className="event-information-container">
@@ -47,7 +63,18 @@ const EventInformation = () => {
 
                 <div className="event-information-details">
                   <h3 className="event-information-title">{event.eventName}</h3>
-                  <p className="event-information-description">{event.eventDescription}</p>
+
+                  <p className="event-information-description">
+                    {truncateText(event.eventDescription, index)}
+                    {event.eventDescription.length > 250 && (
+                      <button
+                        className="read-more-btn"
+                        onClick={() => toggleReadMore(index)}
+                      >
+                        {showMoreStates[index] ? " Read Less" : " Read More"}
+                      </button>
+                    )}
+                  </p>
 
                   <div className="event-information-meta">
                     <p><strong>📍 Location:</strong> {event.eventLocation}</p>
@@ -61,7 +88,6 @@ const EventInformation = () => {
             ))}
           </div>
 
-          {/* View All Button */}
           <div className="view-all-container">
             <button className="view-all-btn" onClick={() => navigate("/event")}>
               View All Events

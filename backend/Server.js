@@ -11,6 +11,8 @@ const forgotPasswordRoutes = require('./Routes/forgotPasswordRoutes');
 const teamMemberRoutes = require("./Routes/teamMemberRoutes");
 const paymentRoutes = require("./Routes/paymentRoutes");
 const registerForEventRoutes = require("./Routes/registerForEventRoutes");
+const uploadRoutes = require("./Routes/uploadRoutes");
+const donationRoutes = require("./Routes/donationRoutes");
 
 
 
@@ -31,7 +33,13 @@ app.use("/api/auth", authRoutes);
 app.use('/api/forgot-password', forgotPasswordRoutes);
 app.use("/api/team", teamMemberRoutes);
 app.use("/api/payment", paymentRoutes);
+app.use("/api/upload", uploadRoutes);
+
 app.use("/api/registerevent", registerForEventRoutes);
+
+app.use("/api/donation", donationRoutes);
+
+
 
 
 

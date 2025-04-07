@@ -53,6 +53,7 @@
   }
   
   .nav-links a:hover {
+    text-decoration: none;
     color: #ffffff;
     background-color: #e94e77;
   }
@@ -151,6 +152,7 @@
   }
   
   .mobile-menu ul a:hover {
+    text-decoration: none;
     color: #e94e77;
   }
   
