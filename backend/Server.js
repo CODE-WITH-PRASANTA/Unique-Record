@@ -13,7 +13,7 @@ const paymentRoutes = require("./Routes/paymentRoutes");
 const registerForEventRoutes = require("./Routes/registerForEventRoutes");
 const uploadRoutes = require("./Routes/uploadRoutes");
 const donationRoutes = require("./Routes/donationRoutes");
-
+const homeMediaRoutes = require("./Routes/homeMediaRoutes");
 
 
 
@@ -34,11 +34,14 @@ app.use('/api/forgot-password', forgotPasswordRoutes);
 app.use("/api/team", teamMemberRoutes);
 app.use("/api/payment", paymentRoutes);
 app.use("/api/upload", uploadRoutes);
-
 app.use("/api/registerevent", registerForEventRoutes);
-
 app.use("/api/donation", donationRoutes);
+app.use("/api/home-media", homeMediaRoutes);
 
+
+app.get('/', (req, res) => {
+    res.send('Server is running...');
+  });
 
 
 

@@ -1,45 +1,54 @@
-import React from 'react';
-import './Rotation.css'; // Import the CSS for animations
-
-// Assets for the rotation
-import rotate1image from '../../assets/rotate-01.jpg';
-import rotate2image from '../../assets/rotate-02.jpg';
-import rotate3image from '../../assets/rotate-03.jpg';
-import rotate4image from '../../assets/rotate-04.jpg';
-import rotate5image from '../../assets/rotate-03.jpg';
-import rotate6image from '../../assets/rotate-06.jpg';
-import rotate7image from '../../assets/rotate-01.jpg';
-import rotate8image from '../../assets/rotate-02.jpg';
-import rotate9image from '../../assets/rotate-03.jpg';
+import React, { useEffect, useState } from 'react';
+import './Rotation.css';
+import axios from 'axios';
+import { API_URL } from '../../Api.js';
 
 const Rotation = ({ speed = 12 }) => {
-  const images = [
-    rotate1image,
-    rotate2image,
-    rotate3image,
-    rotate4image,
-    rotate5image,
-    rotate6image,
-    rotate7image,
-    rotate8image,
-    rotate9image,
-  ];
+  const [images, setImages] = useState([]);
+  const [modalImage, setModalImage] = useState(null);
 
-  // Duplicate the images to make the infinite loop effect seamless
+  useEffect(() => {
+    const fetchImages = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/home-media/all`);
+        setImages(response.data);
+      } catch (error) {
+        console.error('Error fetching images:', error);
+      }
+    };
+
+    fetchImages();
+  }, []);
+
   const duplicatedImages = [...images, ...images];
+
+  const openModal = (img) => setModalImage(img);
+  const closeModal = () => setModalImage(null);
 
   return (
     <div className="rotation-section">
       <h2 className="rotation-heading">Our Events & Photo Gallery</h2>
+
       <div className="rotation-container">
         <div className="rotation-wrapper" style={{ animationDuration: `${speed}s` }}>
           {duplicatedImages.map((image, index) => (
-            <div className="rotation-item" key={index}>
-              <img src={image} alt={`rotate-${index}`} />
+            <div
+              className="rotation-item"
+              key={index}
+              onClick={() => openModal(image.url)}
+            >
+              <img src={image.url} alt={image.name || `rotate-${index}`} />
             </div>
           ))}
         </div>
       </div>
+
+      {modalImage && (
+        <div className="image-modal" onClick={closeModal}>
+          <span className="close-icon" onClick={closeModal}>✖</span>
+          <img src={modalImage} alt="enlarged" className="modal-content" />
+        </div>
+      )}
     </div>
   );
 };

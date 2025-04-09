@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"; 
 import axios from "axios";
+import DOMPurify from "dompurify";
 import { API_URL } from "../../Api";
 import "./EventInformation.css";
 
@@ -31,11 +32,23 @@ const EventInformation = () => {
     setShowMoreStates(updatedStates);
   };
 
-  const truncateText = (text, index) => {
-    if (showMoreStates[index] || text.length <= 250) {
-      return text;
+  const getSanitizedHtml = (html) => {
+    return {
+      __html: DOMPurify.sanitize(html),
+    };
+  };
+
+  const truncateText = (html, index) => {
+    const div = document.createElement("div");
+    div.innerHTML = html;
+    const textContent = div.textContent || div.innerText || "";
+
+    if (showMoreStates[index] || textContent.length <= 250) {
+      return { __html: DOMPurify.sanitize(html) };
     }
-    return text.substring(0, 250) + "...";
+
+    const truncated = textContent.substring(0, 250) + "...";
+    return { __html: truncated };
   };
 
   return (
@@ -64,17 +77,18 @@ const EventInformation = () => {
                 <div className="event-information-details">
                   <h3 className="event-information-title">{event.eventName}</h3>
 
-                  <p className="event-information-description">
-                    {truncateText(event.eventDescription, index)}
-                    {event.eventDescription.length > 250 && (
-                      <button
-                        className="read-more-btn"
-                        onClick={() => toggleReadMore(index)}
-                      >
-                        {showMoreStates[index] ? " Read Less" : " Read More"}
-                      </button>
-                    )}
-                  </p>
+                  <p
+                    className="event-information-description"
+                    dangerouslySetInnerHTML={truncateText(event.eventDescription, index)}
+                  />
+                  {event.eventDescription.length > 250 && (
+                    <button
+                      className="event-information-read-more-btn"
+                      onClick={() => toggleReadMore(index)}
+                    >
+                      {showMoreStates[index] ? " Read Less" : " Read More"}
+                    </button>
+                  )}
 
                   <div className="event-information-meta">
                     <p><strong>📍 Location:</strong> {event.eventLocation}</p>

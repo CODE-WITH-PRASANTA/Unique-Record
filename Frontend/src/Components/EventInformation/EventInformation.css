@@ -222,67 +222,27 @@
   background-color: #d4406a;
 }
 
-.read-more-btn {
+.event-information-read-more-btn {
   background: none;
   color: #E94e77;
   font-weight: 500;
   border: none;
   cursor: pointer;
   font-size: 15px;
-  margin-left: 5px;
-  padding: 0;
+  font-weight: 600;
+  margin-bottom: 10px;
 }
 
-.read-more-btn:hover {
-  text-decoration: underline;
+.event-information-read-more-btn:hover {
+  text-decoration: none;
 }
 
 
 @media (max-width: 768px) {
-  .event-information-container {
-    padding: 15px;
-  }
-
-  .event-information-heading {
-    text-align: center;
-  }
-
+ 
   .event-information-image{
-    height: 100%;
     width: 100%;
+    height: 300px;
   }
-
-  .event-information-card {
-    width: 100%;
-    max-width: 100%;
-    margin-bottom: 20px;
-  }
-
-  .event-information-meta p {
-    margin-bottom: 8px;
-  }
-
-  .view-all-btn {
-    font-size: 14px;
-    padding: 8px 16px;
-  }
-}
-
-@media (max-width: 480px) {
-  .event-information-heading {
-    margin-bottom: 15px;
-  }
-
-  .event-information-details {
-    padding: 15px;
-  }
-
-  .event-information-meta strong {
-    display: block;
-    margin-bottom: 3px;
-  }
-
-  .read-more-btn {
-    font-size: 14px;
-  }
+ 
 }

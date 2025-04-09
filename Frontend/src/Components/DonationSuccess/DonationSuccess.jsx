@@ -1,49 +1,87 @@
 import React from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import './DonationSuccess.css';
+import logo from '../../assets/UNQUE.png';
 
 const DonationSuccess = () => {
   const { state } = useLocation();
-  const {
-    name,
-    amount,
-    paymentId,
-    certificate,
-    email,
-    phone,
-  } = state || {};
+  const { name, amount, paymentId, email, phone } = state || {};
+  const navigate = useNavigate();
 
-  const handleDownload = () => {
-    const element = document.getElementById("donation-success-receipt");
-    const printWindow = window.open("", "", "width=800,height=600");
-    printWindow.document.write(`
-      <html>
-        <head>
-          <title>Donation Receipt</title>
-        </head>
-        <body>${element.innerHTML}</body>
-      </html>
-    `);
-    printWindow.document.close();
-    printWindow.print();
+  const handleGoHome = () => {
+    navigate("/");
   };
 
   return (
     <div className="donation-success-container">
-      <h2 className="donation-success-heading">🎉 Thank You for Your Donation!</h2>
-      <p className="donation-success-subheading">Your payment was successful.</p>
+      <div className="donation-success-wrapper">
+        <div className="donation-success-card">
+          <img src={logo} alt="Logo" className="donation-success-logo" />
+          <h2 className="donation-success-heading">Unique Record Of Universe</h2>
+          <h3 className="donation-success-title">Donation Success</h3>
 
-      <div id="donation-success-receipt" className="donation-success-receipt">
-        <h3 className="donation-success-receipt-title">Donation Receipt</h3>
-        <p><strong>Name:</strong> {name}</p>
-        <p><strong>Email:</strong> {email}</p>
-        <p><strong>Phone:</strong> {phone}</p>
-        <p><strong>Amount Donated:</strong> ₹{amount}</p>
-        <p><strong>Payment ID:</strong> {paymentId}</p>
-        <p><strong>80G Certificate Required:</strong> {certificate}</p>
+          <div className="donation-success-receipt-container">
+            <p className="donation-success-top-text"> Payment ID: <strong>{paymentId || "N/A"}</strong></p>
+
+            <div className="donation-success-receipt-box">
+              <div className="donation-success-receipt-header">
+                <span><strong>Payment ID:</strong> {paymentId || "N/A"}</span>
+                <span><strong>Transaction ID:</strong> {paymentId || "N/A"}</span>
+              </div>
+
+              <div className="donation-success-info-section">
+                <div className="donation-success-to">
+                  <p><strong>To:</strong></p>
+                  <p><strong>{name || "N/A"}</strong></p>
+                  <p>{email || "N/A"}</p>
+                  <p>Phone: {phone || "N/A"}</p>
+                </div>
+
+                <div className="donation-success-from">
+                  <p><strong>From:</strong></p>
+                  <p><strong>Unique Records of Universe<br />Digitally Marking The Extraordinary Achievement</strong></p>
+                  <p>Thekma,<br />District-Azamgarh (Uttar Pradesh)<br />Pin- 276303</p>
+                  <p>Email: uruonline2025@gmail.com</p>
+                  <p>Phone: +91 9472351693</p>
+                </div>
+              </div>
+
+              <table className="donation-success-table">
+                <thead>
+                  <tr>
+                    <th>Payment ID</th>
+                    <th>Name</th>
+                    <th>Date</th>
+                    <th>Total Amount</th>
+                    <th>Payment Method</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>{paymentId || "N/A"}</td>
+                    <td>{name || "N/A"}</td>
+                    <td>{new Date().toLocaleDateString()}</td>
+                    <td>Rs. {amount || "N/A"}</td>
+                    <td>Online Payment</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div className="donation-success-subtotal">
+                <span><strong>Subtotal</strong></span>
+                <span>Rs. {amount || "N/A"}</span>
+              </div>
+            </div>
+          </div>
+
+          <p className="donation-success-thank-you">🙏 Thank you for your generous donation! 🙏</p>
+        </div>
+
+        <button className="donation-success-download-btn" onClick={handleGoHome}>
+  🏠 Go to Home
+</button>
+
       </div>
-
-      <button onClick={handleDownload} className="donation-success-button">📄 Download Receipt</button>
     </div>
   );
 };

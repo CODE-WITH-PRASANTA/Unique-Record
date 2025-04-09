@@ -24,6 +24,7 @@ import AdminAddTeamMember from '../../Components/AdminAddTeamMember/AdminAddTeam
 import AdminManageRegisteredPeople from '../../Components/AdminManageRegisteredPeople/AdminManageRegisteredPeople';
 import './AdminNavbar.css';
 import AdminManageDonations from '../../Components/AdminManageDonations/AdminManageDonations';
+import AdminManageHomeMedia from '../../Components/AdminManageHomeMedia/AdminManageHomeMedia';
 
 const NAVIGATION = [
   {
@@ -175,10 +176,19 @@ const NAVIGATION = [
       },
     ],
   },
-  
 
-
-  
+  {
+    kind: 'divider',
+  },
+  {
+    kind: 'header',
+    title: 'Home Media',
+  },
+  {
+    segment: 'homemedia',
+    title: 'Manage Home Media',
+    icon: <PhotoLibraryIcon style={{ color: '#ff5722' }} />, // or another relevant icon
+  }
 ];
 
 const demoTheme = extendTheme({
@@ -252,9 +262,9 @@ export default function DashboardLayoutBasic({ window }) {
             {router.pathname === '/team/add' && <AdminAddTeamMember />}
             {router.pathname === '/team/manage' && <AdminManageTeamMembers />}
             {router.pathname === '/event/manage-registered' && <AdminManageRegisteredPeople />}
-            
-{/* ✅ New Donation Manage Section */}
-{router.pathname === '/donation/manage' && <AdminManageDonations />}
+            {/* ✅ New Donation Manage Section */}
+            {router.pathname === '/donation/manage' && <AdminManageDonations />}
+            {router.pathname === '/homemedia' && <AdminManageHomeMedia />}
           </PageContainer>
         </DashboardLayout>
       </AppProvider>
