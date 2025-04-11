@@ -1,0 +1,239 @@
+.Photo-Manage-Container {
+    padding: 40px 30px;
+    max-width: 1100px;
+    margin: 40px auto;
+    font-family: 'Segoe UI', sans-serif;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .Photo-Manage-Title {
+    text-align: center;
+    color: #222;
+    margin-bottom: 35px;
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  
+  .Photo-Manage-Form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    background: #f3f6f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    margin-bottom: 35px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  }
+  
+  .Photo-Manage-Field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  
+  .Photo-Manage-Label {
+    font-weight: 600;
+    color: #333;
+    font-size: 15px;
+  }
+  
+  .Photo-Manage-Input,
+  .Photo-Manage-Select {
+    padding: 12px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 15px;
+    background: #fff;
+    transition: border-color 0.2s ease;
+  }
+  
+  .Photo-Manage-Input:focus,
+  .Photo-Manage-Select:focus {
+    border-color: #3b82f6;
+    outline: none;
+  }
+  
+  .Photo-Manage-Upload-Button {
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #4caf50, #66bb6a);
+    color: white;
+    font-weight: bold;
+    font-size: 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    align-self: start;
+    transition: background 0.3s ease;
+  }
+  
+  .Photo-Manage-Upload-Button:hover {
+    background: linear-gradient(135deg, #43a047, #5cb85c);
+  }
+  
+  .Photo-Manage-Table-Section {
+    overflow-x: auto;
+  }
+  
+  .Photo-Manage-Table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.05);
+  }
+  
+  .Photo-Manage-Table th,
+  .Photo-Manage-Table td {
+    padding: 14px 10px;
+    text-align: center;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 14px;
+    color: #333;
+  }
+  
+  .Photo-Manage-Table-Head th {
+    background: #f8f9fa;
+    font-weight: 600;
+    color: #444;
+    font-size: 15px;
+    letter-spacing: 0.3px;
+  }
+  
+  .Photo-Manage-Thumbnail {
+    width: 60px;
+    height: 60px;
+    border-radius: 6px;
+    object-fit: cover;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+  
+  .Photo-Manage-Link {
+    color: #1e88e5;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  
+  .Photo-Manage-Link:hover {
+    color: #1565c0;
+    text-decoration: underline;
+  }
+  
+  .Photo-Manage-Delete-Button {
+    background-color: #f44336;
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .Photo-Manage-Delete-Button:hover {
+    background-color: #d32f2f;
+  }
+  
+  .Photo-Manage-No-Data {
+    text-align: center;
+    color: #888;
+    font-style: italic;
+    padding: 20px;
+    font-size: 16px;
+  }
+  
+
+  /* Base styles remain unchanged from your code above */
+
+/* Responsive styles */
+@media (max-width: 992px) {
+    .Photo-Manage-Container {
+      padding: 30px 20px;
+      margin: 30px 15px;
+    }
+  
+    .Photo-Manage-Title {
+      font-size: 28px;
+    }
+  
+    .Photo-Manage-Form {
+      padding: 16px;
+    }
+  
+    .Photo-Manage-Input,
+    .Photo-Manage-Select {
+      font-size: 14px;
+      padding: 10px 12px;
+    }
+  
+    .Photo-Manage-Upload-Button {
+      padding: 10px 20px;
+      font-size: 14px;
+    }
+  
+    .Photo-Manage-Table th,
+    .Photo-Manage-Table td {
+      padding: 10px 8px;
+      font-size: 13px;
+    }
+  
+    .Photo-Manage-Delete-Button {
+      padding: 6px 12px;
+      font-size: 13px;
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .Photo-Manage-Container {
+      padding: 20px 15px;
+      margin: 20px 10px;
+    }
+  
+    .Photo-Manage-Title {
+      font-size: 24px;
+    }
+  
+    .Photo-Manage-Form {
+      padding: 14px;
+    }
+  
+    .Photo-Manage-Input,
+    .Photo-Manage-Select {
+      font-size: 13px;
+      padding: 8px 10px;
+    }
+  
+    .Photo-Manage-Upload-Button {
+      padding: 8px 16px;
+      font-size: 13px;
+    }
+  
+    .Photo-Manage-Table th,
+    .Photo-Manage-Table td {
+      padding: 8px 6px;
+      font-size: 12px;
+    }
+  
+    .Photo-Manage-Thumbnail {
+      width: 50px;
+      height: 50px;
+    }
+  
+    .Photo-Manage-Delete-Button {
+      padding: 6px 10px;
+      font-size: 12px;
+    }
+  
+    .Photo-Manage-Form,
+    .Photo-Manage-Table-Section {
+      overflow-x: auto;
+    }
+  }
+  

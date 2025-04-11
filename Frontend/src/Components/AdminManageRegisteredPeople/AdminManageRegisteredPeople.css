@@ -154,3 +154,21 @@ a:hover {
       padding: 10px;
   }
 }
+
+.AdminManage-Registered-People-filter-container {
+  margin-bottom: 20px;
+}
+
+.AdminManage-Registered-People-filter-container select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+.AdminManage-Registered-People-filter-container input[type="search"] {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 200px;
+}

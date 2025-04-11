@@ -25,6 +25,8 @@ import AdminManageRegisteredPeople from '../../Components/AdminManageRegisteredP
 import './AdminNavbar.css';
 import AdminManageDonations from '../../Components/AdminManageDonations/AdminManageDonations';
 import AdminManageHomeMedia from '../../Components/AdminManageHomeMedia/AdminManageHomeMedia';
+import YoutubeManage from '../../Components/YoutubeManage/YoutubeManage';
+import PhotoManage from '../../Components/PhotoManage/PhotoManage';
 
 const NAVIGATION = [
   {
@@ -188,7 +190,31 @@ const NAVIGATION = [
     segment: 'homemedia',
     title: 'Manage Home Media',
     icon: <PhotoLibraryIcon style={{ color: '#ff5722' }} />, // or another relevant icon
-  }
+  },
+  {
+    kind: 'header',
+    title: 'Manage Media',
+  },
+  {
+    segment: 'media',
+    title: 'Media',
+    icon: <PhotoLibraryIcon style={{ color: '#00bcd4' }} />,
+    children: [
+      {
+        segment: 'youtube',
+        title: 'YouTube Manage',
+        icon: <PhotoLibraryIcon style={{ color: '#f44336' }} />,
+      },
+      {
+        segment: 'photos',
+        title: 'Photo Manage',
+        icon: <PhotoLibraryIcon style={{ color: '#3f51b5' }} />,
+      },
+    ],
+  },
+
+  
+
 ];
 
 const demoTheme = extendTheme({
@@ -262,9 +288,10 @@ export default function DashboardLayoutBasic({ window }) {
             {router.pathname === '/team/add' && <AdminAddTeamMember />}
             {router.pathname === '/team/manage' && <AdminManageTeamMembers />}
             {router.pathname === '/event/manage-registered' && <AdminManageRegisteredPeople />}
-            {/* ✅ New Donation Manage Section */}
             {router.pathname === '/donation/manage' && <AdminManageDonations />}
             {router.pathname === '/homemedia' && <AdminManageHomeMedia />}
+            {router.pathname === '/media/youtube' && <YoutubeManage />}
+            {router.pathname === '/media/photos' && <PhotoManage />}
           </PageContainer>
         </DashboardLayout>
       </AppProvider>

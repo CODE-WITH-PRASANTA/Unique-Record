@@ -103,6 +103,7 @@
 }
 
 .description {
+    text-align: justify;
     font-size: 1.1rem;
     margin-bottom: 40px;
     line-height: 1.8;

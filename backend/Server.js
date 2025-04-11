@@ -14,6 +14,8 @@ const registerForEventRoutes = require("./Routes/registerForEventRoutes");
 const uploadRoutes = require("./Routes/uploadRoutes");
 const donationRoutes = require("./Routes/donationRoutes");
 const homeMediaRoutes = require("./Routes/homeMediaRoutes");
+const youtubeRoutes = require("./Routes/youtubeRoutes");
+const photoRoutes = require("./Routes/photoRoutes");
 
 
 
@@ -37,6 +39,9 @@ app.use("/api/upload", uploadRoutes);
 app.use("/api/registerevent", registerForEventRoutes);
 app.use("/api/donation", donationRoutes);
 app.use("/api/home-media", homeMediaRoutes);
+app.use('/api/youtube', youtubeRoutes);
+app.use("/api/photos", photoRoutes);
+
 
 
 app.get('/', (req, res) => {

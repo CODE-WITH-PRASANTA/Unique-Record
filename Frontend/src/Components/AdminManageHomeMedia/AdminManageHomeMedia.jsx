@@ -17,12 +17,13 @@ const AdminManageHomeMedia = () => {
 
   const fetchUploadedImages = async () => {
     try {
-      const res = await axios.get(API_BASE_URL);
+      const res = await axios.get(`${API_BASE_URL}/all`);
       setUploadedImages(res.data);
     } catch (error) {
       console.error('Error fetching media:', error);
     }
   };
+  
 
   const handleFileChange = (e) => {
     setSelectedFiles([...e.target.files]);

@@ -1,67 +1,62 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./MediaGalary.css";
 import "swiper/css";
 import "swiper/css/pagination";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination } from "swiper/modules";
 import ReactPaginate from "react-paginate";
-
-// Assets of the Our Work Gallery
-import Workgalary1 from "../../assets/work-galary-1.jpg";
-import Workgalary2 from "../../assets/work-galary-2.jpg";
-import Workgalary3 from "../../assets/work-galary-3.jpg";
-import Workgalary4 from "../../assets/work-galary-4.jpg";
-import Workgalary5 from "../../assets/work-galary-5.jpg";
-import Workgalary6 from "../../assets/work-galary-6.jpg";
-import Workgalary7 from "../../assets/work-galary-7.jpg";
-import Workgalary8 from "../../assets/work-galary-8.jpg";
-import Workgalary9 from "../../assets/work-galary-9.jpg";
-import Workgalary10 from "../../assets/work-galary-10.jpg";
+import axios from "axios";
+import { API_URL } from "../../Api"; // adjust path as needed
 
 const MediaGalary = () => {
-  const videos = [
-    "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    "https://www.youtube.com/embed/3JZ_D3ELwOQ",
-    "https://www.youtube.com/embed/tgbNymZ7vqY",
-    "https://www.youtube.com/embed/oHg5SJYRHA0",
-    "https://www.youtube.com/embed/L_jWHffIx5E",
-    "https://www.youtube.com/embed/ZZ5LpwO-An4",
-  ];
-
-  const allProjects = [
-    { id: 1, image: Workgalary1, category: "News Paper" },
-    { id: 2, image: Workgalary2, category: "Online News" },
-    { id: 3, image: Workgalary3, category: "News Paper" },
-    { id: 4, image: Workgalary4, category: "Online News" },
-    { id: 5, image: Workgalary5, category: "All Photos" },
-    { id: 6, image: Workgalary6, category: "Online News" },
-    { id: 7, image: Workgalary7, category: "News Paper" },
-    { id: 8, image: Workgalary8, category: "Online News" },
-    { id: 9, image: Workgalary9, category: "News Paper" },
-    { id: 10, image: Workgalary10, category: "All Photos" },
-  ];
-
+  const [videos, setVideos] = useState([]);
   const [videoPage, setVideoPage] = useState(0);
   const videosPerPage = 6;
 
   const [photoPage, setPhotoPage] = useState(0);
   const photosPerPage = 6;
-
   const [selectedCategory, setSelectedCategory] = useState("All Photos");
+  const [photos, setPhotos] = useState([]);
+
+
+  // Fetch videos from backend
+  useEffect(() => {
+    const fetchVideos = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/youtube`);
+        setVideos(response.data); // assuming response.data is an array of video objects
+      } catch (error) {
+        console.error("Error fetching videos:", error);
+      }
+    };
+
+    fetchVideos();
+  }, []);
+
+
+useEffect(() => {
+  const fetchPhotos = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/photos`, {
+        params: { category: selectedCategory },
+      });
+      
+      setPhotos(response.data);
+    } catch (error) {
+      console.error("Error fetching photos:", error);
+    }
+  };
+
+  fetchPhotos();
+}, [selectedCategory]);
 
   const handleVideoPageChange = ({ selected }) => setVideoPage(selected);
   const handlePhotoPageChange = ({ selected }) => setPhotoPage(selected);
 
-  // Filter photos based on selected category
-  const filteredPhotos =
-    selectedCategory === "All Photos"
-      ? allProjects
-      : allProjects.filter((project) => project.category === selectedCategory);
 
-  const paginatedPhotos = filteredPhotos.slice(
-    photoPage * photosPerPage,
-    (photoPage + 1) * photosPerPage
-  );
+      const paginatedPhotos = photos.slice(
+        photoPage * photosPerPage,
+        (photoPage + 1) * photosPerPage
+      );
+      
 
   return (
     <>
@@ -74,7 +69,7 @@ const MediaGalary = () => {
             .map((video, index) => (
               <div className="video-box" key={index}>
                 <iframe
-                  src={video}
+                  src={video.embedLink}
                   title={`video-${index}`}
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
@@ -98,7 +93,6 @@ const MediaGalary = () => {
       <div className="pic-gallery-section">
         <h2 className="gallery-title">Our Photo Gallery</h2>
 
-        {/* Filter Buttons */}
         <div className="filter-buttons">
           <button
             className={`filter-btn ${
@@ -135,31 +129,33 @@ const MediaGalary = () => {
           </button>
         </div>
 
-        <div className="gallery-grid" key={photoPage}>
-          {paginatedPhotos.map((project) => (
-            <div key={project.id} className="gallery-item">
-              <img
-                src={project.image}
-                alt="Gallery Item"
-                className="gallery-image"
-              />
-              <div className="gallery-info">
-                <h4 className="gallery-category">Mr. Avishek</h4>
-                <p>Pricing Got From : XXXXXX</p>
-              </div>
-            </div>
-          ))}
-        </div>
+      <div className="gallery-grid" key={photoPage}>
+  {paginatedPhotos.map((photo) => (
+    <div key={photo._id} className="gallery-item">
+      <img
+        src={photo.imageUrl}
+        alt="Gallery Item"
+        className="gallery-image"
+      />
+      <div className="gallery-info">
+        <h4 className="gallery-category">{photo.category}</h4>
+        <p>Link: <a href={photo.link}>{photo.link}</a></p>
+      </div>
+    </div>
+  ))}
+</div>
 
-        <ReactPaginate
-          previousLabel={"Prev"}
-          nextLabel={"Next"}
-          pageCount={Math.ceil(filteredPhotos.length / photosPerPage)}
-          onPageChange={handlePhotoPageChange}
-          containerClassName={"pagination-buttons"}
-          activeClassName={"active-button"}
-          disabledClassName={"disabled"}
-        />
+
+<ReactPaginate
+  previousLabel={"Prev"}
+  nextLabel={"Next"}
+  pageCount={Math.ceil(photos.length / photosPerPage)}
+  onPageChange={handlePhotoPageChange}
+  containerClassName={"pagination-buttons"}
+  activeClassName={"active-button"}
+  disabledClassName={"disabled"}
+/>
+
       </div>
     </>
   );

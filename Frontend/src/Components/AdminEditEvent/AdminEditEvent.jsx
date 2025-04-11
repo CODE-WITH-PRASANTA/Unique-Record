@@ -134,8 +134,8 @@ const handleDeleteEvent = async (id) => {
                 <td className="Admin-edit-event-location">{event.eventLocation}</td>
                 <td className="Admin-edit-event-date">{event.eventDate.split("T")[0]}</td>
                 <td className="Admin-edit-event-description" dangerouslySetInnerHTML={{
-  __html: DOMPurify.sanitize(truncateText(event.eventDescription, 20))
-}}></td>
+                    __html: DOMPurify.sanitize(truncateText(event.eventDescription, 20))
+                  }}></td>
 
                 <td className="Admin-edit-event-organizer">{event.eventOrganizer}</td>
                 <td className="Admin-edit-event-opening">{event.openingDate.split("T")[0]}</td>
