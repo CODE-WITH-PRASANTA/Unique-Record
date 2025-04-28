@@ -25,6 +25,7 @@ import ProtectedRoute from "./Components/ProtectedRoute"; // ✅ Keep only this 
 import Donate from "./Pages/Donate/Donate";
 import PaymentSuccess from "./Components/PaymentSuccess/PaymentSuccess";
 import DonationSuccess from "./Components/DonationSuccess/DonationSuccess";
+import MakeUserPost from "./Components/MakeUserPost/MakeUserPost";
 
 function Layout() {
   const location = useLocation();
@@ -71,6 +72,7 @@ function Layout() {
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/payment-success" element={<PaymentSuccess />} />
             <Route path="/donation-success" element={<DonationSuccess />} />
+            <Route path="/your-post" element={<MakeUserPost />}/>
             
 
           

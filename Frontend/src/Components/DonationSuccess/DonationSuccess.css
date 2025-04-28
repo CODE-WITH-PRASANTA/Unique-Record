@@ -148,7 +148,7 @@
 }
 
 .donation-success-download-btn {
-  margin-top: 30px;
+  margin-top: 16px;
   padding: 12px 28px;
   background-color: #E94e77;
   color: white;
@@ -266,3 +266,57 @@
   align-items: center;
   gap: 8px;
 }
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  .donation-success-wrapper,
+  .donation-success-wrapper * {
+    visibility: visible;
+  }
+
+  .donation-success-buttons {
+    display: none; /* hide buttons while printing */
+  }
+
+  .donation-success-wrapper {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    padding: 20px;
+  }
+}
+
+.donation-success-buttons{
+  display: flex;
+  gap: 50px;
+}
+
+.donation-success-print-btn {
+  background-color: #4caf50;
+  color: white;
+  padding: 12px 28px;
+  margin-top: 15px;
+  margin-left: 10px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.donation-success-print-btn:hover {
+  background-color: #45a049;
+  transform: scale(1.03);
+}
+
+.donation-success-print-btn:active {
+  transform: scale(0.98);
+  background-color: #3e9144;
+}
+

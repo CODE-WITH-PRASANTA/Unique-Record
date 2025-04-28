@@ -1,0 +1,166 @@
+.Make-User-Post-Container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 30px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+  }
+  
+  .Make-User-Post-Heading {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333;
+  }
+  
+  .Make-User-Post-Form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .Make-User-Post-Row {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .Make-User-Post-FormGroup {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .Make-User-Post-FormGroupFull {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .Make-User-Post-FormGroup label {
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+  
+  .Make-User-Post-FormGroup input,
+  .Make-User-Post-FormGroup select,
+  .Make-User-Post-FormGroup textarea {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+  }
+  
+  .Make-User-Post-TagsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  
+  .Make-User-Post-Tag {
+    background: #e0f7fa;
+    color: #00796b;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .Make-User-Post-TagRemove {
+    margin-left: 8px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  .Make-User-Post-SubmitButton {
+    margin-top: 20px;
+    padding: 12px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 17px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .Make-User-Post-SubmitButton:hover {
+    background: #0056b3;
+  }
+  
+
+  /* Your existing CSS remains exactly same... */
+
+/* Responsive Media Queries */
+
+/* For tablets (768px and below) */
+@media (max-width: 768px) {
+    .Make-User-Post-Container {
+      margin: 20px;
+      padding: 20px;
+    }
+  
+    .Make-User-Post-Row {
+      flex-direction: column;
+    }
+  
+    .Make-User-Post-FormGroup,
+    .Make-User-Post-FormGroupFull {
+      width: 100%;
+    }
+  
+    .Make-User-Post-Heading {
+      font-size: 24px;
+    }
+  
+    .Make-User-Post-SubmitButton {
+      font-size: 16px;
+      padding: 10px;
+    }
+  }
+  
+  /* For mobile devices (480px and below) */
+  @media (max-width: 480px) {
+    .Make-User-Post-Container {
+      margin: 15px;
+      padding: 15px;
+    }
+  
+    .Make-User-Post-Heading {
+      font-size: 20px;
+    }
+  
+    .Make-User-Post-FormGroup label {
+      font-size: 14px;
+    }
+  
+    .Make-User-Post-FormGroup input,
+    .Make-User-Post-FormGroup select,
+    .Make-User-Post-FormGroup textarea {
+      font-size: 14px;
+      padding: 8px;
+    }
+  
+    .Make-User-Post-Tag {
+      font-size: 12px;
+      padding: 5px 10px;
+    }
+  
+    .Make-User-Post-SubmitButton {
+      font-size: 15px;
+      padding: 10px;
+    }
+  }
+  
+  /* For very small devices (360px and below) */
+  @media (max-width: 360px) {
+    .Make-User-Post-Heading {
+      font-size: 18px;
+    }
+  
+    .Make-User-Post-SubmitButton {
+      font-size: 14px;
+    }
+  }
+  

@@ -19,6 +19,15 @@ const AllEvents = () => {
 const queryParams = new URLSearchParams(location.search);
 const sharedEventId = queryParams.get("eventId");
 
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+  return `${day}-${month}-${year}`;
+};
+
+
 
   const navigate = useNavigate(); 
 
@@ -129,8 +138,9 @@ const sharedEventId = queryParams.get("eventId");
                 <p className="All-Events-Date"><strong>Event Date : </strong> 📅 {new Date(event.eventDate).toDateString()}</p>
 
                 <div className="event-date-box">
-                  <p><strong>Opening Date:</strong> {new Date(event.openingDate).toLocaleDateString()}</p>
-                  <p><strong>Closing Date:</strong> {new Date(event.closingDate).toLocaleDateString()}</p>
+                <p><strong>Opening Date:</strong> {formatDate(event.openingDate)}</p>
+                <p><strong>Closing Date:</strong> {formatDate(event.closingDate)}</p>
+
                 </div>
                 
                 <div className="event-buttons">

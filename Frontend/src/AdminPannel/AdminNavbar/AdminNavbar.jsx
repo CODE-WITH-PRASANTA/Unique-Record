@@ -12,6 +12,7 @@ import PhotoLibraryIcon from '@mui/icons-material/PhotoLibrary'; // Gallery Icon
 import { AppProvider } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { PageContainer } from '@toolpad/core/PageContainer';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'; // Import a nice 'approval' icon
 import AdminDashboard from '../AdminDashboard/AdminDashboard';
 import CreateBlog from '../../Components/CreateBlog/CreateBlog';
 import AdminManageNotice from '../../Components/AdminManageNotice/AdminManageNotice';
@@ -27,6 +28,9 @@ import AdminManageDonations from '../../Components/AdminManageDonations/AdminMan
 import AdminManageHomeMedia from '../../Components/AdminManageHomeMedia/AdminManageHomeMedia';
 import YoutubeManage from '../../Components/YoutubeManage/YoutubeManage';
 import PhotoManage from '../../Components/PhotoManage/PhotoManage';
+import AdminEditBlogs from '../../Components/AdminEditBlogs/AdminEditBlogs';
+import AdminManageTeamMembers from '../../Components/AdminManageTeamMembers/AdminManageTeamMembers';
+import AproveBlogs from '../../Components/AproveBlogs/AproveBlogs';
 
 const NAVIGATION = [
   {
@@ -55,7 +59,24 @@ const NAVIGATION = [
         title: 'Create Blog',
         icon: <CreateIcon style={{ color: '#4caf50' }} />,
       },
+      {
+        segment: 'edit',
+        title: 'Edit Blog',  // <-- Added this
+        icon: <EditIcon style={{ color: '#ff9800' }} />,
+      },
     ],
+  },
+  {
+    kind: 'divider',
+  },
+  {
+    kind: 'header',
+    title: 'Approve Blogs',
+  },
+  {
+    segment: 'approve-blogs',
+    title: 'Approve Blogs',
+    icon: <CheckCircleIcon style={{ color: '#4caf50' }} />, // Green color for approved feeling
   },
   {
     kind: 'divider',
@@ -279,6 +300,7 @@ export default function DashboardLayoutBasic({ window }) {
           <PageContainer>
             {router.pathname === '/dashboard' && <AdminDashboard />}
             {router.pathname === '/blog/create' && <CreateBlog />}
+            {router.pathname === '/blog/edit' && <AdminEditBlogs />}
             {router.pathname === '/notice/add' && <AdminAddNotice />} 
             {router.pathname === '/notice/manage' && <AdminManageNotice />}
             {router.pathname === '/event/add' && <AdminAddEvent />}
@@ -292,6 +314,7 @@ export default function DashboardLayoutBasic({ window }) {
             {router.pathname === '/homemedia' && <AdminManageHomeMedia />}
             {router.pathname === '/media/youtube' && <YoutubeManage />}
             {router.pathname === '/media/photos' && <PhotoManage />}
+            {router.pathname === '/approve-blogs' && <AproveBlogs />}
           </PageContainer>
         </DashboardLayout>
       </AppProvider>

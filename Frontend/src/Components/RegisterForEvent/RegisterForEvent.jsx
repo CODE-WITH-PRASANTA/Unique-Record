@@ -297,7 +297,7 @@ const RegisterForEvent = () => {
                 </div>
                 <div className="event-group">
                   <label><FaGlobe /> Website</label>
-                  <input type="url" value={website} onChange={handleWebsiteChange} />
+                  <input type="text" value={website} onChange={handleWebsiteChange} />
                 </div>
               </div>
           

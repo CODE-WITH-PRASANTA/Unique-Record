@@ -39,7 +39,7 @@ th, td {
   white-space: nowrap;
 }
 
-th {
+.AdminManage-Registered-People-table th {
   background-color: #0056b3;
   color: white;
   font-weight: bold;
@@ -171,4 +171,76 @@ a:hover {
   border: 1px solid #ccc;
   border-radius: 5px;
   width: 200px;
+}
+
+.paid {
+  color: green;
+  font-weight: bold;
+}
+
+.pending {
+  color: red;
+  font-weight: bold;
+}
+
+.AdminManage-Registered-People-filter-container {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.AdminManage-Registered-People-filter-container select,
+.AdminManage-Registered-People-filter-container input {
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  outline: none;
+  font-size: 14px;
+}
+
+.AdminManage-Registered-People-download-btn {
+  background-color: #28a745;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.AdminManage-Registered-People-download-btn:hover {
+  background-color: #218838;
+}
+
+.AdminManage-Registered-People-notification-btn {
+  background: none;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.AdminManage-Registered-People-notification-btn:hover {
+  color: #0056b3;
+}
+
+.AdminManage-Registered-People-notifications {
+  margin-top: 30px;
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.AdminManage-Registered-People-notifications h3 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.AdminManage-Registered-People-notification-item {
+  font-size: 14px;
+  margin-bottom: 5px;
 }

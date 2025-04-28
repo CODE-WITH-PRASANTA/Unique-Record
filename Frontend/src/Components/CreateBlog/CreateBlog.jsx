@@ -2,6 +2,8 @@ import React, { Suspense, lazy, useState } from "react";
 import "./CreateBlog.css";
 import axios from "axios";
 import BlogForm from "../BlogForm/BlogForm";
+import { API_URL } from "../../Api"; // Adjust the path according to your folder structure
+
 
 // Lazy load TinyMCE Editor for better performance
 const Editor = lazy(() => import("@tinymce/tinymce-react").then((module) => ({ default: module.Editor })));
@@ -15,6 +17,7 @@ const CreateBlog = () => {
     category: "",
     tags: [],
   });
+
   const [file, setFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -64,7 +67,7 @@ const CreateBlog = () => {
     formDataToSend.append("image", file);
   
     try {
-      const response = await axios.post("http://localhost:5000/api/blogs/create", formDataToSend, {
+      const response = await axios.post(`${API_URL}/blogs/create`, formDataToSend, {
         headers: { "Content-Type": "multipart/form-data" },
       });
   

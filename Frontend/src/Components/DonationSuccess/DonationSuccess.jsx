@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import './DonationSuccess.css';
 import logo from '../../assets/UNQUE.png';
@@ -7,14 +7,20 @@ const DonationSuccess = () => {
   const { state } = useLocation();
   const { name, amount, paymentId, email, phone } = state || {};
   const navigate = useNavigate();
+  const printRef = useRef();
 
   const handleGoHome = () => {
     navigate("/");
   };
 
+  const handlePrint = () => {
+    window.print();
+  };
+
   return (
     <div className="donation-success-container">
-      <div className="donation-success-wrapper">
+      <div className="donation-success-wrapper" ref={printRef}>
+        
         <div className="donation-success-card">
           <img src={logo} alt="Logo" className="donation-success-logo" />
           <h2 className="donation-success-heading">Unique Record Of Universe</h2>
@@ -28,7 +34,7 @@ const DonationSuccess = () => {
                 <span><strong>Payment ID:</strong> {paymentId || "N/A"}</span>
                 <span><strong>Transaction ID:</strong> {paymentId || "N/A"}</span>
               </div>
-
+            
               <div className="donation-success-info-section">
                 <div className="donation-success-to">
                   <p><strong>To:</strong></p>
@@ -77,9 +83,18 @@ const DonationSuccess = () => {
           <p className="donation-success-thank-you">🙏 Thank you for your generous donation! 🙏</p>
         </div>
 
-        <button className="donation-success-download-btn" onClick={handleGoHome}>
-  🏠 Go to Home
-</button>
+        <div className="donation-success-buttons">
+
+        <button className="donation-success-print-btn" onClick={handlePrint}>
+            🖨️ Print Receipt
+          </button>
+
+          <button className="donation-success-download-btn" onClick={handleGoHome}>
+            🏠 Go to Home
+          </button>
+          
+        </div>
+
 
       </div>
     </div>
