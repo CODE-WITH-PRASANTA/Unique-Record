@@ -1,0 +1,176 @@
+.manage-uru-container {
+  padding: 40px;
+  background-color: #f7f7f7;
+  border: none;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.manage-uru-title {
+  font-size: 30px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #3498db;
+  text-align: center;
+}
+
+.manage-uru-table-container {
+  overflow-x: auto;
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.manage-uru-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.manage-uru-table-header {
+  background-color: #3498db;
+  color: #fff;
+  padding: 15px;
+  border: none;
+  font-weight: 600;
+  text-align: left;
+  border-radius: 5px 5px 0 0;
+}
+
+.manage-uru-table-sub-header {
+  background-color: #04171ad0;
+  color: #ffffff;
+  padding: 10px;
+  border: none;
+  font-weight: 600;
+  text-align: left;
+}
+
+.manage-uru-table-data {
+  padding: 15px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+.manage-uru-table-data input[type="text"],
+.manage-uru-table-data input[type="date"],
+.manage-uru-table-data input[type="email"],
+.manage-uru-table-data textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+.manage-uru-table-data select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+.manage-uru-save-btn {
+  background-color: #2ecc71;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.manage-uru-edit-btn {
+  background-color: #e74c3c;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.manage-uru-save-btn:hover,
+.manage-uru-edit-btn:hover {
+  opacity: 0.8;
+}
+
+.manage-uru-photo {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #3498db;
+}
+
+.manage-uru-video {
+  width: 200px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 2px solid #3498db;
+}
+
+@media (max-width: 768px) {
+  .manage-uru-table-container {
+    overflow-x: auto;
+  }
+  .manage-uru-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    display: block;
+  }
+  .manage-uru-table thead,
+  .manage-uru-table tbody {
+    display: block;
+  }
+  .manage-uru-table tr {
+    display: block;
+  }
+  .manage-uru-table th,
+  .manage-uru-table td {
+    display: block;
+    padding: 10px;
+  }
+}
+
+/* Scrollbar CSS */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #3498db;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #f7f7f7;
+  border-radius: 10px;
+}
+
+/* Button CSS */
+button {
+  transition: all 0.3s ease-in-out;
+}
+
+button:hover {
+  transform: scale(1.1);
+}
+
+/* Input CSS */
+input[type="text"]:focus,
+input[type="date"]:focus,
+input[type="email"]:focus,
+textarea:focus,
+select:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 10px rgba(52, 152, 219, 0.2);
+}

@@ -36,8 +36,8 @@ const Home = () => {
             If you have any amazing, unique Records or Activity to share with coming generations and to develop in them the spirit of doing something positive for the welfare of the people, then get it recorded in the digital archives of the universe.
             </p>
             <div className="banner-buttons">
-              <a href="#make-your-trip" className="btn btn-primary">Apply Now</a>
-              <a href="#request-quote" className="btn btn-secondary">See The Records</a>
+              <a href="/login" className="btn btn-primary">Apply Now</a>
+              <a href="/media" className="btn btn-secondary">See The Records</a>
             </div>
           </div>
           <div className="banner-image">

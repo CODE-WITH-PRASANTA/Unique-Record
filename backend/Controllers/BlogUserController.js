@@ -1,7 +1,6 @@
-const mongoose = require("mongoose"); // Add this import statement
+const mongoose = require("mongoose");
 const cloudinary = require("../Config/cloudinary");
 const fs = require("fs");
-const path = require("path");
 const BlogUserModel = require("../Model/BlogUserModel");
 
 // Create a new blog post
@@ -9,7 +8,6 @@ const createBlogUserPost = async (req, res) => {
   try {
     const { title, description, content, authorName, category, tags } = req.body;
 
-    // Handle image upload to Cloudinary
     const uploadedImage = req.file ? await cloudinary.uploader.upload(req.file.path) : null;
 
     const newBlogPost = new BlogUserModel({
@@ -18,14 +16,13 @@ const createBlogUserPost = async (req, res) => {
       content,
       authorName,
       category,
-      tags: tags.split(","),
+      tags: tags ? tags.split(",") : [],
       image: uploadedImage ? uploadedImage.secure_url : "",
     });
 
     await newBlogPost.save();
     res.status(201).json({ message: "Blog post created successfully", newBlogPost });
 
-    // Cleanup the temporary uploaded image
     if (req.file) {
       fs.unlinkSync(req.file.path);
     }
@@ -36,14 +33,25 @@ const createBlogUserPost = async (req, res) => {
   }
 };
 
-// Get all blog posts
-const getAllBlogUserPosts = async (req, res) => {
+// Fetch all approved blog posts
+const getApprovedBlogUserPosts = async (req, res) => {
   try {
-    const posts = await BlogUserModel.find();
+    const posts = await BlogUserModel.find({ isApproved: true }).sort({ createdAt: -1 });
     res.status(200).json(posts);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Failed to fetch blog posts" });
+    res.status(500).json({ error: "Failed to fetch approved blog posts" });
+  }
+};
+
+// Fetch all unapproved blog posts
+const getUnapprovedBlogUserPosts = async (req, res) => {
+  try {
+    const posts = await BlogUserModel.find({ isApproved: false }).sort({ createdAt: -1 });
+    res.status(200).json(posts);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to fetch unapproved blog posts" });
   }
 };
 
@@ -52,7 +60,6 @@ const updateBlogUserPost = async (req, res) => {
   try {
     const { id } = req.params;
 
-    // Validate the ID format
     if (!id || !mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({ error: "Invalid or missing ID" });
     }
@@ -65,12 +72,11 @@ const updateBlogUserPost = async (req, res) => {
       content,
       authorName,
       category,
-      tags: tags.split(","),
+      tags: tags ? tags.split(",") : [],
       isApproved,
     };
 
     if (req.file) {
-      // Handle image update to Cloudinary
       const uploadedImage = await cloudinary.uploader.upload(req.file.path);
       updatedData.image = uploadedImage.secure_url;
     }
@@ -83,7 +89,6 @@ const updateBlogUserPost = async (req, res) => {
 
     res.status(200).json({ message: "Blog post updated successfully", updatedPost });
 
-    // Cleanup the temporary uploaded image
     if (req.file) {
       fs.unlinkSync(req.file.path);
     }
@@ -105,6 +110,10 @@ const approveBlogUserPost = async (req, res) => {
       { new: true }
     );
 
+    if (!updatedPost) {
+      return res.status(404).json({ error: "Blog post not found" });
+    }
+
     res.status(200).json({ message: "Blog post approved", updatedPost });
 
   } catch (error) {
@@ -118,20 +127,17 @@ const unapproveBlogUserPost = async (req, res) => {
   try {
     const { id } = req.params;
 
-    // Find the blog post by ID to get the image URL for Cloudinary deletion
     const blogPost = await BlogUserModel.findById(id);
     
     if (!blogPost) {
       return res.status(404).json({ error: "Blog post not found" });
     }
 
-    // Delete the image from Cloudinary if it exists
     if (blogPost.image) {
-      const imagePublicId = blogPost.image.split('/').pop().split('.')[0]; // Extract the public ID from the image URL
+      const imagePublicId = blogPost.image.split('/').pop().split('.')[0];
       await cloudinary.uploader.destroy(imagePublicId);
     }
 
-    // Delete the blog post from the database
     await BlogUserModel.findByIdAndDelete(id);
 
     res.status(200).json({ message: "Blog post unapproved and deleted successfully" });
@@ -142,10 +148,47 @@ const unapproveBlogUserPost = async (req, res) => {
   }
 };
 
+// Get a single approved blog post by ID
+const getSingleApprovedBlogUserPost = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ error: "Invalid or missing ID" });
+    }
+
+    const post = await BlogUserModel.findOne({ _id: id, isApproved: true });
+
+    if (!post) {
+      return res.status(404).json({ error: "Approved blog post not found" });
+    }
+
+    res.status(200).json(post);
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to fetch approved blog post" });
+  }
+};
+
+// Get all blog posts
+const getAllBlogUserPosts = async (req, res) => {
+    try {
+      const posts = await BlogUserModel.find();
+      res.status(200).json(posts);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Failed to fetch blog posts" });
+    }
+  };
+
 module.exports = {
   createBlogUserPost,
-  getAllBlogUserPosts,
+  getApprovedBlogUserPosts,
+  getUnapprovedBlogUserPosts,
   updateBlogUserPost,
   approveBlogUserPost,
   unapproveBlogUserPost,
+  getAllBlogUserPosts,
+  getSingleApprovedBlogUserPost
 };

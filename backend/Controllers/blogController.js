@@ -104,19 +104,36 @@ exports.getAllBlogs = async (req, res) => {
   }
 };
 
-// Get Single Blog (Optional Bonus)
+
+// Get Single Blog (Improved)
 exports.getSingleBlog = async (req, res) => {
   try {
     const { id } = req.params;
-    const blog = await Blog.findById(id);
+
+    const blog = await Blog.findById(id).lean(); // use .lean() for plain JS object
 
     if (!blog) {
-      return res.status(404).json({ message: "Blog not found." });
+      return res.status(404).json({ success: false, message: "Blog not found." });
     }
 
-    res.status(200).json({ blog });
+    res.status(200).json({
+      success: true,
+      message: "Blog fetched successfully.",
+      blog: {
+        id: blog._id,
+        title: blog.title,
+        description: blog.description,
+        content: blog.content,
+        authorName: blog.authorName,
+        category: blog.category,
+        tags: blog.tags,
+        imageUrl: blog.imageUrl,
+        createdAt: blog.createdAt,
+        updatedAt: blog.updatedAt,
+      },
+    });
   } catch (error) {
-    console.error("Error fetching single blog:", error);
-    res.status(500).json({ message: "Server error while fetching blog." });
+    console.error("Error fetching blog:", error);
+    res.status(500).json({ success: false, message: "Server error while fetching blog." });
   }
 };

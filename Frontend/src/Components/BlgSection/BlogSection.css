@@ -105,6 +105,7 @@
 
 /* Read More Button */
 .read-more {
+    text-decoration: none;
     font-size: 14px;
     color: #e94e77;
     font-weight: bold;
@@ -116,6 +117,7 @@
 }
 
 .read-more:hover {
+    text-decoration: none;
     color: #c81e5a;
     border-bottom: 2px solid #c81e5a;
 }
@@ -236,4 +238,23 @@
     .read-more {
         font-size: 12px;
     }
+}
+
+/* Toggle Button */
+.blog-toggle-button {
+    margin-top: 30px;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #e94e77;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.blog-toggle-button:hover {
+    background-color: #c81e5a;
+    transform: translateY(-2px);
 }

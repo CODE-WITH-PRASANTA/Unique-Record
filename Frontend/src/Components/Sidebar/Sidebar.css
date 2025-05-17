@@ -122,38 +122,49 @@
     padding-left: 20px;
 }
 .sidebar-dropdown {
-    background: #ffffff;
-    border: 1px solid #ddd;
-    padding: 10px;
-    margin-top: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    overflow: hidden;
-    max-height: 0;
-    transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
-    opacity: 0;
-  }
-  
-  .sidebar-dropdown.open {
-    max-height: 200px;
-    padding: 10px;
-    transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
-    opacity: 1;
-  }
-  
-  .sidebar-dropdown a {
-    padding: 10px;
-    display: block;
-    color: #333;
-    text-decoration: none;
-    transition: 0.3s ease-in-out;
-    border-radius: 5px;
-  }
-  
-  .sidebar-dropdown a:hover {
-    background: #e0f3ff;
-    color: #007bff;
-  }
+  background: #ffffff;
+  border: 1px solid #ddd;
+  padding: 0;
+  margin-top: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease-in-out, padding 0.5s ease-in-out;
+  opacity: 0;
+}
+
+.sidebar-dropdown.open {
+  max-height: 500px; /* Increased max-height to accommodate more items */
+  padding: 10px;
+  transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease-in-out, padding 0.5s ease-in-out;
+  opacity: 1;
+}
+
+.sidebar-dropdown a {
+  padding: 12px 15px; /* Increased padding for better spacing */
+  display: block;
+  color: #333;
+  text-decoration: none;
+  transition: 0.3s ease-in-out;
+  border-radius: 5px;
+  border-bottom: 1px solid #f0f0f0; /* Added a subtle border-bottom */
+}
+
+.sidebar-dropdown a:last-child {
+  border-bottom: none; /* Removed border-bottom for the last item */
+}
+
+.sidebar-dropdown a:hover {
+  background: #e0f3ff;
+  color: #007bff;
+  padding-left: 20px; /* Increased padding-left on hover */
+  transition: 0.3s ease-in-out;
+}
+
+.sidebar-dropdown {
+  transition-delay: 0.1s; /* Added a transition delay */
+}
 
 /* Responsive Adjustments */
 @media (max-width: 1024px) {

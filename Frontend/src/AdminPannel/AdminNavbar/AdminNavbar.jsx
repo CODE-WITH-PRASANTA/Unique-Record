@@ -31,6 +31,8 @@ import PhotoManage from '../../Components/PhotoManage/PhotoManage';
 import AdminEditBlogs from '../../Components/AdminEditBlogs/AdminEditBlogs';
 import AdminManageTeamMembers from '../../Components/AdminManageTeamMembers/AdminManageTeamMembers';
 import AproveBlogs from '../../Components/AproveBlogs/AproveBlogs';
+import ManageURU from '../../Components/ManageURU/ManageURU';
+import ApproveURU from '../../Components/ApproveURU/ApproveURU';
 
 const NAVIGATION = [
   {
@@ -78,6 +80,27 @@ const NAVIGATION = [
     title: 'Approve Blogs',
     icon: <CheckCircleIcon style={{ color: '#4caf50' }} />, // Green color for approved feeling
   },
+  {
+  kind: 'header',
+  title: 'URU Management',
+},
+{
+  segment: 'uru',
+  title: 'URU',
+  icon: <DashboardIcon style={{ color: '#009688' }} />, 
+  children: [
+    {
+      segment: 'manage-uru',
+      title: 'Manage URU',
+      icon: <ListIcon style={{ color: '#2196f3' }} />,
+    },
+    {
+      segment: 'approve-uru',
+      title: 'Approve URU',
+      icon: <CheckCircleIcon style={{ color: '#4caf50' }} />,
+    },
+  ],
+},
   {
     kind: 'divider',
   },
@@ -315,6 +338,8 @@ export default function DashboardLayoutBasic({ window }) {
             {router.pathname === '/media/youtube' && <YoutubeManage />}
             {router.pathname === '/media/photos' && <PhotoManage />}
             {router.pathname === '/approve-blogs' && <AproveBlogs />}
+            {router.pathname === '/uru/manage-uru' && <ManageURU />}
+            {router.pathname === '/uru/approve-uru' && <ApproveURU />}
           </PageContainer>
         </DashboardLayout>
       </AppProvider>

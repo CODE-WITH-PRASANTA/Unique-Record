@@ -26,6 +26,8 @@ import Donate from "./Pages/Donate/Donate";
 import PaymentSuccess from "./Components/PaymentSuccess/PaymentSuccess";
 import DonationSuccess from "./Components/DonationSuccess/DonationSuccess";
 import MakeUserPost from "./Components/MakeUserPost/MakeUserPost";
+import ApplicationStatus from "./Components/ApplicationStatus/ApplicationStatus";
+import DownCertificate from "./Components/DownCertificate/DownCertificate";
 
 function Layout() {
   const location = useLocation();
@@ -46,6 +48,8 @@ function Layout() {
               <Route element={<ProtectedRoute />}>
                 <Route path="/dashboard" element={<UserDashboard />} />
                 <Route path="/dashboard/event-registration" element={<RegisterForEvent />} />
+                <Route path="/dashboard/application-status" element={<ApplicationStatus />} />
+                <Route path="/dashboard/down-certificate" element={<DownCertificate />} />
               </Route>
             </Routes>
           </div>

@@ -1,0 +1,378 @@
+
+/* Container Styles */
+.achivment-container {
+  display: flex;
+  min-height: 100vh;
+  flex-wrap: wrap;
+}
+/* Right Panel Styles */
+.right-panel {
+  width: 60%;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  padding: 2rem;
+  box-sizing: border-box;
+}
+/* Left Panel Container */
+.achievement-form-left-panel {
+  width: 40%;
+  background-color: #04171a; /* Tailwind Green-600 */
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.5rem;
+  position: relative;
+  padding: 11rem 2rem;
+  box-sizing: border-box;
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+  box-shadow: 4px 0 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Social Icons */
+.achievement-form-social-icons {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  display: flex;
+  gap: 1rem;
+  font-size: 1.4rem;
+}
+
+.achievement-form-social-icons a {
+  color: white;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.achievement-form-social-icons a:hover {
+  color: #facc15; /* Tailwind Yellow-400 */
+  transform: scale(1.1);
+}
+
+/* Illustration Image */
+.achievement-form-illustration img {
+  width: 280px;
+  margin-top: 8rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Heading */
+.achievement-form-heading {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-top: 1.5rem;
+}
+
+/* Description Text */
+.achievement-form-description {
+  font-size: 1rem;
+  line-height: 1.6;
+  padding: 0 1rem;
+  color: #e5e5e5;
+  text-align: justify;
+}
+
+
+/* Form Container Styles */
+.form-achivment-container {
+  max-width: 500px;
+  margin: auto;
+}
+
+/* Heading Styles */
+.heading {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.paragraph {
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+  margin-top: 1.5rem;
+}
+.section-title{
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+/* Radio Box Styles */
+.radio-box {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border: 1px solid #ccc;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.radio-box input[type="radio"] {
+  transform: scale(1.3);
+}
+
+/* Button Styles */
+.previous .next-button {
+  background-color: #14b866;
+  color: #fff;
+  border: none;
+  padding: 0.8rem 2rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+/* Form Layout */
+.personal-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.grid-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem 1.5rem;
+}
+
+.achivment-form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.achivment-form-group label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.3rem;
+}
+
+.achivment-form-group input,
+.achivment-form-group select,
+.achivment-form-group textarea {
+  padding: 0.8rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: #fff;
+  transition: all 0.3s ease;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.achivment-form-group input::placeholder,
+.achivment-form-group select {
+  color: #aaa;
+}
+
+.achivment-form-group input:focus,
+.achivment-form-group select:focus {
+  border-color: #14b866;
+  outline: none;
+  background-color: #f9f9f9;
+  box-shadow: 0px 4px 15px rgba(20, 184, 102, 0.2);
+}
+
+/* Button Area */
+.form-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+/* Buttons */
+.prev-button,
+.next-button {
+  padding: 0.9rem 2rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 48%;
+  display: inline-block;
+}
+
+/* Previous Button */
+.prev-button {
+  background-color: #e0e0e0;
+  color: #333;
+}
+
+.prev-button:hover {
+  background-color: #ccc;
+}
+
+/* Next/Submit Button */
+.next-button {
+  background-color: #14b866;
+  color: #fff;
+}
+
+.next-button:hover {
+  background-color: #119c52;
+}
+
+/* Thank You Container Styles */
+.thank-you-achivment-container {
+  text-align: center;
+  padding: 2rem;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: none;
+}
+
+.thank-you-achivment-container h2 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.thank-you-achivment-container p {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 2rem;
+}
+
+/* Progress Bar Container */
+.progress-bar-container {
+  margin-bottom: 1.5rem;
+}
+
+/* Label above bar */
+.progress-text {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #14b866;
+  margin-bottom: 0.4rem;
+}
+
+/* Progress bar base */
+.progress-bar {
+  width: 100%;
+  background-color: #e0e0e0;
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+/* Fill inside progress bar */
+.progress-fill {
+  height: 100%;
+  background-color: #14b866;
+  width: 0%;
+  transition: width 0.4s ease-in-out;
+}
+
+.submit-button {
+  background-color: #4f46e5; /* Indigo-600 */
+  color: white;
+  padding: 0.6rem 1.5rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.submit-button:hover {
+  background-color: #4338ca; /* Indigo-700 */
+  transform: translateY(-1px);
+}
+
+.submit-button:active {
+  background-color: #3730a3; /* Indigo-800 */
+  transform: translateY(0);
+}
+
+/* Media Queries */
+
+/* Large Desktops */
+@media (max-width: 1400px) {
+  .achievement-form-left-panel {
+    padding: 8rem 2rem;
+  }
+  .achievement-form-illustration img {
+    width: 240px;
+    margin-top: 6rem;
+  }
+}
+
+/* Small Desktops and Large Tablets */
+@media (max-width: 1200px) {
+  .container {
+    flex-direction: column;
+  }
+  .achievement-form-left-panel {
+    width: 100%;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-left-radius: 0;
+    padding: 4rem 2rem;
+  }
+  .achievement-form-illustration img {
+    width: 200px;
+    margin-top: 4rem;
+  }
+  .right-panel {
+    display: block;
+    width: 100%;
+    padding-top: 10px;
+  }
+}
+
+/* Tablets */
+@media (max-width: 768px) {
+  .grid-form {
+    grid-template-columns: 1fr;
+  }
+  .achivment-form-group {
+    margin-bottom: 1rem;
+  }
+ 
+  .achievement-form-illustration img {
+    width: 180px;
+    margin-top: 3rem;
+  }
+}
+
+/* Mobile Devices */
+@media (max-width: 480px) {
+  .achievement-form-left-panel {
+    padding: 2rem 1rem;
+  }
+  .achievement-form-illustration img {
+    width: 150px;
+    margin-top: 2rem;
+  }
+ 
+  .form-achivment-container {
+    max-width: 100%;
+  }
+  .prev-button, .next-button {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+  .form-footer {
+    flex-direction: column;
+  }
+}
+
+/* Small Mobile Devices */
+@media (max-width: 320px) {
+  .achievement-form-left-panel {
+    padding: 1.5rem 0.5rem;
+  }
+  .achievement-form-illustration img {
+    width: 120px;
+    margin-top: 1.5rem;
+  }
+}

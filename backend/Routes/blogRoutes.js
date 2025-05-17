@@ -18,4 +18,6 @@ router.get("/all", blogController.getAllBlogs);
 // GET - Fetch Single Blog (Optional Bonus)
 router.get("/:id", blogController.getSingleBlog);
 
+
+
 module.exports = router;

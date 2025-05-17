@@ -86,13 +86,17 @@ const Sidebar = () => {
     setIsOpen(!isOpen);
   };
 
-  const toggleDropdown = () => {
+ const toggleDropdown = () => {
+  setTimeout(() => {
     setIsDropdownOpen(!isDropdownOpen);
-  };
+  }, 100); // Added a 100ms delay
+};
 
-  const toggleEventDropdown = () => {
+ const toggleEventDropdown = () => {
+  setTimeout(() => {
     setIsEventDropdownOpen(!isEventDropdownOpen);
-  };
+  }, 100); // Added a 100ms delay
+};
 
   return (
     <>
@@ -134,15 +138,15 @@ const Sidebar = () => {
                 <Link to="/dashboard" className={location.pathname === "/dashboard" ? "sidebar-active" : ""}>
                   <FaFileAlt /> Apply for "URU" Holder
                 </Link>
-                <Link to="/application-status" className={location.pathname === "/application-status" ? "sidebar-active" : ""}>
+                <Link to="/dashboard/application-status" className={location.pathname === "/dashboard/application-status" ? "sidebar-active" : ""}>
                   <FaClipboardList /> Application Status
                 </Link>
-                <Link to="/edit-application" className={location.pathname === "/edit-application" ? "sidebar-active" : ""}>
-                  <FaEdit /> Edit Application Form
+                <Link to="/dashboard/down-certificate" className={location.pathname === "/dashboard/down-certificate" ? "sidebar-active" : ""}>
+                  <FaEdit /> Download Certificate
                 </Link>
-                <Link to="/download-application" className={location.pathname === "/download-application" ? "sidebar-active" : ""}>
+                {/* <Link to="/download-application" className={location.pathname === "/download-application" ? "sidebar-active" : ""}>
                   <FaDownload /> Download Application Form
-                </Link>
+                </Link> */}
               </div>
             )}
           </div>
@@ -159,15 +163,15 @@ const Sidebar = () => {
                 <Link to="/dashboard/event-registration" className={location.pathname === "/dashboard/event-registration" ? "sidebar-active" : ""}>
                   <FaClipboardList /> Register for Event
                 </Link>
-                <Link to="/event-status" className={location.pathname === "/event-status" ? "sidebar-active" : ""}>
+                <Link to="/dashboard/event-status" className={location.pathname === "/dashboard/event-status" ? "sidebar-active" : ""}>
                   <FaClipboardList /> Registration Status
                 </Link>
-                <Link to="/edit-event" className={location.pathname === "/edit-event" ? "sidebar-active" : ""}>
-                  <FaUserEdit /> Edit Event Form
+                <Link to="/dashboard/edit-event" className={location.pathname === "/dashboard/edit-event" ? "sidebar-active" : ""}>
+                  <FaUserEdit /> Download Your Ticket
                 </Link>
-                <Link to="/download-event" className={location.pathname === "/download-event" ? "sidebar-active" : ""}>
+                {/* <Link to="/download-event" className={location.pathname === "/download-event" ? "sidebar-active" : ""}>
                   <FaDownload /> Download Event Form
-                </Link>
+                </Link> */}
               </div>
             )}
           </div>

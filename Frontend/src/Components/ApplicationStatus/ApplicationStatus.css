@@ -1,0 +1,167 @@
+.Application-status-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(to right, #f1f1f1, #fafafa);
+  padding: 60px 20px;
+  min-height: 100vh;
+}
+
+.Application-status-card {
+  padding: 40px 30px;
+  border-radius: 16px;
+  max-width: 900px;
+  width: 100%;
+  text-align: center;
+}
+
+.Application-status-heading {
+  font-size: 32px;
+  color: #2c3e50;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.Application-status-description {
+  font-size: 16px;
+  color: #7f8c8d;
+  margin-bottom: 40px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.Application-status-timeline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.Application-status-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 100px;
+  margin: 10px 0;
+}
+
+.Application-status-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  color: #fff;
+  font-size: 18px;
+}
+
+.Application-status-icon {
+  font-size: 20px;
+}
+
+.Application-status-label {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #34495e;
+  font-weight: 500;
+}
+
+.Application-status-line {
+  width: 40px;
+  height: 4px;
+  background-color: #bdc3c7;
+  margin: 0 10px;
+  border-radius: 2px;
+}
+
+.Application-status-circle.green {
+  background-color: #27ae60;
+}
+
+.Application-status-circle.yellow {
+  background-color: #f1c40f;
+}
+
+.Application-status-circle.blue {
+  background-color: #3498db;
+  cursor: pointer;
+}
+
+.Application-status-circle.blue:hover {
+  background-color: #2980b9;
+  transform: scale(1.1);
+}
+
+/* Add at the bottom of ApplicationStatus.css */
+
+/* For tablets and smaller screens */
+@media (max-width: 768px) {
+  .Application-status-card {
+    padding: 30px 20px;
+  }
+
+  .Application-status-heading {
+    font-size: 26px;
+  }
+
+  .Application-status-description {
+    font-size: 14px;
+    margin-bottom: 30px;
+  }
+
+  .Application-status-timeline {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .Application-status-line {
+    width: 4px;
+    height: 40px;
+    margin: 10px 0;
+  }
+}
+
+/* For mobile devices */
+@media (max-width: 480px) {
+  .Application-status-wrapper {
+    padding: 40px 10px;
+  }
+
+  .Application-status-card {
+    padding: 20px 15px;
+  }
+
+  .Application-status-heading {
+    font-size: 22px;
+  }
+
+  .Application-status-description {
+    font-size: 13px;
+  }
+
+  .Application-status-step {
+    min-width: 80px;
+  }
+
+  .Application-status-circle {
+    width: 36px;
+    height: 36px;
+  }
+
+  .Application-status-icon {
+    font-size: 16px;
+  }
+
+  .Application-status-label {
+    font-size: 12px;
+  }
+
+  .Application-status-line {
+    width: 3px;
+    height: 30px;
+  }
+}
+

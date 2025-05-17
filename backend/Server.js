@@ -18,6 +18,7 @@ const youtubeRoutes = require("./Routes/youtubeRoutes");
 const photoRoutes = require("./Routes/photoRoutes");
 const blogRoutes = require("./Routes/blogRoutes");
 const blogUserRoutes = require("./Routes/BlogUserRoutes");
+const uruRoutes = require("./Routes/uruRoutes");
 
 
 
@@ -46,6 +47,8 @@ app.use('/api/youtube', youtubeRoutes);
 app.use("/api/photos", photoRoutes);
 app.use("/api/blogs", blogRoutes);
 app.use("/api/user/blog", blogUserRoutes);
+app.use("/api/uru", uruRoutes);
+
 
 
 
