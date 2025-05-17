@@ -122,11 +122,8 @@ const getAllURUs = async (req, res) => {
     res.status(500).json({ message: "Error getting URUs" });
   }
 };
-
-// Update URU
-const updateURU = async (req, res) => {
+const createURU = async (req, res) => {
   try {
-    const { id } = req.params;
     const {
       applicantName,
       sex,
@@ -154,12 +151,49 @@ const updateURU = async (req, res) => {
       xLink,
       pinterestLink,
       otherMediaLink,
-      photoUrl,
-      videoUrl,
-      documentUrl,
     } = req.body;
 
-    const uru = await URU.findByIdAndUpdate(id, {
+    // Validate required fields
+    if (!applicantName || !sex || !dateOfBirth || !address || !district || !state || !pinCode || !educationalQualification || !whatsappMobileNumber || !emailId || !occupation || !recordCategory || !recordTitle || !recordDescription || !purposeOfRecordAttempt || !dateOfAttempt || !recordVenue) {
+      return res.status(400).json({ message: "Please provide all required fields" });
+    }
+
+    const existingURU = await URU.findOne({ userId: req.user.id });
+    if (existingURU && existingURU.status !== "Rejected" && existingURU.status !== "Deleted") {
+      return res.status(400).json({ message: "You already have a pending or approved URU" });
+    }
+
+    if (existingURU && existingURU.status === "Deleted") {
+      await URU.findByIdAndDelete(existingURU._id);
+    }
+
+    let photoUrl, videoUrl, documentUrl;
+
+    if (req.files.photo) {
+      const photoResult = await cloudinary.uploader.upload(req.files.photo[0].path, {
+        folder: "URU_Photos",
+      });
+      photoUrl = photoResult.secure_url;
+    }
+
+    if (req.files.video) {
+      const videoResult = await cloudinary.uploader.upload(req.files.video[0].path, {
+        folder: "URU_Videos",
+        resource_type: "video",
+      });
+      videoUrl = videoResult.secure_url;
+    }
+
+    if (req.files.document) {
+      const documentResult = await cloudinary.uploader.upload(req.files.document[0].path, {
+        folder: "URU_Documents",
+        resource_type: "raw",
+      });
+      documentUrl = documentResult.secure_url;
+    }
+
+    const newURU = new URU({
+      userId: req.user.id,
       applicantName,
       sex,
       dateOfBirth,
@@ -189,13 +223,17 @@ const updateURU = async (req, res) => {
       photoUrl,
       videoUrl,
       documentUrl,
-    }, { new: true });
+    });
 
-    res.json(uru);
+    await newURU.save();
+
+    res.status(201).json({ message: "URU created successfully" });
   } catch (error) {
-    res.status(500).json({ message: "Error updating URU" });
+    console.error(error);
+    res.status(500).json({ message: "Error creating URU" });
   }
 };
+
 
 // Update URU status
 const updateURUStatus = async (req, res) => {
