@@ -102,10 +102,11 @@ const submitForm = async () => {
       alert("Error submitting form");
     }
   } catch (error) {
-    console.error(error);
+    console.error("Error submitting form:", error);
     alert("Error submitting form");
   }
 };
+
 
   const progressStep = Math.min(Math.max(step - 1, 0), 4);
   const progressPercent = (progressStep / 4) * 100;

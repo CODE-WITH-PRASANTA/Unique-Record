@@ -3,9 +3,6 @@ const cloudinary = require("../Config/cloudinary");
 const Razorpay = require("razorpay");
 const crypto = require("crypto");
 
-
-// Create URU
-// Create URU
 const createURU = async (req, res) => {
   try {
     const existingURU = await URU.findOne({ userId: req.user.id });
@@ -17,54 +14,28 @@ const createURU = async (req, res) => {
       await URU.findByIdAndDelete(existingURU._id);
     }
 
-    const {
-      applicantName,
-      sex,
-      dateOfBirth,
-      address,
-      district,
-      state,
-      pinCode,
-      educationalQualification,
-      whatsappMobileNumber,
-      emailId,
-      occupation,
-      recordCategory,
-      recordTitle,
-      recordDescription,
-      purposeOfRecordAttempt,
-      dateOfAttempt,
-      recordVenue,
-      organisationName,
-      googleDriveLink,
-      facebookLink,
-      youtubeLink,
-      instagramLink,
-      linkedInLink,
-      xLink,
-      pinterestLink,
-      otherMediaLink,
-    } = req.body;
+    const uruData = req.body;
+    const files = req.files;
 
     let photoUrl, videoUrl, documentUrl;
 
-    if (req.files.photo) {
-      const photoResult = await cloudinary.uploader.upload(req.files.photo[0].path, {
+    if (files.photo) {
+      const photoResult = await cloudinary.uploader.upload(files.photo[0].path, {
         folder: "URU_Photos",
       });
       photoUrl = photoResult.secure_url;
     }
 
-    if (req.files.video) {
-      const videoResult = await cloudinary.uploader.upload(req.files.video[0].path, {
+    if (files.video) {
+      const videoResult = await cloudinary.uploader.upload(files.video[0].path, {
         folder: "URU_Videos",
         resource_type: "video",
       });
       videoUrl = videoResult.secure_url;
     }
 
-    if (req.files.document) {
-      const documentResult = await cloudinary.uploader.upload(req.files.document[0].path, {
+    if (files.document) {
+      const documentResult = await cloudinary.uploader.upload(files.document[0].path, {
         folder: "URU_Documents",
         resource_type: "raw",
       });
@@ -73,32 +44,7 @@ const createURU = async (req, res) => {
 
     const newURU = new URU({
       userId: req.user.id,
-      applicantName,
-      sex,
-      dateOfBirth,
-      address,
-      district,
-      state,
-      pinCode,
-      educationalQualification,
-      whatsappMobileNumber,
-      emailId,
-      occupation,
-      recordCategory,
-      recordTitle,
-      recordDescription,
-      purposeOfRecordAttempt,
-      dateOfAttempt,
-      recordVenue,
-      organisationName,
-      googleDriveLink,
-      facebookLink,
-      youtubeLink,
-      instagramLink,
-      linkedInLink,
-      xLink,
-      pinterestLink,
-      otherMediaLink,
+      ...uruData,
       photoUrl,
       videoUrl,
       documentUrl,
@@ -108,7 +54,7 @@ const createURU = async (req, res) => {
 
     res.status(201).json({ message: "URU created successfully" });
   } catch (error) {
-    console.error(error);
+    console.error("Error creating URU:", error);
     res.status(500).json({ message: "Error creating URU" });
   }
 };
@@ -122,78 +68,12 @@ const getAllURUs = async (req, res) => {
     res.status(500).json({ message: "Error getting URUs" });
   }
 };
-const createURU = async (req, res) => {
+
+// Update URU
+const updateURU = async (req, res) => {
   try {
+    const { id } = req.params;
     const {
-      applicantName,
-      sex,
-      dateOfBirth,
-      address,
-      district,
-      state,
-      pinCode,
-      educationalQualification,
-      whatsappMobileNumber,
-      emailId,
-      occupation,
-      recordCategory,
-      recordTitle,
-      recordDescription,
-      purposeOfRecordAttempt,
-      dateOfAttempt,
-      recordVenue,
-      organisationName,
-      googleDriveLink,
-      facebookLink,
-      youtubeLink,
-      instagramLink,
-      linkedInLink,
-      xLink,
-      pinterestLink,
-      otherMediaLink,
-    } = req.body;
-
-    // Validate required fields
-    if (!applicantName || !sex || !dateOfBirth || !address || !district || !state || !pinCode || !educationalQualification || !whatsappMobileNumber || !emailId || !occupation || !recordCategory || !recordTitle || !recordDescription || !purposeOfRecordAttempt || !dateOfAttempt || !recordVenue) {
-      return res.status(400).json({ message: "Please provide all required fields" });
-    }
-
-    const existingURU = await URU.findOne({ userId: req.user.id });
-    if (existingURU && existingURU.status !== "Rejected" && existingURU.status !== "Deleted") {
-      return res.status(400).json({ message: "You already have a pending or approved URU" });
-    }
-
-    if (existingURU && existingURU.status === "Deleted") {
-      await URU.findByIdAndDelete(existingURU._id);
-    }
-
-    let photoUrl, videoUrl, documentUrl;
-
-    if (req.files.photo) {
-      const photoResult = await cloudinary.uploader.upload(req.files.photo[0].path, {
-        folder: "URU_Photos",
-      });
-      photoUrl = photoResult.secure_url;
-    }
-
-    if (req.files.video) {
-      const videoResult = await cloudinary.uploader.upload(req.files.video[0].path, {
-        folder: "URU_Videos",
-        resource_type: "video",
-      });
-      videoUrl = videoResult.secure_url;
-    }
-
-    if (req.files.document) {
-      const documentResult = await cloudinary.uploader.upload(req.files.document[0].path, {
-        folder: "URU_Documents",
-        resource_type: "raw",
-      });
-      documentUrl = documentResult.secure_url;
-    }
-
-    const newURU = new URU({
-      userId: req.user.id,
       applicantName,
       sex,
       dateOfBirth,
@@ -223,17 +103,45 @@ const createURU = async (req, res) => {
       photoUrl,
       videoUrl,
       documentUrl,
-    });
+    } = req.body;
 
-    await newURU.save();
+    const uru = await URU.findByIdAndUpdate(id, {
+      applicantName,
+      sex,
+      dateOfBirth,
+      address,
+      district,
+      state,
+      pinCode,
+      educationalQualification,
+      whatsappMobileNumber,
+      emailId,
+      occupation,
+      recordCategory,
+      recordTitle,
+      recordDescription,
+      purposeOfRecordAttempt,
+      dateOfAttempt,
+      recordVenue,
+      organisationName,
+      googleDriveLink,
+      facebookLink,
+      youtubeLink,
+      instagramLink,
+      linkedInLink,
+      xLink,
+      pinterestLink,
+      otherMediaLink,
+      photoUrl,
+      videoUrl,
+      documentUrl,
+    }, { new: true });
 
-    res.status(201).json({ message: "URU created successfully" });
+    res.json(uru);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Error creating URU" });
+    res.status(500).json({ message: "Error updating URU" });
   }
 };
-
 
 // Update URU status
 const updateURUStatus = async (req, res) => {
