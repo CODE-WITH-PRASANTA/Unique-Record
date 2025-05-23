@@ -1,16 +1,38 @@
 .Approve-URU-container {
   padding: 20px;
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #f0f0f0;
 }
 
 .Approve-URU-title {
-  font-size: 24px;
-  font-weight: bold;
+  text-align: center;
   margin-bottom: 20px;
-  color: #337ab7;
+  color: #4CAF50;
+}
+
+.filter-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.filter-status-select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+}
+
+.download-excel-btn {
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.download-excel-btn:hover {
+  background-color: #3e8e41;
 }
 
 .Approve-URU-table-container {
@@ -24,63 +46,40 @@
 }
 
 .Approve-URU-table-header {
-  background-color: #337ab7;
+  background-color: #4CAF50;
   color: #fff;
   padding: 10px;
-  text-align: left;
   border: 1px solid #ddd;
 }
 
 .Approve-URU-table-data {
   padding: 10px;
-  text-align: left;
   border: 1px solid #ddd;
-  background-color: #f9f9f9;
 }
 
 .Approve-URU-price-input {
-  width: 100px;
-  padding: 5px;
+  padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
+  width: 100%;
+}
+
+.Approve-URU-transition-id-input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 100%;
 }
 
 .Approve-URU-submit-btn {
+  padding: 10px 20px;
   background-color: #4CAF50;
   color: #fff;
-  padding: 5px 10px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
 }
 
 .Approve-URU-submit-btn:hover {
-  opacity: 0.8;
-}
-.filter-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.filter-status-select {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 16px;
-}
-
-.download-excel-btn {
-  background-color: #4CAF50;
-  color: #fff;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.download-excel-btn:hover {
   background-color: #3e8e41;
 }

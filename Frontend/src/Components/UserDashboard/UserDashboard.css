@@ -78,6 +78,7 @@
 }
 
 
+
 /* Form Container Styles */
 .form-achivment-container {
   max-width: 500px;
@@ -99,7 +100,22 @@
   margin-bottom: 10px;
   margin-top: 10px;
 }
+.Sub-heading {
+  color: #f9592dc6; /* red color */
+  margin-top: 15px;
+  display: block;
+  margin-bottom: 10px;
+}
+.evidence-heading {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
 
+.section-title {
+  margin-bottom: 20px;
+}
 /* Radio Box Styles */
 .radio-box {
   display: flex;

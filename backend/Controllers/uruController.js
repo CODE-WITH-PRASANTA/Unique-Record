@@ -1,356 +1,398 @@
 const URU = require("../Model/uruModel");
 const cloudinary = require("../Config/cloudinary");
-const Razorpay = require("razorpay");
-const crypto = require("crypto");
-
-const createURU = async (req, res) => {
-  try {
-    const existingURU = await URU.findOne({ userId: req.user.id });
-    if (existingURU && existingURU.status !== "Rejected" && existingURU.status !== "Deleted") {
-      return res.status(400).json({ message: "You already have a pending or approved URU" });
-    }
-
-    if (existingURU && existingURU.status === "Deleted") {
-      await URU.findByIdAndDelete(existingURU._id);
-    }
-
-    const uruData = req.body;
-    const files = req.files;
-
-    let photoUrl, videoUrl, documentUrl;
-
-    if (files.photo) {
-      const photoResult = await cloudinary.uploader.upload(files.photo[0].path, {
-        folder: "URU_Photos",
-      });
-      photoUrl = photoResult.secure_url;
-    }
-
-    if (files.video) {
-      const videoResult = await cloudinary.uploader.upload(files.video[0].path, {
-        folder: "URU_Videos",
-        resource_type: "video",
-      });
-      videoUrl = videoResult.secure_url;
-    }
-
-    if (files.document) {
-      const documentResult = await cloudinary.uploader.upload(files.document[0].path, {
-        folder: "URU_Documents",
-        resource_type: "raw",
-      });
-      documentUrl = documentResult.secure_url;
-    }
-
-    const newURU = new URU({
-      userId: req.user.id,
-      ...uruData,
-      photoUrl,
-      videoUrl,
-      documentUrl,
-    });
-
-    await newURU.save();
-
-    res.status(201).json({ message: "URU created successfully" });
-  } catch (error) {
-    console.error("Error creating URU:", error);
-    res.status(500).json({ message: "Error creating URU" });
-  }
-};
-
-// Get all URUs
-const getAllURUs = async (req, res) => {
-  try {
-    const urus = await URU.find();
-    res.json(urus);
-  } catch (error) {
-    res.status(500).json({ message: "Error getting URUs" });
-  }
-};
-
-// Update URU
-const updateURU = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const {
-      applicantName,
-      sex,
-      dateOfBirth,
-      address,
-      district,
-      state,
-      pinCode,
-      educationalQualification,
-      whatsappMobileNumber,
-      emailId,
-      occupation,
-      recordCategory,
-      recordTitle,
-      recordDescription,
-      purposeOfRecordAttempt,
-      dateOfAttempt,
-      recordVenue,
-      organisationName,
-      googleDriveLink,
-      facebookLink,
-      youtubeLink,
-      instagramLink,
-      linkedInLink,
-      xLink,
-      pinterestLink,
-      otherMediaLink,
-      photoUrl,
-      videoUrl,
-      documentUrl,
-    } = req.body;
-
-    const uru = await URU.findByIdAndUpdate(id, {
-      applicantName,
-      sex,
-      dateOfBirth,
-      address,
-      district,
-      state,
-      pinCode,
-      educationalQualification,
-      whatsappMobileNumber,
-      emailId,
-      occupation,
-      recordCategory,
-      recordTitle,
-      recordDescription,
-      purposeOfRecordAttempt,
-      dateOfAttempt,
-      recordVenue,
-      organisationName,
-      googleDriveLink,
-      facebookLink,
-      youtubeLink,
-      instagramLink,
-      linkedInLink,
-      xLink,
-      pinterestLink,
-      otherMediaLink,
-      photoUrl,
-      videoUrl,
-      documentUrl,
-    }, { new: true });
-
-    res.json(uru);
-  } catch (error) {
-    res.status(500).json({ message: "Error updating URU" });
-  }
-};
-
-// Update URU status
-const updateURUStatus = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { status } = req.body;
-    if (status === "Rejected") {
-      const uru = await URU.findById(id);
-      if (uru.photoUrl) {
-        const publicId = uru.photoUrl.split("/").pop().split(".")[0];
-        await cloudinary.uploader.destroy(`URU_Photos/${publicId}`);
-      }
-      if (uru.videoUrl) {
-        const publicId = uru.videoUrl.split("/").pop().split(".")[0];
-        await cloudinary.uploader.destroy(`URU_Videos/${publicId}`, {
-          resource_type: "video",
-        });
-      }
-      if (uru.documentUrl) {
-        const publicId = uru.documentUrl.split("/").pop().split(".")[0];
-        await cloudinary.uploader.destroy(`URU_Documents/${publicId}`, {
-          resource_type: "raw",
-        });
-      }
-      await URU.findByIdAndDelete(id);
-      res.json({ message: "URU rejected and deleted successfully" });
-    } else {
-      const uru = await URU.findByIdAndUpdate(id, { status }, { new: true });
-      res.json(uru);
-    }
-  } catch (error) {
-    res.status(500).json({ message: "Error updating URU status" });
-  }
-};
-
-// Delete URU
-const deleteURU = async (req, res) => {
-  try {
-    const { id } = req.params;
-    await URU.findByIdAndDelete(id);
-    res.json({ message: "URU deleted successfully" });
-  } catch (error) {
-    res.status(500).json({ message: "Error deleting URU" });
-  }
-};
-
-// Get all approved URUs
-const getAllApprovedURUs = async (req, res) => {
-  try {
-    const urus = await URU.find({ status: "Approved" });
-    res.json(urus);
-  } catch (error) {
-    res.status(500).json({ message: "Error getting approved URUs" });
-  }
-};
-
-// Update URU price with validation
-const updateURUPrice = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { price } = req.body;
-    if (price < 0) {
-      return res.status(400).json({ message: "Price cannot be negative" });
-    }
-    const uru = await URU.findByIdAndUpdate(id, { 
-      price, 
-      priceUpdated: true, 
-      priceUpdatedDate: new Date().toLocaleString() 
-    }, { new: true });
-    if (!uru) {
-      return res.status(404).json({ message: "URU not found" });
-    }
-    res.json(uru);
-  } catch (error) {
-    res.status(500).json({ message: "Error updating URU price" });
-  }
-};
-
+const Razorpay = require('razorpay');
+const dotenv = require('dotenv');
+dotenv.config();
+const { createHmac } = require('crypto');
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
   key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 
-// Get application status
-const getApplicationStatus = async (req, res) => {
-  try {
-    const userId = req.user.id;
-    const uru = await URU.findOne({ userId });
-    if (!uru) {
-      return res.status(404).json({ message: "Application not found" });
-    }
-    res.json({ status: uru.status });
-  } catch (error) {
-    res.status(500).json({ message: "Error getting application status" });
-  }
-};
-
-// Create Razorpay order
-const createOrder = async (req, res) => {
-  try {
-    const userId = req.user.id;
-    const uru = await URU.findOne({ userId });
-    if (!uru) {
-      return res.status(404).json({ message: "Application not found" });
-    }
-    const amount = uru.price * 100; // Convert to paise
-    const options = {
-      amount,
-      currency: "INR",
-      payment_capture: 1,
-    };
-    const order = await razorpay.orders.create(options);
-    res.json(order);
-  } catch (error) {
-    res.status(500).json({ message: "Error creating Razorpay order" });
-  }
-};
-
-const verifyPayment = async (req, res) => {
-  try {
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
-    const userId = req.user.id;
-
-    const uru = await URU.findOne({ userId });
-    if (!uru) {
-      return res.status(404).json({ message: "Application not found" });
-    }
-
-    const generatedSignature = crypto
-      .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
-      .update(`${razorpay_order_id}|${razorpay_payment_id}`)
-      .digest("hex");
-
-    if (generatedSignature === razorpay_signature) {
-      // Update application with payment details
-      uru.paymentStatus = "Success";
-      uru.razorpayOrderId = razorpay_order_id;
-      uru.razorpayPaymentId = razorpay_payment_id;
-      uru.razorpaySignature = razorpay_signature;
-      await uru.save();
-
-      return res.status(200).json({ message: "Payment verified successfully" });
-    } else {
-      uru.paymentStatus = "Failed";
-      await uru.save();
-
-      return res.status(400).json({ message: "Invalid payment signature" });
-    }
-  } catch (error) {
-    console.error("Payment verification error:", error);
-    res.status(500).json({ message: "Error verifying payment" });
-  }
-};
-
-const uploadCertificate = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const uru = await URU.findById(id);
-    if (!uru) {
-      return res.status(404).json({ message: "URU not found" });
-    }
-
-    if (req.file) {
-      const certificateResult = await cloudinary.uploader.upload(req.file.path, {
-        folder: "URU_Certificates",
-      });
-      const certificateUrl = certificateResult.secure_url;
-      uru.certificateUrl = certificateUrl;
-      await uru.save();
-      res.json({ message: "Certificate uploaded successfully" });
-    } else {
-      res.status(400).json({ message: "No file uploaded" });
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Error uploading certificate" });
-  }
-};
-
-const downloadCertificate = async (req, res) => {
-  try {
-    const userId = req.user.id;
-    const uru = await URU.findOne({ userId });
-    if (!uru) {
-      return res.status(404).json({ message: "URU not found" });
-    }
-
-    if (!uru.certificateUrl) {
-      return res.status(404).json({ message: "Certificate not found" });
-    }
-
-    res.json({ certificateUrl: uru.certificateUrl });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Error downloading certificate" });
-  }
-};
 
 module.exports = {
-  createURU,
-  getAllURUs,
-  updateURU,
-  updateURUStatus,
-  updateURUPrice,
-  deleteURU,
-  getAllApprovedURUs ,
-  getApplicationStatus,
-  createOrder,
-  verifyPayment,
-uploadCertificate , 
-downloadCertificate
+  createUru: async (req, res) => {
+    try {
+      const {
+        position ,
+        applicantName,
+        sex,
+        dateOfBirth,
+        address,
+        district,
+        country,
+        state,
+        pinCode,
+        educationalQualification,
+        whatsappMobileNumber,
+        emailId,
+        occupation,
+        recordCategory,
+        recordTitle,
+        recordDescription,
+        purposeOfRecordAttempt,
+        dateOfAttempt,
+        recordVenue,
+        organisationName,
+        googleDriveLink,
+        facebookLink,
+        youtubeLink,
+        instagramLink,
+        linkedInLink,
+        xLink,
+        pinterestLink,
+        otherMediaLink,
+        witness1Name,
+        witness1Designation,
+        witness1Address,
+        witness1MobileNumber,
+        witness1EmailId,
+        witness2Name,
+        witness2Designation,
+        witness2Address,
+        witness2MobileNumber,
+        witness2EmailId,
+      } = req.body;
+
+      const userId = req.user.id;
+
+      const photo = req.files.photo;
+      const video = req.files.video;
+      const document = req.files.document;
+
+      const photoResult = await cloudinary.uploader.upload(photo[0].path);
+      const videoResult = video ? await cloudinary.uploader.upload(video[0].path, { resource_type: "video" }) : null;
+      const documentResult = document ? await cloudinary.uploader.upload(document[0].path) : null;
+
+      let applicationNumber;
+      let isUnique = false;
+
+      while (!isUnique) {
+        const randomNumber = Math.floor(1000 + Math.random() * 9000);
+        applicationNumber = `URU${randomNumber}`;
+        const existingUru = await URU.findOne({ applicationNumber });
+        if (!existingUru) {
+          isUnique = true;
+        }
+      }
+
+      const uru = new URU({
+        position: req.body.position,
+        userId,
+        applicationNumber,
+        applicantName,
+        sex,
+        dateOfBirth,
+        address,
+        district,
+        country,
+        state,
+        pinCode,
+        educationalQualification,
+        whatsappMobileNumber,
+        emailId,
+        occupation,
+        recordCategory,
+        recordTitle,
+        recordDescription,
+        purposeOfRecordAttempt,
+        dateOfAttempt,
+        recordVenue,
+        organisationName,
+        googleDriveLink,
+        facebookLink,
+        youtubeLink,
+        instagramLink,
+        linkedInLink,
+        xLink,
+        pinterestLink,
+        otherMediaLink,
+        photoUrl: photoResult.secure_url,
+        videoUrl: videoResult ? videoResult.secure_url : null,
+        documentUrl: documentResult ? documentResult.secure_url : null,
+        witness1: {
+          name: witness1Name,
+          designation: witness1Designation,
+          address: witness1Address,
+          mobileNumber: witness1MobileNumber,
+          emailId: witness1EmailId,
+        },
+        witness2: {
+          name: witness2Name,
+          designation: witness2Designation,
+          address: witness2Address,
+          mobileNumber: witness2MobileNumber,
+          emailId: witness2EmailId,
+        },
+      });
+
+      await uru.save();
+
+      res.status(201).json({
+        message: "URU application created successfully",
+        applicationNumber: uru.applicationNumber,
+      });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
+
+  getAllUru: async (req, res) => {
+    try {
+      const urus = await URU.find().populate("userId", "name email");
+      res.status(200).json(urus);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
+
+  getUruById: async (req, res) => {
+    try {
+      const uru = await URU.findById(req.params.id).populate("userId", "name email");
+      if (!uru) {
+        return res.status(404).json({ message: "URU application not found" });
+      }
+      res.status(200).json(uru);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
+
+  updateUru: async (req, res) => {
+    try {
+      const uru = await URU.findById(req.params.id);
+      if (!uru) {
+        return res.status(404).json({ message: "URU application not found" });
+      }
+      const updatedUru = await URU.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+      });
+      res.status(200).json(updatedUru);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
+
+  deleteUru: async (req, res) => {
+  try {
+    const uru = await URU.findById(req.params.id);
+    if (!uru) {
+      return res.status(404).json({ message: "URU application not found" });
+    }
+
+    // Delete files from Cloudinary
+    if (uru.photoUrl) {
+      const photoPublicId = uru.photoUrl.split('/').pop().split('.')[0];
+      await cloudinary.uploader.destroy(photoPublicId);
+    }
+
+    if (uru.videoUrl) {
+      const videoPublicId = uru.videoUrl.split('/').pop().split('.')[0];
+      await cloudinary.uploader.destroy(videoPublicId, { resource_type: 'video' });
+    }
+
+    if (uru.documentUrl) {
+      const documentPublicId = uru.documentUrl.split('/').pop().split('.')[0];
+      await cloudinary.uploader.destroy(documentPublicId);
+    }
+
+    if (uru.certificateUrl) {
+      const certificatePublicId = uru.certificateUrl.split('/').pop().split('.')[0];
+      await cloudinary.uploader.destroy(certificatePublicId);
+    }
+
+    // Delete the URU application from the database
+    await URU.findByIdAndDelete(req.params.id);
+
+    res.status(200).json({ message: "URU application deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+} ,
+
+ approveUru: async (req, res) => {
+  try {
+    const uru = await URU.findById(req.params.id);
+    if (!uru) {
+      return res.status(404).json({ message: "URU application not found" });
+    }
+    uru.status = "Approved";
+    uru.approvedDate = new Date();
+    await uru.save({ validateBeforeSave: false });
+    res.status(200).json({ message: "URU application approved successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+  },
+
+  fetchApprovedUru: async (req, res) => {
+    try {
+      const approvedUrus = await URU.find({ status: "Approved" });
+      if (!approvedUrus.length) {
+        return res.status(200).json([]); // Return empty array if no approved URUs
+      }
+      res.status(200).json(approvedUrus);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
+
+  updatePrice: async (req, res) => {
+    try {
+      const { applicationNumber, price } = req.body;
+      if (!applicationNumber || !price) {
+        return res.status(400).json({ message: "Application number and price are required" });
+      }
+
+      const uru = await URU.findOne({ applicationNumber });
+      if (!uru) {
+        return res.status(404).json({ message: "URU application not found" });
+      }
+
+      if (uru.priceUpdated) {
+        return res.status(400).json({ message: "Price has already been updated for this application" });
+      }
+
+      const updatedUru = await URU.findOneAndUpdate(
+        { applicationNumber },
+        {
+          $set: {
+            price,
+            priceUpdated: true,
+            priceUpdatedDate: new Date().toISOString(),
+          },
+        },
+        { new: true }
+      );
+
+      res.status(200).json({ message: "Price updated successfully" });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
+
+  getUruByApplicationNumber: async (req, res) => {
+  try {
+    const applicationNumber = req.params.applicationNumber;
+    const uru = await URU.findOne({ applicationNumber });
+    if (!uru) {
+      return res.status(404).json({ message: "URU application not found" });
+    }
+    res.status(200).json(uru);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+},
+
+  createRazorpayOrder: async (req, res) => {
+    try {
+      const { applicationNumber } = req.body;
+
+      const uru = await URU.findOne({ applicationNumber });
+      if (!uru || !uru.price) return res.status(404).json({ message: "Application not found or price missing" });
+
+      const options = {
+        amount: uru.price * 100, // ₹ to paise
+        currency: "INR",
+        receipt: `receipt_${applicationNumber}`,
+      };
+
+      const order = await razorpay.orders.create(options);
+
+      uru.razorpayOrderId = order.id;
+      await uru.save();
+
+      res.status(200).json({ orderId: order.id, amount: options.amount });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
+
+  verifyRazorpayPayment: async (req, res) => {
+    try {
+      const { applicationNumber, razorpayOrderId, razorpayPaymentId, razorpaySignature } = req.body;
+
+      const hmac = createHmac("sha256", process.env.RAZORPAY_KEY_SECRET);
+      hmac.update(`${razorpayOrderId}|${razorpayPaymentId}`);
+      const generatedSignature = hmac.digest("hex");
+
+      if (generatedSignature !== razorpaySignature) {
+        return res.status(400).json({ success: false, message: "Invalid signature" });
+      }
+
+     await URU.findOneAndUpdate(
+  { applicationNumber },
+  {
+    paymentStatus: "Success",
+    razorpayOrderId,
+    razorpayPaymentId,
+    razorpaySignature,
+    status: "Approved",
+  }
+);
+
+      res.status(200).json({ success: true });
+    } catch (error) {
+      res.status(500).json({ success: false, message: error.message });
+    }
+  },
+
+   fetchPaidUru: async (req, res) => {
+    try {
+      const paidUrus = await URU.find({ paymentStatus: "Success" });
+      res.status(200).json(paidUrus);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
+
+    uploadCertificate: async (req, res) => {
+    try {
+      const applicationNumber = req.params.applicationNumber;
+      const uru = await URU.findOne({ applicationNumber });
+      if (!uru) {
+        return res.status(404).json({ message: "URU application not found" });
+      }
+
+      if (!req.file) {
+        return res.status(400).json({ message: "No file uploaded" });
+      }
+
+      const certificate = req.file;
+      const result = await cloudinary.uploader.upload(certificate.path);
+      uru.certificateUrl = result.secure_url;
+      await uru.save();
+
+      res.status(200).json({ message: "Certificate uploaded successfully" });
+    } catch (error) {
+      console.error(error); // Log the error for more insights
+      res.status(500).json({ message: error.message });
+    }
+  },
+
+  downloadCertificate: async (req, res) => {
+    try {
+      const applicationNumber = req.params.applicationNumber;
+      const uru = await URU.findOne({ applicationNumber });
+      if (!uru || !uru.certificateUrl) {
+        return res.status(404).json({ message: "Certificate not found" });
+      }
+
+      const certificateUrl = uru.certificateUrl;
+      res.redirect(certificateUrl);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
+  
+  fetchAppliedUruByUser: async (req, res) => {
+    try {
+      const userId = req.user.id;
+      const urus = await URU.find({ userId });
+      res.status(200).json(urus);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+
 };

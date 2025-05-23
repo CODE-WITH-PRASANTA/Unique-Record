@@ -1,0 +1,506 @@
+.achivement-details-container {
+  display: flex;
+  flex-wrap: wrap;
+  background-color: #fff;
+  padding: 0 30px;
+  gap: 50px;
+  justify-content: center;
+  max-width: 1500px;
+  margin: auto;
+  margin-top: 50px;
+}
+
+.achivement-details-main-content {
+  flex: 2;
+  min-width: 300px;
+}
+
+.achivement-details-main-banner {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.achivement-details-post-meta-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin-top: 16px;
+  font-size: 14px;
+  color: #777;
+}
+
+.achivement-details-icon {
+  margin-right: 6px;
+  color: #f5a623;
+}
+
+.achivement-details-intro-paragraph {
+  font-size: 16px;
+  line-height: 1.7;
+  margin-top: 20px;
+}
+
+.achivement-details-feature-section {
+  padding: 3rem 1.5rem;
+  font-family: 'Inter', sans-serif;
+  color: #1f2937;
+  max-width: 1200px;
+}
+
+.achivement-details-feature-intro h2 {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  color: #111827;
+}
+
+.achivement-details-feature-intro p {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: #4b5563;
+  margin-bottom: 2rem;
+}
+
+.achivement-details-feature-body {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.achivement-details-feature-list {
+  flex: 1;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  min-width: 250px;
+}
+
+.achivement-details-feature-list li {
+  display: flex;
+  align-items: center;
+  padding-bottom: 25px;
+  font-size: 1rem;
+  color: #1f2937;
+  margin-bottom: 0.75rem;
+}
+
+.achivement-details-feature-list li::before {
+  content: '✔';
+  color: #10b981;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.achivement-details-feature-image {
+  flex: 1;
+  min-width: 250px;
+}
+
+.achivement-details-feature-image img {
+  width: 100%;
+  max-width: 500px;
+  border-radius: 0.75rem;
+  object-fit: cover;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+}
+
+.achivement-details-feature-footer {
+  margin-top: 2.5rem;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: #4b5563;
+}
+
+.achivement-details-quote-section {
+  max-width: 1200px;
+  margin: auto;
+  padding: 3rem 1.5rem;
+  font-family: 'Inter', sans-serif;
+}
+
+.achivement-details-quote-box {
+  background-color: #002244;
+  color: #ffffff;
+  padding: 2.5rem;
+  border-radius: 0.5rem;
+  margin-bottom: 3rem;
+}
+
+.achivement-details-description {
+  font-size: 1.8rem;
+  font-weight: 700;
+  line-height: 1.4;
+  margin-bottom: 2rem;
+}
+
+.achivement-details-quote-author {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.achivement-details-quote-line {
+  width: 2rem;
+  height: 3px;
+  background-color: #fbbf24;
+  border-radius: 1px;
+}
+
+.achivement-details-quote-name {
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.achivement-details-quote-followup h2 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 1rem;
+}
+
+.achivement-details-quote-followup p {
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: #374151;
+}
+
+.achivement-details-tags-social-container {
+  background-color: #f9fafb;
+  border-radius: 12px;
+  padding: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+}
+
+.achivement-details-tag-list {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.achivement-details-tag {
+  background: white;
+  border: 1px solid #e5e7eb;
+  padding: 0.5rem 1.25rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #111827;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+}
+
+.achivement-details-tag:hover {
+  background-color: #1d4ed8;
+  color: #ffffff;
+  border-color: #1d4ed8;
+  transform: translateY(-2px);
+}
+
+.achivement-details-social-icons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.achivement-details-social-icons a {
+  text-decoration: none;
+  background-color: #001f3f;
+  color: white;
+  font-size: 1.1rem;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.achivement-details-social-icons a:hover {
+  background-color: #fbbf24;
+  transform: scale(1.1);
+}
+
+.achivement-details-sidebar {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+
+}
+
+.achivement-details-sidebar-items {
+margin-top: 20px;
+  width: 90%;
+}
+
+.achivement-details-sidebar-section {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  border: 1px solid #eee;
+margin-top: 30px;
+}
+
+.achivement-details-search-box {
+  display: flex;
+}
+
+.achivement-details-search-box input {
+  flex: 1;
+  padding: 10px;
+  font-size: 1rem;
+}
+
+.achivement-details-search-box button {
+  background-color: #ffc727;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.achivement-details-search-icon {
+  font-size: 16px;
+  color: #000;
+}
+
+.achivement-details-categories h2,
+.achivement-details-latest-articles h2,
+.achivement-details-subscribe h2 {
+  font-size: 1.7rem;
+  margin-bottom: 20px;
+  font-weight: bold;
+  color: #000;
+}
+
+.achivement-details-category-item {
+  margin-bottom: 15px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.1rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+.achivement-details-category-item svg {
+  font-size: 0.8rem;
+}
+
+.achivement-details-latest-articles .achivement-details-article {
+  margin-bottom: 30px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 20px;
+}
+
+.achivement-details-article:last-child {
+  border-bottom: none;
+}
+
+.achivement-details-article img {
+  width: 100%;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+.achivement-details-article h3 {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #000;
+  margin-bottom: 10px;
+}
+
+.achivement-details-read-now {
+  color: #00b386;
+  font-weight: bold;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.achivement-details-read-now svg {
+  font-size: 0.9rem;
+}
+
+.achivement-details-subscribe h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1d2d3c;
+  margin-bottom: 15px;
+}
+
+.achivement-details-subscribe p {
+  font-size: 1rem;
+  color: #4b5563;
+  margin-bottom: 20px;
+}
+
+.achivement-details-subscribe-form {
+  display: flex;
+  border: 1px solid #d1d5db;
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 25px;
+  gap: 20px;
+}
+
+.achivement-details-subscribe-form input {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  font-size: 1rem;
+  color: #111827;
+}
+
+.achivement-details-subscribe-form input::placeholder {
+  color: #9ca3af;
+}
+
+.achivement-details-subscribe-form button {
+  background-color: #ffc727;
+  padding: 0 20px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.achivement-details-subscribe-form button svg {
+  color: #000;
+  font-size: 1rem;
+}
+
+.achivement-details-social-icons.achivement-details-dark-icons {
+  display: flex;
+  gap: 20px;
+  justify-content: flex-start;
+}
+
+.achivement-details-social-icons.achivement-details-dark-icons a {
+  background-color: #00172b;
+  padding: 12px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+.achivement-details-social-icons.achivement-details-dark-icons a:hover {
+  background-color: #ffc727;
+}
+
+.achivement-details-social-icons.achivement-details-dark-icons svg {
+  color: #ffffff;
+  font-size: 1rem;
+}
+
+.achivement-details-tags h2 {
+  font-size: 1.7rem;
+  margin-bottom: 20px;
+  font-weight: bold;
+  color: #000;
+}
+
+.achivement-details-tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.achivement-details-latest-posts {
+  padding: 2rem 1rem;
+  max-width: 1200px;
+  margin: auto;
+  font-family: sans-serif;
+}
+
+.achivement-details-posts-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+}
+
+.achivement-details-post-card {
+  flex: 1 1 calc(33.333% - 2rem);
+  max-width: calc(33.333% - 2rem);
+  box-sizing: border-box;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.achivement-details-post-card:hover {
+  transform: translateY(-5px);
+}
+
+.achivement-details-post-card img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.achivement-details-meta {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #555;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.achivement-details-category {
+  font-weight: bold;
+  color: #001133;
+}
+
+.achivement-details-dot {
+  color: #ffaa00;
+  font-size: 1.5rem;
+  line-height: 0;
+}
+
+.achivement-details-post-card h3 {
+  font-size: 1.25rem;
+  margin: 1rem 0 0.5rem;
+  color: #001133;
+}
+
+.achivement-details-post-card p {
+  color: #444;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+.achivement-details-read-post {
+  font-weight: bold;
+  color: #00a859;
+  text-decoration: none;
+  font-size: 1rem;
+}
+
+.achivement-details-read-post:hover {
+  text-decoration: underline;
+}

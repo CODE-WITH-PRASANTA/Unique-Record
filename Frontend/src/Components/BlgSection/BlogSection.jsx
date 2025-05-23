@@ -11,7 +11,7 @@ const BlogSection = () => {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const res = await axios.get("http://localhost:5002/api/blogs/all");
+        const res = await axios.get("http://localhost:5005/api/blogs/all");
         setBlogs(res.data.blogs);
       } catch (error) {
         console.error("Error fetching blogs:", error);
@@ -20,7 +20,7 @@ const BlogSection = () => {
 
     const fetchApprovedBlogs = async () => {
       try {
-        const res = await axios.get("http://localhost:5002/api/user/blog/approved");
+        const res = await axios.get("http://localhost:5005/api/user/blog/approved");
         setApprovedBlogs(res.data);
       } catch (error) {
         console.error("Error fetching approved blogs:", error);

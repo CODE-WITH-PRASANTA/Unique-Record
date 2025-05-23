@@ -28,6 +28,7 @@ import DonationSuccess from "./Components/DonationSuccess/DonationSuccess";
 import MakeUserPost from "./Components/MakeUserPost/MakeUserPost";
 import ApplicationStatus from "./Components/ApplicationStatus/ApplicationStatus";
 import DownCertificate from "./Components/DownCertificate/DownCertificate";
+import AchivmentDetails from "./Components/AchivmentDetails/AchivmentDetails";
 
 function Layout() {
   const location = useLocation();
@@ -68,6 +69,8 @@ function Layout() {
             <Route path="/media" element={<Media />} />
             <Route path="/vision" element={<Vision />} />
             <Route path="/achivments" element={<OurAchivments />} />
+                    <Route path="/achivment-details/:id" element={<AchivmentDetails />} />
+
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:id" element={<BlogDetails />} />
             <Route path="/login" element={<Login />} />

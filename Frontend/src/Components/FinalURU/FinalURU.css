@@ -1,0 +1,185 @@
+/* Container */
+.Final-Uru-Container {
+  padding: 30px;
+  background-color: #f4f7fa;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Heading */
+.Final-Uru-Heading {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 30px;
+  color: #2c3e50;
+  text-align: center;
+}
+
+/* Search and Button Bar */
+.Final-Uru-Search-Bar-Container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 25px;
+  gap: 10px;
+}
+
+.Final-Uru-Search-Bar {
+  flex: 1;
+  max-width: 400px;
+  padding: 12px 15px;
+  border: 1px solid #dcdcdc;
+  border-radius: 8px;
+  outline: none;
+  font-size: 16px;
+  transition: border-color 0.3s;
+}
+
+.Final-Uru-Search-Bar:focus {
+  border-color: #2980b9;
+}
+
+.Final-Uru-Download-Excel-Button {
+  background: linear-gradient(135deg, #27ae60, #2ecc71);
+  color: #fff;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out;
+}
+
+.Final-Uru-Download-Excel-Button:hover {
+  background: linear-gradient(135deg, #219150, #27ae60);
+}
+
+/* Table */
+.Final-Uru-Table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.05);
+  overflow: hidden;
+}
+
+.Final-Uru-Table-Header {
+  background-color: #34495e;
+  color: #ecf0f1;
+  padding: 14px;
+  font-weight: 600;
+  border: 1px solid #dcdcdc;
+  text-align: left;
+}
+
+.Final-Uru-Table-Data {
+  padding: 14px;
+  border: 1px solid #f0f0f0;
+  color: #333;
+  vertical-align: middle;
+}
+
+tr:nth-child(even) {
+  background-color: #f9fbfc;
+}
+
+tr:hover {
+  background-color: #f0f8ff;
+}
+
+/* File Upload */
+.Final-Uru-File-Input {
+  padding: 8px;
+  border: 1px solid #bbb;
+  border-radius: 6px;
+  background-color: #f8f8f8;
+  margin-bottom: 5px;
+}
+
+/* Buttons */
+.Final-Uru-Reupload-Button,
+.Final-Uru-Submit-Button,
+.Final-Uru-Delete-Button {
+  margin-top: 5px;
+  margin-right: 6px;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.Final-Uru-Reupload-Button {
+  background-color: #3498db;
+}
+
+.Final-Uru-Reupload-Button:hover {
+  background-color: #2980b9;
+}
+
+.Final-Uru-Submit-Button {
+  background-color: #2ecc71;
+}
+
+.Final-Uru-Submit-Button:hover {
+  background-color: #27ae60;
+}
+
+.Final-Uru-Delete-Button {
+  background-color: #e74c3c;
+}
+
+.Final-Uru-Delete-Button:hover {
+  background-color: #c0392b;
+}
+
+/* No Data Found */
+.Final-Uru-No-Data-Found {
+  text-align: center;
+  padding: 30px;
+  font-size: 18px;
+  color: #999;
+}
+
+/* Responsive Table Wrapper */
+.table-responsive {
+  overflow-x: auto;
+  border-radius: 10px;
+}
+
+/* Media Queries */
+@media only screen and (max-width: 768px) {
+  .Final-Uru-Search-Bar-Container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .Final-Uru-Search-Bar {
+    max-width: 100%;
+    width: 100%;
+  }
+  .Final-Uru-Download-Excel-Button {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .Final-Uru-Container {
+    background: white;
+    padding: 20px;
+  }
+  .Final-Uru-Heading {
+    font-size: 24px;
+  }
+  .Final-Uru-Table-Header {
+    padding: 10px;
+  }
+  .Final-Uru-Table-Data {
+    padding: 10px;
+  }
+}

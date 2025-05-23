@@ -7,14 +7,6 @@
   min-height: 100vh;
 }
 
-.Application-status-card {
-  padding: 40px 30px;
-  border-radius: 16px;
-  max-width: 900px;
-  width: 100%;
-  text-align: center;
-}
-
 .Application-status-heading {
   font-size: 32px;
   color: #2c3e50;
@@ -165,3 +157,309 @@
   }
 }
 
+
+.Application-status-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.Application-status-header-left,
+.Application-status-header-right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.Application-status-header-left {
+  align-items: flex-start;
+}
+
+.Application-status-header-right {
+  align-items: flex-end;
+}
+
+
+.Application-status-wrapper {
+  display: grid;
+  gap: 20px;
+  padding: 60px 20px;
+  background: linear-gradient(to right, #f1f1f1, #fafafa);
+  min-height: 100vh;
+}
+.Application-status-heading {
+  font-size: 32px;
+  color: #2c3e50;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.Application-status-description {
+  font-size: 16px;
+  color: #7f8c8d;
+  margin-bottom: 40px;
+}
+
+.Application-status-timeline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.Application-status-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 100px;
+  margin: 10px 0;
+}
+
+.Application-status-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  color: #fff;
+  font-size: 18px;
+}
+
+.Application-status-icon {
+  font-size: 20px;
+}
+
+.Application-status-line {
+  width: 40px;
+  height: 4px;
+  background-color: #bdc3c7;
+  margin: 0 10px;
+  border-radius: 2px;
+}
+
+.Application-status-circle.green {
+  background-color: #27ae60;
+}
+
+.Application-status-circle.yellow {
+  background-color: #f1c40f;
+}
+
+.Application-status-circle.blue {
+  background-color: #3498db;
+  cursor: pointer;
+}
+
+.Application-status-circle.blue:hover {
+  background-color: #2980b9;
+  transform: scale(1.1);
+}
+
+.Application-status-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.Application-status-header-left,
+.Application-status-header-right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.Application-status-header-left {
+  align-items: flex-start;
+}
+
+.Application-status-header-right {
+  align-items: flex-end;
+}
+
+.Application-status-label {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 7px;
+}
+
+
+/* Add media queries for responsiveness */
+
+@media (max-width: 1024px) {
+  .Application-status-wrapper {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .Application-status-wrapper {
+    grid-template-columns: repeat(1, 1fr);
+  }
+  .Application-status-card {
+    padding: 30px 20px;
+  }
+
+  .Application-status-heading {
+    font-size: 26px;
+  }
+
+  .Application-status-description {
+    font-size: 14px;
+    margin-bottom: 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .Application-status-wrapper {
+    padding: 40px 10px;
+  }
+
+  .Application-status-card {
+    padding: 20px 15px;
+  }
+
+  .Application-status-heading {
+    font-size: 22px;
+  }
+
+  .Application-status-description {
+    font-size: 13px;
+  }
+}
+.Application-status-circle.yellow {
+  background-color: #ffcc00;
+  color: white;
+}
+
+.Application-status-step.pending .Application-status-circle {
+  background-color: #ffcc00;
+}
+
+.Application-status-card {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  margin-bottom: 20px;
+   text-align: center;
+}
+
+.Application-status-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.Application-status-header-left,
+.Application-status-header-right {
+  display: flex;
+  flex-direction: column;
+}
+
+.Application-status-header-right {
+  align-items: flex-end;
+  position: relative;
+}
+
+.Application-status-options {
+  margin-top: 8px;
+  cursor: pointer;
+}
+
+.Application-status-options-icon {
+  font-size: 18px;
+  color: #666;
+}
+
+.Application-status-options-menu {
+  position: absolute;
+  top: 30px;
+  right: 0;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 8px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: none;
+}
+
+.Application-status-options:hover .Application-status-options-menu {
+  display: block;
+}
+
+.Application-status-options-menu a {
+  text-decoration: none;
+  color: #337ab7;
+  transition: color 0.2s ease;
+}
+
+.Application-status-options-menu a:hover {
+  color: #23527c;
+}
+
+.Application-status-description {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 20px;
+}
+.Application-status-info {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 12px 24px;
+  align-items: center;
+  background-color: #ffffff;
+  padding: 24px 32px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  margin-bottom: 20px;
+  border: 2px dashed #2c3e50;
+}
+.Application-status-info .Application-status-label {
+  text-align: right;
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 15px;
+  white-space: nowrap;
+}
+
+.Application-status-info .Application-status-value {
+  font-size: 15px;
+  color: #34495e;
+  font-weight: 500;
+  padding-left: 10px;
+  background-color: #c9d4e59d;
+  border-radius: 6px;
+  padding: 6px 10px;
+  transition: background-color 0.2s ease;
+}
+
+.Application-status-value {
+  font-size: 16px;
+  color: #333;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* Responsive support */
+@media (max-width: 600px) {
+  .Application-status-info {
+    padding: 20px;
+  }
+
+  .Application-status-info .Application-status-label {
+    text-align: left;
+  }
+
+  .Application-status-info .Application-status-value {
+    padding-left: 0;
+    margin-bottom: 10px;
+  }
+}

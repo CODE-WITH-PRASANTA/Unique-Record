@@ -1,22 +1,26 @@
 const jwt = require("jsonwebtoken");
+const User = require("../Model/User");
 
-const authenticateUser = (req, res, next) => {
-  const authHeader = req.header("Authorization");
+const authenticateUser = async (req, res, next) => {
+  try {
+    const authHeader = req.header("Authorization");
+    if (!authHeader?.startsWith("Bearer ")) {
+      return res.status(401).json({ message: "Authorization token required" });
+    }
 
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return res.status(401).json({ message: "Authorization token required" });
-  }
+    const token = authHeader.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-  const token = authHeader.split(" ")[1];
-
-  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-    if (err) {
+    const user = await User.findById(decoded.id);
+    if (!user || !user.tokens.includes(token)) {
       return res.status(401).json({ message: "Invalid or expired token" });
     }
 
-    req.user = decoded; // Attach user data to `req`
+    req.user = decoded;
     next();
-  });
+  } catch (error) {
+    res.status(401).json({ message: "Unauthorized", error });
+  }
 };
 
 module.exports = authenticateUser;

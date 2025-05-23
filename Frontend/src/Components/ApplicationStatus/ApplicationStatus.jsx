@@ -1,144 +1,211 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './ApplicationStatus.css';
-import { FaCheckCircle } from 'react-icons/fa';
+import { FaCheckCircle, FaEllipsisV } from 'react-icons/fa';
 import { MdPayment } from 'react-icons/md';
-import { API_URL } from '../../Api'; // Import API_URL
+import { API_URL } from '../../Api';
+import Swal from 'sweetalert2';
+
 
 const ApplicationStatus = () => {
-  const [status, setStatus] = useState('');
-  const [orderId, setOrderId] = useState('');
-  const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
-  const token = localStorage.getItem('token');
+  const [applications, setApplications] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const token = localStorage.getItem('token'); // assuming you're storing the token in local storage
 
   useEffect(() => {
-    const getStatus = async () => {
+    const fetchApplications = async () => {
       try {
-        const response = await axios.get(`${API_URL}/uru/application-status`, {
+        const response = await axios.get(`${API_URL}/uru/fetch-applied-uru-by-user`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-        setStatus(response.data.status);
+        setApplications(response.data);
       } catch (error) {
-        setError(error.message);
-      } finally {
-        setIsLoading(false);
+        console.error(error);
       }
     };
-    getStatus();
+    fetchApplications();
   }, []);
 
-  const handlePayment = async () => {
-    setIsProcessingPayment(true);
+  const handlePayment = async (applicationNumber) => {
     try {
-      const response = await axios.post(`${API_URL}/uru/create-order`, null, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+      const { data: appDetails } = await axios.get(`${API_URL}/uru/get-uru-by-application-number/${applicationNumber}`, {
+        headers: { Authorization: `Bearer ${token}` },
       });
-      setOrderId(response.data.id);
+
+      const { price, applicantName, emailId } = appDetails;
+
+     if (!price || price <= 0) {
+  Swal.fire({
+    title: "Please Wait for Approval",
+    html: `
+      <b>Your application is under review.</b><br>
+      Please wait <strong>24 hours</strong> for admin approval.<br>
+      Once approved, you will be able to make the payment.
+    `,
+    icon: "info",
+    confirmButtonText: "Okay",
+    confirmButtonColor: "#4CAF50",
+  });
+  return;
+}
+
+
+      // Step 1: Create Razorpay order
+      const { data: orderData } = await axios.post(
+        `${API_URL}/uru/create-razorpay-order`,
+        { applicationNumber },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
       const options = {
-        key: 'rzp_live_1gSA9RbSjj0sEj',
-        amount: response.data.amount,
-        currency: response.data.currency,
-        name: 'Unique Record Of Universe',
-        description: 'Payment for Application',
-        order_id: response.data.id,
+        key: "rzp_live_1gSA9RbSjj0sEj", // Store this securely in .env
+        amount: orderData.amount,
+        currency: "INR",
+        name: "URU Application",
+        description: "Application Payment",
+        order_id: orderData.orderId,
         handler: async (response) => {
-          try {
-            await axios.post(`${API_URL}/uru/verify-payment`, response, {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            });
-            alert('Payment successful');
-          } catch (error) {
-            setError(error.message);
-          } finally {
-            setIsProcessingPayment(false);
+          const verifyRes = await axios.post(
+            `${API_URL}/uru/verify-razorpay-payment`,
+            {
+              applicationNumber,
+              razorpayOrderId: response.razorpay_order_id,
+              razorpayPaymentId: response.razorpay_payment_id,
+              razorpaySignature: response.razorpay_signature,
+            },
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+
+          if (verifyRes.data.success) {
+            alert("Payment successful!");
+            setApplications((prev) =>
+              prev.map((a) => (a.applicationNumber === applicationNumber ? { ...a, status: "Paid" } : a))
+            );
+          } else {
+            alert("Payment verification failed");
           }
         },
         prefill: {
-          name: 'Your Name',
-          email: 'your.email@example.com',
-          contact: '9999999999',
+          name: applicantName,
+          email: emailId,
         },
-        theme: {
-          color: '#F37254',
-        },
+        theme: { color: "#3399cc" },
       };
+
       const rzp = new window.Razorpay(options);
       rzp.open();
-    } catch (error) {
-      setError(error.message);
-      setIsProcessingPayment(false);
-    }
+    } catch (err) {
+  console.error(err);
+  Swal.fire({
+    title: "Payment Status",
+    html: `
+      <b>Payment Already Done!</b><br>
+      Please wait 24 hours to verify and receive your certificate.
+    `,
+    icon: "info",
+    confirmButtonText: "Okay",
+    confirmButtonColor: "#4CAF50",
+  });
+  }
   };
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
 
   return (
     <div className="Application-status-wrapper">
-      <div className="Application-status-card">
-        <h2 className="Application-status-heading">Application Status Tracker</h2>
-        <p className="Application-status-description">
-          Follow your application's journey from submission to final payment. Stay updated every step of the way.
-        </p>
+     {applications.map((application) => (
+        <div key={application.applicationNumber} className="Application-status-card">
+          <div className="Application-status-header">
+            <div className="Application-status-header-left">
+              <p className="Application-status-label">Application No.</p>
+              <p className="Application-status-value">{application.applicationNumber}</p>
+            </div>
+            <div className="Application-status-header-right">
+              <p className="Application-status-label">Applicant Name</p>
+              <p className="Application-status-value">{application.applicantName}</p>
+              <div className="Application-status-options">
+                <FaEllipsisV className="Application-status-options-icon" />
+                <div className="Application-status-options-menu">
+                  <a href={`${API_URL}/uru/download-application-form/${application.applicationNumber}`} target="_blank" rel="noopener noreferrer">
+                    Download Application Form
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
 
-        <div className="Application-status-timeline">
-          <div className={`Application-status-step ${status === 'Pending' || status === 'Approved' || status === 'Paid' ? 'completed' : ''}`}>
-            <div className="Application-status-circle green">
+          <h2 className="Application-status-heading">Application Status Tracker</h2>
+          <p className="Application-status-description">
+            Follow your application's journey from submission to final payment. Stay updated every step of the way.
+          </p>
+
+        <div className="Application-status-info">
+            <p className="Application-status-label">Position:</p>
+            <p className="Application-status-value">{application.position}</p>
+            <p className="Application-status-label">Payment Status:</p>
+            <p className="Application-status-value">{application.paymentStatus}</p>
+          </div>
+
+          <div className="Application-status-timeline">
+            <div className={`Application-status-step ${['Pending', 'Approved', 'Paid'].includes(application.status) ? 'completed' : ''}`}>
+              <div className="Application-status-circle green">
+                <FaCheckCircle className="Application-status-icon" />
+              </div>
+              <p className="Application-status-label">Application Submitted</p>
+            </div>
+
+            <div className="Application-status-line" />
+
+            <div className={`Application-status-step ${['Approved', 'Paid'].includes(application.status) ? 'completed' : ''}`}>
+              <div className="Application-status-circle green">
+                <FaCheckCircle className="Application-status-icon" />
+              </div>
+              <p className="Application-status-label"> URU Investigator Checks  </p>
+            </div>
+
+            <div className="Application-status-line" />
+
+            <div className={`Application-status-step ${['Approved', 'Paid'].includes(application.status) ? 'completed' : ''}`}>
+              <div className="Application-status-circle green">
+                <FaCheckCircle className="Application-status-icon" />
+              </div>
+              <p className="Application-status-label">Document Verified</p>
+            </div>
+
+            <div className="Application-status-line" />
+
+           <div className={`Application-status-step final ${['Approved', 'Paid'].includes(application.status) ? 'completed' : application.status === 'Pending' ? 'pending' : ''}`}>
+            <div className={`Application-status-circle ${
+              application.status === 'Approved' ? 'green' :
+              application.status === 'Pending' ? 'yellow' :
+              application.status === 'Paid' ? 'green' : ''
+            }`}>
               <FaCheckCircle className="Application-status-icon" />
             </div>
-            <p className="Application-status-label">Application Submitted</p>
+            <p className="Application-status-label">
+              {application.status === 'Approved' ? 'Approved' :
+              application.status === 'Pending' ? 'Pending Approval' :
+              application.status === 'Paid' ? 'Approved & Paid' : ''}
+            </p>
           </div>
 
-          <div className="Application-status-line" />
-
-          <div className={`Application-status-step ${status === 'Approved' || status === 'Paid' ? 'completed' : ''}`}>
-            <div className="Application-status-circle green">
-              <FaCheckCircle className="Application-status-icon" />
+            <div className="Application-status-line" />
+            <div className={`Application-status-step payment ${application.status === 'Paid' ? 'completed' : ''}`}>
+              <div className="Application-status-circle blue" onClick={() => handlePayment(application.applicationNumber, application.price)}>
+                <MdPayment className="Application-status-icon" />
+              </div>
+              <p className="Application-status-label">Make Payment</p>
             </div>
-            <p className="Application-status-label">HR Approved</p>
           </div>
 
-          <div className="Application-status-line" />
-
-          <div className={`Application-status-step ${status === 'Approved' || status === 'Paid' ? 'completed' : ''}`}>
-            <div className="Application-status-circle green">
-              <FaCheckCircle className="Application-status-icon" />
+          {application.status === 'Paid' && (
+            <div className="payment-successful">
+              <p>Thank you for your payment!</p>
             </div>
-            <p className="Application-status-label">Document Verified</p>
-          </div>
-
-          <div className="Application-status-line" />
-
-          <div className={`Application-status-step final ${status === 'Approved' || status === 'Paid' ? 'completed' : ''}`}>
-            <div className={`Application-status-circle ${status === 'Approved' ? 'yellow' : status === 'Paid' ? 'green' : ''}`}>
-              <FaCheckCircle className="Application-status-icon" />
-            </div>
-            <p className="Application-status-label">Approved</p>
-          </div>
-
-          <div className="Application-status-line" />
-
-          <div className={`Application-status-step payment ${status === 'Paid' ? 'completed' : ''}`}>
-            <div className="Application-status-circle blue" onClick={handlePayment}>
-              <MdPayment className="Application-status-icon" />
-            </div>
-            <p className="Application-status-label">Make Payment</p>
-          </div>
+          )}
         </div>
-      </div>
+      ))}
     </div>
   );
 };

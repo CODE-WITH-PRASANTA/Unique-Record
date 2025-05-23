@@ -19,6 +19,8 @@ const photoRoutes = require("./Routes/photoRoutes");
 const blogRoutes = require("./Routes/blogRoutes");
 const blogUserRoutes = require("./Routes/BlogUserRoutes");
 const uruRoutes = require("./Routes/uruRoutes");
+const categoryRoutes = require("./Routes/categoryRoutes");
+const achievementRoutes = require('./Routes/achievementRoutes');
 
 
 
@@ -48,16 +50,14 @@ app.use("/api/photos", photoRoutes);
 app.use("/api/blogs", blogRoutes);
 app.use("/api/user/blog", blogUserRoutes);
 app.use("/api/uru", uruRoutes);
-
+app.use('/api/categories', categoryRoutes);
+app.use('/api/achievements', achievementRoutes);
 
 
 
 app.get('/', (req, res) => {
     res.send('Server is running...');
   });
-
-
-
 
 const PORT = process.env.PORT || 5005;
 app.listen(PORT, () => {

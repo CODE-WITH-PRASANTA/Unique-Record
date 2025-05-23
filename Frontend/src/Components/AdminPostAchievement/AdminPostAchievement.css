@@ -1,0 +1,161 @@
+/* Container */
+.achivement-post-container {
+  max-width: 1500px;
+  padding: 30px;
+  background: linear-gradient(135deg, #f9fafd, #e6f0ff);
+  border: 1px solid #d0e1ff;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+}
+
+/* Heading */
+.achivement-post-heading {
+  text-align: center;
+  font-size: 26px;
+  font-weight: 600;
+  margin-bottom: 30px;
+  color: #2e6da4;
+  letter-spacing: 1px;
+}
+
+/* Form */
+.achivement-post-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Form group */
+.achivement-post-form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Label */
+.achivement-post-label {
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #333;
+  font-size: 14px;
+}
+
+/* Input, Select, Textarea */
+.achivement-post-input,
+.achivement-post-select,
+.achivement-post-textarea {
+  padding: 12px;
+  font-size: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  background-color: #fff;
+}
+
+.achivement-post-input:focus,
+.achivement-post-select:focus,
+.achivement-post-textarea:focus {
+  border-color: #5b9bd5;
+  outline: none;
+  box-shadow: 0 0 5px rgba(91, 155, 213, 0.3);
+}
+
+/* Textarea */
+.achivement-post-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* File Upload */
+.achivement-post-file {
+  padding: 10px 0;
+  font-size: 14px;
+}
+
+/* Button */
+.achivement-post-button {
+  padding: 12px;
+  font-size: 16px;
+  background-color: #2e6da4;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.achivement-post-button:hover {
+  background-color: #245a8d;
+}
+.achivement-post-success-alert {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 12px 16px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  font-weight: bold;
+  border: 1px solid #c3e6cb;
+}
+
+.achivement-post-tag {
+  background: #6c63ff;
+  color: #000000;
+  border-radius: 4px;
+  padding: 5px 10px;
+  margin-right: 5px;
+}
+
+.achivement-post-tags-input input {
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+
+/* Media Queries */
+@media (max-width: 1200px) {
+  .achivement-post-container {
+    max-width: 1000px;
+  }
+}
+
+@media (max-width: 992px) {
+  .achivement-post-container {
+    max-width: 800px;
+  }
+  .achivement-post-form {
+    gap: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .achivement-post-container {
+    max-width: 600px;
+  }
+  .achivement-post-form {
+    gap: 10px;
+  }
+  .achivement-post-input,
+  .achivement-post-select,
+  .achivement-post-textarea {
+    padding: 10px;
+  }
+}
+
+@media (max-width: 576px) {
+  .achivement-post-container {
+    max-width: 100%;
+    padding: 20px;
+  }
+  .achivement-post-form {
+    gap: 10px;
+  }
+  .achivement-post-input,
+  .achivement-post-select,
+  .achivement-post-textarea {
+    padding: 8px;
+  }
+  .achivement-post-button {
+    padding: 10px;
+  }
+}

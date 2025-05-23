@@ -1,0 +1,132 @@
+.manage-achievements-container {
+  padding: 2rem;
+  background: #f9f9f9;
+  min-height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.manage-achievements-header {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #e94e77;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.manage-achievements-table-container {
+  overflow-x: auto;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background: #fff;
+  border-radius: 10px;
+}
+
+.manage-achievements-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px;
+}
+
+.manage-achievements-table-head {
+  background-color: #e0e0e0;
+}
+
+.manage-achievements-table-header {
+  padding: 12px 16px;
+  text-align: center;
+  font-weight: 600;
+  color: #333;
+  border-bottom: 2px solid #ccc;
+}
+
+.manage-achievements-table-body tr:nth-child(even) {
+  background-color: #f4f4f4;
+}
+
+.manage-achievements-table-row:hover {
+  background-color: #f0f8ff;
+}
+
+.manage-achievements-table-data {
+  padding: 10px 16px;
+  text-align: center;
+  color: #444;
+  border-bottom: 1px solid #ddd;
+}
+
+.manage-achievements-image {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid #ccc;
+  transition: transform 0.3s ease;
+}
+
+.manage-achievements-image:hover {
+  transform: scale(1.1);
+  border-color: #e94e77;
+}
+
+.manage-achievements-change-image-input {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: #fafafa;
+  transition: 0.3s ease;
+}
+
+.manage-achievements-change-image-input:hover {
+  background-color: #e3f2fd;
+}
+
+.manage-achievements-actions-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.manage-achievements-delete-btn {
+  padding: 6px 14px;
+  background-color: #ff5252;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.manage-achievements-delete-btn:hover {
+  background-color: #d32f2f;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+  .manage-achievements-header {
+    font-size: 1.5rem;
+  }
+
+  .manage-achievements-table {
+    min-width: 100%;
+  }
+
+  .manage-achievements-table-data,
+  .manage-achievements-table-header {
+    font-size: 0.9rem;
+    padding: 8px;
+  }
+
+  .manage-achievements-image {
+    width: 50px;
+    height: 50px;
+  }
+
+  .manage-achievements-actions-container {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .manage-achievements-delete-btn {
+    width: 100%;
+  }
+}

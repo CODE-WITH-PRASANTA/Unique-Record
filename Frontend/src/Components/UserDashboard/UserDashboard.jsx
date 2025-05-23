@@ -1,20 +1,19 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "axios"; 
 import "./UserDashboard.css";
 import img1 from "../../assets/left.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
-import { API_URL } from '../../Api';
-
-
 import {
   faFacebookF,
   faXTwitter,
   faInstagram,
   faTiktok,
 } from "@fortawesome/free-brands-svg-icons";
+import { API_URL } from '../../Api';
 
 const UserDashboard = () => {
+  const [categories, setCategories] = useState([]);
   const [step, setStep] = useState(1);
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -24,6 +23,7 @@ const UserDashboard = () => {
     dateOfBirth: "",
     address: "",
     district: "",
+    country: "", // changed to lowercase 'c'
     state: "",
     pinCode: "",
     educationalQualification: "",
@@ -48,7 +48,31 @@ const UserDashboard = () => {
     photo: null,
     video: null,
     document: null,
+    witness1Name: "",
+    witness1Designation: "",
+    witness1Address: "",
+    witness1MobileNumber: "",
+    witness1EmailId: "",
+    witness2Name: "",
+    witness2Designation: "",
+    witness2Address: "",
+    witness2MobileNumber: "",
+    witness2EmailId: "",
+    position: "", // added position field
   });
+
+
+useEffect(() => {
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/categories`);
+      setCategories(response.data);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  };
+  fetchCategories();
+}, []);
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -67,61 +91,42 @@ const UserDashboard = () => {
     setStep((prevStep) => prevStep - 1);
   };
 
-  const handleFinalSubmit = (e) => {
+  const handleFinalSubmit = async (e) => {
     e.preventDefault();
     if (termsAccepted) {
-      submitForm();
+      try {
+        const formDataToSend = new FormData();
+        Object.keys(formData).forEach((key) => {
+          if (key === "photo" || key === "video" || key === "document") {
+            formDataToSend.append(key, formData[key]);
+          } else {
+            formDataToSend.append(key, formData[key]);
+          }
+        });
+        
+        const token = localStorage.getItem("token");
+        const response = await axios.post(`${API_URL}/uru/create-uru`, formDataToSend, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        
+        if (response.status === 201) {
+          setSubmitted(true);
+        } else {
+          console.error("Error submitting form:", response);
+        }
+      } catch (error) {
+        console.error("Error submitting form:", error);
+      }
     } else {
       alert("Please accept the Terms and Conditions before submitting.");
     }
   };
 
-
-const submitForm = async () => {
-  try {
-    const token = localStorage.getItem("token"); 
-    const form = new FormData();
-    Object.keys(formData).forEach((key) => {
-      if (key === "photo" || key === "video" || key === "document") {
-        if (formData[key] !== null) {
-          form.append(key, formData[key]);
-        }
-      } else {
-        form.append(key, formData[key]);
-      }
-    });
-    const response = await axios.post(`${API_URL}/uru/create-uru`, form, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    if (response.status === 201) {
-      setSubmitted(true);
-    } else {
-      alert("Error submitting form");
-    }
-  } catch (error) {
-    console.error("Error submitting form:", error);
-    alert("Error submitting form");
-  }
-};
-
-
-  const progressStep = Math.min(Math.max(step - 1, 0), 4);
-  const progressPercent = (progressStep / 4) * 100;
-
-  useEffect(() => {
-    let timer;
-    if (submitted) {
-      timer = setTimeout(() => {
-        setStep(1);
-        setSubmitted(false);
-        setTermsAccepted(false);
-      }, 5000);
-    }
-    return () => clearTimeout(timer);
-  }, [submitted]);
+  const progressStep = Math.min(Math.max(step - 1, 0), 5);
+  const progressPercent = (progressStep / 5) * 100;
 
   return (
     <>
@@ -141,16 +146,17 @@ const submitForm = async () => {
           <h1 className="achievement-form-heading">Unique Record Of Universe</h1>
 
           <p className="achievement-form-description">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate maiores odit impedit consequatur? Sequi reiciendis velit ab delectus quam suscipit ullam incidunt, tempora harum sapiente cumque animi eum dolore veniam eveniet soluta mollitia quibusdam! Placeat earum inventore ipsum pariatur sit laboriosam animi repudiandae natus laudantium consectetur, fugit illo corporis blanditiis, vel possimus deserunt vero, repellendus aspernatur modi beatae autem? Quam!
+          Unique Records Universe (URU) aims to provide a global platform and recognition to extraordinary, inspiring, verifiable human achievements, natural phenomena and innovations from around the world by digitally cataloguing them. Our aim is to preserve unique records or activities for positive inspiration to future generations with inclusive, transparent and ethical standards.
           </p>
         </div>
 
         <div className="right-panel">
           <div className="form-achivment-container">
-            <h2 className="heading">Apply for URU</h2>
+            <h2 className="heading">Apply Online Appliction Form</h2>
+            <small className="Sub-heading">Apply online to have your unique record or activity registered in the digital archives of the universe</small>
 
             <div className="progress-bar-achivment-container">
-              <div className="progress-text">{progressStep} of 4 completed</div>
+              <div className="progress-text">{progressStep} of 5 completed</div>
               <div className="progress-bar">
                 <div className="progress-fill" style={{ width: `${progressPercent}%` }}></div>
               </div>
@@ -159,16 +165,16 @@ const submitForm = async () => {
             {step === 1 && (
               <>
                 <p className="paragraph">Select the position you are applying for:</p>
-                <form onSubmit={handleNext}>
+                <form onSubmit={handleNext} >
                   <label className="radio-box">
-                    <input type="radio" name="position" />
+                    <input type="radio" name="position" value="Unique Record" onChange={handleInputChange} />
                     <span>Unique Record</span>
                   </label>
                   <label className="radio-box">
-                    <input type="radio" name="position" />
+                    <input type="radio" name="position" value="Unique Activity" onChange={handleInputChange} />
                     <span>Unique Activity</span>
                   </label>
-                  <small>* Start branch radio based</small>
+                  <small>* Start  Choose branch radio based</small>
                   <div className="form-footer">
                     <button type="submit" className="next-button">Next</button>
                   </div>
@@ -211,6 +217,10 @@ const submitForm = async () => {
                       <input type="text" name="state" value={formData.state} onChange={handleInputChange} required />
                     </div>
                     <div className="achivment-form-group">
+                      <label>Country*</label>
+                      <input type="text" name="country" value={formData.country} onChange={handleInputChange} required />
+                    </div>
+                    <div className="achivment-form-group">
                       <label>Pin Code*</label>
                       <input type="text" name="pinCode" value={formData.pinCode} onChange={handleInputChange} required />
                     </div>
@@ -245,13 +255,16 @@ const submitForm = async () => {
                 <form className="personal-form" onSubmit={handleNext}>
                   <div className="grid-form">
                     <div className="achivment-form-group">
-                      <label>Record/Activity Category*</label>
-                      <select name="recordCategory" value={formData.recordCategory} onChange={handleInputChange} required>
-                        <option value="">Select</option>
-                        <option value="individual">Individual Effort</option>
-                        <option value="group">Group Effort</option>
-                      </select>
-                    </div>
+  <label>Effort Type *</label>
+  <select name="recordCategory" value={formData.recordCategory} onChange={handleInputChange} required>
+    <option value="">Select</option>
+    <option value="individual">Individual Effort</option>
+    <option value="group">Group Effort</option>
+    {categories.map((category) => (
+      <option key={category._id} value={category.name}>{category.name}</option>
+    ))}
+  </select>
+</div>
                     <div className="achivment-form-group">
                       <label>Record/Activity Title*</label>
                       <input type="text" name="recordTitle" value={formData.recordTitle} onChange={handleInputChange} required />
@@ -261,7 +274,7 @@ const submitForm = async () => {
                       <textarea name="recordDescription" value={formData.recordDescription} onChange={handleInputChange} required />
                     </div>
                     <div className="achivment-form-group">
-                      <label>Purpose of the Record Attempt*</label>
+                      <label>Purpose of the Record/Activity Attempt*</label>
                       <textarea name="purposeOfRecordAttempt" value={formData.purposeOfRecordAttempt} onChange={handleInputChange} required />
                     </div>
                     <div className="achivment-form-group">
@@ -287,7 +300,8 @@ const submitForm = async () => {
 
             {step === 4 && (
               <>
-                <p className="section-title">Provide Record/Activity Links and Upload Documents:</p>
+                <p className="section-title"><h2 className="evidence-heading">Evidence :</h2> 
+                  You should attach full details of evidence related to your achievements, photographs, biodata including newspaper cuttings and various types of social media and web links.</p>
                 <form className="personal-form" onSubmit={handleNext}>
                   <div className="grid-form">
                     <div className="achivment-form-group">
@@ -308,7 +322,7 @@ const submitForm = async () => {
                     </div>
                     <div className="achivment-form-group">
                       <label>LinkedIn Link</label>
-                      <input type="url" name="linkedInLink" value={formData.linkedInLink} onChange={handleInputChange} />
+                      <input type="url" name="linkedInLink" value={formData.linkedInLink} onClick={handleInputChange} />
                     </div>
                     <div className="achivment-form-group">
                       <label>X Link</label>
@@ -343,7 +357,60 @@ const submitForm = async () => {
               </>
             )}
 
-            {step === 5 && !submitted && (
+            {step === 5 && (
+              <>
+                <p className="section-title">Witness Details (Optional):</p>
+                <form className="personal-form" onSubmit={handleNext}>
+                  <div className="grid-form">
+                    <h3>Witness 1</h3>
+                    <div className="achivment-form-group">
+                      <label>Name of Witness 1</label>
+                      <input type="text" name="witness1Name" value={formData.witness1Name} onChange={handleInputChange} />
+                    </div>
+                    <div className="achivment-form-group">
+                      <label>Witness Designation</label>
+                      <input type="text" name="witness1Designation" value={formData.witness1Designation} onChange={handleInputChange} />
+                    </div>
+                    <div className="achivment-form-group">
+                      <label>Witness Address</label>
+                      <input type="text" name="witness1Address" value={formData.witness1Address} onChange={handleInputChange} />
+                    </div>
+                    <div className="achivment-form-group">
+                      <label>Witness Mobile Number</label>
+                      <input type="tel" name="witness1MobileNumber" value={formData.witness1MobileNumber} onChange={handleInputChange} />
+                    </div>
+                    <div className="achivment-form-group">
+                      <label>Witness Email ID</label>
+                      <input type="email" name="witness1EmailId" value={formData.witness1EmailId} onChange={handleInputChange} />
+                    </div>
+
+                    <h3>Witness 2</h3>
+                    <div className="achivment-form-group">
+                      <label>Name of Witness 2</label>
+                      <input type="text" name="witness2Name" value={formData.witness2Name} onChange={handleInputChange} />
+                    </div>
+                    <div className="achivment-form-group">
+                      <label>Witness Designation</label>
+                      <input type="text" name="witness2Designation" value={formData.witness2Designation} onChange={handleInputChange} />
+                    </div>
+                                        <div className="achivment-form-group">
+                      <label>Witness Mobile Number</label>
+                      <input type="tel" name="witness2MobileNumber" value={formData.witness2MobileNumber} onChange={handleInputChange} />
+                    </div>
+                    <div className="achivment-form-group">
+                      <label>Witness Email ID</label>
+                      <input type="email" name="witness2EmailId" value={formData.witness2EmailId} onChange={handleInputChange} />
+                    </div>
+                  </div>
+                  <div className="form-footer">
+                    <button type="button" className="prev-button" onClick={handlePrevious}>← Previous</button>
+                    <button type="submit" className="next-button">Next</button>
+                  </div>
+                </form>
+              </>
+            )}
+
+            {step === 6 && !submitted && (
               <form className="thank-you-achivment-container" onSubmit={handleFinalSubmit}>
                 <h2 className="heading">Thank you for your time</h2>
                 <p className="paragraph">We will contact you shortly at the following email address <strong>{formData.emailId}</strong></p>
@@ -367,7 +434,7 @@ const submitForm = async () => {
                     <FontAwesomeIcon icon={faCircleCheck} size="3x" color="#14b866" />
                   </div>
                   <h2 className="heading">Request successfully sent!</h2>
-                  <p className="paragraph">You will be redirect back in 5 seconds</p>
+                  <p className="paragraph">You will be see the submission successfull.</p>
                 </div>
               </div>
             )}

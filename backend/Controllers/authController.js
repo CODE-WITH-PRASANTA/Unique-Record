@@ -45,24 +45,17 @@ exports.login = async (req, res) => {
       $or: [{ email: emailOrPhone }, { phoneNumber: emailOrPhone }],
     });
 
-    if (!user) {
-      return res.status(400).json({ message: "Invalid credentials" });
-    }
+    if (!user) return res.status(400).json({ message: "Invalid credentials" });
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ message: "Invalid credentials" });
-    }
+    if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
-    // Update last login timestamp
-    const currentDate = new Date();
-    user.lastLogin = currentDate;
+    // Save the token
+    user.tokens.push(token);
+    user.lastLogin = new Date();
     await user.save();
-
-    // Format lastLogin date for better readability
-    const formattedLastLogin = `${currentDate.getDate().toString().padStart(2, "0")}-${(currentDate.getMonth() + 1).toString().padStart(2, "0")}-${currentDate.getFullYear()} ${currentDate.getHours().toString().padStart(2, "0")}:${currentDate.getMinutes().toString().padStart(2, "0")}:${currentDate.getSeconds().toString().padStart(2, "0")}`;
 
     res.json({
       token,
@@ -71,7 +64,7 @@ exports.login = async (req, res) => {
         fullName: user.fullName,
         email: user.email,
         uniqueId: user.uniqueId,
-        lastLogin: formattedLastLogin, // Send formatted date
+        lastLogin: user.lastLogin.toLocaleString(),
       },
     });
 
@@ -79,6 +72,8 @@ exports.login = async (req, res) => {
     res.status(500).json({ message: "Server error", error });
   }
 };
+
+
 
 exports.getUser = async (req, res) => {
   try {
@@ -93,32 +88,26 @@ exports.getUser = async (req, res) => {
 exports.logout = async (req, res) => {
   try {
     const authHeader = req.header("Authorization");
-
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return res.status(401).json({ message: "Authorization token required" });
+    if (!authHeader?.startsWith("Bearer ")) {
+      return res.status(401).json({ message: "Token missing" });
     }
 
     const token = authHeader.split(" ")[1];
 
-    console.log("Received Token in Backend:", token);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.id);
+    if (!user) return res.status(401).json({ message: "User not found" });
 
-    // Verify token
-    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-      if (err) {
-        return res.status(401).json({ message: "Invalid or expired token" });
-      }
+    // Remove current token
+    user.tokens = user.tokens.filter((t) => t !== token);
+    await user.save();
 
-      console.log("Decoded Token:", decoded);
-
-      // Blacklist the token
-      tokenBlacklist.add(token);
-      res.status(200).json({ message: "User logged out successfully" });
-    });
+    res.json({ message: "Logout successful" });
   } catch (error) {
-    console.error("Logout error:", error);
-    res.status(500).json({ message: "Server error", error });
+    res.status(401).json({ message: "Invalid or expired token", error });
   }
 };
+
 
 
 // ✅ Middleware to check if token is blacklisted

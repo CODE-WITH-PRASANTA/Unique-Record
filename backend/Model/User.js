@@ -7,7 +7,9 @@ const UserSchema = new mongoose.Schema(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     uniqueId: { type: String, required: true, unique: true }, // Unique User ID
-    lastLogin: { type: Date, default: null } // Last login timestamp
+    lastLogin: { type: Date, default: null } , // Last login timestamp
+      tokens: [String], // Store active tokens
+
   },
   { timestamps: true }
 );

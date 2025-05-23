@@ -33,6 +33,10 @@ import AdminManageTeamMembers from '../../Components/AdminManageTeamMembers/Admi
 import AproveBlogs from '../../Components/AproveBlogs/AproveBlogs';
 import ManageURU from '../../Components/ManageURU/ManageURU';
 import ApproveURU from '../../Components/ApproveURU/ApproveURU';
+import FinalURU from '../../Components/FinalURU/FinalURU';
+import AdminPostAchievement from '../../Components/AdminPostAchievement/AdminPostAchievement';
+import AdminManageAchievements from '../../Components/AdminManageAchievements/AdminManageAchievements';
+import AdminManageCategories from '../../Components/AdminManageCategories/AdminManageCategories';
 
 const NAVIGATION = [
   {
@@ -47,10 +51,10 @@ const NAVIGATION = [
   {
     kind: 'divider',
   },
-  {
-    kind: 'header',
-    title: 'Blog Section',
-  },
+  // {
+  //   kind: 'header',
+  //   title: 'Blog Section',
+  // },
   {
     segment: 'blog',
     title: 'Blog',
@@ -68,18 +72,18 @@ const NAVIGATION = [
       },
     ],
   },
-  {
-    kind: 'divider',
-  },
-  {
-    kind: 'header',
-    title: 'Approve Blogs',
-  },
-  {
-    segment: 'approve-blogs',
-    title: 'Approve Blogs',
-    icon: <CheckCircleIcon style={{ color: '#4caf50' }} />, // Green color for approved feeling
-  },
+  // {
+  //   kind: 'divider',
+  // },
+  // {
+  //   kind: 'header',
+  //   title: 'Approve Blogs',
+  // },
+  // {
+  //   segment: 'approve-blogs',
+  //   title: 'Approve Blogs',
+  //   icon: <CheckCircleIcon style={{ color: '#4caf50' }} />, // Green color for approved feeling
+  // },
   {
   kind: 'header',
   title: 'URU Management',
@@ -99,8 +103,39 @@ const NAVIGATION = [
       title: 'Approve URU',
       icon: <CheckCircleIcon style={{ color: '#4caf50' }} />,
     },
+     {
+        segment: 'final-uru',
+        title: 'Final URU',
+        icon: <CheckCircleIcon style={{ color: '#8bc34a' }} />, // You can use a different icon
+      },
   ],
 },
+
+ {
+    kind: 'divider',
+  },
+  {
+    kind: 'header',
+    title: 'Achievements',
+  },
+  {
+    segment: 'achievements',
+    title: 'Achievements',
+    icon: <DashboardIcon style={{ color: '#8bc34a' }} />, 
+    children: [
+      {
+        segment: 'post',
+        title: 'Post Achievement',
+        icon: <AddCircleIcon style={{ color: '#4caf50' }} />,
+      },
+      {
+        segment: 'manage',
+        title: 'Manage Achievements',
+        icon: <ListIcon style={{ color: '#2196f3' }} />,
+      },
+    ],
+  },
+
   {
     kind: 'divider',
   },
@@ -208,6 +243,18 @@ const NAVIGATION = [
   },
   {
     kind: 'header',
+    title: 'Category Manage',
+  },
+  {
+    segment: 'category',
+    title: 'Manage Categories',
+    icon: <ListIcon style={{ color: '#2196f3' }} />, 
+  },
+  {
+    kind: 'divider',
+  },
+  {
+    kind: 'header',
     title: 'Donation Manage',
   },
   {
@@ -254,6 +301,8 @@ const NAVIGATION = [
         title: 'Photo Manage',
         icon: <PhotoLibraryIcon style={{ color: '#3f51b5' }} />,
       },
+
+
     ],
   },
 
@@ -322,8 +371,8 @@ export default function DashboardLayoutBasic({ window }) {
         <DashboardLayout>
           <PageContainer>
             {router.pathname === '/dashboard' && <AdminDashboard />}
-            {router.pathname === '/blog/create' && <CreateBlog />}
-            {router.pathname === '/blog/edit' && <AdminEditBlogs />}
+            {/* {router.pathname === '/blog/create' && <CreateBlog />} */}
+            {/* {router.pathname === '/blog/edit' && <AdminEditBlogs />} */}
             {router.pathname === '/notice/add' && <AdminAddNotice />} 
             {router.pathname === '/notice/manage' && <AdminManageNotice />}
             {router.pathname === '/event/add' && <AdminAddEvent />}
@@ -340,6 +389,11 @@ export default function DashboardLayoutBasic({ window }) {
             {router.pathname === '/approve-blogs' && <AproveBlogs />}
             {router.pathname === '/uru/manage-uru' && <ManageURU />}
             {router.pathname === '/uru/approve-uru' && <ApproveURU />}
+            {router.pathname === '/uru/final-uru' && <FinalURU />} 
+            {router.pathname === '/achievements/post' && <AdminPostAchievement />}
+            {router.pathname === '/achievements/manage' && <AdminManageAchievements />}
+            {router.pathname === '/category' && <AdminManageCategories />}
+
           </PageContainer>
         </DashboardLayout>
       </AppProvider>

@@ -1,24 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './ApproveURU.css';
-import { API_URL } from '../../Api'; // Import API_URL
+import { API_URL } from '../../Api';
 import * as XLSX from 'xlsx';
 
 const ApproveURU = () => {
   const [urus, setUrus] = useState([]);
-  const [prices, setPrices] = useState({});
-  const [priceUpdateDates, setPriceUpdateDates] = useState({});
-  const [filterStatus, setFilterStatus] = useState('');
   const [filteredUrus, setFilteredUrus] = useState([]);
+  const [filterStatus, setFilterStatus] = useState('');
+  const [prices, setPrices] = useState({});
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    const token = localStorage.getItem('token');
     const fetchApprovedUrus = async () => {
       try {
-        const response = await axios.get(`${API_URL}/uru/get-all-approved-urus`);
+        const response = await axios.get(`${API_URL}/uru/fetch-approved-uru`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         setUrus(response.data);
         setFilteredUrus(response.data);
       } catch (error) {
-        console.error(error);
+        setError(error.message);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchApprovedUrus();
@@ -32,27 +40,30 @@ const ApproveURU = () => {
     setFilteredUrus(filtered);
   }, [filterStatus, urus]);
 
-  const handlePriceChange = (id, newPrice) => {
-    setPrices((prevPrices) => ({ ...prevPrices, [id]: newPrice }));
+  const handlePriceChange = (applicationNumber, newPrice) => {
+    if (!isNaN(newPrice)) {
+      setPrices((prevPrices) => ({ ...prevPrices, [applicationNumber]: newPrice }));
+    }
   };
 
-  const handleSubmit = async (id) => {
+  const handleSubmit = async (applicationNumber) => {
     try {
-      const response = await axios.put(`${API_URL}/uru/update-uru-price/${id}`, {
-        price: prices[id],
+      const token = localStorage.getItem('token');
+      const response = await axios.put(`${API_URL}/uru/update-price`, {
+        applicationNumber,
+        price: prices[applicationNumber],
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
       setUrus((prevUrus) =>
         prevUrus.map((uru) =>
-          uru._id === id ? { ...uru, priceUpdated: true } : uru
+          uru.applicationNumber === applicationNumber ? { ...uru, priceUpdated: true, price: prices[applicationNumber] } : uru
         )
       );
-      setPriceUpdateDates((prevDates) => ({
-        ...prevDates,
-        [id]: new Date().toLocaleString(),
-      }));
-      console.log(response.data);
     } catch (error) {
-      console.error(error);
+      setError(error.message);
     }
   };
 
@@ -66,6 +77,15 @@ const ApproveURU = () => {
     XLSX.utils.book_append_sheet(workbook, worksheet, 'URUs');
     XLSX.writeFile(workbook, `URUs_${new Date().toLocaleDateString()}.xlsx`);
   };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
 
   return (
     <div className="Approve-URU-container">
@@ -90,49 +110,47 @@ const ApproveURU = () => {
           <thead>
             <tr>
               <th className="Approve-URU-table-header">Serial No.</th>
-              <th className="Approve-URU-table-header">Unique ID</th>
+              <th className="Approve-URU-table-header">Application Number</th>
               <th className="Approve-URU-table-header">Name</th>
               <th className="Approve-URU-table-header">Price</th>
+              <th className="Approve-URU-table-header">Transition ID</th>
               <th className="Approve-URU-table-header">Payment Status</th>
-              <th className="Approve-URU-table-header">Razorpay Order ID</th>
-              <th className="Approve-URU-table-header">Razorpay Payment ID</th>
-              <th className="Approve-URU-table-header">Razorpay Signature</th>
-              <th className="Approve-URU-table-header">Price Updated Date</th>
               <th className="Approve-URU-table-header">Action</th>
             </tr>
           </thead>
           <tbody>
             {filteredUrus.map((uru, index) => (
-              <tr key={uru._id}>
+              <tr key={uru.applicationNumber}>
                 <td className="Approve-URU-table-data">{index + 1}</td>
-                <td className="Approve-URU-table-data">{uru._id}</td>
+                <td className="Approve-URU-table-data">{uru.applicationNumber}</td>
                 <td className="Approve-URU-table-data">{uru.applicantName}</td>
                 <td className="Approve-URU-table-data">
                   {uru.priceUpdated ? (
-                    <span>{uru.price}</span>
+                    <span style={{ color: 'green' }}>{uru.price}</span>
                   ) : (
                     <input
                       type="number"
-                      value={prices[uru._id] || uru.price || ''}
-                      onChange={(e) => handlePriceChange(uru._id, parseInt(e.target.value))}
+                      value={prices[uru.applicationNumber] || uru.price}
+                      onChange={(e) => handlePriceChange(uru.applicationNumber, parseInt(e.target.value))}
                       className="Approve-URU-price-input"
                     />
                   )}
                 </td>
-                <td className="Approve-URU-table-data">{uru.paymentStatus || 'Pending'}</td>
-                <td className="Approve-URU-table-data">{uru.razorpayOrderId || 'N/A'}</td>
-                <td className="Approve-URU-table-data">{uru.razorpayPaymentId || 'N/A'}</td>
-                <td className="Approve-URU-table-data">{uru.razorpaySignature || 'N/A'}</td>
                 <td className="Approve-URU-table-data">
-                  {uru.priceUpdatedDate || (uru.priceUpdated ? 'N/A' : '')}
+                  {uru.razorpayPaymentId ? (
+                    <span style={{ color: 'green' }}>{uru.razorpayPaymentId}</span>
+                  ) : (
+                    <span>N/A</span>
+                  )}
                 </td>
+                <td className="Approve-URU-table-data">{uru.paymentStatus}</td>
                 <td className="Approve-URU-table-data">
                   {uru.priceUpdated ? (
-                    <span>Price Updated</span>
+                    <span style={{ color: 'green' }}>Price Updated</span>
                   ) : (
                     <button
                       className="Approve-URU-submit-btn"
-                      onClick={() => handleSubmit(uru._id)}
+                      onClick={() => handleSubmit(uru.applicationNumber)}
                     >
                       Submit
                     </button>

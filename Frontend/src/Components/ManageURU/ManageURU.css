@@ -1,176 +1,213 @@
 .manage-uru-container {
-  padding: 40px;
-  background-color: #f7f7f7;
-  border: none;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-}
-
-.manage-uru-title {
-  font-size: 30px;
-  font-weight: 700;
-  margin-bottom: 20px;
-  color: #3498db;
-  text-align: center;
-}
-
-.manage-uru-table-container {
-  overflow-x: auto;
   padding: 20px;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.manage-uru-table {
-  width: 100%;
+.manage-uru-heading {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.uru-table {
   border-collapse: collapse;
-  border-spacing: 0;
-}
-
-.manage-uru-table-header {
-  background-color: #3498db;
-  color: #fff;
-  padding: 15px;
-  border: none;
-  font-weight: 600;
-  text-align: left;
-  border-radius: 5px 5px 0 0;
-}
-
-.manage-uru-table-sub-header {
-  background-color: #04171ad0;
-  color: #ffffff;
-  padding: 10px;
-  border: none;
-  font-weight: 600;
-  text-align: left;
-}
-
-.manage-uru-table-data {
-  padding: 15px;
-  border-bottom: 1px solid #ddd;
-  text-align: left;
-}
-
-.manage-uru-table-data input[type="text"],
-.manage-uru-table-data input[type="date"],
-.manage-uru-table-data input[type="email"],
-.manage-uru-table-data textarea {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-sizing: border-box;
-  font-size: 16px;
+  background-color: #fff;
 }
 
-.manage-uru-table-data select {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-sizing: border-box;
-  font-size: 16px;
-}
-
-.manage-uru-save-btn {
-  background-color: #2ecc71;
+.uru-table th {
+  background-color: #337ab7;
   color: #fff;
-  padding: 10px 20px;
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.uru-table td {
+  gap: 20px;
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.uru-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.uru-table tbody tr:hover {
+  background-color: #f5f5f5;
+}
+
+.manage-uru-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.manage-uru-actions button {
+  padding: 5px 10px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 16px;
 }
 
-.manage-uru-edit-btn {
-  background-color: #e74c3c;
+.manage-uru-actions button.edit {
+  background-color: #5cb85c;
   color: #fff;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
 }
 
-.manage-uru-save-btn:hover,
-.manage-uru-edit-btn:hover {
+.manage-uru-actions button.delete {
+  background-color: #d9534f;
+  color: #fff;
+}
+
+.manage-uru-actions button:hover {
   opacity: 0.8;
 }
 
-.manage-uru-photo {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  border-radius: 50%;
-  border: 2px solid #3498db;
+.edit-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.manage-uru-video {
-  width: 200px;
-  height: 150px;
-  object-fit: cover;
+.edit-modal-content {
+  background-color: #fff;
+  padding: 20px;
   border-radius: 10px;
-  border: 2px solid #3498db;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
-@media (max-width: 768px) {
-  .manage-uru-table-container {
-    overflow-x: auto;
-  }
-  .manage-uru-table {
-    width: 100%;
-    border-collapse: collapse;
-    border-spacing: 0;
-    display: block;
-  }
-  .manage-uru-table thead,
-  .manage-uru-table tbody {
-    display: block;
-  }
-  .manage-uru-table tr {
-    display: block;
-  }
-  .manage-uru-table th,
-  .manage-uru-table td {
-    display: block;
-    padding: 10px;
-  }
+.edit-modal-content h2 {
+  margin-top: 0;
 }
 
-/* Scrollbar CSS */
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+.edit-modal-content form {
+  display: flex;
+  flex-direction: column;
 }
 
-::-webkit-scrollbar-thumb {
-  background-color: #3498db;
+.edit-modal-content label {
+  margin-bottom: 10px;
+}
+
+.edit-modal-content input {
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+}
+
+
+
+.manage-uru-container {
+  padding: 20px;
+}
+
+.manage-uru-heading {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.uru-table {
+  border-collapse: collapse;
+  width: 100%;
+  background-color: #fff;
+}
+
+.uru-table th {
+  background-color: #337ab7;
+  color: #fff;
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.uru-table td {
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.edit-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.edit-modal-content {
+  background-color: #fff;
+  padding: 20px;
   border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
-::-webkit-scrollbar-track {
-  background-color: #f7f7f7;
-  border-radius: 10px;
+.manage-uru-form-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
 }
 
-/* Button CSS */
-button {
-  transition: all 0.3s ease-in-out;
+.manage-uru-form-group {
+  width: 30%;
+  margin-right: 20px;
 }
 
-button:hover {
-  transform: scale(1.1);
+.manage-uru-form-group label {
+  display: block;
+  margin-bottom: 10px;
 }
 
-/* Input CSS */
-input[type="text"]:focus,
-input[type="date"]:focus,
-input[type="email"]:focus,
-textarea:focus,
-select:focus {
-  border-color: #3498db;
-  box-shadow: 0 0 10px rgba(52, 152, 219, 0.2);
+.manage-uru-form-group input {
+  width: 100%;
+  height: 40px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.manage-uru-form-row {
+  display: flex;
+  gap: 10px;
+}
+
+.manage-uru-submit {
+  background-color: #4CAF50;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.manage-uru-button {
+  background-color: #ccc;
+  color: #333;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.manage-uru-form-row button[type="manage-uru-submit"]:hover {
+  background-color: #3e8e41;
+}
+
+.manage-uru-form-row button[type="manage-uru-button"]:hover {
+  background-color: #aaa;
 }
