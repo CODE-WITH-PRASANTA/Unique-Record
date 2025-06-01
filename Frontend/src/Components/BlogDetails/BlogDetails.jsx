@@ -1,122 +1,180 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from "react-router-dom";
-import axios from 'axios';
+import React, { useState, useEffect } from 'react';
 import './BlogDetails.css';
-import featuredImage1 from '../../assets/blog-03.jpg';
-import featuredImage2 from '../../assets/blog-04.jpg';
-import featuredImage3 from '../../assets/blog-05.jpg';
+import rp from '../../assets/rp-1.webp';
+import { useParams } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCalendarAlt, faComments, faSearch, faQuoteLeft, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+import { API_URL } from '../../Api'; // Import the API_URL constant
 
 const BlogDetails = () => {
-    const { id } = useParams();
-    const [blog, setBlog] = useState(null);
+  const { id } = useParams();
+  const [blog, setBlog] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [categories, setCategories] = useState([]);
+  const [recentPosts, setRecentPosts] = useState([]);
+  const [tags, setTags] = useState([]);
 
-    useEffect(() => {
-        const fetchBlog = async () => {
-            try {
-                const res = await axios.get(`http://localhost:5002/api/blogs/${id}`);
-                setBlog(res.data.blog);
-            } catch (err) {
-                console.error("Error fetching blog:", err);
-            }
-        };
-        fetchBlog();
-    }, [id]);
+  const fetchCategories = async () => {
+    try {
+      const res = await fetch(`${API_URL}/categories`);
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      const data = await res.json();
+      setCategories(data);
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+  };
 
-    if (!blog) return <div className="Blog-Details-Container">Loading...</div>;
+  const fetchBlog = async () => {
+    try {
+      const res = await fetch(`${API_URL}/blogs/${id}`);
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      const data = await res.json();
+      if (data.success) {
+        setBlog(data.data);
+        setTags(data.data.tags || []);
+      }
+    } catch (error) {
+      console.error('Error fetching blog:', error);
+    }
+  };
 
-    return (
-        <div className="Blog-Details-Container">
-            <div className="Blog-Details-Content">
-                <h1 className="Blog-Details-Title">{blog.title}</h1>
-                <div className="Blog-Details-Meta">
-                    <span>📌 {blog.authorName}</span> | <span>📂 {blog.category}</span> | <span>📅 {new Date(blog.createdAt).toLocaleDateString()}</span>
-                </div>
-                <p className="Blog-Details-Description">{blog.description}</p>
-                <img src={blog.imageUrl} alt={blog.title} className="Blog-Details-MainImage" />
-                
-                <div className="Blog-Details-Text" dangerouslySetInnerHTML={{ __html: blog.content }}></div>
+  const fetchRecentPosts = async () => {
+    try {
+      const res = await fetch(`${API_URL}/blogs/all`);
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      const data = await res.json();
+      if (data.success) {
+        setRecentPosts(data.data.slice(0, 2));
+      }
+    } catch (error) {
+      console.error('Error fetching recent posts:', error);
+    }
+  };
 
-                <div className="Blog-Details-CommentSection">
-                    <h2>Leave A Comment</h2>
-                    <p>Your email address will not be published. Required fields are marked *</p>
-                    <form className="Blog-Details-CommentForm">
-                        <div className="Comment-Row">
-                            <input type="text" placeholder="Your name" required />
-                            <input type="email" placeholder="Your email" required />
-                        </div>
-                        <textarea placeholder="Write comment" required></textarea>
-                        <button type="submit">Post Comment</button>
-                    </form>
-                </div>
+  useEffect(() => {
+    fetchBlog();
+    fetchRecentPosts();
+    fetchCategories();
+  }, [id]);
+
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  if (!blog) {
+    return <div>Loading...</div>;
+  }
+
+
+  return (
+    <div className="News-details-container">
+      <div className="News-details-main-content">
+        <div className="News-details-content-area">
+          <div className="News-details-image-section-one">
+            <img src={blog.imageUrl} alt={blog.blogTitle} />
+            <div className="News-details-footer">
+              <div className="date-container">
+                <FontAwesomeIcon icon={faCalendarAlt} className="news-icon" />
+                <span>{new Date(blog.createdAt).toLocaleDateString()}</span>
+              </div>
+              <div className="author-container">
+                <FontAwesomeIcon icon={faCheckCircle} className="news-icon" />
+                <span>By : {blog.authorName || 'Unknown Author'}</span>
+              </div>
             </div>
+          </div>
 
-            {/* Sidebar */}
-            <aside className="Blog-Details-Sidebar">
-                <div className="Blog-Details-SearchBar">
-                    <input type="text" placeholder="Search..." />
-                </div>
+          <h1 className="News-details-title">{blog.blogTitle}</h1>
+          <p className="News-details-paragraph">{blog.shortDescription}</p>
+          <p className="News-details-paragraph" dangerouslySetInnerHTML={{ __html: blog.blogContent }}></p>
 
-                <div className="Blog-Details-Categories">
-                    <h3>Categories</h3>
-                    <ul>
-                        <li>Market Updates (50)</li>
-                        <li>Buying Tips (34)</li>
-                        <li>Interior Inspiration (69)</li>
-                        <li>Investment Insights (25)</li>
-                        <li>Home Construction (12)</li>
-                        <li>Legal Guidance (12)</li>
-                        <li>Community Spotlight (69)</li>
-                    </ul>
-                </div>
+          {blog.quotes && (
+            <div className="News-details-quote">
+              <FontAwesomeIcon icon={faQuoteLeft} className="quote-icon" />
+              <p>"{blog.quotes}"</p>
+            </div>
+          )}
 
-                <div className="Blog-Details-FeaturedListings">
-                    <h3>Featured Listings</h3>
-                    <div className="Blog-Details-FeaturedItem">
-                        <img src={featuredImage1} alt="Featured 1" />
-                        <div>
-                            <p>Key Real Estate Trends To Watch In 2024</p>
-                            <span>📅 February 15, 2024</span>
-                        </div>
-                    </div>
-                    <div className="Blog-Details-FeaturedItem">
-                        <img src={featuredImage2} alt="Featured 2" />
-                        <div>
-                            <p>Expert Tips For Profitable Real Estate Investments</p>
-                            <span>📅 February 15, 2024</span>
-                        </div>
-                    </div>
-                    <div className="Blog-Details-FeaturedItem">
-                        <img src={featuredImage3} alt="Featured 3" />
-                        <div>
-                            <p>10 Steps To Prepare For A Successful Real Estate...</p>
-                            <span>📅 February 15, 2024</span>
-                        </div>
-                    </div>
-                </div>
+          <div className="News-details-community">
+            <div className="News-details-tags-row">
+              <div className="tags">
+                <strong>Tags:</strong> <span>{tags.join(', ')}</span>
+              </div>
+              <div className="social-share">
+                <strong>Share:</strong>
+                <button className="social-news-icon">F</button>
+                <button className="social-news-icon">X</button>
+                <button className="social-news-icon">in</button>
+                <button className="social-news-icon">G</button>
+              </div>
+            </div>
+          </div>
 
-                <div className="Blog-Details-Newsletter">
-                    <h3>Join Our Newsletter</h3>
-                    <p>Signup to get the latest news and updates.</p>
-                    <input type="email" placeholder="Enter your email" />
-                    <button>Subscribe</button>
-                </div>
-
-                <div className="Blog-Details-PopularTags">
-                    <h3>Popular Tags</h3>
-                    <div className="Blog-Details-Tags">
-                        {Array.isArray(blog.tags)
-                            ? blog.tags.map((t, idx) => (
-                                <span key={idx} className="Blog-Details-Tag">{t}</span>
-                            ))
-                            : blog.tags?.split(',').map((t, idx) => (
-                                <span key={idx} className="Blog-Details-Tag">{t.trim()}</span>
-                            ))
-                        }
-                    </div>
-                </div>
-            </aside>
+          <div className="comments-reply-form">
+            <h2>Ask Any Question ?</h2>
+            <form>
+              <div className="news-form-row">
+                <input type="text" placeholder="Name" />
+                <input type="email" placeholder="Email" />
+              </div>
+              <div className="news-form-row">
+                <input type="tel" placeholder="Phone" />
+                <input type="text" placeholder="Subject" />
+              </div>
+              <textarea placeholder="Message"></textarea>
+              <button type="submit">Submit Now →</button>
+            </form>
+          </div>
         </div>
-    );
+
+        <aside className="News-details-sidebar">
+          <div className="News-details-search-bar">
+            <input type="search" value={searchTerm} onChange={handleSearch} placeholder="Search" />
+            <button><FontAwesomeIcon icon={faSearch} /></button>
+          </div>
+          <div className="News-details-categories">
+            <h2>All Categories</h2>
+            <div className="News-details-category-tags">
+              {categories.map((category, index) => (
+                <span key={index} className="News-details-category-tag">
+                  {category.name}
+                </span>
+              ))}
+            </div>
+          </div>
+          <div className="News-details-recent-posts-sidebar">
+            <h2>Recent Posts</h2>
+            {recentPosts.map((post, index) => (
+              <div key={index} className="News-details-recent-post">
+                <img src={post.imageUrl || rp} alt="Post" />
+                <div className="News-details-recent-post-content">
+                  <h3>{post.blogTitle}</h3>
+                  <a href={`/blog/${post._id}`} className="News-details-read-more">Read More</a>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="News-details-tags-sidebar">
+            <h2>Tags</h2>
+            <div className="News-details-tags">
+              {tags.map((tag, index) => (
+                <span key={index} className="News-details-tag">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  );
 };
 
 export default BlogDetails;

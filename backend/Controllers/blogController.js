@@ -1,139 +1,115 @@
 const Blog = require("../Model/Blog");
 const cloudinary = require("../Config/cloudinary");
+const fs = require("fs");
 
 // Create Blog
-exports.createBlog = async (req, res) => {
+const createBlog = async (req, res) => {
   try {
-    const { title, description, content, authorName, category, tags } = req.body;
-
-    if (!req.file) {
-      return res.status(400).json({ message: "Image is required." });
-    }
+    const {
+      blogTitle,
+      shortDescription,
+      quotes,
+      blogContent,
+      category,
+      authorName,
+      tags,
+    } = req.body;
 
     const result = await cloudinary.uploader.upload(req.file.path, {
       folder: "blogs",
     });
 
     const newBlog = new Blog({
-      title,
-      description,
-      content,
-      authorName,
+      blogTitle,
+      shortDescription,
+      quotes,
+      blogContent,
       category,
-      tags: tags ? tags.split(",") : [],
+      authorName,
+      tags: JSON.parse(tags),
       imageUrl: result.secure_url,
     });
 
     await newBlog.save();
-    res.status(201).json({ message: "Blog created successfully.", blog: newBlog });
+    fs.unlinkSync(req.file.path); // Clean temp file
+
+    res.status(201).json({ success: true, message: "Blog created", data: newBlog });
   } catch (error) {
-    console.error("Error creating blog:", error);
-    res.status(500).json({ message: "Server error while creating blog." });
+    console.error(error);
+    res.status(500).json({ success: false, message: "Something went wrong" });
+  }
+};
+
+// Fetch All Blogs
+const getAllBlogs = async (req, res) => {
+  try {
+    const blogs = await Blog.find().sort({ createdAt: -1 });
+    res.status(200).json({ success: true, data: blogs });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Failed to fetch blogs" });
+  }
+};
+
+// Fetch Blog by ID
+const getBlogById = async (req, res) => {
+  try {
+    const blog = await Blog.findById(req.params.id);
+    if (!blog) {
+      return res.status(404).json({ success: false, message: "Blog not found" });
+    }
+    res.status(200).json({ success: true, data: blog });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Failed to fetch blog" });
   }
 };
 
 // Update Blog
-exports.updateBlog = async (req, res) => {
+const updateBlog = async (req, res) => {
   try {
-    const { id } = req.params;
-    const { title, description, content, authorName, category, tags } = req.body;
+    const blogId = req.params.id;
+    let updateData = { ...req.body };
 
-    const blog = await Blog.findById(id);
-    if (!blog) {
-      return res.status(404).json({ message: "Blog not found." });
-    }
-
-    // If new image uploaded
     if (req.file) {
-      const publicId = blog.imageUrl.split("/").pop().split(".")[0];
-      await cloudinary.uploader.destroy(`blogs/${publicId}`);
-
       const result = await cloudinary.uploader.upload(req.file.path, {
         folder: "blogs",
       });
-
-      blog.imageUrl = result.secure_url;
+      updateData.imageUrl = result.secure_url;
+      fs.unlinkSync(req.file.path);
     }
 
-    // Update other fields
-    blog.title = title || blog.title;
-    blog.description = description || blog.description;
-    blog.content = content || blog.content;
-    blog.authorName = authorName || blog.authorName;
-    blog.category = category || blog.category;
-    blog.tags = tags ? tags.split(",") : blog.tags;
+    if (updateData.tags) {
+      updateData.tags = JSON.parse(updateData.tags);
+    }
 
-    await blog.save();
-    res.status(200).json({ message: "Blog updated successfully.", blog });
+    const updatedBlog = await Blog.findByIdAndUpdate(blogId, updateData, { new: true });
+
+    if (!updatedBlog) {
+      return res.status(404).json({ success: false, message: "Blog not found" });
+    }
+
+    res.status(200).json({ success: true, message: "Blog updated", data: updatedBlog });
   } catch (error) {
-    console.error("Error updating blog:", error);
-    res.status(500).json({ message: "Server error while updating blog." });
+    res.status(500).json({ success: false, message: "Failed to update blog" });
   }
 };
 
 // Delete Blog
-exports.deleteBlog = async (req, res) => {
+const deleteBlog = async (req, res) => {
   try {
-    const { id } = req.params;
-
-    const blog = await Blog.findById(id);
+    const blog = await Blog.findByIdAndDelete(req.params.id);
     if (!blog) {
-      return res.status(404).json({ message: "Blog not found." });
+      return res.status(404).json({ success: false, message: "Blog not found" });
     }
-
-    const publicId = blog.imageUrl.split("/").pop().split(".")[0];
-    await cloudinary.uploader.destroy(`blogs/${publicId}`);
-
-    await blog.deleteOne();
-
-    res.status(200).json({ message: "Blog deleted successfully." });
+    res.status(200).json({ success: true, message: "Blog deleted" });
   } catch (error) {
-    console.error("Error deleting blog:", error);
-    res.status(500).json({ message: "Server error while deleting blog." });
+    res.status(500).json({ success: false, message: "Failed to delete blog" });
   }
 };
 
-// Get All Blogs
-exports.getAllBlogs = async (req, res) => {
-  try {
-    const blogs = await Blog.find().sort({ createdAt: -1 }); // Newest first
-    res.status(200).json({ blogs });
-  } catch (error) {
-    console.error("Error fetching blogs:", error);
-    res.status(500).json({ message: "Server error while fetching blogs." });
-  }
-};
-
-
-// Get Single Blog (Improved)
-exports.getSingleBlog = async (req, res) => {
-  try {
-    const { id } = req.params;
-
-    const blog = await Blog.findById(id).lean(); // use .lean() for plain JS object
-
-    if (!blog) {
-      return res.status(404).json({ success: false, message: "Blog not found." });
-    }
-
-    res.status(200).json({
-      success: true,
-      message: "Blog fetched successfully.",
-      blog: {
-        id: blog._id,
-        title: blog.title,
-        description: blog.description,
-        content: blog.content,
-        authorName: blog.authorName,
-        category: blog.category,
-        tags: blog.tags,
-        imageUrl: blog.imageUrl,
-        createdAt: blog.createdAt,
-        updatedAt: blog.updatedAt,
-      },
-    });
-  } catch (error) {
-    console.error("Error fetching blog:", error);
-    res.status(500).json({ success: false, message: "Server error while fetching blog." });
-  }
+module.exports = {
+  createBlog,
+  getAllBlogs,
+  getBlogById,
+  updateBlog,
+  deleteBlog,
 };

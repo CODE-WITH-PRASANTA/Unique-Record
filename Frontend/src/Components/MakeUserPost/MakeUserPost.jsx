@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
-import axios from 'axios';
 import './MakeUserPost.css';
-import Swal from 'sweetalert2';
-import { API_URL } from '../../Api';  // Import the API_URL from a separate config file
+import { API_URL } from '../../Api'; // Import the API_URL
+
 
 const MakeUserPost = () => {
   const [formData, setFormData] = useState({
     title: '',
-    description: '',
+    quotes: '',
     content: '',
     authorName: '',
     category: '',
@@ -64,60 +63,50 @@ const MakeUserPost = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-  
-    const formDataToSend = new FormData();
-    formDataToSend.append('title', formData.title);
-    formDataToSend.append('description', formData.description);
-    formDataToSend.append('content', formData.content);
-    formDataToSend.append('authorName', formData.authorName || 'Anonymous');
-    formDataToSend.append('category', formData.category);
-    formDataToSend.append('tags', formData.tags.join(','));
-    if (formData.image) {
-      formDataToSend.append('image', formData.image);
-    }
-  
-    try {
-      const response = await axios.post(`${API_URL}/user/blog/create`, formDataToSend, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  const formPayload = new FormData();
+  formPayload.append("blogTitle", formData.title);
+  formPayload.append("shortDescription", formData.quotes); // Map quotes to shortDescription
+  formPayload.append("quotes", formData.quotes);
+  formPayload.append("blogContent", formData.content);
+  formPayload.append("category", formData.category);
+  formPayload.append("authorName", formData.authorName || "Anonymous");
+  formPayload.append("tags", JSON.stringify(formData.tags)); // must be stringified
+  formPayload.append("image", formData.image);
+
+  try {
+      const response = await fetch(`${API_URL}/blogs/create`, {
+        method: "POST",
+        body: formPayload,
       });
-      console.log('Response:', response.data);
-      
-      // Success alert after the post is successfully created
-      Swal.fire({
-        position: 'top-end',
-        icon: 'success',
-        title: 'Your blog post has been created successfully!',
-        showConfirmButton: false,
-        timer: 1500,
-      });
-  
-      // Optionally, reset the form after successful submission
+
+    const data = await response.json();
+
+    if (response.ok) {
+      alert("✅ Blog posted successfully!");
+      // Clear the form
       setFormData({
         title: '',
-        description: '',
+        quotes: '',
         content: '',
         authorName: '',
         category: '',
         tags: [],
         image: null,
       });
-  
-    } catch (error) {
-      console.error('Error:', error);
-      // Handle error (e.g., show an error message)
-      Swal.fire({
-        position: 'top-end',
-        icon: 'error',
-        title: 'An error occurred. Please try again later.',
-        showConfirmButton: false,
-        timer: 1500,
-      });
+      setTagInput('');
+    } else {
+      alert(`❌ Failed to post: ${data.message}`);
     }
-  };
+  } catch (error) {
+    console.error("Error submitting blog:", error);
+    alert("❌ Server error. Try again later.");
+  }
+};
+
+
   return (
     <div className="Make-User-Post-Container">
       <h2 className="Make-User-Post-Heading">Create a New Blog Post</h2>
@@ -138,12 +127,12 @@ const MakeUserPost = () => {
           </div>
 
           <div className="Make-User-Post-FormGroup">
-            <label>Description<span>*</span></label>
+            <label>Quotes<span>*</span></label>
             <input
               type="text"
-              name="description"
-              placeholder="Short description"
-              value={formData.description}
+              name="quotes"
+              placeholder="Short Quotes"
+              value={formData.quotes}
               onChange={handleChange}
               required
             />
@@ -161,8 +150,8 @@ const MakeUserPost = () => {
               toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
               menubar: false,
               height: 300,
-              branding: false,  // <<<<<< REMOVE TinyMCE branding
-              promotion: false, // <<<<<< REMOVE TinyMCE "Upgrade to Premium" ads
+              branding: false,
+              promotion: false,
             }}
             onEditorChange={handleEditorChange}
           />

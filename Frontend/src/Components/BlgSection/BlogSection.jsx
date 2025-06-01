@@ -1,74 +1,133 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
-import "./BlogSection.css";
-import axios from "axios";
+import './BlogSection.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
+import { API_URL } from '../../Api'; // Import API_URL
+
+
+const BlogPost = ({ post }) => (
+  <div className="Blog-Section-Post" key={post._id}>
+    <div className="Blog-Section-Post-Image">
+      <img src={post.imageUrl} alt={post.blogTitle} />
+    </div>
+    <div className="Blog-Section-Post-Details">
+      <div className="Blog-Section-Post-Category">{post.category}</div>
+      <Link to={`/blog/${post._id}`}>
+        <h2 className="Blog-Section-Post-Title">{post.blogTitle}</h2>
+      </Link>
+      <p className="Blog-Section-Post-Excerpt">{post.shortDescription}</p>
+      <div className="Blog-Section-Post-Meta">
+        <span>{new Date(post.createdAt).toDateString()}</span>
+        <span className="Blog-Section-Post-Dot"></span>
+        <span>By {post.authorName}</span>
+      </div>
+    </div>
+  </div>
+);
+
+const RecentPost = ({ post }) => (
+  <div className="Blog-Section-Recent-Post" key={post._id}>
+    <img src={post.imageUrl} alt={post.blogTitle} />
+    <div className="Blog-Section-Recent-Post-Info">
+      <span>{new Date(post.createdAt).toDateString()}</span>
+      <Link to={`/blog/${post._id}`}>
+        <h3>{post.blogTitle}</h3>
+      </Link>
+    </div>
+  </div>
+);
+
+const TagButton = ({ tag }) => (
+  <button className="Blog-Section-Tag-Button">{tag}</button>
+);
+
+const CategoryItem = ({ category, handleCategoryClick }) => (
+  <div className="Blog-Section-Category-Item" onClick={() => handleCategoryClick(category.name)}>
+    <span>{category.name}</span>
+    <span className="Blog-Section-Category-Count">({category.count})</span>
+  </div>
+);
 
 const BlogSection = () => {
-  const [blogs, setBlogs] = useState([]);
-  const [approvedBlogs, setApprovedBlogs] = useState([]);
-  const [showApproved, setShowApproved] = useState(false);
+  const [blogPosts, setBlogPosts] = useState([]);
+  const [filteredBlogPosts, setFilteredBlogPosts] = useState([]);
+  const [tags, setTags] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
   useEffect(() => {
-    const fetchBlogs = async () => {
-      try {
-        const res = await axios.get("http://localhost:5005/api/blogs/all");
-        setBlogs(res.data.blogs);
-      } catch (error) {
-        console.error("Error fetching blogs:", error);
-      }
-    };
+     axios.get(`${API_URL}/blogs/all`) // Use API_URL
+      .then(res => {
+        const blogs = res.data.data;
+        setBlogPosts(blogs);
+        setFilteredBlogPosts(blogs);
 
-    const fetchApprovedBlogs = async () => {
-      try {
-        const res = await axios.get("http://localhost:5005/api/user/blog/approved");
-        setApprovedBlogs(res.data);
-      } catch (error) {
-        console.error("Error fetching approved blogs:", error);
-      }
-    };
+        // Extract tags and categories from blogs
+        const tagSet = new Set();
+        const categoryMap = {};
 
-    fetchBlogs();
-    fetchApprovedBlogs();
+        blogs.forEach(blog => {
+          blog.tags.forEach(tag => tagSet.add(tag));
+          categoryMap[blog.category] = (categoryMap[blog.category] || 0) + 1;
+        });
+
+        setTags(Array.from(tagSet));
+        setCategories(Object.entries(categoryMap).map(([name, count]) => ({ name, count })));
+      })
+      .catch(err => {
+        console.error("Failed to fetch blogs", err);
+      });
   }, []);
 
-  const handleToggle = () => {
-    setShowApproved(!showApproved);
+  const handleCategoryClick = (category) => {
+    setSelectedCategory(category);
+    const filteredPosts = blogPosts.filter(post => post.category === category);
+    setFilteredBlogPosts(filteredPosts);
   };
 
+
   return (
-    <section className="blog-section">
-      <h2 className="blog-header">Latest Insights & Trends</h2>
-      <p className="blog-subtext">
-        Stay updated with "Unique Records of Universe" and all the unique, amazing, innovative information of the country and the world
-      </p>
-
-
-      <div className="blog-container">
-        {(showApproved ? approvedBlogs : blogs).map((blog) => (
-          <div className="blog-card" key={blog._id}>
-            <Link to={`/blog/${blog._id}`}>
-              <img src={blog.image || blog.imageUrl} alt={blog.title} className="blog-image" />
-            </Link>
-            <div className="blog-content">
-              <span className="blog-date">{new Date(blog.createdAt).toLocaleDateString()}</span>
-              <p className="blog-meta">
-                <strong>{blog.authorName}</strong> • {blog.category}
-              </p>
-              <h3 className="blog-title">
-                <Link to={`/blog/${blog._id}`}>{blog.title}</Link>
-              </h3>
-              <p className="blog-description">{blog.description}</p>
-              <Link to={`/blog/${blog._id}`} className="read-more">Read More →</Link>
-            </div>
-          </div>
+    <div className="Blog-Section-Container">
+      <div className="Blog-Section-Main-Content">
+        {filteredBlogPosts.map(post => (
+          <BlogPost key={post._id} post={post} />
         ))}
       </div>
 
-      <button onClick={handleToggle} className="blog-toggle-button">
-  {showApproved ? "Show All Blogs" : "Show User Blogs"}
-</button>
+      <div className="Blog-Section-Sidebar">
+        <div className="Blog-Section-Search-Box">
+          <input type="text" placeholder="Search" />
+          <button><FontAwesomeIcon icon={faSearch} /></button>
+        </div>
 
-    </section>
+        <div className="Blog-Section-Categories">
+          <h2>Categories</h2>
+          <div className="Blog-Section-Category-List">
+            {categories.map((category, index) => (
+              <CategoryItem key={index} category={category} handleCategoryClick={handleCategoryClick} />
+            ))}
+          </div>
+        </div>
+
+        <div className="Blog-Section-Recent-Posts">
+          <h2>Recent Posts</h2>
+          {blogPosts.slice(0, 2).map(post => (
+            <RecentPost key={post._id} post={post} />
+          ))}
+        </div>
+
+        <div className="Blog-Section-Tags">
+          <h2>Tags</h2>
+          <div className="Blog-Section-Tag-List">
+            {tags.map((tag, index) => (
+              <TagButton key={index} tag={tag} />
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

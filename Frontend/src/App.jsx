@@ -69,8 +69,7 @@ function Layout() {
             <Route path="/media" element={<Media />} />
             <Route path="/vision" element={<Vision />} />
             <Route path="/achivments" element={<OurAchivments />} />
-                    <Route path="/achivment-details/:id" element={<AchivmentDetails />} />
-
+            <Route path="/achivment-details/:id" element={<AchivmentDetails />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:id" element={<BlogDetails />} />
             <Route path="/login" element={<Login />} />
@@ -80,8 +79,6 @@ function Layout() {
             <Route path="/payment-success" element={<PaymentSuccess />} />
             <Route path="/donation-success" element={<DonationSuccess />} />
             <Route path="/your-post" element={<MakeUserPost />}/>
-            
-
           
               <Route path="/admin/*" element={<AdminNavbar />} />
           </Routes>

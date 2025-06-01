@@ -14,7 +14,6 @@ import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { PageContainer } from '@toolpad/core/PageContainer';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'; // Import a nice 'approval' icon
 import AdminDashboard from '../AdminDashboard/AdminDashboard';
-import CreateBlog from '../../Components/CreateBlog/CreateBlog';
 import AdminManageNotice from '../../Components/AdminManageNotice/AdminManageNotice';
 import AdminAddNotice from '../../Components/AdminAddNotice/AdminAddNotice';
 import AdminAddEvent from '../../Components/AdminAddEvent/AdminAddEvent';
@@ -37,6 +36,7 @@ import FinalURU from '../../Components/FinalURU/FinalURU';
 import AdminPostAchievement from '../../Components/AdminPostAchievement/AdminPostAchievement';
 import AdminManageAchievements from '../../Components/AdminManageAchievements/AdminManageAchievements';
 import AdminManageCategories from '../../Components/AdminManageCategories/AdminManageCategories';
+import CreateBlogs from '../../Components/CreateBlogs/CreateBlogs';
 
 const NAVIGATION = [
   {
@@ -51,10 +51,10 @@ const NAVIGATION = [
   {
     kind: 'divider',
   },
-  // {
-  //   kind: 'header',
-  //   title: 'Blog Section',
-  // },
+  {
+    kind: 'header',
+    title: 'Blog Section',
+  },
   {
     segment: 'blog',
     title: 'Blog',
@@ -371,7 +371,7 @@ export default function DashboardLayoutBasic({ window }) {
         <DashboardLayout>
           <PageContainer>
             {router.pathname === '/dashboard' && <AdminDashboard />}
-            {/* {router.pathname === '/blog/create' && <CreateBlog />} */}
+            {router.pathname === '/blog/create' && <CreateBlogs />}
             {/* {router.pathname === '/blog/edit' && <AdminEditBlogs />} */}
             {router.pathname === '/notice/add' && <AdminAddNotice />} 
             {router.pathname === '/notice/manage' && <AdminManageNotice />}

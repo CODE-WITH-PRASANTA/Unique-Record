@@ -1,0 +1,164 @@
+.Create-Blog-Container {
+  margin: 30px auto;
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.Create-Blog-Title {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #3498db;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.Create-Blog-Form {
+  display: flex;
+  flex-direction: column;
+}
+
+.Create-Blog-Row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.Create-Blog-Section {
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.Create-Blog-Section-Half {
+  width: 48%;
+}
+
+.Create-Blog-Label {
+  display: block;
+  margin-bottom: 10px;
+  color: #666;
+  font-weight: bold;
+}
+
+.Create-Blog-Input,
+.Create-Blog-Select,
+.Create-Blog-TextArea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.Create-Blog-TextArea {
+  height: 100px;
+  resize: vertical;
+}
+
+.Create-Blog-TextArea-Large {
+  height: 200px;
+}
+
+.Create-Blog-FileInput {
+  padding: 10px;
+  width: 100%;
+}
+
+.Create-Blog-ImagePreview {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 5px;
+  margin-top: 10px;
+  border: 1px solid #ddd;
+}
+
+.Create-Blog-Tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.Create-Blog-Tag {
+  background-color: #3498db;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.Create-Blog-Tag-Remove {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  margin-left: 5px;
+  cursor: pointer;
+  color: #fff;
+}
+
+.Create-Blog-Input-Tag {
+  width: auto;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-right: 10px;
+  font-size: 14px;
+}
+
+.Create-Blog-Tag-Add {
+  background-color: #2ecc71;
+  color: #fff;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.Create-Blog-SubmitBtn {
+  background-color: #4CAF50;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  align-self: center;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.Create-Blog-SubmitBtn:hover {
+  background-color: #3e8e41;
+}
+
+/* Media Queries */
+
+@media (max-width: 768px) {
+  .Create-Blog-Row {
+    flex-direction: column;
+  }
+  .Create-Blog-Section-Half {
+    width: 100%;
+  }
+  .Create-Blog-Input-Tag {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .Create-Blog-Container {
+    padding: 10px;
+    margin-top: 0px;
+  }
+  .Create-Blog-Title {
+    font-size: 24px;
+  }
+  .Create-Blog-SubmitBtn {
+    padding: 5px 10px;
+  }
+}

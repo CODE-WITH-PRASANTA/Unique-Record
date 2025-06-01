@@ -19,7 +19,7 @@ const DownCertificate = () => {
 
   const fetchCertificates = async () => {
     try {
-      const response = await axios.get(`${API_URL}/uru/get-all-uru`, {
+      const response = await axios.get(`${API_URL}/uru/fetch-applied-uru-by-user`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

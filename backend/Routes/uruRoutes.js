@@ -48,7 +48,7 @@ router.post(
   upload.single("certificate"),
   uploadCertificate
 );
-router.get("/download-certificate/:applicationNumber", authenticate,  downloadCertificate);
+router.get("/download-certificate/:applicationNumber",  downloadCertificate);
 router.get("/fetch-applied-uru-by-user", authenticate, fetchAppliedUruByUser);
 
 
