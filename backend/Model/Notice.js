@@ -29,8 +29,9 @@ const noticeSchema = new mongoose.Schema({
     type: String
   },
   otherFiles: {
-    type: String
-  }
+    type: String,
+    default: null,
+  },
 }, { timestamps: true });
 
 module.exports = mongoose.model('Notice', noticeSchema);

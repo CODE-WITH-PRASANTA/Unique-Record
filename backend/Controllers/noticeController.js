@@ -45,12 +45,16 @@ exports.addNotice = async (req, res) => {
       return res.status(400).json({ message: "Title, description, and post owner are required" });
     }
 
-    if (!req.files || !req.files.photo || !req.files.otherFiles) {
-      return res.status(400).json({ message: "Both photo and otherFiles are required" });
+    if (!req.files || !req.files.photo) {
+      return res.status(400).json({ message: "Photo is required" });
     }
 
     const photoUrl = await uploadToCloudinary(req.files.photo[0].path);
-    const otherFilesUrl = await uploadToCloudinary(req.files.otherFiles[0].path);
+    let otherFilesUrl = null;
+
+    if (req.files.otherFiles) {
+      otherFilesUrl = await uploadToCloudinary(req.files.otherFiles[0].path);
+    }
 
     const notice = new Notice({
       title,
@@ -65,6 +69,7 @@ exports.addNotice = async (req, res) => {
     await notice.save();
     res.status(201).json({ message: "Notice added successfully", notice });
   } catch (error) {
+    console.error("Error adding notice:", error);
     res.status(500).json({ message: error.message });
   }
 };

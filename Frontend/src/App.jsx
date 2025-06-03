@@ -29,6 +29,7 @@ import MakeUserPost from "./Components/MakeUserPost/MakeUserPost";
 import ApplicationStatus from "./Components/ApplicationStatus/ApplicationStatus";
 import DownCertificate from "./Components/DownCertificate/DownCertificate";
 import AchivmentDetails from "./Components/AchivmentDetails/AchivmentDetails";
+import AdminLogin from "./Components/AdminLogin/AdminLogin";
 
 function Layout() {
   const location = useLocation();
@@ -80,7 +81,7 @@ function Layout() {
             <Route path="/donation-success" element={<DonationSuccess />} />
             <Route path="/your-post" element={<MakeUserPost />}/>
           
-              <Route path="/admin/*" element={<AdminNavbar />} />
+              <Route path="/admin/*" element={<AdminLogin />} />
           </Routes>
         </div>
       )}

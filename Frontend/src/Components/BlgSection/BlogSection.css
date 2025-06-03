@@ -7,12 +7,18 @@
   gap: 40px;
   font-family: 'Segoe UI', sans-serif;
   flex-wrap: wrap;
+  background-color: #f7f7f7;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 /* ===== Blog Section Main Content ===== */
 .Blog-Section-Main-Content {
   flex: 1 1 70%;
   min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 /* ===== Blog Section Post ===== */
@@ -28,9 +34,7 @@
   transition: box-shadow 0.3s ease;
 }
 
-.Blog-Section-Post:hover {
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-}
+
 
 .Blog-Section-Post-Image {
   flex: 1 1 280px;
@@ -40,14 +44,11 @@
 }
 
 .Blog-Section-Post-Image img {
-  width: 300px;
+  width: 100%;
+  height: 180px;
   object-fit: cover;
   border-radius: 8px;
   transition: transform 0.3s ease;
-}
-
-.Blog-Section-Post:hover .Blog-Section-Post-Image img {
-  transform: scale(1.05);
 }
 
 .Blog-Section-Post-Details {
@@ -55,6 +56,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  gap: 10px;
 }
 
 .Blog-Section-Post-Category {
@@ -65,21 +67,22 @@
   padding: 5px 10px;
   display: inline-block;
   border-radius: 4px;
-  margin-bottom: 12px;
   text-transform: uppercase;
   width: fit-content;
 }
 
 .Blog-Section-Post-Title {
   font-size: 1.4rem;
-  margin-bottom: 10px;
   color: #111;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
 }
 
 .Blog-Section-Post-Excerpt {
   font-size: 1rem;
   color: #555;
-  margin-bottom: 15px;
+  line-height: 1.6;
 }
 
 .Blog-Section-Post-Meta {
@@ -96,6 +99,25 @@
   background-color: #888;
   border-radius: 50%;
 }
+
+.Blog-Section-ReadMore {
+  color: #d4af37;
+  font-weight: 600;
+  transition: color 0.3s ease;
+  text-decoration: none;
+  border-bottom: 2px solid #d4af37;
+  padding-bottom: 2px;
+  width: 100px;
+  margin-top: 5px;
+}
+
+.Blog-Section-ReadMore:hover {
+  color: #b39700;
+  border-bottom: 2px solid #b39700;
+  text-decoration: none;
+}
+
+
 
 /* ===== Blog Section Sidebar ===== */
 .Blog-Section-Sidebar {
@@ -158,6 +180,7 @@
   margin-bottom: 20px;
   font-size: 1.2rem;
   color: #222;
+  font-weight: 600;
 }
 
 .Blog-Section-Recent-Post {
@@ -198,6 +221,7 @@
   color: #333;
   margin-top: 5px;
   line-height: 1.4;
+  font-weight: 600;
 }
 
 /* ===== Blog Section Tags ===== */
@@ -205,6 +229,7 @@
   margin-bottom: 15px;
   font-size: 1.2rem;
   color: #222;
+  font-weight: 600;
 }
 
 .Blog-Section-Tag-List {
@@ -229,138 +254,12 @@
   border-color: #4caf50;
 }
 
-/* ===== Blog Section Sidebar Image ===== */
-.Blog-Section-Sidebar-Image {
-  position: relative;
-  margin-bottom: 20px;
-  overflow: hidden;
-  border-radius: 10px;
-}
-
-.Blog-Section-Sidebar-Image img {
-  width: 100%;
-  height: auto;
-  transition: all 0.5s ease;
-  filter: brightness(80%);
-}
-
-.Blog-Section-Sidebar-Image:hover img {
-  filter: brightness(100%);
-  transform: scale(1.05);
-}
-
-.Blog-Section-Sidebar-Image::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.2);
-  transition: all 0.5s ease;
-}
-
-.Blog-Section-Sidebar-Image:hover::before {
-  background-color: rgba(0, 0, 0, 0);
-}
-
-/* ===== Responsive Design ===== */
-
-/* Large tablets and below */
-@media (max-width: 992px) {
-  .Blog-Section-Container {
-    flex-direction: column;
-    padding: 20px;
-  }
-
-  .Blog-Section-Main-Content,
-  .Blog-Section-Sidebar {
-    width: 100%;
-    min-width: auto;
-  }
-
-  .Blog-Section-Sidebar {
-    margin-top: 30px;
-  }
-}
-
-/* Medium tablets and below */
-@media (max-width: 768px) {
-  .Blog-Section-Post {
-    flex-direction: column;
-  }
-
-  .Blog-Section-Post-Image {
-    flex-basis: 100%;
-    max-width: 100%;
-    min-width: auto;
-  }
-
-  .Blog-Section-Recent-Post {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .Blog-Section-Recent-Post img {
-    width: 100%;
-    height: 150px;
-    border-radius: 8px;
-  }
-
-  .Blog-Section-Sidebar-Image {
-    margin-bottom: 15px;
-  }
-}
-
-/* Small phones and below */
-@media (max-width: 600px) {
-  .Blog-Section-Post-Category {
-    font-size: 0.65rem;
-    padding: 4px 8px;
-  }
-
-  .Blog-Section-Post-Title {
-    font-size: 1.2rem;
-  }
-
-  .Blog-Section-Post-Excerpt {
-    font-size: 0.9rem;
-  }
-
-  .Blog-Section-Tag-Button {
-    padding: 6px 10px;
-    font-size: 0.8rem;
-  }
-}
-
-/* Extra small phones */
-@media (max-width: 480px) {
-  .Blog-Section-Container {
-    padding: 10px;
-  }
-
-  .Blog-Section-Post {
-    padding: 10px;
-  }
-
-  .Blog-Section-Recent-Post {
-    padding: 10px;
-  }
-
-  .Blog-Section-Sidebar-Image {
-    margin-bottom: 10px;
-  }
-
-  .Blog-Section-Sidebar-Image img {
-    border-radius: 5px;
-  }
-}
-
 /* ===== Blog Section Categories ===== */
 .Blog-Section-Categories h2 {
   margin-bottom: 15px;
   font-size: 1.2rem;
   color: #222;
+  font-weight: 600;
 }
 
 .Blog-Section-Category-List {
@@ -384,4 +283,124 @@
 .Blog-Section-Category-Count {
   font-size: 0.9rem;
   color: #888;
+}
+
+
+/* Existing CSS code remains the same */
+
+/* Media Queries */
+
+/* Large Desktops and Laptops */
+@media (max-width: 1600px) {
+  .Blog-Section-Container {
+    max-width: 1400px;
+  }
+}
+
+/* Small Desktops and Large Tablets */
+@media (max-width: 1200px) {
+  .Blog-Section-Container {
+    max-width: 1000px;
+    flex-direction: column;
+  }
+  .Blog-Section-Main-Content {
+    flex: 1 1 100%;
+  }
+  .Blog-Section-Sidebar {
+    flex: 0 0 100%;
+    margin-top: 20px;
+  }
+}
+
+/* Tablets and Small Laptops */
+@media (max-width: 992px) {
+  .Blog-Section-Container {
+    padding: 20px;
+  }
+  .Blog-Section-Post {
+    flex-direction: column;
+  }
+  .Blog-Section-Post-Image {
+    flex: none;
+    max-width: 100%;
+  }
+  .Blog-Section-Post-Image img {
+    height: 250px;
+  }
+}
+
+/* Mobile Devices */
+@media (max-width: 768px) {
+  .Blog-Section-Container {
+    margin: 20px auto;
+    padding: 10px;
+  }
+  .Blog-Section-Post {
+    padding: 10px;
+  }
+  .Blog-Section-Post-Title {
+    font-size: 1.2rem;
+  }
+  .Blog-Section-Post-Excerpt {
+    font-size: 0.9rem;
+  }
+  .Blog-Section-Search-Box input {
+    padding: 10px 12px;
+  }
+  .Blog-Section-Search-Box button {
+    padding: 0 16px;
+  }
+}
+
+/* Small Mobile Devices */
+@media (max-width: 480px) {
+  .Blog-Section-Container {
+    margin: 10px auto;
+  }
+  .Blog-Section-Recent-Post img {
+    width: 60px;
+    height: 60px;
+  }
+  .Blog-Section-Recent-Post-Info h3 {
+    font-size: 0.9rem;
+  }
+}
+
+/* Extra Small Mobile Devices */
+@media (max-width: 320px) {
+  .Blog-Section-Container {
+    padding: 5px;
+  }
+  .Blog-Section-Post {
+    padding: 5px;
+  }
+  .Blog-Section-Post-Title {
+    font-size: 1rem;
+  }
+  .Blog-Section-Post-Excerpt {
+    font-size: 0.8rem;
+  }
+}
+
+.author-designation {
+  font-style: italic;
+  color: #555;
+  font-weight: 500;
+  margin-left: 4px;
+}
+
+.Blog-Section-Post-Index {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: #d4af37;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.Blog-Section-Post {
+  position: relative;
+  /* rest of your styles */
 }

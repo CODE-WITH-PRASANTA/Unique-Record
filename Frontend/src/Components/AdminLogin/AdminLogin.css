@@ -1,0 +1,258 @@
+/* Admin Login Page */
+.Admin-login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 20px;
+  background-color: #f7f8fc;
+}
+
+/* Admin Login Box */
+.Admin-login-box {
+  background: #fff;
+  padding: 50px 40px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Admin Login Logo */
+.Admin-login-logo {
+  width: 160px;
+  margin-bottom: 15px;
+}
+
+/* Admin Login Heading */
+.Admin-login-heading {
+  font-size: 26px;
+  font-weight: 700;
+  color: #1e1e2f;
+  margin-bottom: 6px;
+}
+
+/* Admin Login Subtitle */
+.Admin-login-subtitle {
+  color: #666;
+  font-size: 15px;
+  margin-bottom: 30px;
+}
+
+/* Admin Login Form */
+.Admin-login-form {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Admin Login Label */
+.Admin-login-label {
+  font-size: 15px;
+  color: #333;
+  margin-bottom: 6px;
+}
+
+/* Admin Login Input */
+.Admin-login-input {
+  padding: 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 15px;
+  margin-bottom: 22px;
+  transition: border 0.3s ease;
+}
+
+.Admin-login-input:focus {
+  border-color: #4d62d9;
+}
+
+/* Admin Login Remember */
+.Admin-login-remember {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 25px;
+}
+
+.Admin-login-remember-label {
+  font-size: 14px;
+  color: #444;
+}
+
+/* Admin Login Button */
+.Admin-login-btn {
+  background-color: #4d62d9;
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.Admin-login-btn:hover {
+  background-color: #3a4ab5;
+}
+
+/* Admin Login Divider */
+.Admin-login-divider {
+  margin: 30px 0;
+  font-size: 14px;
+  color: #999;
+  position: relative;
+}
+
+.Admin-login-divider::before,
+.Admin-login-divider::after {
+  content: "";
+  height: 1px;
+  width: 30%;
+  background-color: #ddd;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.Admin-login-divider::before {
+  left: 0;
+}
+
+.Admin-login-divider::after {
+  right: 0;
+}
+
+/* Admin Login Social */
+.Admin-login-social {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.Admin-login-social-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 6px;
+  border: none;
+  color: white;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.Admin-login-social-btn:hover {
+  transform: scale(1.05);
+}
+
+.Admin-login-social-btn.facebook {
+  background-color: #3b5998;
+}
+
+.Admin-login-social-btn.twitter {
+  background-color: #000;
+}
+
+.Admin-login-social-btn.google {
+  background-color: #db4437;
+}
+
+.Admin-login-social-btn.github {
+  background-color: #333;
+}
+
+
+/* ... existing CSS code ... */
+
+/* Responsive Breakpoints */
+@media (max-width: 768px) {
+  .Admin-login-box {
+    padding: 40px 30px;
+    max-width: 500px;
+  }
+
+  .Admin-login-heading {
+    font-size: 24px;
+  }
+
+  .Admin-login-subtitle {
+    font-size: 14px;
+  }
+
+  .Admin-login-input {
+    padding: 12px;
+    font-size: 14px;
+  }
+
+  .Admin-login-btn {
+    padding: 12px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .Admin-login-logo {
+    width: 120px;
+  }
+
+  .Admin-login-heading {
+    font-size: 20px;
+  }
+
+  .Admin-login-subtitle {
+    font-size: 13px;
+  }
+
+  .Admin-login-input {
+    padding: 10px;
+    font-size: 13px;
+  }
+
+  .Admin-login-btn {
+    padding: 10px;
+    font-size: 13px;
+  }
+
+  .Admin-login-social-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 320px) {
+
+  .Admin-login-logo {
+    width: 100px;
+  }
+
+  .Admin-login-heading {
+    font-size: 18px;
+  }
+
+  .Admin-login-subtitle {
+    font-size: 12px;
+  }
+
+  .Admin-login-input {
+    padding: 8px;
+    font-size: 12px;
+  }
+
+  .Admin-login-btn {
+    padding: 8px;
+    font-size: 12px;
+  }
+
+  .Admin-login-social-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+}

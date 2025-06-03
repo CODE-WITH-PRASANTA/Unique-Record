@@ -12,6 +12,10 @@ const createBlog = async (req, res) => {
       blogContent,
       category,
       authorName,
+      authorDesignation,
+      phoneNumber,
+      email,
+      address,
       tags,
     } = req.body;
 
@@ -26,6 +30,10 @@ const createBlog = async (req, res) => {
       blogContent,
       category,
       authorName,
+      authorDesignation: authorDesignation ?? "",
+      phoneNumber: phoneNumber ?? "",
+      email: email ?? "",
+      address: address ?? "",
       tags: JSON.parse(tags),
       imageUrl: result.secure_url,
     });
@@ -96,15 +104,29 @@ const updateBlog = async (req, res) => {
 // Delete Blog
 const deleteBlog = async (req, res) => {
   try {
-    const blog = await Blog.findByIdAndDelete(req.params.id);
+    const blog = await Blog.findById(req.params.id);
     if (!blog) {
       return res.status(404).json({ success: false, message: "Blog not found" });
     }
-    res.status(200).json({ success: true, message: "Blog deleted" });
+
+    // Extract public_id from Cloudinary URL
+    const imageUrl = blog.imageUrl;
+    const publicIdMatch = imageUrl.match(/\/blogs\/([^/.]+)\./);
+    if (publicIdMatch && publicIdMatch[1]) {
+      const publicId = `blogs/${publicIdMatch[1]}`;
+      await cloudinary.uploader.destroy(publicId);
+    }
+
+    // Delete blog from MongoDB
+    await Blog.findByIdAndDelete(req.params.id);
+
+    res.status(200).json({ success: true, message: "Blog and image deleted successfully" });
   } catch (error) {
+    console.error("Error deleting blog:", error);
     res.status(500).json({ success: false, message: "Failed to delete blog" });
   }
 };
+
 
 module.exports = {
   createBlog,

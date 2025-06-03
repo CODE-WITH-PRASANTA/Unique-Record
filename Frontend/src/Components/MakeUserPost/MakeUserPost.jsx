@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import './MakeUserPost.css';
 import { API_URL } from '../../Api'; // Import the API_URL
@@ -10,12 +10,30 @@ const MakeUserPost = () => {
     quotes: '',
     content: '',
     authorName: '',
+    authorDesignation: '',
+    phoneNumber: '',
+    email: '',
+    address: '',
     category: '',
     tags: [],
     image: null,
   });
 
   const [tagInput, setTagInput] = useState('');
+   const [categories, setCategories] = useState([]);
+   useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch(`${API_URL}/categories`);
+        const data = await response.json();
+        setCategories(data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+    fetchCategories();
+  }, []);
+  
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -68,12 +86,16 @@ const MakeUserPost = () => {
 
   const formPayload = new FormData();
   formPayload.append("blogTitle", formData.title);
-  formPayload.append("shortDescription", formData.quotes); // Map quotes to shortDescription
+  formPayload.append("shortDescription", formData.quotes); 
   formPayload.append("quotes", formData.quotes);
   formPayload.append("blogContent", formData.content);
   formPayload.append("category", formData.category);
   formPayload.append("authorName", formData.authorName || "Anonymous");
-  formPayload.append("tags", JSON.stringify(formData.tags)); // must be stringified
+  formPayload.append("authorDesignation", formData.authorDesignation);
+  formPayload.append("phoneNumber", formData.phoneNumber);
+  formPayload.append("email", formData.email);
+  formPayload.append("address", formData.address);
+  formPayload.append("tags", JSON.stringify(formData.tags)); 
   formPayload.append("image", formData.image);
 
   try {
@@ -86,12 +108,15 @@ const MakeUserPost = () => {
 
     if (response.ok) {
       alert("✅ Blog posted successfully!");
-      // Clear the form
       setFormData({
         title: '',
         quotes: '',
         content: '',
         authorName: '',
+        authorDesignation: '',
+        phoneNumber: '',
+        email: '',
+        address: '',
         category: '',
         tags: [],
         image: null,
@@ -157,7 +182,7 @@ const MakeUserPost = () => {
           />
         </div>
 
-        {/* Author Name & Category */}
+        {/* Author Information */}
         <div className="Make-User-Post-Row">
           <div className="Make-User-Post-FormGroup">
             <label>Author Name</label>
@@ -171,24 +196,68 @@ const MakeUserPost = () => {
           </div>
 
           <div className="Make-User-Post-FormGroup">
-            <label>Category</label>
-            <select
-              name="category"
-              value={formData.category}
+            <label>Author Designation</label>
+            <input
+              type="text"
+              name="authorDesignation"
+              placeholder="Author designation"
+              value={formData.authorDesignation}
               onChange={handleChange}
-            >
-              <option value="">Select Category</option>
-              <option value="Technology">Technology</option>
-              <option value="Health">Health</option>
-              <option value="Travel">Travel</option>
-              <option value="Education">Education</option>
-              <option value="Lifestyle">Lifestyle</option>
-            </select>
+            />
           </div>
         </div>
 
-        {/* Tags & Image Upload */}
         <div className="Make-User-Post-Row">
+          <div className="Make-User-Post-FormGroup">
+            <label>Phone Number</label>
+            <input
+              type="text"
+              name="phoneNumber"
+              placeholder="Phone number"
+              value={formData.phoneNumber}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="Make-User-Post-FormGroup">
+            <label>Email</label>
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={formData.email}
+              onChange={handleChange}
+            />
+          </div>
+        </div>
+
+        <div className="Make-User-Post-FormGroupFull">
+          <label>Address</label>
+          <textarea
+            name="address"
+            placeholder="Address"
+            value={formData.address}
+            onChange={handleChange}
+            rows={3}
+          />
+        </div>
+
+        {/* Category & Tags */}
+        <div className="Make-User-Post-Row">
+      <div className="Make-User-Post-FormGroup">
+        <label>Category</label>
+        <select
+          name="category"
+          value={formData.category}
+          onChange={handleChange}
+        >
+          <option value="">Select Category</option>
+          {categories.map((category) => (
+            <option key={category._id} value={category.name}>{category.name}</option>
+          ))}
+        </select>
+      </div>
+
           <div className="Make-User-Post-FormGroup">
             <label>Tags</label>
             <input
@@ -208,17 +277,18 @@ const MakeUserPost = () => {
               ))}
             </div>
           </div>
+        </div>
 
-          <div className="Make-User-Post-FormGroup">
-            <label>Upload Image<span>*</span></label>
-            <input
-              type="file"
-              name="image"
-              accept="image/*"
-              onChange={handleChange}
-              required
-            />
-          </div>
+        {/* Image Upload */}
+        <div className="Make-User-Post-FormGroupFull">
+          <label>Upload Image<span>*</span></label>
+          <input
+            type="file"
+            name="image"
+            accept="image/*"
+            onChange={handleChange}
+            required
+          />
         </div>
 
         <button type="submit" className="Make-User-Post-SubmitButton">Post Blog</button>

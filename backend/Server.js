@@ -31,7 +31,6 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/api/notices", noticeRoutes);
-
 app.use("/api/events", eventRoutes);
 app.use("/api/eventsgalary", eventGalleryRoutes);
 app.use("/api/auth", authRoutes);

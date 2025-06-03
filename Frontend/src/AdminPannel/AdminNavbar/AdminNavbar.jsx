@@ -67,23 +67,11 @@ const NAVIGATION = [
       },
       {
         segment: 'edit',
-        title: 'Edit Blog',  // <-- Added this
+        title: 'Delete Blog',  // <-- Added this
         icon: <EditIcon style={{ color: '#ff9800' }} />,
       },
     ],
   },
-  // {
-  //   kind: 'divider',
-  // },
-  // {
-  //   kind: 'header',
-  //   title: 'Approve Blogs',
-  // },
-  // {
-  //   segment: 'approve-blogs',
-  //   title: 'Approve Blogs',
-  //   icon: <CheckCircleIcon style={{ color: '#4caf50' }} />, // Green color for approved feeling
-  // },
   {
   kind: 'header',
   title: 'URU Management',
@@ -372,7 +360,7 @@ export default function DashboardLayoutBasic({ window }) {
           <PageContainer>
             {router.pathname === '/dashboard' && <AdminDashboard />}
             {router.pathname === '/blog/create' && <CreateBlogs />}
-            {/* {router.pathname === '/blog/edit' && <AdminEditBlogs />} */}
+            {router.pathname === '/blog/edit' && <AdminEditBlogs />}
             {router.pathname === '/notice/add' && <AdminAddNotice />} 
             {router.pathname === '/notice/manage' && <AdminManageNotice />}
             {router.pathname === '/event/add' && <AdminAddEvent />}

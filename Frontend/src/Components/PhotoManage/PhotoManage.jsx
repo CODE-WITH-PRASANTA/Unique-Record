@@ -59,17 +59,17 @@ const PhotoManage = () => {
       setLoading(false);
     }
   };
+const handleDelete = async (id) => {
+  if (!window.confirm("Are you sure you want to delete this photo?")) return;
 
-  const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this photo?")) return;
-
-    try {
-      await axios.delete(`${photoAPI}/${id}`);
-      setPhotos(photos.filter((photo) => photo._id !== id));
-    } catch (err) {
-      console.error("Failed to delete", err);
-    }
-  };
+  try {
+    const res = await axios.delete(`${photoAPI}/${id}`);
+    setPhotos(photos.filter((photo) => photo._id !== id));
+  } catch (err) {
+    console.error("Failed to delete:", err.response.data.error);
+    alert(`Failed to delete: ${err.response.data.error}`);
+  }
+};
 
   return (
     <div className="Photo-Manage-Container">
@@ -86,6 +86,7 @@ const PhotoManage = () => {
             <option value="">-- Select --</option>
             <option value="News Paper">News Paper</option>
             <option value="Online News">Online News</option>
+            <option value="Photos">Photos</option>
           </select>
         </div>
 

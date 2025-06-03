@@ -5,6 +5,12 @@ import { useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarAlt, faComments, faSearch, faQuoteLeft, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import { API_URL } from '../../Api'; // Import the API_URL constant
+import { faPrint } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fab } from '@fortawesome/free-brands-svg-icons';
+
+library.add(fab);
 
 const BlogDetails = () => {
   const { id } = useParams();
@@ -13,6 +19,21 @@ const BlogDetails = () => {
   const [categories, setCategories] = useState([]);
   const [recentPosts, setRecentPosts] = useState([]);
   const [tags, setTags] = useState([]);
+  const [showAllCategories, setShowAllCategories] = useState(false);
+
+  const handleViewAllCategories = () => {
+    setShowAllCategories(!showAllCategories);
+  };
+
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    // Redirect to search results page or filter blog posts
+    window.location.href = `/search?q=${searchTerm}`;
+  };
 
   const fetchCategories = async () => {
     try {
@@ -64,13 +85,16 @@ const BlogDetails = () => {
     fetchCategories();
   }, [id]);
 
-  const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
-  };
-
   if (!blog) {
     return <div>Loading...</div>;
   }
+
+  const capitalizeDesignation = (designation) => {
+  return designation
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ');
+};
 
 
   return (
@@ -84,15 +108,19 @@ const BlogDetails = () => {
                 <FontAwesomeIcon icon={faCalendarAlt} className="news-icon" />
                 <span>{new Date(blog.createdAt).toLocaleDateString()}</span>
               </div>
-              <div className="author-container">
-                <FontAwesomeIcon icon={faCheckCircle} className="news-icon" />
-                <span>By : {blog.authorName || 'Unknown Author'}</span>
-              </div>
+          <div className="author-container">
+            <FontAwesomeIcon icon={faCheckCircle} className="news-icon" />
+            <span>By: {blog.authorName || 'Unknown Author'}</span>
+            {blog.authorDesignation && (
+              <span> &mdash; ({capitalizeDesignation(blog.authorDesignation)})</span>
+            )}
+          </div>
+
+
             </div>
           </div>
 
           <h1 className="News-details-title">{blog.blogTitle}</h1>
-          <p className="News-details-paragraph">{blog.shortDescription}</p>
           <p className="News-details-paragraph" dangerouslySetInnerHTML={{ __html: blog.blogContent }}></p>
 
           {blog.quotes && (
@@ -109,16 +137,33 @@ const BlogDetails = () => {
               </div>
               <div className="social-share">
                 <strong>Share:</strong>
-                <button className="social-news-icon">F</button>
-                <button className="social-news-icon">X</button>
-                <button className="social-news-icon">in</button>
-                <button className="social-news-icon">G</button>
+                <button className="social-news-icon" onClick={() => window.open(`https://www.facebook.com/sharer/sharer.php?u=${window.location.href}`, '_blank')}>
+                  <FontAwesomeIcon icon={['fab', 'facebook-f']} />
+                </button>
+                <button className="social-news-icon" onClick={() => window.open(`https://twitter.com/intent/tweet?url=${window.location.href}`, '_blank')}>
+                  <FontAwesomeIcon icon={['fab', 'twitter']} />
+                </button>
+                <button className="social-news-icon" onClick={() => window.open(`https://www.linkedin.com/sharing/share?url=${window.location.href}`, '_blank')}>
+                  <FontAwesomeIcon icon={['fab', 'linkedin-in']} />
+                </button>
+                <button className="social-news-icon" onClick={() => window.open(`https://wa.me/?text=${window.location.href}`, '_blank')}>
+                  <FontAwesomeIcon icon={['fab', 'whatsapp']} />
+                </button>
+                <button className="social-news-icon" onClick={() => window.open(`https://telegram.me/share/url?url=${window.location.href}`, '_blank')}>
+                  <FontAwesomeIcon icon={['fab', 'telegram-plane']} />
+                </button>
+                <button className="social-news-icon" onClick={() => window.print()}>
+                  <FontAwesomeIcon icon={faPrint} />
+                </button>
+                <button className="social-news-icon" onClick={() => window.location.href = `mailto:?subject=${blog.blogTitle}&body=${window.location.href}`}>
+                  <FontAwesomeIcon icon={faEnvelope} />
+                </button>
               </div>
             </div>
           </div>
 
           <div className="comments-reply-form">
-            <h2>Ask Any Question ?</h2>
+            <h2>Please Share Your Feedback or Suggestions.?</h2>
             <form>
               <div className="news-form-row">
                 <input type="text" placeholder="Name" />
@@ -127,6 +172,7 @@ const BlogDetails = () => {
               <div className="news-form-row">
                 <input type="tel" placeholder="Phone" />
                 <input type="text" placeholder="Subject" />
+                <input type="text" placeholder="Address" />
               </div>
               <textarea placeholder="Message"></textarea>
               <button type="submit">Submit Now →</button>
@@ -136,19 +182,33 @@ const BlogDetails = () => {
 
         <aside className="News-details-sidebar">
           <div className="News-details-search-bar">
-            <input type="search" value={searchTerm} onChange={handleSearch} placeholder="Search" />
-            <button><FontAwesomeIcon icon={faSearch} /></button>
+            <form onSubmit={handleSearchSubmit}>
+              <input type="search" value={searchTerm} onChange={handleSearch} placeholder="Search" />
+              <button type="submit"><FontAwesomeIcon icon={faSearch} /></button>
+            </form>
           </div>
+
           <div className="News-details-categories">
             <h2>All Categories</h2>
             <div className="News-details-category-tags">
-              {categories.map((category, index) => (
-                <span key={index} className="News-details-category-tag">
-                  {category.name}
-                </span>
-              ))}
+              {categories
+                .slice(0, showAllCategories ? categories.length : 5)
+                .map((category, index) => (
+                  <span key={index} className="News-details-category-tag">
+                    {category.name}
+                  </span>
+                ))}
             </div>
+            {categories.length > 5 && (
+              <button
+                className="view-all-categories-btn"
+                onClick={handleViewAllCategories}
+              >
+                {showAllCategories ? "View Less" : "View All Categories"}
+              </button>
+            )}
           </div>
+
           <div className="News-details-recent-posts-sidebar">
             <h2>Recent Posts</h2>
             {recentPosts.map((post, index) => (

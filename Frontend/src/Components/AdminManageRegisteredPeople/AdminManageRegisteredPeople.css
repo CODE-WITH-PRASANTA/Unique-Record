@@ -131,17 +131,6 @@ tr:hover {
   font-size: 14px;
 }
 
-/* Links */
-a {
-  color: #007bff;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-a:hover {
-  text-decoration: underline;
-}
-
 /* Mobile Responsive */
 @media (max-width: 768px) {
   .AdminManage-Registered-People-table {

@@ -5,27 +5,54 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { API_URL } from '../../Api'; // Import API_URL
+import { faListOl } from '@fortawesome/free-solid-svg-icons';
 
+const BlogPost = ({ post, index, totalPosts }) => {
+  const capitalizeDesignation = (designation) => {
+    return designation
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ');
+  };
 
-const BlogPost = ({ post }) => (
-  <div className="Blog-Section-Post" key={post._id}>
-    <div className="Blog-Section-Post-Image">
-      <img src={post.imageUrl} alt={post.blogTitle} />
-    </div>
-    <div className="Blog-Section-Post-Details">
-      <div className="Blog-Section-Post-Category">{post.category}</div>
-      <Link to={`/blog/${post._id}`}>
-        <h2 className="Blog-Section-Post-Title">{post.blogTitle}</h2>
-      </Link>
-      <p className="Blog-Section-Post-Excerpt">{post.shortDescription}</p>
-      <div className="Blog-Section-Post-Meta">
-        <span>{new Date(post.createdAt).toDateString()}</span>
-        <span className="Blog-Section-Post-Dot"></span>
-        <span>By {post.authorName}</span>
+  return (
+    <div className="Blog-Section-Post" key={post._id}>
+      <div className="Blog-Section-Post-Index">
+        <FontAwesomeIcon icon={faListOl} />
+        <span>Sl No. {totalPosts - index}</span>
+      </div>
+      <div className="Blog-Section-Post-Image">
+        <img src={post.imageUrl} alt={post.blogTitle} />
+      </div>
+      <div className="Blog-Section-Post-Details">
+        <div className="Blog-Section-Post-Category">{post.category}</div>
+        <Link to={`/blog/${post._id}`}>
+          <h2 className="Blog-Section-Post-Title">{post.blogTitle}</h2>
+        </Link>
+        <p className="Blog-Section-Post-Excerpt">
+          {post.shortDescription.length > 150
+            ? `${post.shortDescription.substring(0, 150)}...`
+            : post.shortDescription}
+        </p>
+        <div className="Blog-Section-Post-Meta">
+          <span>{new Date(post.createdAt).toDateString()}</span>
+          <span className="Blog-Section-Post-Dot"></span>
+          <span>
+            By {post.authorName}
+            {post.authorDesignation && (
+              <span className="author-designation">
+                {' '}({capitalizeDesignation(post.authorDesignation)})
+              </span>
+            )}
+          </span>
+        </div>
+        <Link to={`/blog/${post._id}`} className="Blog-Section-ReadMore">
+          Read More →
+        </Link>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 const RecentPost = ({ post }) => (
   <div className="Blog-Section-Recent-Post" key={post._id}>
@@ -91,8 +118,8 @@ const BlogSection = () => {
   return (
     <div className="Blog-Section-Container">
       <div className="Blog-Section-Main-Content">
-        {filteredBlogPosts.map(post => (
-          <BlogPost key={post._id} post={post} />
+        {filteredBlogPosts.map((post, index) => (
+          <BlogPost key={post._id} post={post} index={index} totalPosts={filteredBlogPosts.length} />
         ))}
       </div>
 

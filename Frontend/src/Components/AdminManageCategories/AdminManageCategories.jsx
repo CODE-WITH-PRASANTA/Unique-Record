@@ -54,6 +54,7 @@ const AdminManageCategories = () => {
     setInputValue(name);
     setEditId(id);
   };
+
   return (
     <div className="Admin-category-container">
       <h2 className="Admin-category-title">Manage Categories</h2>
@@ -72,8 +73,9 @@ const AdminManageCategories = () => {
       </div>
 
       <div className="Admin-category-list">
-        {categories.map((category) => (
+        {categories.map((category, index) => (
           <div key={category._id} className="Admin-category-item">
+            <span className="Admin-category-serial">{index + 1}.</span>
             <span className="Admin-category-name">{category.name}</span>
             <div className="Admin-category-actions">
               <button

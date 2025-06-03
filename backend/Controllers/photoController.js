@@ -46,9 +46,9 @@ exports.getPhotos = async (req, res) => {
       res.status(500).json({ error: "Failed to fetch photos" });
     }
   };
-  
 
-exports.deletePhoto = async (req, res) => {
+  
+  exports.deletePhoto = async (req, res) => {
   try {
     const { id } = req.params;
     const photo = await Photo.findById(id);
@@ -56,13 +56,18 @@ exports.deletePhoto = async (req, res) => {
     if (!photo) return res.status(404).json({ error: "Photo not found" });
 
     // Delete from Cloudinary
-    await cloudinary.uploader.destroy(photo.publicId);
+    try {
+      await cloudinary.uploader.destroy(photo.publicId);
+    } catch (cloudinaryError) {
+      console.error("Cloudinary deletion error:", cloudinaryError);
+    }
 
     // Delete from DB
-    await photo.remove();
+    await Photo.findByIdAndDelete(id);
 
     res.json({ message: "Photo deleted successfully" });
   } catch (err) {
+    console.error("Delete error:", err); 
     res.status(500).json({ error: "Failed to delete photo" });
   }
 };
