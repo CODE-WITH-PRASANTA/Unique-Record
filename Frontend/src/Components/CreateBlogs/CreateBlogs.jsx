@@ -19,13 +19,16 @@ const CreateBlogs = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const [blogs, setBlogs] = useState([]);
   const [editingBlog, setEditingBlog] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredBlogs, setFilteredBlogs] = useState(blogs);
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         const response = await fetch(`${API_URL}/categories`);
         const data = await response.json();
-        setCategories(data);
+        const sortedCategories = data.sort((a, b) => a.name.localeCompare(b.name));
+        setCategories(sortedCategories);
       } catch (error) {
         console.error('Error fetching categories:', error);
       }
@@ -43,6 +46,10 @@ const CreateBlogs = () => {
     };
     fetchBlogs();
   }, []);
+
+  useEffect(() => {
+    setFilteredBlogs(blogs);
+  }, [blogs]);
 
   const handleImageUpload = (e) => {
     setImage(e.target.files[0]);
@@ -104,7 +111,6 @@ const CreateBlogs = () => {
         });
         setBlogs(editingBlog ? blogs.map(blog => blog._id === editingBlog._id ? data.data : blog) : [...blogs, data.data]);
         setEditingBlog(null);
-        // Reset form fields
         setBlogTitle('');
         setShortDescription('');
         setQuotes('');
@@ -154,25 +160,24 @@ const CreateBlogs = () => {
     }
   };
 
-  const [searchTerm, setSearchTerm] = useState('');
-const [filteredBlogs, setFilteredBlogs] = useState(blogs);
+  const handleSearch = () => {
+    const filtered = blogs.filter(blog => 
+      blog.blogTitle.toLowerCase().includes(searchTerm.toLowerCase()) || 
+      blog.authorName.toLowerCase().includes(searchTerm.toLowerCase()) || 
+      blog.authorDesignation.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredBlogs(filtered);
+  };
 
-useEffect(() => {
-  setFilteredBlogs(blogs);
-}, [blogs]);
+  const handleReset = () => {
+    setSearchTerm('');
+    setFilteredBlogs(blogs);
+  };
 
-const handleSearch = () => {
-  const filtered = blogs.filter(blog => 
-    (blog.phoneNumber && blog.phoneNumber.includes(searchTerm)) || 
-    (blog.email && blog.email.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
-  setFilteredBlogs(filtered);
-};
-
-const handleReset = () => {
-  setSearchTerm('');
-  setFilteredBlogs(blogs);
-};
+  const copySelectedText = () => {
+    const selectedText = window.getSelection().toString();
+    navigator.clipboard.writeText(selectedText);
+  };
 
   return (
     <div className="Create-Blog-Container">
@@ -241,19 +246,68 @@ const handleReset = () => {
         <div className="Create-Blog-Section">
           <label className="Create-Blog-Label">Blog Content</label>
           <Editor
-            apiKey='38wljwg2resc6xba8ypjqp4duobboibboshf3czbuyv5iulv'
-            value={blogContent}
-            onEditorChange={handleEditorChange}
-            init={{
-              height: 300,
-              menubar: false,
-              branding: false, // Add this line to remove branding
-              plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
-              toolbar:
-                'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
-              content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
-            }}
-          />
+  apiKey="38wljwg2resc6xba8ypjqp4duobboibboshf3czbuyv5iulv"
+  value={blogContent}
+  onEditorChange={handleEditorChange}
+  init={{
+    height: 300,
+    menubar: false,
+    branding: false,
+    plugins:
+      'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+    toolbar:
+      'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+    content_style:
+      'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+
+    setup: (editor) => {
+      let copyButton;
+
+      // Detect text selection
+      editor.on('NodeChange', () => {
+        const selection = editor.selection.getContent({ format: 'text' });
+        if (selection && selection.trim().length > 0) {
+          const rect = editor.selection.getRng().getBoundingClientRect();
+
+          if (!copyButton) {
+            copyButton = document.createElement('button');
+            copyButton.innerText = 'Copy';
+            copyButton.style.position = 'absolute';
+            copyButton.style.zIndex = '1000';
+            copyButton.style.padding = '5px 10px';
+            copyButton.style.background = '#333';
+            copyButton.style.color = '#fff';
+            copyButton.style.border = 'none';
+            copyButton.style.borderRadius = '5px';
+            copyButton.style.cursor = 'pointer';
+            copyButton.onclick = () => {
+              navigator.clipboard.writeText(selection);
+              copyButton.innerText = 'Copied!';
+              setTimeout(() => {
+                copyButton.innerText = 'Copy';
+              }, 1000);
+            };
+            document.body.appendChild(copyButton);
+          }
+
+          // Position the button near the selection
+          const iframeRect = editor.iframeElement.getBoundingClientRect();
+          copyButton.style.top = `${iframeRect.top + rect.top - 35}px`;
+          copyButton.style.left = `${iframeRect.left + rect.left}px`;
+          copyButton.style.display = 'block';
+        } else if (copyButton) {
+          copyButton.style.display = 'none';
+        }
+      });
+
+      // Hide on blur
+      editor.on('Blur', () => {
+        if (copyButton) copyButton.style.display = 'none';
+      });
+    },
+  }}
+/>
+
         </div>
 
         <div className="Create-Blog-Row">
@@ -328,51 +382,44 @@ const handleReset = () => {
         </button>
       </form>
 
-    <h2 className='Create-Blog-heading-table'>Blogs</h2>
-<div className="search-bar-container">
-  <input
-    type="text"
-    value={searchTerm}
-    onChange={(e) => setSearchTerm(e.target.value)}
-    placeholder="Search by phone number or email"
-    className="search-bar-input"
-  />
-  <button className="search-bar-button" onClick={handleSearch}>Search</button>
-  <button className="search-bar-button" onClick={handleReset}>Reset</button>
-</div>
-<table className="Create-Blog-Table">
-  <thead>
-    <tr>
-      <th>S.No.</th>
-      <th>Title</th>
-      <th>Photo</th>
-      <th>Author Name</th>
-      <th>Author Designation</th>
-      <th>Phone Number</th>
-      <th>Email</th>
-      <th>Address</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    {filteredBlogs.map((blog, index) => (
-      <tr key={blog._id}>
-        <td>{index + 1}</td>
-        <td>{blog.blogTitle}</td>
-        <td><img src={blog.imageUrl} alt={blog.blogTitle} /></td>
-        <td>{blog.authorName}</td>
-        <td>{blog.authorDesignation || "N/A"}</td>
-        <td>{blog.phoneNumber || "N/A"}</td>
-        <td>{blog.email || "N/A"}</td>
-        <td>{blog.address || "N/A"}</td>
-        <td>
-          <button onClick={() => handleEditBlog(blog)}>Edit</button>
-        </td>
-      </tr>
-    ))}
-  </tbody>
-</table>
-
+      <h2 className='Create-Blog-heading-table'>Blogs</h2>
+      <div className="search-bar-container">
+        <input
+          type="text"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Search by blog title, author name, or author designation"
+          className="search-bar-input"
+        />
+        <button className="search-bar-button" onClick={handleSearch}>Search</button>
+        <button className="search-bar-button" onClick={handleReset}>Reset</button>
+      </div>
+      <table className="Create-Blog-Table">
+        <thead>
+          <tr>
+            <th>S.No.</th>
+            <th>Title</th>
+            <th>Photo</th>
+            <th>Author Name</th>
+            <th>Author Designation</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filteredBlogs.map((blog, index) => (
+            <tr key={blog._id}>
+              <td>{index + 1}</td>
+              <td>{blog.blogTitle}</td>
+              <td><img src={blog.imageUrl} alt={blog.blogTitle} /></td>
+              <td>{blog.authorName}</td>
+              <td>{blog.authorDesignation || "N/A"}</td>
+              <td>
+                <button onClick={() => handleEditBlog(blog)}>Edit</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };

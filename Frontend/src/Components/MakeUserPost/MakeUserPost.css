@@ -164,3 +164,106 @@
     }
   }
   
+  /* === Terms Modal Overlay === */
+.Make-User-Post-TermsModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* === Modal Content Box === */
+.Make-User-Post-TermsModalContent {
+  background: #fff;
+  border-radius: 12px;
+  max-width: 700px;
+  width: 90%;
+  padding: 30px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+  overflow-y: auto;
+  max-height: 80vh;
+  animation: slideUp 0.4s ease-in-out;
+}
+
+/* === Modal Title === */
+.Make-User-Post-TermsModalContent h2 {
+  font-size: 24px;
+  margin-bottom: 15px;
+  color: #333;
+  border-bottom: 2px solid #e94e77;
+  padding-bottom: 8px;
+}
+
+/* === Modal Paragraphs === */
+.Make-User-Post-TermsModalContent p {
+  font-size: 15px;
+  color: #444;
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+
+/* === Modal List === */
+.Make-User-Post-TermsModalContent ul {
+  padding-left: 20px;
+  margin-bottom: 15px;
+}
+
+.Make-User-Post-TermsModalContent li {
+  font-size: 14.5px;
+  color: #444;
+  line-height: 1.5;
+  margin-bottom: 8px;
+  list-style-type: disc;
+}
+
+/* === Close Button === */
+.Make-User-Post-TermsModalClose {
+  margin-top: 15px;
+  padding: 10px 20px;
+  background-color: #e94e77;
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.Make-User-Post-TermsModalClose:hover {
+  background-color: #d03c67;
+}
+
+/* === Terms Link === */
+.Make-User-Post-TermsLink {
+  color: #e94e77;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+/* === Animations === */
+@keyframes slideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

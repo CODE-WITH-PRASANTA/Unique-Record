@@ -8,6 +8,17 @@ import { API_URL } from '../../Api'; // Import API_URL
 import { faListOl } from '@fortawesome/free-solid-svg-icons';
 
 const BlogPost = ({ post, index, totalPosts }) => {
+  const [showFullImage, setShowFullImage] = useState(false);
+
+  const handleImageClick = () => {
+    setShowFullImage(true);
+  };
+
+  const handleCloseFullImage = () => {
+    setShowFullImage(false);
+  };
+
+
   const capitalizeDesignation = (designation) => {
     return designation
       .split(' ')
@@ -15,14 +26,24 @@ const BlogPost = ({ post, index, totalPosts }) => {
       .join(' ');
   };
 
+  
+
   return (
+    
     <div className="Blog-Section-Post" key={post._id}>
       <div className="Blog-Section-Post-Index">
         <FontAwesomeIcon icon={faListOl} />
         <span>Sl No. {totalPosts - index}</span>
       </div>
-      <div className="Blog-Section-Post-Image">
-        <img src={post.imageUrl} alt={post.blogTitle} />
+     <div className="Blog-Section-Post-Image">
+        <img src={post.imageUrl} alt={post.blogTitle} onClick={handleImageClick} />
+        {showFullImage && (
+          <div className="Blog-Section-Full-Image-Overlay" onClick={handleCloseFullImage}>
+            <div className="Blog-Section-Full-Image-Container">
+              <img src={post.imageUrl} alt={post.blogTitle} />
+            </div>
+          </div>
+        )}
       </div>
       <div className="Blog-Section-Post-Details">
         <div className="Blog-Section-Post-Category">{post.category}</div>
@@ -117,6 +138,11 @@ const BlogSection = () => {
 
   return (
     <div className="Blog-Section-Container">
+       <div className="mobile-Blog-Section-Search-Box">
+          <input type="text" placeholder="Search" />
+          <button><FontAwesomeIcon icon={faSearch} /></button>
+        </div>
+
       <div className="Blog-Section-Main-Content">
         {filteredBlogPosts.map((post, index) => (
           <BlogPost key={post._id} post={post} index={index} totalPosts={filteredBlogPosts.length} />

@@ -57,17 +57,17 @@ const NAVIGATION = [
   },
   {
     segment: 'blog',
-    title: 'Blog',
+    title: 'URU Post',
     icon: <ArticleIcon style={{ color: '#ff5722' }} />,
     children: [
       {
         segment: 'create',
-        title: 'Create Blog',
+        title: 'Create Blog Post',
         icon: <CreateIcon style={{ color: '#4caf50' }} />,
       },
       {
         segment: 'edit',
-        title: 'Delete Blog',  // <-- Added this
+        title: 'Delete Blog Post',  // <-- Added this
         icon: <EditIcon style={{ color: '#ff9800' }} />,
       },
     ],

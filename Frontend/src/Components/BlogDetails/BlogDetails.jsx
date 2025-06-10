@@ -35,18 +35,19 @@ const BlogDetails = () => {
     window.location.href = `/search?q=${searchTerm}`;
   };
 
-  const fetchCategories = async () => {
-    try {
-      const res = await fetch(`${API_URL}/categories`);
-      if (!res.ok) {
-        throw new Error(`HTTP error! status: ${res.status}`);
-      }
-      const data = await res.json();
-      setCategories(data);
-    } catch (error) {
-      console.error('Error fetching categories:', error);
+ const fetchCategories = async () => {
+  try {
+    const res = await fetch(`${API_URL}/categories`);
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`);
     }
-  };
+    const data = await res.json();
+    const sortedCategories = data.sort((a, b) => a.name.localeCompare(b.name));
+    setCategories(sortedCategories);
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+  }
+};
 
   const fetchBlog = async () => {
     try {
