@@ -13,6 +13,7 @@ import {
   FiPhone,
   FiClipboard,
   FiCalendar,
+  FiStar
 } from "react-icons/fi";
 import { FaRegNewspaper } from "react-icons/fa";
 
@@ -56,6 +57,12 @@ const Navbar = () => {
               <FiAward className="nav-icon" /> Achievements
             </a>
           </li>
+
+       <li>
+        <a href="/achievers">
+          <FiStar className="nav-icon" /> Achiever's Details
+        </a>
+      </li>
           <li>
             <a href="/notice">
               <FiClipboard className="nav-icon" /> Notice
@@ -142,6 +149,11 @@ const Navbar = () => {
           <li>
             <a href="/achivments">
               <FiAward className="nav-icon" /> Achievements
+            </a>
+          </li>
+             <li>
+            <a href="/achievers">
+              <FiStar className="nav-icon" /> Achiever's Details
             </a>
           </li>
           <li>

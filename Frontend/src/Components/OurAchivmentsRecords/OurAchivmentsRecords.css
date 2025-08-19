@@ -1,67 +1,111 @@
-.Our-Achievement-Record-Container {
+.our-achievements-record-container {
   display: flex;
-  background-color: #fff;
-  padding: 0 30px;
-  gap: 50px;
+  flex-direction: column;
+  align-items: center;
+  padding: 50px 30px;
   max-width: 1700px;
   margin: auto;
-  margin-top: 50px;
-  margin-bottom: 50px;
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
-.Our-Achievement-Record-Main-Content {
-  text-align: justify;
-  flex: 2;
-}
-
-.Our-Achievement-Record-Post {
+.our-achievements-record-main {
   display: flex;
+  gap: 50px;
+}
+
+.our-achievements-record-posts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
-  margin-bottom: 40px;
+  text-align: justify;
+  flex: 3;
 }
 
-.Our-Achievement-Record-Post img {
-  width: 400px;
-  height: auto;
+.our-achievements-record-post {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #eee;
   border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  height: 900px;
 }
 
-.Our-Achievement-Record-Post-Details {
+.our-achievements-record-post img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+
+.our-achievements-record-post-details {
   flex: 1;
 }
 
-.Our-Achievement-Record-Post-category {
+.our-achievements-record-post-category {
+  font-size: 13px;
+  color: #555;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 10px;
-  font-size: 0.85rem;
-  color: #333;
+  gap: 8px;
+  line-height: 1.6;
+  font-weight: 500;
+  margin-bottom: 6px;
 }
 
-.Our-Achievement-Record-Dot {
-  width: 6px;
-  height: 6px;
-  background-color: #ffc727;
+.our-achievements-record-post-category strong {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.our-achievements-record-dot {
+  width: 5px;
+  height: 5px;
+  background-color: #007bff;
   border-radius: 50%;
   display: inline-block;
 }
 
-.Our-Achievement-Record-Post-Details h2 {
+.achiever-info {
+  width: 100%;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #666;
+}
+
+.achiever-info strong {
+  color: #34495e;
+}
+
+.achievement-provider {
+  display: inline-block;
+  font-size: 13px;
+  color: #777;
+  margin-top: 2px;
+}
+
+.our-achievements-record-post-details h2 {
+  text-align: left;
   font-size: 1.9rem;
   margin: 10px 0;
   font-weight: 800;
   color: #000;
-  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-family: Cambria, Cochin, Georgia,  Times, 'Times New Roman', serif;
 }
 
-.Our-Achievement-Record-Post-Details p {
+.our-achievements-record-post-details p {
   color: #444;
   margin-bottom: 10px;
   line-height: 1.5;
 }
 
-.Our-Achievement-Record-Read-Post {
+.our-achievements-record-read-post {
   color: #00b386;
   font-weight: bold;
   cursor: pointer;
@@ -71,31 +115,31 @@
   margin-top: 10px;
 }
 
-.Our-Achievement-Record-Sidebar {
+.our-achievements-record-sidebar {
   flex: 1;
   display: flex;
   flex-direction: column;
   gap: 30px;
 }
 
-.Our-Achievement-Record-Sidebar-Section {
+.our-achievements-record-sidebar-section {
   background-color: #fff;
   padding: 30px;
   border-radius: 10px;
   border: 1px solid #eee;
 }
 
-.Our-Achievement-Record-Search-Box {
+.our-achievements-record-search-box {
   display: flex;
 }
 
-.Our-Achievement-Record-Search-Box input {
+.our-achievements-record-search-box input {
   flex: 1;
   padding: 10px;
   font-size: 1rem;
 }
 
-.Our-Achievement-Record-Search-Box button {
+.our-achievements-record-search-box button {
   background-color: #ffc727;
   border: none;
   padding: 10px 15px;
@@ -105,21 +149,21 @@
   justify-content: center;
 }
 
-.Our-Achievement-Record-Search-Icon {
+.our-achievements-record-search-icon {
   font-size: 16px;
   color: #000;
 }
 
-.Our-Achievement-Record-Categories h2,
-.Our-Achievement-Record-Latest-Articles h2,
-.Our-Achievement-Record-Subscribe h2 {
+.our-achievements-record-categories h2,
+.our-achievements-record-latest-articles h2,
+.our-achievements-record-subscribe h2 {
   font-size: 1.7rem;
   margin-bottom: 20px;
   font-weight: bold;
   color: #000;
 }
 
-.Our-Achievement-Record-Category-Item {
+.our-achievements-record-category-item {
   margin-bottom: 15px;
   font-weight: bold;
   display: flex;
@@ -128,28 +172,29 @@
   font-size: 1.1rem;
   border-bottom: 1px solid #eee;
   padding-bottom: 10px;
+  cursor: pointer;
 }
 
-.Our-Achievement-Record-Latest-Articles .Our-Achievement-Record-Article {
+.our-achievements-record-latest-articles .our-achievements-record-article {
   margin-bottom: 30px;
   border-bottom: 1px solid #eee;
   padding-bottom: 20px;
 }
 
-.Our-Achievement-Record-Article img {
+.our-achievements-record-article img {
   width: 100%;
   border-radius: 10px;
   margin-bottom: 15px;
 }
 
-.Our-Achievement-Record-Article h3 {
+.our-achievements-record-article h3 {
   font-size: 1.1rem;
   font-weight: bold;
   color: #000;
   margin-bottom: 10px;
 }
 
-.Our-Achievement-Record-Read-Now {
+.our-achievements-record-read-now {
   color: #00b386;
   font-weight: bold;
   font-size: 1rem;
@@ -159,7 +204,7 @@
   cursor: pointer;
 }
 
-.Our-Achievement-Record-Subscribe-Form {
+.our-achievements-record-subscribe-form {
   display: flex;
   border: 1px solid #d1d5db;
   border-radius: 2px;
@@ -168,7 +213,7 @@
   gap: 20px;
 }
 
-.Our-Achievement-Record-Subscribe-Form input {
+.our-achievements-record-subscribe-form input {
   flex: 1;
   padding: 12px;
   border: none;
@@ -176,7 +221,7 @@
   color: #111827;
 }
 
-.Our-Achievement-Record-Subscribe-Form button {
+.our-achievements-record-subscribe-form button {
   background-color: #ffc727;
   padding: 0 20px;
   border: none;
@@ -186,13 +231,13 @@
   cursor: pointer;
 }
 
-.Our-Achievement-Record-Social-Icons {
+.our-achievements-record-social-icons {
   display: flex;
   gap: 20px;
   justify-content: flex-start;
 }
 
-.Our-Achievement-Record-Social-Icons a {
+.our-achievements-record-social-icons a {
   background-color: #00172b;
   padding: 12px;
   border-radius: 50%;
@@ -202,29 +247,29 @@
   transition: background-color 0.3s ease;
 }
 
-.Our-Achievement-Record-Social-Icons a:hover {
+.our-achievements-record-social-icons a:hover {
   background-color: #ffc727;
 }
 
-.Our-Achievement-Record-Social-Icons svg {
+.our-achievements-record-social-icons svg {
   color: #ffffff;
   font-size: 1rem;
 }
 
-.Our-Achievement-Record-Tags h2 {
+.our-achievements-record-tags h2 {
   font-size: 1.7rem;
   margin-bottom: 20px;
   font-weight: bold;
   color: #000;
 }
 
-.Our-Achievement-Record-Tag-List {
+.our-achievements-record-tag-list {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
 }
 
-.Our-Achievement-Record-Tag {
+.our-achievements-record-tag {
   display: inline-block;
   border: 1px solid #e0e0e0;
   padding: 8px 18px;
@@ -237,100 +282,62 @@
   transition: all 0.25s ease-in-out;
 }
 
-.Our-Achievement-Record-Tag:hover {
+.our-achievements-record-tag:hover {
   background-color: #f0f0f0;
   color: #1a1f2b;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.Our-Achievement-Record-Day-Name {
-  font-weight: 700;
-  color: #374151;
-  font-size: 0.85rem;
-  text-transform: uppercase;
+
+/* Desktop View */
+@media (min-width: 1200px) {
+  .our-achievements-record-container {
+    max-width: 1700px;
+  }
+  .our-achievements-record-posts {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
-.Our-Achievement-Record-Date {
-  padding: 10px 0;
-  font-size: 0.95rem;
-  color: #1f2937;
-  border-radius: 6px;
-  transition: background 0.2s, color 0.2s;
-}
-
-.Our-Achievement-Record-Date:hover {
-  background-color: #f3f4f6;
-  cursor: pointer;
-}
-
-.Our-Achievement-Record-Today {
-  background-color: #00b386;
-  color: white;
-  font-weight: 700;
-  border-radius: 6px;
-}
-
-
-@media (max-width: 1200px) {
-  .Our-Achievement-Record-Container {
+/* Tablet View */
+@media (min-width: 768px) and (max-width: 1199px) {
+  .our-achievements-record-container {
     max-width: 1000px;
   }
-  .Our-Achievement-Record-Post img {
-    width: 300px;
+  .our-achievements-record-posts {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .our-achievements-record-post {
+    height: auto;
   }
 }
 
-@media (max-width: 992px) {
-  .Our-Achievement-Record-Container {
+/* Mobile View */
+@media (max-width: 767px) {
+  .our-achievements-record-container {
+    padding: 20px;
+  }
+  .our-achievements-record-main {
     flex-direction: column;
   }
-  .Our-Achievement-Record-Main-Content {
-    flex: 1;
+  .our-achievements-record-posts {
+    grid-template-columns: repeat(1, 1fr);
   }
-  .Our-Achievement-Record-Sidebar {
-    flex: 1;
-    margin-top: 30px;
+  .our-achievements-record-post {
+    height: auto;
   }
-  .Our-Achievement-Record-Post img {
-    width: 250px;
+  .our-achievements-record-sidebar {
+    margin-top: 20px;
   }
-}
-
-@media (max-width: 768px) {
-  .Our-Achievement-Record-Post {
+  .our-achievements-record-search-box {
     flex-direction: column;
   }
-  .Our-Achievement-Record-Post img {
+  .our-achievements-record-search-box input {
     width: 100%;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
   }
-  .Our-Achievement-Record-Post-Details {
-    flex: 1;
-  }
-}
-
-@media (max-width: 576px) {
-  .Our-Achievement-Record-Post-category{
-    font-size: 0.58rem;
-  }
-  .Our-Achievement-Record-Post-Details h2{
-    font-size: 1.6rem;
-  }
-  .Our-Achievement-Record-Container {
-    padding: 0 15px;
-  }
-  .Our-Achievement-Record-Sidebar-Section {
-    padding: 15px;
-  }
-  .Our-Achievement-Record-Subscribe-Form {
-    flex-direction: column;
-    gap: 10px;
-  }
-  .Our-Achievement-Record-Subscribe-Form input {
-    padding: 10px;
-  }
-  .Our-Achievement-Record-Subscribe-Form button {
-    padding: 10px;
+  .our-achievements-record-search-box button {
+    width: 100%;
   }
 }

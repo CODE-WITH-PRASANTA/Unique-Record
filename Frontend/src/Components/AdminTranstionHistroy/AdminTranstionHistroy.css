@@ -1,0 +1,164 @@
+.Admin-Transition-Container {
+  width: 100%;
+  padding: 20px;
+  background-color: #f0f0f0;
+}
+
+.Admin-Transition-Header-Section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.Admin-Transition-Title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.Admin-Transition-View-All {
+  font-size: 14px;
+  color: #3498db;
+  text-decoration: none;
+}
+
+.Admin-Transition-View-All:hover {
+  text-decoration: underline;
+}
+
+.Admin-Transition-Table-Section {
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.Admin-Transition-Table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.Admin-Transition-Table th,
+.Admin-Transition-Table td {
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 14px;
+}
+
+.Admin-Transition-Table th {
+  color: #555;
+  font-weight: 600;
+  background: #f9fbfd;
+}
+
+.Admin-Transition-Table tbody tr {
+  border-top: 1px solid #eee;
+  transition: background 0.2s;
+}
+
+.Admin-Transition-Table tbody tr:hover {
+  background: #f9fbfd;
+}
+
+.Admin-Transition-User-Info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.Admin-Transition-Avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.Admin-Transition-Status {
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.Admin-Transition-Status.completed {
+  background: #e6f9f0;
+  color: #2ecc71;
+}
+
+.Admin-Transition-Status.pending {
+  background: #fff5e6;
+  color: #f39c12;
+}
+
+.Admin-Transition-Status.inprogress {
+  background: #e6f0ff;
+  color: #3498db;
+}
+
+.Admin-Transition-Status.canceled {
+  background: #ffe6e6;
+  color: #e74c3c;
+}
+
+.Admin-Transition-Actions {
+  display: flex;
+  gap: 12px;
+}
+
+.Admin-Transition-Icon {
+  font-size: 16px;
+  color: #555;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.Admin-Transition-Icon:hover {
+  color: #3498db;
+}
+
+
+@media (max-width: 768px) {
+  .Admin-Transition-Container {
+    padding: 10px;
+  }
+
+  .Admin-Transition-Header-Section {
+    padding: 10px;
+  }
+
+  .Admin-Transition-Table-Section {
+    padding: 10px;
+    overflow-x: auto;
+  }
+
+  .Admin-Transition-Table {
+    width: 100%;
+    min-width: 600px;
+  }
+}
+
+@media (max-width: 480px) {
+  .Admin-Transition-Title {
+    font-size: 16px;
+  }
+
+  .Admin-Transition-View-All {
+    font-size: 12px;
+  }
+
+  .Admin-Transition-Table th,
+  .Admin-Transition-Table td {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+
+  .Admin-Transition-Avatar {
+    width: 24px;
+    height: 24px;
+  }
+}

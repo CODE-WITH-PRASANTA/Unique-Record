@@ -6,11 +6,10 @@ import { MdPayment } from 'react-icons/md';
 import { API_URL } from '../../Api';
 import Swal from 'sweetalert2';
 
-
 const ApplicationStatus = () => {
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(false);
-  const token = localStorage.getItem('token'); // assuming you're storing the token in local storage
+  const token = localStorage.getItem('token'); 
 
   useEffect(() => {
     const fetchApplications = async () => {
@@ -34,23 +33,34 @@ const ApplicationStatus = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      const { price, applicantName, emailId } = appDetails;
+      if (appDetails.paymentStatus === 'Success') {
+        Swal.fire({
+          title: "Payment Status",
+          html: `
+            <b>Payment Already Done!</b><br>
+            Please wait 24 hours to verify and receive your certificate.
+          `,
+          icon: "info",
+          confirmButtonText: "Okay",
+          confirmButtonColor: "#4CAF50",
+        });
+        return;
+      }
 
-     if (!price || price <= 0) {
-  Swal.fire({
-    title: "Please Wait for Approval",
-    html: `
-      <b>Your application is under review.</b><br>
-      Please wait <strong>24 hours</strong> for admin approval.<br>
-      Once approved, you will be able to make the payment.
-    `,
-    icon: "info",
-    confirmButtonText: "Okay",
-    confirmButtonColor: "#4CAF50",
-  });
-  return;
-}
-
+      if (!appDetails.price || appDetails.price <= 0) {
+        Swal.fire({
+          title: "Please Wait for Approval",
+          html: `
+            <b>Your application is under review.</b><br>
+            Please wait <strong>24 hours</strong> for admin approval.<br>
+            Once approved, you will be able to make the payment.
+          `,
+          icon: "info",
+          confirmButtonText: "Okay",
+          confirmButtonColor: "#4CAF50",
+        });
+        return;
+      }
 
       // Step 1: Create Razorpay order
       const { data: orderData } = await axios.post(
@@ -60,7 +70,7 @@ const ApplicationStatus = () => {
       );
 
       const options = {
-        key: "rzp_live_1gSA9RbSjj0sEj", // Store this securely in .env
+        key: "rzp_live_1gSA9RbSjj0sEj", 
         amount: orderData.amount,
         currency: "INR",
         name: "URU Application",
@@ -81,15 +91,15 @@ const ApplicationStatus = () => {
           if (verifyRes.data.success) {
             alert("Payment successful!");
             setApplications((prev) =>
-              prev.map((a) => (a.applicationNumber === applicationNumber ? { ...a, status: "Paid" } : a))
+              prev.map((a) => (a.applicationNumber === applicationNumber ? { ...a, paymentStatus: 'Success' } : a))
             );
           } else {
             alert("Payment verification failed");
           }
         },
         prefill: {
-          name: applicantName,
-          email: emailId,
+          name: appDetails.applicantName,
+          email: appDetails.emailId,
         },
         theme: { color: "#3399cc" },
       };
@@ -97,24 +107,13 @@ const ApplicationStatus = () => {
       const rzp = new window.Razorpay(options);
       rzp.open();
     } catch (err) {
-  console.error(err);
-  Swal.fire({
-    title: "Payment Status",
-    html: `
-      <b>Payment Already Done!</b><br>
-      Please wait 24 hours to verify and receive your certificate.
-    `,
-    icon: "info",
-    confirmButtonText: "Okay",
-    confirmButtonColor: "#4CAF50",
-  });
-  }
+      console.error(err);
+    }
   };
-
 
   return (
     <div className="Application-status-wrapper">
-     {applications.map((application) => (
+      {applications.map((application) => (
         <div key={application.applicationNumber} className="Application-status-card">
           <div className="Application-status-header">
             <div className="Application-status-header-left">
@@ -127,9 +126,14 @@ const ApplicationStatus = () => {
               <div className="Application-status-options">
                 <FaEllipsisV className="Application-status-options-icon" />
                 <div className="Application-status-options-menu">
-                  <a href={`${API_URL}/uru/download-application-form/${application.applicationNumber}`} target="_blank" rel="noopener noreferrer">
-                    Download Application Form
+                 <a 
+                    href={``} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                  >
+                    Download Your Application Form
                   </a>
+
                 </div>
               </div>
             </div>
@@ -140,11 +144,19 @@ const ApplicationStatus = () => {
             Follow your application's journey from submission to final payment. Stay updated every step of the way.
           </p>
 
-        <div className="Application-status-info">
+          <div className="Application-status-info">
             <p className="Application-status-label">Position:</p>
             <p className="Application-status-value">{application.position}</p>
             <p className="Application-status-label">Payment Status:</p>
-            <p className="Application-status-value">{application.paymentStatus}</p>
+            <p className={`Application-status-value ${application.paymentStatus === 'Success' ? 'success' : 'pending'}`}>
+              {application.paymentStatus === 'Success' ? 'Payment Successful' : 'Payment Pending'}
+            </p>
+            {application.price && (
+              <p className="Application-status-label">Payment Allotment:</p>
+            )}
+            {application.price && (
+              <p className="Application-status-value">₹{application.price}</p>
+            )}
           </div>
 
           <div className="Application-status-timeline">
@@ -175,33 +187,39 @@ const ApplicationStatus = () => {
 
             <div className="Application-status-line" />
 
-           <div className={`Application-status-step final ${['Approved', 'Paid'].includes(application.status) ? 'completed' : application.status === 'Pending' ? 'pending' : ''}`}>
-            <div className={`Application-status-circle ${
-              application.status === 'Approved' ? 'green' :
-              application.status === 'Pending' ? 'yellow' :
-              application.status === 'Paid' ? 'green' : ''
-            }`}>
-              <FaCheckCircle className="Application-status-icon" />
+            <div className={`Application-status-step final ${['Approved', 'Paid'].includes(application.status) ? 'completed' : application.status === 'Pending' ? 'pending' : ''}`}>
+              <div className={`Application-status-circle ${
+                application.status === 'Approved' ? 'green' :
+                application.status === 'Pending' ? 'yellow' :
+                application.status === 'Paid' ? 'green' : ''
+              }`}>
+                <FaCheckCircle className="Application-status-icon" />
+              </div>
+              <p className="Application-status-label">
+                {application.status === 'Approved' ? 'Approved' :
+                application.status === 'Pending' ? 'Pending Approval' :
+                application.status === 'Paid' ? 'Approved & Paid' : ''}
+              </p>
             </div>
-            <p className="Application-status-label">
-              {application.status === 'Approved' ? 'Approved' :
-              application.status === 'Pending' ? 'Pending Approval' :
-              application.status === 'Paid' ? 'Approved & Paid' : ''}
-            </p>
-          </div>
 
             <div className="Application-status-line" />
-            <div className={`Application-status-step payment ${application.status === 'Paid' ? 'completed' : ''}`}>
-              <div className="Application-status-circle blue" onClick={() => handlePayment(application.applicationNumber, application.price)}>
-                <MdPayment className="Application-status-icon" />
+            <div className={`Application-status-step payment ${application.paymentStatus === 'Success' ? 'completed' : ''}`}>
+              <div className={`Application-status-circle ${application.paymentStatus === 'Success' ? 'green' : 'blue'}`} onClick={() => application.paymentStatus !== 'Success' && handlePayment(application.applicationNumber)}>
+                {application.paymentStatus === 'Success' ? (
+                  <FaCheckCircle className="Application-status-icon" />
+                ) : (
+                  <MdPayment className="Application-status-icon" />
+                )}
               </div>
-              <p className="Application-status-label">Make Payment</p>
+              <p className={`Application-status-label ${application.paymentStatus === 'Success' ? 'success' : 'pending'}`}>
+                {application.paymentStatus === 'Success' ? 'Paid' : 'Make Payment'}
+              </p>
             </div>
           </div>
 
-          {application.status === 'Paid' && (
+          {application.paymentStatus === 'Success' && (
             <div className="payment-successful">
-              <p>Thank you for your payment!</p>
+              <p className="success">Thank you for your payment!</p>
             </div>
           )}
         </div>

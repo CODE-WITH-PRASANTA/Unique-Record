@@ -463,3 +463,44 @@
     margin-bottom: 10px;
   }
 }
+
+
+.success {
+  color: #27ae60;
+}
+
+.pending {
+  color: #f1c40f;
+}
+
+.Application-status-value.success {
+  color: #27ae60;
+  font-weight: bold;
+}
+
+.Application-status-value.pending {
+  color: #f10f0f;
+  font-weight: bold;
+}
+
+.Application-status-label.success {
+  color: #27ae60;
+}
+
+.Application-status-label.pending {
+  color: #f10f0f;
+}
+
+.payment-successful {
+  background-color: #dff0d8;
+  border: 1px solid #8bc34a;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+.payment-successful p.success {
+  color: #3e8e41;
+  font-weight: bold;
+  margin: 0;
+}

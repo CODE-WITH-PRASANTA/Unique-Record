@@ -51,12 +51,29 @@ const BlogPost = ({ post, index, totalPosts }) => {
           <h2 className="Blog-Section-Post-Title">{post.blogTitle}</h2>
         </Link>
         <p className="Blog-Section-Post-Excerpt">
-          {post.shortDescription.length > 150
-            ? `${post.shortDescription.substring(0, 150)}...`
+          {post.shortDescription.length > 250
+            ? `${post.shortDescription.substring(0, 250)}...`
             : post.shortDescription}
         </p>
         <div className="Blog-Section-Post-Meta">
-          <span>{new Date(post.createdAt).toDateString()}</span>
+        <span>📅 {new Date(post.createdAt).toDateString()}</span>
+           {post.address && (
+            <span>
+              <span className="Blog-Section-Post-Dot"></span>
+              <span>
+                📍 {post.address}
+              </span>
+            </span>
+          )}
+          {post.email && (
+            <span>
+              <span className="Blog-Section-Post-Dot"></span>
+              <span>
+                📧 {post.email}
+              </span>
+            </span>
+          )}
+
           <span className="Blog-Section-Post-Dot"></span>
           <span>
             By {post.authorName}
@@ -66,6 +83,7 @@ const BlogPost = ({ post, index, totalPosts }) => {
               </span>
             )}
           </span>
+         
         </div>
         <Link to={`/blog/${post._id}`} className="Blog-Section-ReadMore">
           Read More →

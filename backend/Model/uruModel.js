@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const uruSchema = new mongoose.Schema({
-    position: { type: String },
+  position: { type: String },
   userId: { type: String, required: true },
   applicationNumber: { type: String },
   applicantName: { type: String, required: true },
@@ -34,21 +34,26 @@ const uruSchema = new mongoose.Schema({
   photoUrl: { type: String },
   videoUrl: { type: String },
   documentUrl: { type: String },
-  status: { type: String, enum: ["Pending", "Approved", "Rejected", "Paid"], default: "Pending" },
+  status: { 
+    type: String, 
+    enum: ["Pending", "Approved", "Rejected", "Paid"], 
+    default: "Pending" 
+  },
   price: { type: Number, default: 0 },
   paymentStatus: {
-  type: String,
-  enum: ["Success", "Failed", "Pending"],
-  default: "Pending",
-},
-razorpayOrderId: String,
-razorpayPaymentId: String,
-razorpaySignature: String,
+    type: String,
+    enum: ["Success", "Failed", "Pending"],
+    default: "Pending",
+  },
+  razorpayOrderId: String,
+  razorpayPaymentId: String,
+  razorpaySignature: String,
 
   priceUpdated: { type: Boolean, default: false },
   priceUpdatedDate: { type: String },
-   approvedDate: { type: Date },
-   witness1: {
+  approvedDate: { type: Date },
+
+  witness1: {
     name: { type: String },
     designation: { type: String },
     address: { type: String },
@@ -62,8 +67,10 @@ razorpaySignature: String,
     mobileNumber: { type: String },
     emailId: { type: String },
   },
-    certificateUrl: { type: String },
+  certificateUrl: { type: String },
 
-});
+  // 🔥 NEW FIELD
+  isPublished: { type: Boolean, default: false },
+}, { timestamps: true });
 
 module.exports = mongoose.model("URU", uruSchema);

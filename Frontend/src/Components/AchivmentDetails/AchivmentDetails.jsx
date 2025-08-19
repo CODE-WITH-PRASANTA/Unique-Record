@@ -4,18 +4,22 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { API_URL } from '../../Api';
 
-
-import {
-  FaCalendarAlt,
-  FaUser,
-  FaSearch,
-  FaArrowRight,
-  FaPaperPlane,
-  FaFacebookF,
-  FaInstagram,
-  FaTwitter,
-  FaWhatsapp,
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch, faQuoteLeft, faPrint, faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fab } from '@fortawesome/free-brands-svg-icons';
+import { 
+  FaCalendarAlt, 
+  FaUser, 
+  FaArrowRight, 
+  FaPaperPlane, 
+  FaFacebookF, 
+  FaInstagram, 
+  FaTwitter, 
+  FaWhatsapp 
 } from 'react-icons/fa';
+
+library.add(fab);
 
 const AchivmentDetails = () => {
   const { id } = useParams();
@@ -24,168 +28,194 @@ const AchivmentDetails = () => {
   const [latestAchievements, setLatestAchievements] = useState([]);
   const [categories, setCategories] = useState([]);
   const [tags, setTags] = useState([]);
+  const [showAllCategories, setShowAllCategories] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
 
- 
-useEffect(() => {
-  const fetchAchievement = async () => {
-    try {
-      const response = await axios.get(`${API_URL}/achievements/get-achievement/${id}`);
-      setAchivmentDetails(response.data);
-      localStorage.setItem('AchivmentDetails', JSON.stringify(response.data));
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  useEffect(() => {
+    const fetchAchievement = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/achievements/get-achievement/${id}`);
+        setAchivmentDetails(response.data);
+        localStorage.setItem('AchivmentDetails', JSON.stringify(response.data));
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
-  const fetchLatestAchievements = async () => {
-    try {
-      const response = await axios.get(`${API_URL}/achievements/get-all-achievements`);
-      setLatestAchievements(response.data);
-      const achievementCategories = [...new Set(response.data.map((achievement) => achievement.category))];
-      setCategories(achievementCategories);
-      const achievementTags = [...new Set(response.data.flatMap((achievement) => achievement.tags.split(',')))];
-      setTags(achievementTags);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+    const fetchLatestAchievements = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/achievements/get-all-achievements`);
+        setLatestAchievements(response.data);
+        const achievementCategories = [...new Set(response.data.map((achievement) => achievement.category))];
+        setCategories(achievementCategories);
+        const achievementTags = [...new Set(response.data.flatMap((achievement) => achievement.tags.split(',')))];
+        setTags(achievementTags);
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
-  fetchAchievement();
-  fetchLatestAchievements();
-}, [id]);
+    fetchAchievement();
+    fetchLatestAchievements();
+  }, [id]);
 
   function truncateDescription(description) {
-  const words = description.split(' ');
-  if (words.length > 50) { // adjust the number of words as needed
-    return words.slice(0, 50).join(' ') + '...';
+    const words = description.split(' ');
+    if (words.length > 50) { 
+      return words.slice(0, 50).join(' ') + '...';
+    }
+    return description;
   }
-  return description;
-}
+
+  const handleViewAllCategories = () => {
+    setShowAllCategories(!showAllCategories);
+  };
+
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    console.log('Search term:', searchTerm);
+  };
 
   return (
-    <>
-      <div className="achivement-details-container">
-        <div className="achivement-details-main-content">
-          <img src={achivmentDetails.image} alt="Main Banner" className="achivement-details-main-banner" />
-
-          <div className="achivement-details-post-meta-bar">
-            <span><FaCalendarAlt className="achivement-details-icon" /> {achivmentDetails.createdAt && new Date(achivmentDetails.createdAt).toLocaleDateString()}</span>
-            <span><FaUser className="achivement-details-icon" /> By {achivmentDetails.achieverName}</span>
-          </div>
-
-          <p className="achivement-details-intro-paragraph">
-            {achivmentDetails.shortDescription}
-          </p>
-
-         <section className="achivement-details-feature-section">
-  <div className="achivement-details-feature-intro">
-    <h2>{achivmentDetails.title}</h2>
-    <div dangerouslySetInnerHTML={{ __html: achivmentDetails.content }} />
-  </div>
-</section>
-
-          <div className="achivement-details-tags-social-container">
-            <div className="achivement-details-tag-list">
-              {achivmentDetails.tags?.split(',').map((tag) => (
-                <span key={tag} className="achivement-details-tag">{tag}</span>
-              ))}
-            </div>
-            <div className="achivement-details-social-icons">
-              <a href="#"><i className="fab fa-facebook-f"> </i>< FaFacebookF /></a>
-              <a href="#"><i className="fab fa-instagram"></i> < FaInstagram /></a>
-              <a href="#"><i className="fab fa-twitter"></i> < FaTwitter /> </a>
-              <a href="#"><i className="fab fa-whatsapp"></i> < FaWhatsapp /></a>
+    <div className="Achivments-details-container">
+      <div className="Achivments-details-main-content">
+        <div className="Achivments-details-content-area">
+          <div className="Achivments-details-image-section-one">
+            <img src={achivmentDetails.image} alt={achivmentDetails.title} />
+            <div className="Achivments-details-footer">
+              <div className="date-container">
+                <FaCalendarAlt className="achivement-details-icon" /> 
+                <span>{new Date(achivmentDetails.createdAt).toLocaleDateString()}</span>
+              </div>
+              <div className="author-container">
+                <FaUser className="achivement-details-icon" /> 
+                <strong>Achiever Name: {achivmentDetails.achieverName}</strong>
+              </div>
+              <div className="location-container">
+                <strong>Category: {achivmentDetails.category}</strong>
+              </div>
+              <div className="email-container">
+                <span className="achievement-provider">Provider: {achivmentDetails.providerName}</span>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="achivement-details-sidebar">
-          <div className="achivement-details-sidebar-items">
-            <div className="achivement-details-sidebar-section achivement-details-search-box">
-              <input type="text" placeholder="Search" />
-              <button>
-                <FaSearch className="achivement-details-search-icon" />
-              </button>
-            </div>
+          <h1 className="Achivments-details-title">{achivmentDetails.title}</h1>
+          <div className="Achivments-details-paragraph" dangerouslySetInnerHTML={{ __html: achivmentDetails.content }}></div>
 
-          
-          <div className="achivement-details-sidebar-section achivement-details-categories">
-    <h2>Categories</h2>
-    {categories.map((category) => (
-      <div key={category} className="achivement-details-category-item">
-        <FaArrowRight /> {category}
-      </div>
-    ))}
-  </div>
-
-<div className="achivement-details-sidebar-section achivement-details-latest-articles">
-  <h2>Latest Articles</h2>
-  {latestAchievements.slice(0, 3).map((post, index) => (
-    <div key={index} className="Our-Achievement-Record-Article">
-      {index === 0 ? (
-        <div>
-          <img src={post.image} alt="Article 1" />
-          <h3>{post.title}</h3>
-        </div>
-      ) : (
-        <div>
-          <h3>{post.title}</h3>
-        </div>
-      )}
-      <div className="Our-Achievement-Record-Read-Now">READ NOW <FaArrowRight /></div>
-    </div>
-  ))}
-</div>
-            <div className="achivement-details-sidebar-section achivement-details-subscribe">
-              <h2>Subscribe To Our News</h2>
-              <p>Find out about the last days and the latest promotions of our Corporation</p>
-              <div className="achivement-details-subscribe-form">
-                <input type="email" placeholder="Email" />
-                <button>
-                  <FaPaperPlane />
+          <div className="Achivments-details-community">
+            <div className="Achivments-details-tags-row">
+              <div className="tags">
+                <strong>Tags:</strong> 
+                {achivmentDetails.tags?.split(',').map((tag) => (
+                  <span key={tag} className="Achivments-details-tag">{tag}</span>
+                ))}
+              </div>
+              <div className="social-share">
+                <strong>Share:</strong>
+                <button className="social-Achivments-icon" onClick={() => window.open(`https://www.facebook.com/sharer/sharer.php?u=${window.location.href}`, '_blank')}>
+                  <FontAwesomeIcon icon={['fab', 'facebook-f']} />
+                </button>
+                <button className="social-Achivments-icon" onClick={() => window.open(`https://twitter.com/intent/tweet?url=${window.location.href}`, '_blank')}>
+                  <FontAwesomeIcon icon={['fab', 'twitter']} />
+                </button>
+                <button className="social-Achivments-icon" onClick={() => window.open(`https://www.linkedin.com/sharing/share?url=${window.location.href}`, '_blank')}>
+                  <FontAwesomeIcon icon={['fab', 'linkedin-in']} />
+                </button>
+                <button className="social-Achivments-icon" onClick={() => window.open(`https://wa.me/?text=${window.location.href}`, '_blank')}>
+                  <FontAwesomeIcon icon={['fab', 'whatsapp']} />
+                </button>
+                <button className="social-Achivments-icon" onClick={() => window.open(`https://telegram.me/share/url?url=${window.location.href}`, '_blank')}>
+                  <FontAwesomeIcon icon={['fab', 'telegram-plane']} />
+                </button>
+                <button className="social-Achivments-icon" onClick={() => window.print()}>
+                  <FontAwesomeIcon icon={faPrint} />
+                </button>
+                <button className="social-Achivments-icon" onClick={() => window.location.href = `mailto:?subject=${achivmentDetails.title}&body=${window.location.href}`}>
+                  <FontAwesomeIcon icon={faEnvelope} />
                 </button>
               </div>
-              <div className="achivement-details-social-icons achivement-details-dark-icons">
-                <a href="#"><FaFacebookF /></a>
-                <a href="#"><FaInstagram /></a>
-                <a href="#"><FaTwitter /></a>
-                <a href="#"><FaWhatsapp /></a>
-              </div>
             </div>
+          </div>
 
-  <div className="achivement-details-sidebar-section achivement-details-tags">
-    <h2>Tags</h2>
-    <div className="achivement-details-tag-list">
-      {tags.map((tag) => (
-        <span key={tag} className="achivement-details-tag">{tag}</span>
-      ))}
-    </div>
-  </div>
+          <div className="comments-reply-form">
+            <h2>Please Share Your Feedback or Suggestions.?</h2>
+            <form>
+              <div className="Achivments-form-row">
+                <input type="text" placeholder="Name" />
+                <input type="email" placeholder="Email" />
+              </div>
+              <div className="Achivments-form-row">
+                <input type="tel" placeholder="Phone" />
+                <input type="text" placeholder="Subject" />
+                <input type="text" placeholder="Address" />
+              </div>
+              <textarea placeholder="Message"></textarea>
+              <button type="submit">Submit Now →</button>
+            </form>
           </div>
         </div>
+
+        <aside className="Achivments-details-sidebar">
+          <div className="Achivments-details-search-bar">
+            <form onSubmit={handleSearchSubmit}>
+              <input type="search" value={searchTerm} onChange={handleSearch} placeholder="Search" />
+              <button type="submit"><FontAwesomeIcon icon={faSearch} /></button>
+            </form>
+          </div>
+
+          <div className="Achivments-details-categories">
+            <h2>Categories</h2>
+            <div className="Achivments-details-category-tags">
+              {categories
+                .slice(0, showAllCategories ? categories.length : 5)
+                .map((category, index) => (
+                  <span key={index} className="Achivments-details-category-tag">
+                    {category}
+                  </span>
+                ))}
+            </div>
+            {categories.length > 5 && (
+              <button
+                className="view-all-categories-btn"
+                onClick={handleViewAllCategories}
+              >
+                {showAllCategories ? "View Less" : "View All Categories"}
+              </button>
+            )}
+          </div>
+
+          <div className="Achivments-details-recent-posts-sidebar">
+            <h2>Latest Achievements</h2>
+            {latestAchievements.slice(0, 3).map((post, index) => (
+              <div key={index} className="Achivments-details-recent-post">
+                <img src={post.image} alt="Post" />
+                <div className="Achivments-details-recent-post-content">
+                  <h3>{post.title}</h3>
+                  <a href={`/achievement/${post._id}`} className="Achivments-details-read-more">Read More</a>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="Achivments-details-tags-sidebar">
+            <h2>Tags</h2>
+            <div className="Achivments-details-tags">
+              {tags.map((tag, index) => (
+                <span key={index} className="Achivments-details-tag">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+        </aside>
       </div>
 
-      <section className="achivement-details-latest-posts">
-        <h2>Latest Posts</h2>
-        <div className="achivement-details-posts-row">
-          {latestAchievements.map((latestAchievement) => (
-            <div key={latestAchievement._id} className="achivement-details-post-card">
-              <img src={latestAchievement.image} alt={latestAchievement.title} />
-              <div className="achivement-details-meta">
-                <span className="achivement-details-category">{latestAchievement.category}</span>
-                <span className="achivement-details-dot">•</span>
-                <span className="achivement-details-date">{new Date(latestAchievement.createdAt).toLocaleDateString()}</span>
-              </div>
-              <h3>{latestAchievement.title}</h3>
-              <p>
-               {truncateDescription(latestAchievement.shortDescription)}
-              </p>
-              <a href="#" className="achivement-details-read-post">READ POST →</a>
-            </div>
-          ))}
-        </div>
-      </section>
-    </>
+      
+    </div>
   );
 };
 

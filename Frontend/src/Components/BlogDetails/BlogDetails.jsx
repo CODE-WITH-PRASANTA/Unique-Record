@@ -3,7 +3,7 @@ import './BlogDetails.css';
 import rp from '../../assets/rp-1.webp';
 import { useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendarAlt, faComments, faSearch, faQuoteLeft, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+import {  faSearch, faQuoteLeft } from '@fortawesome/free-solid-svg-icons';
 import { API_URL } from '../../Api'; // Import the API_URL constant
 import { faPrint } from '@fortawesome/free-solid-svg-icons';
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
@@ -105,19 +105,28 @@ const BlogDetails = () => {
           <div className="News-details-image-section-one">
             <img src={blog.imageUrl} alt={blog.blogTitle} />
             <div className="News-details-footer">
-              <div className="date-container">
-                <FontAwesomeIcon icon={faCalendarAlt} className="news-icon" />
-                <span>{new Date(blog.createdAt).toLocaleDateString()}</span>
-              </div>
-          <div className="author-container">
-            <FontAwesomeIcon icon={faCheckCircle} className="news-icon" />
-            <span>By: {blog.authorName || 'Unknown Author'}</span>
-            {blog.authorDesignation && (
-              <span> &mdash; ({capitalizeDesignation(blog.authorDesignation)})</span>
-            )}
-          </div>
+  <div className="date-container">
+  📅 <span>
+    {new Date(blog.createdAt).toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric"
+    }).replace(/\//g, "-")}
+  </span>
+</div>
 
-
+  <div className="author-container">
+    ✍️ <span>By: {blog.authorName || 'Unknown Author'}</span>
+    {blog.authorDesignation && (
+      <span> &mdash; ({capitalizeDesignation(blog.authorDesignation)})</span>
+    )}
+  </div>
+  <div className="location-container">
+    📍 <span>Location: {blog.address || 'Unknown Location'}</span>
+  </div>
+  <div className="email-container">
+    📧 <span>Email: <a href={`mailto:${blog.email}`}>{blog.email || 'Not Provided'}</a></span>
+  </div>
             </div>
           </div>
 

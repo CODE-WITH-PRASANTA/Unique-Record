@@ -346,7 +346,7 @@ module.exports = {
     }
   },
 
-    uploadCertificate: async (req, res) => {
+  uploadCertificate: async (req, res) => {
     try {
       const applicationNumber = req.params.applicationNumber;
       const uru = await URU.findOne({ applicationNumber });
@@ -393,6 +393,49 @@ module.exports = {
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
-  }
+  },
+  updatePublishStatus: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { isPublished } = req.body;
+
+      const uru = await URU.findById(id);
+      if (!uru) {
+        return res.status(404).json({ message: "URU application not found" });
+      }
+
+      uru.isPublished = isPublished;
+      await uru.save();
+
+      res.status(200).json({
+        message: `URU has been ${isPublished ? "Published" : "Unpublished"} successfully`,
+        data: uru,
+      });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
+  fetchPublishedUru: async (req, res) => {
+    try {
+      const urus = await URU.find({ isPublished: true });
+      res.status(200).json(urus);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
+  fetchPublishedUruById: async (req, res) => {
+    try {
+      const { id } = req.params;
+
+      const uru = await URU.findOne({ _id: id, isPublished: true });
+      if (!uru) {
+        return res.status(404).json({ message: "Published URU not found" });
+      }
+
+      res.status(200).json(uru);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
 
 };

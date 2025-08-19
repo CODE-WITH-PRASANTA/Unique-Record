@@ -1,84 +1,107 @@
 /* Container */
 .Final-Uru-Container {
-  padding: 30px;
-  background-color: #f4f7fa;
+  padding: 40px;
+  background: linear-gradient(135deg, #f9fbfd, #eef3f7);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+  animation: fadeIn 0.5s ease-in-out;
 }
 
 /* Heading */
 .Final-Uru-Heading {
-  font-size: 32px;
-  font-weight: 700;
+  font-size: 36px;
+  font-weight: 800;
   margin-bottom: 30px;
   color: #2c3e50;
   text-align: center;
+  letter-spacing: 1px;
+  position: relative;
+}
+
+.Final-Uru-Heading::after {
+  content: "";
+  display: block;
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(135deg, #27ae60, #2ecc71);
+  margin: 10px auto 0;
+  border-radius: 3px;
 }
 
 /* Search and Button Bar */
 .Final-Uru-Search-Bar-Container {
   display: flex;
-  flex-direction: row;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
   margin-bottom: 25px;
-  gap: 10px;
+  gap: 12px;
 }
 
 .Final-Uru-Search-Bar {
   flex: 1;
-  max-width: 400px;
+  max-width: 420px;
   padding: 12px 15px;
-  border: 1px solid #dcdcdc;
-  border-radius: 8px;
+  border: 2px solid #e0e6ed;
+  border-radius: 10px;
   outline: none;
   font-size: 16px;
-  transition: border-color 0.3s;
+  transition: all 0.3s ease;
+  background-color: #fff;
 }
 
 .Final-Uru-Search-Bar:focus {
-  border-color: #2980b9;
+  border-color: #27ae60;
+  box-shadow: 0 0 6px rgba(39, 174, 96, 0.4);
 }
 
 .Final-Uru-Download-Excel-Button {
   background: linear-gradient(135deg, #27ae60, #2ecc71);
   color: #fff;
-  padding: 12px 20px;
+  padding: 12px 22px;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   font-weight: 600;
+  font-size: 15px;
   cursor: pointer;
-  transition: background 0.3s ease-in-out;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
 }
 
 .Final-Uru-Download-Excel-Button:hover {
   background: linear-gradient(135deg, #219150, #27ae60);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(39, 174, 96, 0.4);
 }
 
 /* Table */
 .Final-Uru-Table {
   width: 100%;
   border-collapse: collapse;
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.05);
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
   overflow: hidden;
+  animation: fadeInUp 0.6s ease;
 }
 
 .Final-Uru-Table-Header {
-  background-color: #34495e;
-  color: #ecf0f1;
-  padding: 14px;
+  background: linear-gradient(135deg, #34495e, #2c3e50);
+  color: #fff;
+  padding: 16px;
   font-weight: 600;
-  border: 1px solid #dcdcdc;
+  border: none;
   text-align: left;
+  font-size: 15px;
 }
 
 .Final-Uru-Table-Data {
-  padding: 14px;
-  border: 1px solid #f0f0f0;
+  padding: 15px;
+  border-bottom: 1px solid #f1f3f6;
   color: #333;
-  vertical-align: middle;
+  font-size: 20px;
+  transition: background 0.3s;
 }
 
 tr:nth-child(even) {
@@ -86,100 +109,215 @@ tr:nth-child(even) {
 }
 
 tr:hover {
-  background-color: #f0f8ff;
+  background-color: #eef8f1;
+  transition: background 0.3s ease;
 }
 
 /* File Upload */
 .Final-Uru-File-Input {
   padding: 8px;
-  border: 1px solid #bbb;
-  border-radius: 6px;
+  border: 1px dashed #bbb;
+  border-radius: 8px;
   background-color: #f8f8f8;
-  margin-bottom: 5px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: border-color 0.3s;
+}
+
+.Final-Uru-File-Input:hover {
+  border-color: #27ae60;
 }
 
 /* Buttons */
-.Final-Uru-Reupload-Button,
 .Final-Uru-Submit-Button,
-.Final-Uru-Delete-Button {
-  margin-top: 5px;
-  margin-right: 6px;
-  padding: 8px 14px;
+.Final-Uru-Delete-Button,
+.Final-Uru-Reupload-Button,
+.Final-Uru-Publish-Button,
+.Final-Uru-Unpublish-Button {
+  margin: 5px 6px 0 0;
+  padding: 8px 16px;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   color: #fff;
   cursor: pointer;
   transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
 }
 
-.Final-Uru-Reupload-Button {
-  background-color: #3498db;
-}
-
-.Final-Uru-Reupload-Button:hover {
-  background-color: #2980b9;
-}
-
+/* Submit */
 .Final-Uru-Submit-Button {
-  background-color: #2ecc71;
+  background: linear-gradient(135deg, #2ecc71, #27ae60);
 }
-
 .Final-Uru-Submit-Button:hover {
-  background-color: #27ae60;
+  background: linear-gradient(135deg, #27ae60, #219150);
+  transform: scale(1.05);
 }
 
+/* Delete */
 .Final-Uru-Delete-Button {
-  background-color: #e74c3c;
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+}
+.Final-Uru-Delete-Button:hover {
+  background: linear-gradient(135deg, #c0392b, #a93226);
+  transform: scale(1.05);
 }
 
-.Final-Uru-Delete-Button:hover {
-  background-color: #c0392b;
+/* Reupload */
+.Final-Uru-Reupload-Button {
+  background: linear-gradient(135deg, #3498db, #2980b9);
+}
+.Final-Uru-Reupload-Button:hover {
+  background: linear-gradient(135deg, #2980b9, #2471a3);
+  transform: scale(1.05);
+}
+
+/* Publish */
+.Final-Uru-Publish-Button {
+  background: linear-gradient(135deg, #4CAF50, #2e7d32);
+}
+.Final-Uru-Publish-Button:hover {
+  background: linear-gradient(135deg, #2e7d32, #1b5e20);
+  transform: scale(1.05);
+}
+
+/* Unpublish */
+.Final-Uru-Unpublish-Button {
+  background: linear-gradient(135deg, #FF9800, #e68a00);
+}
+.Final-Uru-Unpublish-Button:hover {
+  background: linear-gradient(135deg, #e68a00, #bf6f00);
+  transform: scale(1.05);
 }
 
 /* No Data Found */
 .Final-Uru-No-Data-Found {
   text-align: center;
-  padding: 30px;
+  padding: 40px;
   font-size: 18px;
+  font-weight: 600;
   color: #999;
 }
 
 /* Responsive Table Wrapper */
 .table-responsive {
   overflow-x: auto;
-  border-radius: 10px;
+  border-radius: 12px;
+}
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/* Media Queries */
-@media only screen and (max-width: 768px) {
-  .Final-Uru-Search-Bar-Container {
-    flex-direction: column;
-    align-items: flex-start;
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+
+/* Responsive Design */
+
+/* Tablets */
+@media (max-width: 992px) {
+  .Final-Uru-Heading {
+    font-size: 28px;
   }
+
   .Final-Uru-Search-Bar {
     max-width: 100%;
-    width: 100%;
+    font-size: 14px;
   }
+
+  .Final-Uru-Download-Excel-Button {
+    padding: 10px 18px;
+    font-size: 14px;
+  }
+
+  .Final-Uru-Table-Header,
+  .Final-Uru-Table-Data {
+    font-size: 13px;
+    padding: 12px;
+  }
+}
+
+/* Mobiles */
+@media (max-width: 768px) {
+  .Final-Uru-Container {
+    padding: 20px;
+  }
+
+  .Final-Uru-Heading {
+    font-size: 24px;
+  }
+
+  .Final-Uru-Search-Bar-Container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
   .Final-Uru-Download-Excel-Button {
     width: 100%;
     text-align: center;
   }
+
+  /* Make table scrollable with sticky headers */
+  .Final-Uru-Table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .Final-Uru-Table-Header {
+    font-size: 12px;
+    padding: 10px;
+  }
+
+  .Final-Uru-Table-Data {
+    font-size: 12px;
+    padding: 10px;
+  }
+
+  /* Buttons shrink to fit */
+  .Final-Uru-Submit-Button,
+  .Final-Uru-Delete-Button,
+  .Final-Uru-Reupload-Button,
+  .Final-Uru-Publish-Button,
+  .Final-Uru-Unpublish-Button {
+    padding: 6px 10px;
+    font-size: 12px;
+    margin: 3px 3px 0 0;
+  }
 }
 
-@media only screen and (max-width: 480px) {
-  .Final-Uru-Container {
-    background: white;
-    padding: 20px;
-  }
+/* Extra small devices */
+@media (max-width: 480px) {
   .Final-Uru-Heading {
-    font-size: 24px;
+    font-size: 20px;
   }
-  .Final-Uru-Table-Header {
+
+  .Final-Uru-Search-Bar {
+    font-size: 13px;
     padding: 10px;
   }
+
+  .Final-Uru-Download-Excel-Button {
+    font-size: 13px;
+    padding: 8px 12px;
+  }
+
+  /* Table becomes more compact */
+  .Final-Uru-Table-Header,
   .Final-Uru-Table-Data {
-    padding: 10px;
+    font-size: 11px;
+    padding: 8px;
+  }
+
+  .Final-Uru-File-Input {
+    font-size: 11px;
+    padding: 6px;
   }
 }

@@ -16,7 +16,10 @@ verifyRazorpayPayment,
 fetchPaidUru,
 uploadCertificate,
 downloadCertificate,
-fetchAppliedUruByUser
+fetchAppliedUruByUser ,
+updatePublishStatus,
+fetchPublishedUru,
+fetchPublishedUruById
 } = require("../Controllers/uruController");
 const authenticate = require("../Middleware/authMiddleware");
 const upload = require("../Middleware/multer");
@@ -50,6 +53,10 @@ router.post(
 );
 router.get("/download-certificate/:applicationNumber",  downloadCertificate);
 router.get("/fetch-applied-uru-by-user", authenticate, fetchAppliedUruByUser);
+router.put("/publish-uru/:id", updatePublishStatus);
+router.get("/fetch-published-uru", fetchPublishedUru);
+router.get("/fetch-published-uru/:id", fetchPublishedUruById);
+
 
 
 module.exports = router;

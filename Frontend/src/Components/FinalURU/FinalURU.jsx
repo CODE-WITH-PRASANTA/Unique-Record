@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './FinalURU.css';
 import { API_URL } from '../../Api';
-
+import Swal from 'sweetalert2';
 
 const FinalURU = () => {
   const [data, setData] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredData, setFilteredData] = useState([]);
+  const [selectedFile, setSelectedFile] = useState({});
 
   useEffect(() => {
     fetchPaidUru();
@@ -23,55 +24,74 @@ const FinalURU = () => {
     setFilteredData(filtered);
   }, [searchTerm, data]);
 
- const fetchPaidUru = async () => {
-  try {
-    const response = await axios.get(`${API_URL}/uru/fetch-paid-uru`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-    });
-    setData(response.data);
-    setFilteredData(response.data);
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-
-  const handleCertificateUpload = async (applicationNumber, event) => {
+  const fetchPaidUru = async () => {
     try {
-      const file = event.target.files[0];
-      const formData = new FormData();
-      formData.append('certificate', file);
-      const response = await axios.post(`${API_URL}/uru/upload-certificate/${applicationNumber}`, formData, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem('token')}`,
-      'Content-Type': 'multipart/form-data',
-    },
-  });
-      console.log(response.data);
+      const response = await axios.get(`${API_URL}/uru/fetch-paid-uru`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      setData(response.data);
+      setFilteredData(response.data);
     } catch (error) {
       console.error(error);
     }
   };
 
-  const handleSubmit = (id) => {
-    // Handle submit logic here
-    console.log(`Submitted for ${id}`);
+  const handleCertificateUpload = (applicationNumber, file) => {
+    setSelectedFile((prevState) => ({ ...prevState, [applicationNumber]: file }));
   };
 
- const handleDelete = async (id) => {
-  try {
-    await axios.delete(`${API_URL}/uru/delete-uru/${id}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-    });
-    fetchPaidUru();
-  } catch (error) {
-    console.error(error);
-  }
-};
+  const handleCertificateSubmit = async (applicationNumber) => {
+    try {
+      const file = selectedFile[applicationNumber];
+      if (!file) {
+        Swal.fire({
+          title: 'Error!',
+          icon: 'error',
+          text: 'Please select a file to upload.',
+          confirmButtonText: 'OK',
+        });
+        return;
+      }
+      const formData = new FormData();
+      formData.append('certificate', file);
+      const response = await axios.post(`${API_URL}/uru/upload-certificate/${applicationNumber}`, formData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      console.log(response.data);
+      Swal.fire({
+        title: 'Certificate Uploaded Successfully!',
+        icon: 'success',
+        text: 'The certificate has been uploaded successfully.',
+        confirmButtonText: 'OK',
+      });
+    } catch (error) {
+      console.error(error);
+      Swal.fire({
+        title: 'Error!',
+        icon: 'error',
+        text: 'Failed to upload the certificate.',
+        confirmButtonText: 'OK',
+      });
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`${API_URL}/uru/delete-uru/${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      fetchPaidUru();
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const handleReupload = (id) => {
     // Handle reupload logic here
@@ -100,6 +120,62 @@ const FinalURU = () => {
     a.download = 'final-uru-data.csv';
     a.click();
     URL.revokeObjectURL(url);
+  };
+
+  const handlePublish = async (id) => {
+    try {
+      const response = await axios.put(`${API_URL}/uru/publish-uru/${id}`, 
+        { isPublished: true },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
+      );
+      fetchPaidUru();
+      Swal.fire({
+        title: 'Published Successfully!',
+        icon: 'success',
+        text: 'The URU application has been published successfully.',
+        confirmButtonText: 'OK',
+      });
+    } catch (error) {
+      console.error(error);
+      Swal.fire({
+        title: 'Error!',
+        icon: 'error',
+        text: 'Failed to publish the URU application.',
+        confirmButtonText: 'OK',
+      });
+    }
+  };
+
+  const handleUnpublish = async (id) => {
+    try {
+      const response = await axios.put(`${API_URL}/uru/publish-uru/${id}`, 
+        { isPublished: false },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
+      );
+      fetchPaidUru();
+      Swal.fire({
+        title: 'Unpublished Successfully!',
+        icon: 'success',
+        text: 'The URU application has been unpublished successfully.',
+        confirmButtonText: 'OK',
+      });
+    } catch (error) {
+      console.error(error);
+      Swal.fire({
+        title: 'Error!',
+        icon: 'error',
+        text: 'Failed to unpublish the URU application.',
+        confirmButtonText: 'OK',
+      });
+    }
   };
 
   return (
@@ -142,13 +218,14 @@ const FinalURU = () => {
                 <td className="Final-Uru-Table-Data">
                   <input
                     type="file"
-                    onChange={(event) => handleCertificateUpload(data.applicationNumber, event)}
+                    onChange={(event) => handleCertificateUpload(data.applicationNumber, event.target.files[0])}
                     className="Final-Uru-File-Input"
                   />
+                 
                 </td>
                 <td className="Final-Uru-Table-Data">
-                  <button
-                    onClick={() => handleSubmit(data._id)}
+                   <button
+                    onClick={() => handleCertificateSubmit(data.applicationNumber)}
                     className="Final-Uru-Submit-Button"
                   >
                     Submit
@@ -159,6 +236,21 @@ const FinalURU = () => {
                   >
                     Delete
                   </button>
+                  {data.isPublished ? (
+                    <button
+                      onClick={() => handleUnpublish(data._id)}
+                      className="Final-Uru-Unpublish-Button"
+                    >
+                      Unpublish
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => handlePublish(data._id)}
+                      className="Final-Uru-Publish-Button"
+                    >
+                      Publish
+                    </button>
+                  )}
                 </td>
               </tr>
             ))

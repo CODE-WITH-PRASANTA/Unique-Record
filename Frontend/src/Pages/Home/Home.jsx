@@ -37,7 +37,7 @@ const Home = () => {
             </p>
             <div className="banner-buttons">
               <a href="/login" className="btn btn-primary">Apply Now</a>
-              <a href="/media" className="btn btn-secondary">See The Records</a>
+              <a href="/achievers" className="btn btn-secondary">See The Records</a>
             </div>
           </div>
           <div className="banner-image">

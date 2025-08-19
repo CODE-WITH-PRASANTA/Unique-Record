@@ -1,0 +1,432 @@
+/* Section Container */
+.Achiver-Details-Section {
+  padding: 40px 100px;
+  background: linear-gradient(135deg, #fdfdfd, #f6f8fb);
+  text-align: center;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Title */
+.Achiver-Details-Title {
+  font-size: 42px;
+  font-weight: 800;
+  margin-bottom: 45px;
+  color: #222;
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  background: linear-gradient(90deg, #ff416c, #ff4b2b, #ff6f91);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  position: relative;
+}
+
+.Achiver-Details-Title::after {
+  content: "";
+  width: 120px;
+  height: 5px;
+  background: linear-gradient(90deg, #ff416c, #ff4b2b, #ff6f91);
+  display: block;
+  margin: 20px auto 0;
+  border-radius: 3px;
+}
+
+/* Filter Buttons */
+.Achiver-Filter {
+  margin-bottom: 55px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.Achiver-Filter-Btn {
+  background: transparent;
+  border: 2px solid #ff4b2b;
+  padding: 12px 28px;
+  border-radius: 40px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #ff4b2b;
+  cursor: pointer;
+  transition: all 0.35s ease;
+  letter-spacing: 0.7px;
+}
+
+.Achiver-Filter-Btn:hover,
+.Achiver-Filter-Btn.active {
+  background: linear-gradient(90deg, #ff416c, #ff4b2b, #ff6f91);
+  color: #fff;
+  box-shadow: 0 10px 20px rgba(255, 75, 43, 0.35);
+  transform: translateY(-2px) scale(1.05);
+}
+
+/* Grid Layout */
+.Achiver-Details-Grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+  gap: 40px;
+  justify-content: center;
+  align-items: stretch;
+}
+
+/* Card */
+.Achiver-Details-Card {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 22px;
+  overflow: hidden;
+  border: 2px solid transparent;
+  background-image: linear-gradient(#fff, #fff),
+    linear-gradient(135deg, #ff416c, #ff4b2b, #ff6f91, #ff9a9e);
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+  display: flex;
+  flex-direction: column;
+  backdrop-filter: blur(6px);
+}
+
+.Achiver-Details-Card:hover {
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Photo */
+.Achiver-Details-Photo {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  border-bottom: 3px solid #7270707c;
+  transition: transform 0.5s ease;
+  border-radius: 20px 20px 0 0;
+}
+
+
+/* Info Section */
+.Achiver-Details-Info {
+  padding: 24px;
+  text-align: left;
+}
+
+.Achiver-Details-Info p {
+  margin: 8px 0;
+  font-size: 15px;
+  color: #444;
+  line-height: 1.6;
+}
+
+.Achiver-Details-Serial strong,
+.Achiver-Details-Category strong {
+  color: #111;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.Achiver-Details-Name {
+  font-weight: 800;
+  font-size: 22px;
+  color: #ff416c;
+  margin-top: 12px;
+}
+
+.Achiver-Details-Provider {
+  font-style: italic;
+  color: #666;
+  font-size: 15px;
+  margin-bottom: 6px;
+}
+
+.Achiver-Details-Date {
+  font-size: 14px;
+  color: #999;
+}
+
+/* Card Button */
+.Achiver-Details-CardBtnWrapper {
+  margin-top: 18px;
+  text-align: right;
+}
+
+.Achiver-Details-CardBtn {
+  background: linear-gradient(90deg, #ff416c, #ff4b2b, #ff6f91);
+  color: #fff;
+  border: none;
+  padding: 12px 26px;
+  border-radius: 30px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 16px rgba(255, 75, 43, 0.35);
+}
+
+.Achiver-Details-CardBtn:hover {
+  background: linear-gradient(90deg, #ff1e56, #ff4b2b, #ff6f91);
+  box-shadow: 0 10px 24px rgba(255, 75, 43, 0.5);
+  transform: translateY(-2px) scale(1.04);
+}
+
+/* View All Button */
+.Achiver-Details-ViewAll {
+  margin-top: 80px;
+}
+
+.Achiver-Details-Btn {
+  background: linear-gradient(90deg, #ff416c, #ff4b2b, #ff6f91);
+  color: #fff;
+  border: none;
+  padding: 20px 55px;
+  border-radius: 45px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.35s ease;
+  box-shadow: 0 10px 26px rgba(255, 75, 43, 0.45);
+}
+
+.Achiver-Details-Btn:hover {
+  background: linear-gradient(90deg, #ff1e56, #ff4b2b, #ff7aa2);
+  box-shadow: 0 14px 32px rgba(255, 75, 43, 0.55);
+  transform: translateY(-3px) scale(1.05);
+}
+
+/* Modal Background */
+.Achiver-Modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 15, 15, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  animation: fadeIn 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+/* Modal Image */
+.Achiver-Modal-Img {
+  max-width: 92%;
+  max-height: 82%;
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.55);
+  animation: zoomIn 0.35s ease-in-out;
+  cursor: default;
+}
+
+/* Close Button */
+.Achiver-Modal-Close {
+  position: absolute;
+  top: 28px;
+  right: 40px;
+  font-size: 50px;
+  font-weight: bold;
+  color: #fff;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.Achiver-Modal-Close:hover {
+  color: #ff4b2b;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes zoomIn {
+  from { transform: scale(0.9); opacity: 0.7; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+
+/* 📱 Responsive Design - Mobile & Tablet */
+
+/* Tablets (max-width: 1024px) */
+@media (max-width: 1024px) {
+  .Achiver-Details-Title {
+    font-size: 34px;
+    margin-bottom: 35px;
+  }
+
+  .Achiver-Filter-Btn {
+    padding: 10px 22px;
+    font-size: 15px;
+  }
+
+  .Achiver-Details-Grid {
+    gap: 28px;
+  }
+
+  .Achiver-Details-CardBtn {
+    padding: 10px 22px;
+    font-size: 14px;
+  }
+
+  .Achiver-Details-Btn {
+    padding: 16px 45px;
+    font-size: 16px;
+  }
+}
+
+/* Large Mobile (max-width: 768px) */
+@media (max-width: 768px) {
+  .Achiver-Details-Section {
+    padding: 60px 18px;
+  }
+
+  .Achiver-Details-Title {
+    font-size: 28px;
+    letter-spacing: 1.5px;
+  }
+
+  .Achiver-Filter {
+    gap: 12px;
+  }
+
+  .Achiver-Filter-Btn {
+    padding: 8px 18px;
+    font-size: 14px;
+  }
+
+  .Achiver-Details-Grid {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+
+  .Achiver-Details-Card {
+    border-radius: 18px;
+  }
+
+  .Achiver-Details-Photo {
+    height: 220px;
+  }
+
+  .Achiver-Details-Info {
+    padding: 18px;
+  }
+
+  .Achiver-Details-Name {
+    font-size: 20px;
+  }
+
+  .Achiver-Details-CardBtn {
+    padding: 9px 20px;
+    font-size: 13px;
+  }
+
+  .Achiver-Details-Btn {
+    padding: 14px 40px;
+    font-size: 15px;
+  }
+
+  .Achiver-Modal-Close {
+    font-size: 40px;
+    top: 20px;
+    right: 20px;
+  }
+}
+
+/* Small Mobile (max-width: 480px) */
+@media (max-width: 480px) {
+  .Achiver-Details-Section {
+    padding: 45px 14px;
+  }
+
+  .Achiver-Details-Title {
+    font-size: 24px;
+    margin-bottom: 25px;
+  }
+
+  .Achiver-Filter {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .Achiver-Filter-Btn {
+    width: 100%;
+    max-width: 260px;
+    margin: 0 auto;
+    font-size: 13px;
+    padding: 8px 15px;
+  }
+
+  .Achiver-Details-Photo {
+    height: 190px;
+  }
+
+  .Achiver-Details-Info p {
+    font-size: 13px;
+  }
+
+  .Achiver-Details-Name {
+    font-size: 18px;
+  }
+
+  .Achiver-Details-CardBtn {
+    font-size: 12px;
+    padding: 8px 16px;
+  }
+
+  .Achiver-Details-Btn {
+    width: 100%;
+    max-width: 280px;
+    padding: 12px 0;
+    font-size: 14px;
+  }
+
+  .Achiver-Modal-Img {
+    max-width: 95%;
+    max-height: 75%;
+  }
+
+  .Achiver-Modal-Close {
+    font-size: 34px;
+    top: 15px;
+    right: 15px;
+  }
+}
+
+/* Grid Layout */
+.Achiver-Details-Grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* Always 4 equal columns on large screens */
+  gap: 40px;
+  justify-content: center;
+  align-items: stretch;
+}
+
+/* Tablets (2 columns) */
+@media (max-width: 1024px) {
+  .Achiver-Details-Grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px;
+  }
+}
+
+/* Mobiles (1 column) */
+@media (max-width: 768px) {
+  .Achiver-Details-Grid {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+}
+
+.achiver-details-serial {
+  font-size: 28px;
+  font-weight: bold;
+  color: #E94e77; /* highlight color */
+  background: linear-gradient(90deg, #ffe0ec, #fff);
+  padding: 8px 14px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  display: inline-block;
+  margin-bottom: 12px;
+  letter-spacing: 1px;
+  border-left: 5px solid #E94e77;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+

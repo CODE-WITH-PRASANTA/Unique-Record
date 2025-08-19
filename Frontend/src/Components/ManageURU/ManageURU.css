@@ -37,32 +37,69 @@
 .uru-table tbody tr:hover {
   background-color: #f5f5f5;
 }
-
+/* ==== Action Buttons Wrapper ==== */
 .manage-uru-actions {
   display: flex;
-  justify-content: space-between;
+  gap: 10px;
+  justify-content: center;
   align-items: center;
 }
 
+/* ==== Common Button Styles ==== */
 .manage-uru-actions button {
-  padding: 5px 10px;
+  padding: 8px 16px;
   border: none;
-  border-radius: 5px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 90px;
 }
 
-.manage-uru-actions button.edit {
-  background-color: #5cb85c;
+/* Edit Button */
+.manage-uru-actions .edit {
+  background: #3498db;
   color: #fff;
+  box-shadow: 0 3px 8px rgba(52, 152, 219, 0.25);
 }
 
-.manage-uru-actions button.delete {
-  background-color: #d9534f;
+.manage-uru-actions .edit:hover {
+  background: #2980b9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(52, 152, 219, 0.35);
+}
+
+/* Delete Button */
+.manage-uru-actions .delete {
+  background: #e74c3c;
   color: #fff;
+  box-shadow: 0 3px 8px rgba(231, 76, 60, 0.25);
 }
 
-.manage-uru-actions button:hover {
-  opacity: 0.8;
+.manage-uru-actions .delete:hover {
+  background: #c0392b;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(231, 76, 60, 0.35);
+}
+
+/* Approve Button */
+.manage-uru-actions .approve {
+  background: #27ae60;
+  color: #fff;
+  box-shadow: 0 3px 8px rgba(39, 174, 96, 0.25);
+}
+
+.manage-uru-actions .approve:hover {
+  background: #1e8449;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(39, 174, 96, 0.35);
+}
+
+/* Active Click Effect */
+.manage-uru-actions button:active {
+  transform: translateY(0);
+  box-shadow: none;
 }
 
 .edit-modal {
@@ -135,7 +172,6 @@
   text-align: left;
   border: 1px solid #ddd;
 }
-
 .edit-modal {
   position: fixed;
   top: 0;
@@ -146,31 +182,44 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 20px;
 }
 
 .edit-modal-content {
   background-color: #fff;
-  padding: 20px;
+  padding: 30px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   max-height: 90vh;
   overflow-y: auto;
+  width: 80%;
+  max-width: 800px;
+}
+
+.edit-modal-content h2 {
+  margin-top: 0;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
 }
 
 .manage-uru-form-row {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   margin-bottom: 20px;
 }
 
 .manage-uru-form-group {
-  width: 30%;
+  width: calc(33.33% - 20px);
   margin-right: 20px;
+  margin-bottom: 20px;
 }
 
 .manage-uru-form-group label {
   display: block;
   margin-bottom: 10px;
+  font-weight: bold;
 }
 
 .manage-uru-form-group input {
@@ -181,12 +230,7 @@
   border-radius: 5px;
 }
 
-.manage-uru-form-row {
-  display: flex;
-  gap: 10px;
-}
-
-.manage-uru-submit {
+.manage-uru-form-row button[type="submit"] {
   background-color: #4CAF50;
   color: #fff;
   padding: 10px 20px;
@@ -195,7 +239,7 @@
   cursor: pointer;
 }
 
-.manage-uru-button {
+.manage-uru-form-row button[type="button"] {
   background-color: #ccc;
   color: #333;
   padding: 10px 20px;
@@ -204,10 +248,162 @@
   cursor: pointer;
 }
 
-.manage-uru-form-row button[type="manage-uru-submit"]:hover {
+.manage-uru-form-row button[type="submit"]:hover {
   background-color: #3e8e41;
 }
 
-.manage-uru-form-row button[type="manage-uru-button"]:hover {
+.manage-uru-form-row button[type="button"]:hover {
   background-color: #aaa;
+}
+
+
+
+/* ==== Common Button Styles ==== */
+.manage-uru-button,
+.manage-uru-submit {
+  padding: 12px 26px;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 120px;
+}
+
+/* Cancel Button */
+.manage-uru-button {
+  background: #f1f1f1;
+  color: #444;
+  border: 1px solid #ccc;
+  margin-right: 50px;
+
+  
+}
+
+.manage-uru-button:hover {
+  background: #e0e0e0;
+  color: #222;
+  transform: translateY(-2px);
+}
+
+/* Update Button */
+.manage-uru-submit {
+  background: linear-gradient(135deg, #4CAF50, #3e8e41);
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.25);
+}
+
+.manage-uru-submit:hover {
+  background: linear-gradient(135deg, #3e8e41, #2d6a31);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(76, 175, 80, 0.35);
+}
+
+/* Smooth Active Effect */
+.manage-uru-button:active,
+.manage-uru-submit:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+
+@media (max-width: 768px) {
+  .manage-uru-form-group {
+    width: calc(50% - 20px);
+  }
+  .edit-modal-content {
+    width: 90%;
+    padding: 20px;
+  }
+  .manage-uru-button {
+    margin-right: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .manage-uru-form-group {
+    width: 100%;
+    margin-right: 0;
+  }
+  .edit-modal-content {
+    width: 95%;
+    padding: 15px;
+  }
+  .manage-uru-form-row {
+    flex-direction: column;
+  }
+  .manage-uru-button {
+    margin-bottom: 10px;
+    padding: 10px 15px;
+  }
+  .manage-uru-submit {
+    padding: 10px 15px;
+  }
+  .manage-uru-actions button {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+  .uru-table th, .uru-table td {
+    padding: 5px;
+  }
+}
+
+
+/* ManageURU.css */
+
+/* Search Container */
+.manage-uru-search {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  margin: 20px 0;
+  padding: 12px 16px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+}
+
+/* Input Field */
+.manage-uru-search input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.manage-uru-search input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+/* Search Button */
+.search-btn {
+  background: #2563eb;
+  color: #fff;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.search-btn:hover {
+  background: #1e40af;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.12);
+}
+
+.search-btn:active {
+  transform: translateY(0);
+  box-shadow: none;
 }

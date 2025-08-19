@@ -3,7 +3,7 @@ import { Editor } from '@tinymce/tinymce-react';
 import { TagsInput } from 'react-tag-input-component';
 import axios from 'axios';
 import './AdminPostAchievement.css';
-import { API_URL } from '../../Api'; // Ensure API_URL = http://localhost:5005
+import { API_URL } from '../../Api'; 
 
 const AdminPostAchievement = () => {
   const [formData, setFormData] = useState({

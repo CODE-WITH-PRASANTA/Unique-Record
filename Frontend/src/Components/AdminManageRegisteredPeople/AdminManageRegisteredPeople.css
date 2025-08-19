@@ -32,7 +32,13 @@
   background: white;
 }
 
-th, td {
+.admin-manage-th th {
+  padding: 12px 15px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+  white-space: nowrap;
+}
+.AdminManage-Registered-People-row td {
   padding: 12px 15px;
   text-align: center;
   border-bottom: 1px solid #ddd;

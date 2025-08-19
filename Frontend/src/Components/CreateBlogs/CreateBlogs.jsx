@@ -3,6 +3,7 @@ import './CreateBlogs.css';
 import { Editor } from '@tinymce/tinymce-react';
 import Swal from 'sweetalert2';
 import { API_URL } from '../../Api';
+import axios from 'axios';
 
 const CreateBlogs = () => {
   const [blogTitle, setBlogTitle] = useState('');
@@ -21,6 +22,9 @@ const CreateBlogs = () => {
   const [editingBlog, setEditingBlog] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredBlogs, setFilteredBlogs] = useState(blogs);
+  const [email, setEmail] = useState('');
+const [phoneNumber, setPhoneNumber] = useState('');
+const [address, setAddress] = useState('');
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -71,6 +75,22 @@ const CreateBlogs = () => {
     setBlogContent(content);
   };
 
+   const handleDelete = async (id) => {
+  if (window.confirm("Are you sure you want to delete this blog?")) {
+    try {
+      const res = await fetch(`${API_URL}/blogs/delete/${id}`, {
+        method: 'DELETE',
+      });
+      const data = await res.json();
+      if (data.success) {
+        setBlogs((prev) => prev.filter((blog) => blog._id !== id));
+      }
+    } catch (error) {
+      console.error('Failed to delete blog', error);
+    }
+  }
+};
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -83,6 +103,8 @@ const CreateBlogs = () => {
     formData.append("authorName", authorName);
     formData.append("authorDesignation", authorDesignation);
     formData.append("tags", JSON.stringify(tags));
+    formData.append("email", email);
+    formData.append("address", address);
     if (image) {
       formData.append("image", image);
     }
@@ -155,6 +177,8 @@ const CreateBlogs = () => {
       setAuthorDesignation(blogData.authorDesignation);
       setTags(blogData.tags);
       setImagePreview(blogData.imageUrl);
+      setEmail(blogData.email);
+    setAddress(blogData.address);
     } catch (error) {
       console.error("Error fetching blog:", error);
     }
@@ -360,6 +384,31 @@ const CreateBlogs = () => {
           </div>
         </div>
 
+        <div className="Create-Blog-Row">
+  <div className="Create-Blog-Section Create-Blog-Section-Half">
+    <label className="Create-Blog-Label">Email</label>
+    <input
+      type="email"
+      value={email}
+      onChange={(e) => setEmail(e.target.value)}
+      placeholder="Enter email"
+      required
+      className="Create-Blog-Input"
+    />
+  </div>
+  
+<div className="Create-Blog-Section Create-Blog-Section-Half">
+  <label className="Create-Blog-Label">Address</label>
+  <textarea
+    value={address}
+    onChange={(e) => setAddress(e.target.value)}
+    placeholder="Enter address"
+    className="Create-Blog-TextArea"
+  />
+</div>
+</div>
+
+
         <div className="Create-Blog-Section">
           <label className="Create-Blog-Label">Upload Image</label>
           <input
@@ -382,44 +431,53 @@ const CreateBlogs = () => {
         </button>
       </form>
 
-      <h2 className='Create-Blog-heading-table'>Blogs</h2>
-      <div className="search-bar-container">
-        <input
-          type="text"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="Search by blog title, author name, or author designation"
-          className="search-bar-input"
-        />
-        <button className="search-bar-button" onClick={handleSearch}>Search</button>
-        <button className="search-bar-button" onClick={handleReset}>Reset</button>
-      </div>
-      <table className="Create-Blog-Table">
-        <thead>
-          <tr>
-            <th>S.No.</th>
-            <th>Title</th>
-            <th>Photo</th>
-            <th>Author Name</th>
-            <th>Author Designation</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredBlogs.map((blog, index) => (
-            <tr key={blog._id}>
-              <td>{index + 1}</td>
-              <td>{blog.blogTitle}</td>
-              <td><img src={blog.imageUrl} alt={blog.blogTitle} /></td>
-              <td>{blog.authorName}</td>
-              <td>{blog.authorDesignation || "N/A"}</td>
-              <td>
-                <button onClick={() => handleEditBlog(blog)}>Edit</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+     <h2 className='Create-Blog-heading-table'>Blogs</h2>
+<div className="search-bar-container">
+  <input
+    type="text"
+    value={searchTerm}
+    onChange={(e) => setSearchTerm(e.target.value)}
+    placeholder="Search by blog title, author name, or author designation"
+    className="search-bar-input"
+  />
+  <button className="search-bar-button" onClick={handleSearch}>Search</button>
+  <button className="search-bar-button" onClick={handleReset}>Reset</button>
+</div>
+ 
+  <table className="Create-Blog-Table">
+    <thead>
+      <tr>
+        <th>S.No.</th>
+        <th>Title</th>
+        <th>Photo</th>
+        <th>Author Name</th>
+        <th>Author Designation</th>
+        <th>Phone Number</th>
+        <th>Email</th>
+        <th>Address</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {filteredBlogs.map((blog, index) => (
+        <tr key={blog._id}>
+          <td>{index + 1}</td>
+          <td>{blog.blogTitle}</td>
+          <td><img src={blog.imageUrl} alt={blog.blogTitle} /></td>
+          <td>{blog.authorName}</td>
+          <td>{blog.authorDesignation || "N/A"}</td>
+          <td>{blog.phoneNumber || "N/A"}</td>
+          <td>{blog.email || "N/A"}</td>
+          <td>{blog.address || "N/A"}</td>
+          <td className='Action-Btn'>
+    <button className="edit-btn" onClick={() => handleEditBlog(blog)} >Edit</button>
+    <button  onClick={() => handleDelete(blog._id)}  >Delete</button>
+  </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+      
     </div>
   );
 };

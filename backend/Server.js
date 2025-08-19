@@ -49,7 +49,6 @@ app.use('/api/categories', categoryRoutes);
 app.use('/api/achievements', achievementRoutes);
 
 
-
 app.get('/', (req, res) => {
     res.send('Server is running...');
   });

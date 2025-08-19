@@ -1,7 +1,6 @@
 const Achievement = require('../Model/achivementModel');
 const cloudinary = require('../Config/cloudinary');
 
-// Post Achievement
 exports.postAchievement = async (req, res) => {
   try {
     const { title, shortDescription, content, providerName, achieverName, category, tags } = req.body;
@@ -9,6 +8,10 @@ exports.postAchievement = async (req, res) => {
 
     if (!image) {
       return res.status(400).json({ message: 'Image is required' });
+    }
+
+    if (!title || !shortDescription || !content || !providerName || !achieverName || !category) {
+      return res.status(400).json({ message: 'All fields are required' });
     }
 
     const result = await cloudinary.uploader.upload(image.path);
@@ -29,6 +32,7 @@ exports.postAchievement = async (req, res) => {
 
     res.status(201).json({ message: 'Achievement posted successfully' });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: 'Error posting achievement' });
   }
 };

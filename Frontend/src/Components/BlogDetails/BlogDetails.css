@@ -54,9 +54,7 @@
 }
 
 .News-details-image-section-one .News-details-footer {
-
-  max-width: 800px;
-  border-top: none; /* Optional: remove if not needed */
+    border-top: none; /* Optional: remove if not needed */
   padding: 0.5rem 1rem;
 
 }
@@ -135,37 +133,80 @@
 .news-icon{
     margin-right: 10px;
 }
-
-/* ===============================
-   Footer Meta Info (Date & Comments)
-   =============================== */
 .News-details-footer {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-  gap: 30px;
-  border-top: 1px solid #ddd;
   flex-wrap: wrap;
+  gap: 20px;
+  padding: 20px;
+  background-color: #eb808084;
+   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  border-top: 1px solid #ddd;
+  font-family: Arial, sans-serif;
 }
 
 .date-container,
-.comments-container {
+.author-container,
+.location-container,
+.email-container {
   display: flex;
   align-items: center;
-}
-
-.date-container i,
-.comments-container i {
-  font-size: 18px;
-  margin-right: 10px;
-  color: #007bff;
+  gap: 10px;
 }
 
 .date-container span,
-.comments-container span {
+.author-container span,
+.location-container span,
+.email-container span {
   font-size: 16px;
+  color: #333;
+}
+
+.author-container span:last-child {
+  font-style: italic;
   color: #666;
+}
+
+.email-container a {
+  text-decoration: none;
+  color: #337ab7;
+}
+
+.email-container a:hover {
+  color: #23527c;
+}
+
+
+/* Medium Devices (Tablets, 768px to 991px) */
+@media (max-width: 991px) {
+  .News-details-footer {
+    gap: 10px;
+  }
+}
+
+/* Small Devices (Mobiles, 767px and below) */
+@media (max-width: 767px) {
+  .News-details-footer {
+    flex-direction: column;
+    padding: 15px;
+  }
+  
+  .date-container,
+  .author-container,
+  .location-container,
+  .email-container {
+    width: 100%;
+    justify-content: start;
+  }
+}
+
+/* Extra Small Devices (Small Mobiles, 480px and below) */
+@media (max-width: 480px) {
+  .date-container span,
+  .author-container span,
+  .location-container span,
+  .email-container span {
+    font-size: 14px;
+  }
 }
 
 /* ===============================

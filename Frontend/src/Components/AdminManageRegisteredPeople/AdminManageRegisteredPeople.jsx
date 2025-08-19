@@ -146,7 +146,7 @@ const AdminManageRegisteredPeople = () => {
 
       <div className="AdminManage-Registered-People-table-container">
         <table className="AdminManage-Registered-People-table">
-          <thead>
+          <thead className="admin-manage-th">
             <tr>
               <th>S.No</th>
               <th>Event Name</th>

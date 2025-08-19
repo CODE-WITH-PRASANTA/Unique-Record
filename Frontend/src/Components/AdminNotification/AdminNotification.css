@@ -1,0 +1,162 @@
+.Admin-Notification-Container {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+  margin: 40px auto;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* Rest of your CSS remains the same */
+
+.Admin-Notification-Invoice-Card,
+.Admin-Notification-Expense-Card,
+.Admin-Notification-Notification-Card {
+  flex: 1;
+  min-width: 320px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.Admin-Notification-Card-Title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.Admin-Notification-Invoice-List {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.Admin-Notification-Invoice-List li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.Admin-Notification-Invoice-List img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.Admin-Notification-Invoice-List div {
+  flex: 1;
+}
+
+.Admin-Notification-Price {
+  color: #3498db;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.Admin-Notification-Time {
+  font-size: 12px;
+  color: #777;
+}
+
+.Admin-Notification-View-Button {
+  margin-top: auto;
+  padding: 10px;
+  border: 1px solid #333;
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.Admin-Notification-View-Button:hover {
+  background: #333;
+  color: #fff;
+}
+
+.Admin-Notification-Chart-Container {
+  width: 100%;
+  height: 250px;
+}
+
+.Admin-Notification-Legend {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.Admin-Notification-Legend li {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+  font-size: 14px;
+  justify-content: space-between;
+}
+
+.Admin-Notification-Dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 8px;
+}
+
+.Admin-Notification-Amount {
+  font-weight: 600;
+}
+
+.Admin-Notification-Notification-List {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.Admin-Notification-Notification-List li {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.Admin-Notification-Icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+  font-size: 16px;
+}
+
+.Admin-Notification-Icon.green { background: #e6f9f0; color: #2ecc71; }
+.Admin-Notification-Icon.blue { background: #e6f2ff; color: #3498db; }
+.Admin-Notification-Icon.red { background: #fdecea; color: #e74c3c; }
+.Admin-Notification-Icon.gray { background: #f0f0f0; color: #555; }
+
+.Admin-Notification-Highlight {
+  color: #3498db;
+  font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .Admin-Notification-Container {
+    flex-direction: column;
+    margin: 20px auto;
+  }
+}

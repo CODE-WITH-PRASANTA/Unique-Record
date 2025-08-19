@@ -1,0 +1,188 @@
+.Admin-dashboard-container {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  flex-wrap: wrap;
+}
+
+.Admin-card {
+  flex: 1;
+  min-width: 300px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.Admin-card-header {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.Admin-card-amount {
+  font-size: 28px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.percent {
+  font-size: 14px;
+  font-weight: 500;
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+.green {
+  background: #e6f9f0;
+  color: #2ecc71;
+}
+
+.blue {
+  background: #e6f2ff;
+  color: #3498db;
+}
+
+.Admin-card-text {
+  margin: 10px 0;
+  color: #555;
+  font-size: 14px;
+}
+
+.progress-bar {
+  height: 8px;
+  background: #eaeaea;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 6px;
+}
+
+.green-fill {
+  background: #2ecc71;
+}
+
+.blue-fill {
+  background: #3498db;
+}
+
+.white-fill {
+  background: #fff;
+}
+
+/* Special background styling */
+.daily-Admin-card::after,
+.monthly-Admin-card::after,
+.yearly-Admin-card::after {
+  content: "";
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  opacity: 0.1;
+}
+
+.daily-Admin-card::after {
+  background: linear-gradient(135deg, #2ecc71, #27ae60);
+}
+
+.monthly-Admin-card::after {
+  background: linear-gradient(135deg, #3498db, #2980b9);
+}
+
+.yearly-Admin-card {
+  background: linear-gradient(135deg, #3498db, #0066cc);
+  color: #fff;
+}
+
+.yearly-Admin-card .Admin-card-text {
+  color: #f0f0f0;
+}
+
+/* Existing CSS above remains same */
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .Admin-dashboard-container {
+    gap: 15px;
+    padding: 15px;
+  }
+
+  .Admin-card {
+    min-width: 250px;
+    padding: 16px;
+  }
+
+  .Admin-card-header {
+    font-size: 16px;
+  }
+
+  .Admin-card-amount {
+    font-size: 24px;
+  }
+
+  .Admin-card-text {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 768px) {
+  .Admin-dashboard-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .Admin-card {
+    width: 100%;
+    min-width: unset;
+  }
+
+  .Admin-card-amount {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 480px) {
+  .Admin-dashboard-container {
+    padding: 10px;
+    gap: 12px;
+  }
+
+  .Admin-card {
+    padding: 14px;
+    border-radius: 10px;
+  }
+
+  .Admin-card-header {
+    font-size: 15px;
+  }
+
+  .Admin-card-amount {
+    font-size: 20px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .percent {
+    font-size: 12px;
+    padding: 2px 6px;
+  }
+
+  .Admin-card-text {
+    font-size: 12px;
+  }
+
+  .progress-bar {
+    height: 6px;
+  }
+}
