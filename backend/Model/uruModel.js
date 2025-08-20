@@ -16,6 +16,7 @@ const uruSchema = new mongoose.Schema({
   whatsappMobileNumber: { type: String, required: true },
   emailId: { type: String, required: true },
   occupation: { type: String, required: true },
+  formCategory: { type: String, required: true },
   recordCategory: { type: String, required: true },
   recordTitle: { type: String, required: true },
   recordDescription: { type: String, required: true },
@@ -71,6 +72,8 @@ const uruSchema = new mongoose.Schema({
 
   // 🔥 NEW FIELD
   isPublished: { type: Boolean, default: false },
+  regNo: { type: String, required: true, unique: true },
+
 }, { timestamps: true });
 
 module.exports = mongoose.model("URU", uruSchema);

@@ -8,16 +8,13 @@ import Swal from 'sweetalert2';
 
 const ApplicationStatus = () => {
   const [applications, setApplications] = useState([]);
-  const [loading, setLoading] = useState(false);
   const token = localStorage.getItem('token'); 
 
   useEffect(() => {
     const fetchApplications = async () => {
       try {
         const response = await axios.get(`${API_URL}/uru/fetch-applied-uru-by-user`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         });
         setApplications(response.data);
       } catch (error) {
@@ -29,17 +26,15 @@ const ApplicationStatus = () => {
 
   const handlePayment = async (applicationNumber) => {
     try {
-      const { data: appDetails } = await axios.get(`${API_URL}/uru/get-uru-by-application-number/${applicationNumber}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const { data: appDetails } = await axios.get(
+        `${API_URL}/uru/get-uru-by-application-number/${applicationNumber}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
       if (appDetails.paymentStatus === 'Success') {
         Swal.fire({
           title: "Payment Status",
-          html: `
-            <b>Payment Already Done!</b><br>
-            Please wait 24 hours to verify and receive your certificate.
-          `,
+          html: `<b>Payment Already Done!</b><br>Please wait 24 hours to verify and receive your certificate.`,
           icon: "info",
           confirmButtonText: "Okay",
           confirmButtonColor: "#4CAF50",
@@ -50,11 +45,7 @@ const ApplicationStatus = () => {
       if (!appDetails.price || appDetails.price <= 0) {
         Swal.fire({
           title: "Please Wait for Approval",
-          html: `
-            <b>Your application is under review.</b><br>
-            Please wait <strong>24 hours</strong> for admin approval.<br>
-            Once approved, you will be able to make the payment.
-          `,
+          html: `<b>Your application is under review.</b><br>Please wait <strong>24 hours</strong> for admin approval.<br>Once approved, you will be able to make the payment.`,
           icon: "info",
           confirmButtonText: "Okay",
           confirmButtonColor: "#4CAF50",
@@ -89,9 +80,26 @@ const ApplicationStatus = () => {
           );
 
           if (verifyRes.data.success) {
-            alert("Payment successful!");
+            Swal.fire({
+              title: "🎉 Payment Successful!",
+              html: `
+                <p style="font-size:16px; margin:0;">Hey <b>${appDetails.applicantName}</b>,</p>
+                <p style="margin:8px 0;">Your transaction is <b style="color:#4CAF50;">successful</b> ✅</p>
+                <p style="font-size:14px; background:#f4f6f8; padding:10px; border-radius:6px;">
+                  Transaction ID: <b style="color:#333;">${response.razorpay_payment_id}</b>
+                </p>
+              `,
+              icon: "success",
+              confirmButtonText: "Okay",
+              confirmButtonColor: "#4CAF50",
+            });
+
             setApplications((prev) =>
-              prev.map((a) => (a.applicationNumber === applicationNumber ? { ...a, paymentStatus: 'Success' } : a))
+              prev.map((a) =>
+                a.applicationNumber === applicationNumber
+                  ? { ...a, paymentStatus: 'Success', transactionId: response.razorpay_payment_id }
+                  : a
+              )
             );
           } else {
             alert("Payment verification failed");
@@ -126,14 +134,9 @@ const ApplicationStatus = () => {
               <div className="Application-status-options">
                 <FaEllipsisV className="Application-status-options-icon" />
                 <div className="Application-status-options-menu">
-                 <a 
-                    href={``} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                  >
+                  <a href={``} target="_blank" rel="noopener noreferrer">
                     Download Your Application Form
                   </a>
-
                 </div>
               </div>
             </div>
@@ -147,18 +150,22 @@ const ApplicationStatus = () => {
           <div className="Application-status-info">
             <p className="Application-status-label">Position:</p>
             <p className="Application-status-value">{application.position}</p>
+
             <p className="Application-status-label">Payment Status:</p>
             <p className={`Application-status-value ${application.paymentStatus === 'Success' ? 'success' : 'pending'}`}>
               {application.paymentStatus === 'Success' ? 'Payment Successful' : 'Payment Pending'}
             </p>
-            {application.price && (
-              <p className="Application-status-label">Payment Allotment:</p>
-            )}
-            {application.price && (
+
+           <p className="Application-status-label">Payment Allotment:</p>
+            {application.price && application.price > 0 ? (
               <p className="Application-status-value">₹{application.price}</p>
+            ) : (
+              <p className="Application-status-wait">⏳ Wait 24 Hr for verifying and allot your payment</p>
             )}
+
           </div>
 
+          {/* Timeline */}
           <div className="Application-status-timeline">
             <div className={`Application-status-step ${['Pending', 'Approved', 'Paid'].includes(application.status) ? 'completed' : ''}`}>
               <div className="Application-status-circle green">
@@ -173,7 +180,7 @@ const ApplicationStatus = () => {
               <div className="Application-status-circle green">
                 <FaCheckCircle className="Application-status-icon" />
               </div>
-              <p className="Application-status-label"> URU Investigator Checks  </p>
+              <p className="Application-status-label">URU Investigator Checks</p>
             </div>
 
             <div className="Application-status-line" />
@@ -204,7 +211,10 @@ const ApplicationStatus = () => {
 
             <div className="Application-status-line" />
             <div className={`Application-status-step payment ${application.paymentStatus === 'Success' ? 'completed' : ''}`}>
-              <div className={`Application-status-circle ${application.paymentStatus === 'Success' ? 'green' : 'blue'}`} onClick={() => application.paymentStatus !== 'Success' && handlePayment(application.applicationNumber)}>
+              <div
+                className={`Application-status-circle ${application.paymentStatus === 'Success' ? 'green' : 'blue'}`}
+                onClick={() => application.paymentStatus !== 'Success' && handlePayment(application.applicationNumber)}
+              >
                 {application.paymentStatus === 'Success' ? (
                   <FaCheckCircle className="Application-status-icon" />
                 ) : (
@@ -217,9 +227,13 @@ const ApplicationStatus = () => {
             </div>
           </div>
 
-          {application.paymentStatus === 'Success' && (
+          {/* ✅ After Payment Success – Show Transaction ID */}
+          {application.paymentStatus === 'Success' && application.razorpayPaymentId && (
             <div className="payment-successful">
-              <p className="success">Thank you for your payment!</p>
+              <p className="success">🎉 Thank you for your payment!</p>
+              <p className="transaction-id">
+                Payment ID: <b>{application.razorpayPaymentId}</b>
+              </p>
             </div>
           )}
         </div>

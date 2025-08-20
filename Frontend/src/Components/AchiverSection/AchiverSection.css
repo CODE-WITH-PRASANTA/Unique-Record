@@ -430,3 +430,54 @@
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+
+/* 🔍 Search Box Styling */
+.Achiver-Search {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.Achiver-Search-Input {
+  width: 80%;
+  max-width: 400px;
+  padding: 10px 15px;
+  border: 2px solid #e94e77;
+  border-radius: 8px;
+  font-size: 16px;
+  outline: none;
+  transition: 0.3s ease;
+}
+
+.Achiver-Search-Input:focus {
+  border-color: #333;
+  box-shadow: 0px 0px 8px rgba(233, 78, 119, 0.3);
+}
+
+/* No result text */
+.Achiver-NoResult {
+  text-align: center;
+  font-size: 18px;
+  color: #999;
+  margin: 30px 0;
+}
+
+
+/* 🌐 Responsive Search Box */
+@media (max-width: 768px) {
+  .Achiver-Search-Input {
+    width: 90%;
+    max-width: 100%;
+    font-size: 15px;
+    padding: 9px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .Achiver-Search-Input {
+    width: 95%;
+    font-size: 14px;
+    padding: 8px 10px;
+  }
+}

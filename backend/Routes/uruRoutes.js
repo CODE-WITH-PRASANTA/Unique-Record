@@ -57,6 +57,4 @@ router.put("/publish-uru/:id", updatePublishStatus);
 router.get("/fetch-published-uru", fetchPublishedUru);
 router.get("/fetch-published-uru/:id", fetchPublishedUruById);
 
-
-
 module.exports = router;

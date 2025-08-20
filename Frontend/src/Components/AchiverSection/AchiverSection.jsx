@@ -7,6 +7,7 @@ const AchiverSection = () => {
   const [achievers, setAchievers] = useState([]);
   const [filter, setFilter] = useState("All");
   const [selectedPhoto, setSelectedPhoto] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const fetchPublishedUrus = async () => {
@@ -23,14 +24,38 @@ const AchiverSection = () => {
     fetchPublishedUrus();
   }, []);
 
-  const filteredAchievers =
+  // Filtering by category
+  const filteredByCategory =
     filter === "All"
       ? achievers
       : achievers.filter((achiever) => achiever.position === filter);
 
+  // Apply Search (by name, application number, or serial number)
+  const filteredAchievers = filteredByCategory.filter((achiever, index) => {
+    const serialNo = achievers.length - index; // calculated serial number
+    const query = searchQuery.toLowerCase();
+
+    return (
+      achiever.applicantName.toLowerCase().includes(query) ||
+      achiever.applicationNumber.toLowerCase().includes(query) ||
+      serialNo.toString().includes(query)
+    );
+  });
+
   return (
     <div className="Achiver-Details-Section">
       <h2 className="Achiver-Details-Title"> Our Achievers</h2>
+
+      {/* 🔍 Search Box */}
+      <div className="Achiver-Search">
+        <input
+          type="text"
+          placeholder="Search by Name, Application No, or Serial No..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="Achiver-Search-Input"
+        />
+      </div>
 
       {/* Filter Buttons */}
       <div className="Achiver-Filter">
@@ -40,58 +65,65 @@ const AchiverSection = () => {
         >
           All
         </button>
-        {[...new Set(achievers.map((achiever) => achiever.position))].map((position) => (
-          <button
-            key={position}
-            className={`Achiver-Filter-Btn ${filter === position ? "active" : ""}`}
-            onClick={() => setFilter(position)}
-          >
-            {position}
-          </button>
-        ))}
+        {[...new Set(achievers.map((achiever) => achiever.position))].map(
+          (position) => (
+            <button
+              key={position}
+              className={`Achiver-Filter-Btn ${filter === position ? "active" : ""}`}
+              onClick={() => setFilter(position)}
+            >
+              {position}
+            </button>
+          )
+        )}
       </div>
 
       {/* Cards */}
       <div className="Achiver-Details-Grid">
-        {filteredAchievers.map((achiever, index) => (
-          <div className="Achiver-Details-Card" key={achiever._id}>
-            <img
-              src={achiever.certificateUrl}
-              alt={achiever.applicantName}
-              className="Achiver-Details-Photo"
-              onClick={() => setSelectedPhoto(achiever.certificateUrl)}
-            />
-            <div className="Achiver-Details-Info">
-              <p className="achiver-details-serial">
-              <strong>Serial No:</strong> {index + 1}
-            </p>
+        {filteredAchievers.length > 0 ? (
+          filteredAchievers.map((achiever, index) => (
+            <div className="Achiver-Details-Card" key={achiever._id}>
+              <img
+                src={achiever.certificateUrl}
+                alt={achiever.applicantName}
+                className="Achiver-Details-Photo"
+                onClick={() => setSelectedPhoto(achiever.certificateUrl)}
+              />
+              <div className="Achiver-Details-Info">
+                <p className="achiver-details-serial">
+                  <strong>Serial No:</strong> {achievers.length - index}
+                </p>
 
-              <p className="Achiver-Details-Serial">
-                <strong>Application No:</strong> {achiever.applicationNumber}
-              </p>
-              <p className="Achiver-Details-Category">
-                <strong>Category:</strong> {achiever.position}
-              </p>
-              <p className="Achiver-Details-Name">
-                <strong>Name:</strong> {achiever.applicantName}
-              </p>
-              <p className="Achiver-Details-Provider">
-                <strong>Provider:</strong> Unique Records of Universe (Managment Team)
-              </p>
-              <p className="Achiver-Details-Date">
-                <strong>Date:</strong> {new Date(achiever.dateOfAttempt).toLocaleDateString()}
-              </p>
-              <div className="Achiver-Details-CardBtnWrapper">
-                <Link
-                  to={`/achiever/${achiever._id}`}
-                  className="Achiver-Details-CardBtn"
-                >
-                  View Details
-                </Link>
+                <p className="Achiver-Details-Serial">
+                  <strong>Application No:</strong> {achiever.applicationNumber}
+                </p>
+                <p className="Achiver-Details-Category">
+                  <strong>Category:</strong> {achiever.position}
+                </p>
+                <p className="Achiver-Details-Name">
+                  <strong>Name:</strong> {achiever.applicantName}
+                </p>
+                <p className="Achiver-Details-Provider">
+                  <strong>Provider:</strong> Unique Records of Universe (Managment Team)
+                </p>
+                <p className="Achiver-Details-Date">
+                  <strong>Date Of Attempt:</strong>{" "}
+                  {new Date(achiever.dateOfAttempt).toLocaleDateString()}
+                </p>
+                <div className="Achiver-Details-CardBtnWrapper">
+                  <Link
+                    to={`/achiever/${achiever._id}`}
+                    className="Achiver-Details-CardBtn"
+                  >
+                    View Details
+                  </Link>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))
+        ) : (
+          <p className="Achiver-NoResult">No achievers found.</p>
+        )}
       </div>
 
       {/* View All */}

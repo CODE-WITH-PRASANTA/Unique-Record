@@ -18,62 +18,62 @@ const UserDashboard = () => {
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
-  const [formData, setFormData] = useState({
-    applicantName: "",
-    sex: "",
-    dateOfBirth: "",
-    address: "",
-    district: "",
-    country: "", // changed to lowercase 'c'
-    state: "",
-    pinCode: "",
-    educationalQualification: "",
-    whatsappMobileNumber: "",
-    emailId: "",
-    occupation: "",
-    recordCategory: "",
-    recordTitle: "",
-    recordDescription: "",
-    purposeOfRecordAttempt: "",
-    dateOfAttempt: "",
-    recordVenue: "",
-    organisationName: "",
-    googleDriveLink: "",
-    facebookLink: "",
-    youtubeLink: "",
-    instagramLink: "",
-    linkedInLink: "",
-    xLink: "",
-    pinterestLink: "",
-    otherMediaLink: "",
-    photo: null,
-    video: null,
-    document: null,
-    witness1Name: "",
-    witness1Designation: "",
-    witness1Address: "",
-    witness1MobileNumber: "",
-    witness1EmailId: "",
-    witness2Name: "",
-    witness2Designation: "",
-    witness2Address: "",
-    witness2MobileNumber: "",
-    witness2EmailId: "",
-    position: "", // added position field
-  });
+    const [formData, setFormData] = useState({
+      applicantName: "",
+      sex: "",
+      dateOfBirth: "",
+      address: "",
+      district: "",
+      country: "",
+      state: "",
+      pinCode: "",
+      educationalQualification: "",
+      whatsappMobileNumber: "",
+      emailId: "",
+      occupation: "",
+      formCategory: "",  
+      recordCategory: "",
+      recordTitle: "",
+      recordDescription: "",
+      purposeOfRecordAttempt: "",
+      dateOfAttempt: "",
+      recordVenue: "",
+      organisationName: "",
+      googleDriveLink: "",
+      facebookLink: "",
+      youtubeLink: "",
+      instagramLink: "",
+      linkedInLink: "",
+      xLink: "",
+      pinterestLink: "",
+      otherMediaLink: "",
+      photo: null,
+      video: null,
+      document: null,
+      witness1Name: "",
+      witness1Designation: "",
+      witness1Address: "",
+      witness1MobileNumber: "",
+      witness1EmailId: "",
+      witness2Name: "",
+      witness2Designation: "",
+      witness2Address: "",
+      witness2MobileNumber: "",
+      witness2EmailId: "",
+      position: "",
+    });
 
-
-useEffect(() => {
-  const fetchCategories = async () => {
-    try {
-      const response = await axios.get(`${API_URL}/categories`);
-      setCategories(response.data);
-    } catch (error) {
-      console.error("Error fetching categories:", error);
-    }
-  };
-  fetchCategories();
-}, []);
+    useEffect(() => {
+      const fetchCategories = async () => {
+        try {
+          const response = await axios.get(`${API_URL}/categories`);
+          setCategories(response.data);
+        } catch (error) {
+          console.error("Error fetching categories:", error);
+        }
+      };
+      fetchCategories();
+    }, []);
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -255,14 +255,33 @@ useEffect(() => {
                 <p className="section-title">Fill about Record/Activity Details:</p>
                 <form className="personal-form" onSubmit={handleNext}>
                   <div className="grid-form">
+
+                   {/* New Category Selection */}
                     <div className="achivment-form-group">
-  <label>Effort Type *</label>
-  <select name="recordCategory" value={formData.recordCategory} onChange={handleInputChange} required>
-    <option value="">Select</option>
-    <option value="individual">Individual Effort</option>
-    <option value="group">Group Effort</option>
-  </select>
-</div>
+                      <label>Select Category *</label>
+                      <select
+                        name="formCategory"
+                        value={formData.formCategory}
+                        onChange={handleInputChange}
+                        required
+                      >
+                        <option value="">Select Category</option>
+                        {categories.map((cat) => (
+                          <option key={cat._id} value={cat.name}>
+                            {cat.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div className="achivment-form-group">
+                      <label>Effort Type *</label>
+                      <select name="recordCategory" value={formData.recordCategory} onChange={handleInputChange} required>
+                        <option value="">Select</option>
+                        <option value="individual">Individual Effort</option>
+                        <option value="group">Group Effort</option>
+                      </select>
+                    </div>
                     <div className="achivment-form-group">
                       <label>Record/Activity Title*</label>
                       <input type="text" name="recordTitle" value={formData.recordTitle} onChange={handleInputChange} required />
@@ -294,7 +313,8 @@ useEffect(() => {
                   </div>
                 </form>
               </>
-            )}
+              )}
+
 
             {step === 4 && (
               <>
