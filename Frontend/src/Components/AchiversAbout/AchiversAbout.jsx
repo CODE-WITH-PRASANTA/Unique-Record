@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from "react";
 import "./AchiversAbout.css";
-import { FaFacebookF, FaTwitter, FaWhatsapp, FaEnvelope, FaShareAlt } from "react-icons/fa";
+import { FaFacebookF, FaWhatsapp, FaEnvelope, FaShareAlt } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";  // modern X logo
 import { FiDownload } from "react-icons/fi";
 import { API_URL } from '../../Api';
 import { useParams } from "react-router-dom";
-import { QRCodeCanvas } from "qrcode.react";  // ✅ FIXED IMPORT
+import { QRCodeCanvas } from "qrcode.react";
 
 
 const AchiversAbout = () => {
   const [activeTab, setActiveTab] = useState("summary");
   const [uru, setUru] = useState({});
   const { id } = useParams();
-  const sharableLink = `${window.location.origin}/${uru.applicationNumber}`;
+  const sharableLink = `${window.location.origin}/achiever/${id}`;
+
 
   useEffect(() => {
     const fetchPublishedUruById = async () => {
@@ -26,59 +28,71 @@ const AchiversAbout = () => {
     fetchPublishedUruById();
   }, [id]);
 
-  // Functions
-  const downloadCertificate = (url, name) => {
-    const link = document.createElement('a');
-    link.href = url;
-    link.target = '_blank';
-    link.download = `${name}_certificate.pdf`;
-    link.click();
-  };
+      // Functions
+      const downloadCertificate = (url, name) => {
+        const link = document.createElement('a');
+        link.href = url;
+        link.target = '_blank';
+        link.download = `${name}_certificate.pdf`;
+        link.click();
+      };
 
-  const shareOnFacebook = (url, name, postUrl) => {
-    const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${postUrl}`;
-    window.open(facebookUrl, '_blank');
-  };
+    // Common share text generator
+    const getShareMessage = (name, postUrl) => 
+      `🌟 View ${name}'s Unique Records/Activity on URU web portal 🌟\n\n🔗 ${postUrl}`;
 
-  const shareOnTwitter = (url, name, postUrl) => {
-    const twitterUrl = `https://twitter.com/intent/tweet?url=${postUrl}&text=Check out ${name}'s certificate!`;
-    window.open(twitterUrl, '_blank');
-  };
+    // Facebook
+    const shareOnFacebook = (url, name, postUrl) => {
+      const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(postUrl)}&quote=${encodeURIComponent(getShareMessage(name, postUrl))}`;
+      window.open(facebookUrl, '_blank');
+    };
 
-  const shareOnWhatsApp = (url, name, postUrl) => {
-    const whatsappUrl = `https://api.whatsapp.com/send?text=Check out ${name}'s certificate! ${postUrl}`;
-    window.open(whatsappUrl, '_blank');
-  };
+    // Twitter / X
+    const shareOnTwitter = (url, name, postUrl) => {
+      const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(getShareMessage(name, postUrl))}`;
+      window.open(twitterUrl, '_blank');
+    };
 
-  const shareOnEmail = (url, name, postUrl) => {
-    const emailUrl = `mailto:?subject=${name}'s Certificate&body=Check out ${name}'s certificate! ${postUrl}`;
-    window.open(emailUrl, '_blank');
-  };
+    // WhatsApp
+    const shareOnWhatsApp = (url, name, postUrl) => {
+      const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(getShareMessage(name, postUrl))}`;
+      window.open(whatsappUrl, '_blank');
+    };
 
-  const shareOnOtherPlatforms = async (url, name, postUrl) => {
-    try {
-      if (navigator.canShare && navigator.canShare({ files: [] })) {
-        const response = await fetch(url);
-        const blob = await response.blob();
-        const file = new File([blob], `${name}_certificate.jpg`, { type: blob.type });
+    // Email
+    const shareOnEmail = (url, name, postUrl) => {
+      const emailUrl = `mailto:?subject=${encodeURIComponent(name + "'s Unique Record")}&body=${encodeURIComponent(getShareMessage(name, postUrl))}`;
+      window.open(emailUrl, '_blank');
+    };
 
-        await navigator.share({
-          title: `${name}'s Certificate`,
-          text: `Check out ${name}'s certificate!`,
-          url: postUrl,
-          files: [file],
-        });
-      } else {
-        await navigator.share({
-          title: `${name}'s Certificate`,
-          text: `Check out ${name}'s certificate!`,
-          url: postUrl,
-        });
+    // Other Platforms (Web Share API)
+    const shareOnOtherPlatforms = async (url, name, postUrl) => {
+      try {
+        const text = getShareMessage(name, postUrl);
+
+        if (navigator.canShare && navigator.canShare({ files: [] })) {
+          const response = await fetch(url);
+          const blob = await response.blob();
+          const file = new File([blob], `${name}_certificate.jpg`, { type: blob.type });
+
+          await navigator.share({
+            title: `${name}'s Unique Record`,
+            text,
+            url: postUrl,
+            files: [file],
+          });
+        } else {
+          await navigator.share({
+            title: `${name}'s Unique Record`,
+            text,
+            url: postUrl,
+          });
+        }
+      } catch (error) {
+        console.error("Error sharing:", error);
       }
-    } catch (error) {
-      console.error("Error sharing:", error);
-    }
-  };
+    };
+
   
     const formatDate = (dateString) => {
       if (!dateString) return "N/A";
@@ -180,7 +194,7 @@ const AchiversAbout = () => {
           shareOnTwitter(uru.certificateUrl, uru.applicantName, sharableLink)
         }
       >
-        <FaTwitter />
+        <FaXTwitter  />
       </button>
       <button
         className="share-btn wa"
