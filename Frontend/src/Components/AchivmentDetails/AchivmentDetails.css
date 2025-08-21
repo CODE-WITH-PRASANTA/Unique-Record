@@ -706,3 +706,83 @@
   transform: scale(0.98);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
+
+.record-holder-link {
+  display: flex;
+  justify-content: flex-end; /* Align to the end */
+  margin: 10px 0;
+}
+/* 🔽 Arrow Button 🔽 */
+.arrow-button {
+  display: inline-block;
+  padding: 16px 55px;
+  font-size: 20px;
+  font-weight: 700;
+  text-align: center;
+  color: #fff;
+  text-decoration: none;
+  background: linear-gradient(135deg, #ff512f, #dd2476, #7b2ff7);
+  background-size: 300% 300%;
+  position: relative;
+  clip-path: polygon(0 0, 85% 0, 100% 50%, 85% 100%, 0 100%);
+  border: none;
+  outline: none;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  transition: all 0.4s ease;
+  animation: gradientShift 6s ease infinite;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+/* Hover Effects */
+.arrow-button:hover {
+  background-position: 100% 0;
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 12px 25px rgba(221, 36, 118, 0.5);
+}
+
+/* Subtle glowing effect */
+.arrow-button::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  border-radius: 8px;
+  box-shadow: 0 0 25px rgba(221, 36, 118, 0.6);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.arrow-button:hover::after {
+  opacity: 1;
+}
+
+/* 🔽 Gradient Animation 🔽 */
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* 🔽 Click Animation (Ripple Effect) 🔽 */
+.arrow-button:active {
+  transform: scale(0.96);
+  box-shadow: 0 5px 15px rgba(221, 36, 118, 0.4);
+}
+
+/* 🔽 Responsive Design 🔽 */
+@media (max-width: 768px) {
+  .arrow-button {
+    padding: 14px 40px;
+    font-size: 18px;
+    clip-path: polygon(0 0, 90% 0, 100% 50%, 90% 100%, 0 100%);
+  }
+}
+
+@media (max-width: 480px) {
+  .arrow-button {
+    padding: 12px 28px;
+    font-size: 16px;
+    font-weight: 600;
+    clip-path: polygon(0 0, 92% 0, 100% 50%, 92% 100%, 0 100%);
+  }
+}

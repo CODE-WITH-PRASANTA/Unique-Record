@@ -69,8 +69,6 @@ const uruSchema = new mongoose.Schema({
     emailId: { type: String },
   },
   certificateUrl: { type: String },
-
-  // 🔥 NEW FIELD
   isPublished: { type: Boolean, default: false },
   regNo: { type: String, required: true, unique: true },
 

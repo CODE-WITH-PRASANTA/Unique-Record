@@ -52,7 +52,7 @@
 .achiver-about-title {
   font-size: 30px;
   font-weight: bold;
-  margin-bottom: 25px;
+  text-align: center;
   color: #222;
   background: linear-gradient(90deg, #e94e77, #ff758c);
   -webkit-background-clip: text;
@@ -272,7 +272,7 @@
 
 .achiver-description-table td {
   padding: 14px 18px;
-  font-size: 15px;
+  font-size: 20px;
   color: #333;
   border-bottom: 1px solid #eee;
 }
@@ -432,4 +432,252 @@
   .achiver-about-details{
     margin-top: 0px;
   }
+}
+
+/* Gradient Card - Premium Look */
+.uru-details-card {
+  background: linear-gradient(135deg, #667eea, #764ba2, #ff6a88);
+  border-radius: 20px;
+  padding: 35px;
+  margin: 10px auto;
+  max-width: 750px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+  font-family: "Poppins", sans-serif;
+  color: #222;
+  animation: fadeInUp 0.6s ease-in-out;
+}
+
+/* Title */
+.uru-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 25px;
+  color: #fff;
+  text-align: center;
+  text-shadow: 0 3px 6px rgba(0,0,0,0.3);
+}
+
+/* Highlighted Name */
+.uru-highlight {
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 26px;
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.7), 0 0 15px rgba(250, 204, 21, 0.5);
+}
+
+/* Info Grid (District / State / Country) */
+.uru-info-grid {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 15px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 14px;
+}
+
+.uru-info {
+  font-size: 16px;
+  font-weight: 500;
+  color: #fff;
+}
+
+/* Details List */
+.uru-details-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 22px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.25);
+  backdrop-filter: blur(8px);
+}
+
+/* Each Detail Item */
+.uru-detail {
+  font-size: 16px;
+  color: #222;
+  padding: 10px 14px;
+  border-left: 5px solid #facc15; /* golden accent */
+  background: rgba(255,255,255,0.75);
+  border-radius: 10px;
+}
+
+/* Strong labels */
+.uru-detail strong, 
+.uru-info strong {
+  color: #000;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+/* ---------------------- */
+/* 📱 Responsive Design */
+/* ---------------------- */
+
+/* For Tablets */
+@media (max-width: 1024px) {
+  .uru-details-card {
+    padding: 28px;
+    max-width: 90%;
+  }
+  .uru-title {
+    font-size: 26px;
+  }
+  .uru-highlight {
+    font-size: 28px;
+  }
+  .uru-info {
+    font-size: 17px;
+  }
+  .uru-detail {
+    font-size: 17px;
+    padding: 12px;
+  }
+}
+
+/* For Mobile Screens */
+@media (max-width: 768px) {
+  .uru-details-card {
+    padding: 20px;
+    margin: 15px;
+  }
+  .uru-title {
+    font-size: 22px;
+    line-height: 1.4;
+  }
+  .uru-highlight {
+    font-size: 24px;
+  }
+
+  .uru-info {
+    font-size: 16px;
+  }
+  .uru-detail {
+    font-size: 16px;
+    padding: 10px;
+  }
+}
+
+/* For Very Small Phones */
+@media (max-width: 480px) {
+  .uru-details-card {
+    padding: 16px;
+    border-radius: 15px;
+  }
+ 
+  .uru-detail {
+    padding: 8px;
+  }
+}
+
+
+
+/* Summary Section */
+.achiver-summary-section {
+  margin-top: 20px;
+  padding: 15px;
+  background: #fafafa;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+/* Heading */
+.achiver-summary-heading {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #e94e77; /* Matches your theme color */
+  border-left: 4px solid #e94e77;
+  padding-left: 10px;
+}
+
+/* Summary text */
+.achiver-summary {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #333;
+}
+
+/* Read More / Read Less Button */
+.readmore-btn {
+  margin-top: 6px;
+  padding: 6px 14px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(90deg, #ff7eb3, #ff758c, #ff5858);
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.readmore-btn:hover {
+  background: linear-gradient(90deg, #ff5858, #ff758c, #ff7eb3);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 94, 140, 0.4);
+}
+
+/* 🎉 Congratulations Message */
+.congrats-message {
+  background: linear-gradient(135deg, #ff6ec4, #7873f5, #4ade80);
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 500;
+  padding: 18px 25px;
+  border-radius: 12px;
+  text-align: center;
+  margin: 25px auto;
+  max-width: 700px;
+  line-height: 1.6;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  animation: fadeInUp 0.9s ease-in-out;
+  letter-spacing: 0.5px;
+}
+
+/* Highlighted Name */
+.congrats-message strong {
+  color: #ffeb3b; /* gold-like highlight */
+  font-weight: 700;
+}
+
+/* Italic Part */
+.congrats-message em {
+  font-style: normal;
+  color: #ffd6ff;
+  font-weight: 600;
+}
+
+/* Smooth Animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* Link Buttons */
+.link-btn {
+  display: inline-block;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+}
+
+.link-btn:hover {
+  background: linear-gradient(135deg, #ff6a88, #ffcc70);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
 }

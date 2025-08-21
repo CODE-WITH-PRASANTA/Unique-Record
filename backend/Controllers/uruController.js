@@ -15,7 +15,7 @@ const razorpay = new Razorpay({
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: "uruonline2025@gmail.com", // official URU email
+    user: "uruonline2025@gmail.com", // Admin URU email
     pass: process.env.EMAIL_PASS, // Gmail App Password
   },
 });
@@ -165,9 +165,9 @@ module.exports = {
     await uru.save();
 
         const mailOptions = {
-          from: '"Unique Records of Universe Official Team" <uruonline2025@gmail.com>',
+          from: '"Unique Records of Universe Admin Team" <uruonline2025@gmail.com>',
           to: emailId,
-          subject: "✅ URU Records – Application Confirmation",
+          subject: "✅ Unique Records of Universe Records – Application Confirmation",
           html: `
             <div style="font-family: Arial, sans-serif; padding: 0; margin: 0; background-color: #f4f6f8;">
               <table align="center" cellpadding="0" cellspacing="0" width="600" 
@@ -186,7 +186,7 @@ module.exports = {
                   <td style="padding:30px; color:#333333;">
                     <h2 style="color:#2c3e50; margin-bottom:10px;">Dear ${applicantName},</h2>
                     <p style="font-size:15px; line-height:1.6;">
-                      Thank you for submitting your application to <b>URU Records</b>.  
+                      Thank you for submitting your application to <b>Unique Records of Universe Records</b>.  
                       We are excited to inform you that your application has been successfully received and is currently under review by our assessment team.  
                     </p>
 
@@ -202,7 +202,7 @@ module.exports = {
                     </p>
 
                     <p style="font-size:15px; line-height:1.6;">
-                      We appreciate your interest in being part of the <b>URU Records</b> family, where achievements are celebrated and recognized on a global stage.  
+                      We appreciate your interest in being part of the <b>Unique Records of Universe Records</b> family, where achievements are celebrated and recognized on a global stage.  
                     </p>
 
                     <p style="font-size:15px; line-height:1.6; margin-bottom:30px;">
@@ -222,9 +222,9 @@ module.exports = {
                 <!-- Footer -->
                 <tr style="background:#ecf0f1;">
                   <td style="padding:15px; text-align:center; font-size:12px; color:#7f8c8d;">
-                    <p style="margin:5px 0;">© ${new Date().getFullYear()} URU Records. All Rights Reserved.</p>
+                    <p style="margin:5px 0;">© ${new Date().getFullYear()} Unique Records of Universe. All Rights Reserved.</p>
                     <p style="margin:5px 0;">
-                      URU Records Official • <a href="mailto:uruonline2025@gmail.com" style="color:#2c3e50; text-decoration:none;">uruonline2025@gmail.com</a>
+                      Unique Records of Universe Admin • <a href="mailto:uruonline2025@gmail.com" style="color:#2c3e50; text-decoration:none;">uruonline2025@gmail.com</a>
                     </p>
                   </td>
                 </tr>
@@ -447,22 +447,22 @@ module.exports = {
       const transporter = nodemailer.createTransport({
         service: "gmail",
         auth: {
-          user: "uruonline2025@gmail.com", // Official email
+          user: "uruonline2025@gmail.com", // Admin email
           pass: process.env.EMAIL_PASS, // Use App Password (not your Gmail password)
         },
       });
 
      const mailOptions = {
-  from: '"Unique Records of Universe Official Team" <uruonline2025@gmail.com>',
-  to: uru.emailId, // applicant email saved in DB
-  subject: "🎉 Payment Confirmation - URU Records",
-  html: `
+      from: '"Unique Records of Universe Admin Team" <uruonline2025@gmail.com>',
+      to: uru.emailId, // applicant email saved in DB
+      subject: "🎉 Payment Confirmation - Unique Records of Universe",
+      html: `
     <div style="font-family: 'Segoe UI', Roboto, Arial, sans-serif; max-width:650px; margin:auto; background:#ffffff; border-radius:12px; overflow:hidden; box-shadow:0 6px 18px rgba(0,0,0,0.08);">
       
       <!-- Header -->
       <div style="background:linear-gradient(135deg,#2c3e50,#34495e); padding:20px; text-align:center;">
         <h1 style="color:#ffffff; margin:0; font-size:24px; letter-spacing:1px;">Unique Records of Universe</h1>
-        <p style="color:#ecf0f1; font-size:14px; margin:5px 0 0;">Official Payment Confirmation</p>
+        <p style="color:#ecf0f1; font-size:14px; margin:5px 0 0;">Admin Payment Confirmation</p>
       </div>
 
       <!-- Body -->
@@ -470,7 +470,7 @@ module.exports = {
         <h2 style="color:#27ae60; margin-bottom:12px;">🎉 Payment Successful!</h2>
         <p style="font-size:16px;">Dear <b>${uru.applicantName}</b>,</p>
         <p style="font-size:15px; color:#444;">
-          We are delighted to confirm that your payment for the <b>URU Records Application</b> has been 
+          We are delighted to confirm that your payment for the <b>Unique Records of Universe Records Application</b> has been 
           <span style="color:#27ae60; font-weight:600;">successfully processed</span>.
         </p>
 
@@ -492,12 +492,24 @@ module.exports = {
           You will be notified about the next steps shortly.
         </p>
 
-        <!-- Call to Action -->
-        <div style="text-align:center; margin:25px 0;">
-          <a href="mailto:uruonline2025@gmail.com" style="background:#27ae60; color:#fff; padding:12px 22px; border-radius:6px; text-decoration:none; font-size:15px; font-weight:600; display:inline-block; box-shadow:0 3px 6px rgba(0,0,0,0.1);">
-            📩 Contact URU Support
-          </a>
-        </div>
+       <!-- Call to Action -->
+          <div style="text-align:center; margin:25px 0;">
+            <!-- Contact Button -->
+            <a href="mailto:uruonline2025@gmail.com" 
+              style="background:#27ae60; color:#fff; padding:12px 22px; border-radius:6px; 
+                      text-decoration:none; font-size:15px; font-weight:600; display:inline-block; 
+                      margin:0 8px; box-shadow:0 3px 6px rgba(0,0,0,0.1);">
+              📩 Contact URU Support
+            </a>
+
+            <!-- Login Button -->
+            <a href="https://ouruniverse.in/login" 
+              style="background:#2980b9; color:#fff; padding:12px 22px; border-radius:6px; 
+                      text-decoration:none; font-size:15px; font-weight:600; display:inline-block; 
+                      margin:0 8px; box-shadow:0 3px 6px rgba(0,0,0,0.1);">
+              🔑 Login
+            </a>
+          </div>
       </div>
 
       <!-- Footer -->
@@ -589,11 +601,99 @@ module.exports = {
       uru.isPublished = isPublished;
       await uru.save();
 
+      // ✅ Setup transporter (use your Gmail credentials or SMTP)
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: process.env.EMAIL_USER, // e.g., uruonline2025@gmail.com
+          pass: process.env.EMAIL_PASS, // your app password (not Gmail password)
+        },
+      });
+
+      // ✅ Email template (professional design)
+      const mailOptions = {
+        from: '"Unique Records of Universe" <uruonline2025@gmail.com>',
+        to: uru.emailId,
+        subject: isPublished
+          ? "✅ Your Record Has Been Published!"
+          : "⚠️ Your Record Has Been Unpublished",
+        html: `
+        <div style="font-family:'Segoe UI',Roboto,Arial,sans-serif;max-width:650px;margin:auto;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.08);">
+          
+          <!-- Header -->
+          <div style="background:linear-gradient(135deg,#1abc9c,#16a085);padding:20px;text-align:center;">
+            <h1 style="color:#fff;margin:0;font-size:22px;">Unique Records of Universe</h1>
+            <p style="color:#ecf0f1;margin:5px 0 0;font-size:14px;">Record Status Update</p>
+          </div>
+
+          <!-- Body -->
+          <div style="padding:25px;color:#333;line-height:1.6;">
+            <h2 style="color:${isPublished ? "#27ae60" : "#e74c3c"};margin-bottom:12px;">
+              ${isPublished ? "🎉 Congratulations! Your record is now Published." : "⚠️ Your record has been Unpublished."}
+            </h2>
+
+            <p style="font-size:15px;">Dear <b>${uru.applicantName}</b>,</p>
+            <p style="font-size:15px;color:#555;">
+              ${isPublished
+                ? `We are delighted to inform you that your <b>Unique Records of Universe</b> application has been 
+                  <span style="color:#27ae60;font-weight:600;">successfully published</span>.`
+                : `We would like to notify you that your <b>Unique Records of Universe</b> application has been 
+                  <span style="color:#e74c3c;font-weight:600;">unpublished</span>.`}
+            </p>
+
+            <!-- Record Details -->
+            <div style="background:#f9fafb;border:1px solid #e1e8ed;border-radius:8px;padding:15px;margin:20px 0;">
+              <h3 style="margin:0 0 10px;font-size:16px;color:#2c3e50;">Application Details</h3>
+              <ul style="list-style:none;padding:0;margin:0;font-size:14px;">
+                <li style="padding:6px 0;"><b>Application Number:</b> ${uru.applicationNumber}</li>
+                <li style="padding:6px 0;"><b>Applicant Name:</b> ${uru.applicantName}</li>
+                <li style="padding:6px 0;"><b>Email:</b> ${uru.emailId}</li>
+                <li style="padding:6px 0;"><b>Status:</b> <span style="font-weight:600;color:${isPublished ? "#27ae60" : "#e74c3c"};">${isPublished ? "Published" : "Unpublished"}</span></li>
+              </ul>
+            </div>
+
+            <p style="font-size:15px;margin-top:15px;">
+              ${isPublished
+                ? "Our verification team will now proceed with the next steps, and you will be notified with further updates soon."
+                : "If you believe this was done in error, kindly reach out to our support team."}
+            </p>
+
+            <!-- Call to Action -->
+           <div style="text-align:center;margin:0px 0;">
+            <a href="mailto:uruonline2025@gmail.com" 
+              style="background:#27ae60;color:#fff;padding:12px 22px;border-radius:6px;text-decoration:none;font-size:15px;font-weight:600;display:inline-block;margin:0 8px;box-shadow:0 3px 6px rgba(0,0,0,0.1);">
+              📩 Contact Support
+            </a>
+            <a href="https://ouruniverse.in/achievers" 
+              style="background:#2980b9;color:#fff;padding:12px 22px;border-radius:6px;text-decoration:none;font-size:15px;font-weight:600;display:inline-block;margin:0 8px;box-shadow:0 3px 6px rgba(0,0,0,0.1);">
+              📜 Check Out Post
+            </a>
+          </div>
+
+          </div>
+
+          <!-- Footer -->
+          <div style="background:#f4f6f9;padding:15px;text-align:center;font-size:13px;color:#777;">
+            <p style="margin:5px 0;">📌 For any queries, reach us at 
+              <a href="mailto:uruonline2025@gmail.com" style="color:#2980b9;">uruonline2025@gmail.com</a>
+            </p>
+            <p style="margin:5px 0;color:#aaa;">© ${new Date().getFullYear()} Unique Records of Universe. All Rights Reserved.</p>
+          </div>
+        </div>
+        `,
+      };
+
+      // ✅ Send mail only if Published
+      if (isPublished) {
+        await transporter.sendMail(mailOptions);
+      }
+
       res.status(200).json({
         message: `URU has been ${isPublished ? "Published" : "Unpublished"} successfully`,
         data: uru,
       });
     } catch (error) {
+      console.error("Publish/Unpublish Error:", error);
       res.status(500).json({ message: error.message });
     }
   },

@@ -63,17 +63,22 @@ const UserDashboard = () => {
       position: "",
     });
 
-    useEffect(() => {
-      const fetchCategories = async () => {
-        try {
-          const response = await axios.get(`${API_URL}/categories`);
-          setCategories(response.data);
-        } catch (error) {
-          console.error("Error fetching categories:", error);
-        }
-      };
-      fetchCategories();
-    }, []);
+   useEffect(() => {
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/categories`);
+      // ✅ Sort categories A–Z by name
+      const sortedCategories = response.data.sort((a, b) =>
+        a.name.localeCompare(b.name)
+      );
+      setCategories(sortedCategories);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  };
+  fetchCategories();
+}, []);
+
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });

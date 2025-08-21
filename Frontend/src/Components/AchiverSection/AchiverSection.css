@@ -157,6 +157,7 @@
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 6px 16px rgba(255, 75, 43, 0.35);
+
 }
 
 .Achiver-Details-CardBtn:hover {
@@ -480,4 +481,54 @@
     font-size: 14px;
     padding: 8px 10px;
   }
+}
+
+/* Labels + Values */
+.Achiver-Details-Info p {
+  margin: 8px 0;
+  font-size: 16px;
+}
+
+.Achiver-Details-Info strong {
+  display: inline-block;
+  width: 180px; /* aligns all labels neatly */
+  font-weight: 600;
+  color: #444;
+}
+
+/* Specific field styling */
+.Achiver-Details-Application strong {
+  color: #0056b3;
+}
+
+.Achiver-Details-Name strong {
+  color: #008037;
+}
+
+.Achiver-Details-Address strong {
+  color: #b35400;
+}
+
+.Achiver-Details-Type strong {
+  color: #5a0080;
+}
+
+.Achiver-Details-Category strong {
+  color: #880022;
+}
+
+.Achiver-Section-Title strong {
+  color: #006d77;
+  font-size: 16px;
+}
+
+.Achiver-Details-Date strong {
+  color: #444;
+  font-style: italic;
+  margin-bottom: 10px;
+}
+
+/* Button wrapper */
+.Achiver-Details-CardBtnWrapper {
+  margin-top: 15px;
 }

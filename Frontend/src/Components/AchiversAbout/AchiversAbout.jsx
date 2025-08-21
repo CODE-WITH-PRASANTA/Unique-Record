@@ -13,6 +13,10 @@ const AchiversAbout = () => {
   const [uru, setUru] = useState({});
   const { id } = useParams();
   const sharableLink = `${window.location.origin}/achiever/${id}`;
+  // State for read more / read less
+const [showFullDesc, setShowFullDesc] = useState(false);
+const [showFullPurpose, setShowFullPurpose] = useState(false);
+
 
 
   useEffect(() => {
@@ -132,32 +136,49 @@ const AchiversAbout = () => {
 
  <div className="achiver-about-right">
   <h2 className="achiver-about-title">
-    {uru.applicationNumber}. {uru.position}
+   {uru.position}
   </h2>
 
 {/* Wrap details + photo in flex */}
 <div className="achiver-right-top">
-  <div className="achiver-about-details">
-    <p><strong>Registration No:</strong> {uru.regNo}</p>
-    
-   <p>
-  <strong>Reg. Date:</strong>{" "}
-  {uru.createdAt ? formatDate(uru.createdAt) : "N/A"}
-</p>
+<div className="uru-details-card">
+  <h2 className="uru-title">
+    Unique Records of Universe Holder's Name :{" "}
+    <span className="uru-highlight">{uru.applicantName}</span>
+  </h2>
 
-    
-    <p><strong>Name:</strong> {uru.applicantName}</p>
-    <p><strong>Ph No:</strong> {uru.whatsappMobileNumber}</p>
-    
-   <p>
-  <strong>Date Of Achieving:</strong>{" "}
-  {uru.createdAt
-    ? formatDate(new Date(new Date(uru.createdAt).setDate(new Date(uru.createdAt).getDate() + 1)))
-    : "N/A"}
-</p>
-    <p><strong>Submitting Category:</strong> {uru.formCategory}</p>
-    <p><strong>Effort Type:</strong> {uru.recordCategory}</p>
+  <div className="uru-info-grid">
+    <p className="uru-info"><strong>District:</strong> {uru.district || "N/A"}</p>
+    <p className="uru-info"><strong>State:</strong> {uru.state || "N/A"}</p>
+    <p className="uru-info"><strong>Country:</strong> {uru.country || "N/A"}</p>
   </div>
+
+  <div className="uru-details-list">
+    <p className="uru-detail"><strong>Registration No:</strong> {uru.regNo}</p>
+    <p className="uru-detail">
+      <strong>Reg. Date:</strong>{" "}
+      {uru.createdAt ? formatDate(uru.createdAt) : "N/A"}
+    </p>
+    <p className="uru-detail">
+      <strong>Category:</strong> {uru.formCategory}
+    </p>
+    <p className="uru-detail">
+      <strong>Effort Type:</strong> {uru.recordCategory}
+    </p>
+    <p className="uru-detail">
+      <strong>Date of Digitization in the Universe:</strong>{" "}
+      {uru.createdAt
+        ? formatDate(
+            new Date(
+              new Date(uru.createdAt).setDate(
+                new Date(uru.createdAt).getDate() + 1
+              )
+            )
+          )
+        : "N/A"}
+    </p>
+  </div>
+</div>
 
   {/* Applicant Photo */}
   <div className="achiver-about-photo-section">
@@ -241,92 +262,228 @@ const AchiversAbout = () => {
 
       {/* Tab Content */}
       <div className="achiver-tab-content">
-        {activeTab === "summary" ? (
+       {activeTab === "summary" ? (
+        <div className="achiver-summary-section">
+          <h3 className="achiver-summary-heading">Records / Activity Description</h3>
           <p className="achiver-summary">{uru.recordDescription}</p>
+        </div>
         ) : (
-          <div className="achiver-description-table">
-            <h3>Basic Information</h3>
-            <table>
+            <div className="achiver-description-table">
+            {/* Basic Information */}
+            <h3 className="section-heading">Basic Information</h3>
+            <table className="uru-table">
               <tbody>
-                <tr><td>Application Number</td><td>{uru.applicationNumber || "N/A"}</td></tr>
-                <tr><td>Applicant Name</td><td>{uru.applicantName || "N/A"}</td></tr>
-                <tr><td>Sex</td><td>{uru.sex || "N/A"}</td></tr>
-                <tr><td>Date of Birth</td><td>{uru.dateOfBirth ? new Date(uru.dateOfBirth).toLocaleDateString() : "N/A"}</td></tr>
-                <tr><td>Age</td><td>{uru.dateOfBirth ? new Date().getFullYear() - new Date(uru.dateOfBirth).getFullYear() : "N/A"}</td></tr>
-                <tr><td>Address</td><td>{uru.address || "N/A"}</td></tr>
-                <tr><td>District</td><td>{uru.district || "N/A"}</td></tr>
-                <tr><td>State</td><td>{uru.state || "N/A"}</td></tr>
-                <tr><td>Country</td><td>{uru.country || "N/A"}</td></tr>
-                <tr><td>Pin Code</td><td>{uru.pinCode || "N/A"}</td></tr>
-                <tr><td>Educational Qualification</td><td>{uru.educationalQualification || "N/A"}</td></tr>
-                <tr><td>WhatsApp Mobile</td><td>{uru.whatsappMobileNumber || "N/A"}</td></tr>
-                <tr><td>Email ID</td><td>{uru.emailId || "N/A"}</td></tr>
-                <tr><td>Occupation</td><td>{uru.occupation || "N/A"}</td></tr>
+                <tr><td className="uru-label">Application Number</td><td>{uru.applicationNumber || "N/A"}</td></tr>
+                <tr><td className="uru-label">Applicant Name</td><td>{uru.applicantName || "N/A"}</td></tr>
+                <tr><td className="uru-label">Applicant Date</td><td>{uru.createdAt ? new Date(uru.createdAt).toLocaleDateString() : "N/A"}</td></tr>
+                <tr><td className="uru-label">Sex</td><td><strong>{uru.sex || "N/A"}</strong></td></tr>
+                <tr><td className="uru-label">Date of Birth</td><td>{uru.dateOfBirth ? new Date(uru.dateOfBirth).toLocaleDateString() : "N/A"}</td></tr>
+                <tr><td className="uru-label">Address</td><td>{uru.address || "N/A"}</td></tr>
+                <tr><td className="uru-label">District</td><td>{uru.district || "N/A"}</td></tr>
+                <tr><td className="uru-label">State</td><td>{uru.state || "N/A"}</td></tr>
+                <tr><td className="uru-label">Country</td><td>{uru.country || "N/A"}</td></tr>
+                <tr><td className="uru-label">Pin Code</td><td>{uru.pinCode || "N/A"}</td></tr>
+                <tr><td className="uru-label">Educational Qualification</td><td>{uru.educationalQualification || "N/A"}</td></tr>
+                <tr><td className="uru-label">WhatsApp Mobile</td><td>{uru.whatsappMobileNumber || "N/A"}</td></tr>
+                <tr><td className="uru-label">Email ID</td><td>{uru.emailId || "N/A"}</td></tr>
+                <tr><td className="uru-label">Occupation</td><td>{uru.occupation || "N/A"}</td></tr>
               </tbody>
             </table>
 
-            <h3>Record/Activity Details</h3>
-            <table>
+            {/* Record/Activity Details */}
+            <h3 className="section-heading">Record / Activity Details</h3>
+            <table className="uru-table">
               <tbody>
-                <tr><td>Effort Type</td><td>{uru.recordCategory || "N/A"}</td></tr>
-                <tr><td>Submiting Category</td><td>{uru.formCategory || "N/A"}</td></tr>
-                <tr><td>Type</td><td>{uru.position || "N/A"}</td></tr>
-                <tr><td>Title</td><td>{uru.recordTitle || "N/A"}</td></tr>
-                <tr><td>Description</td><td>{uru.recordDescription || "N/A"}</td></tr>
-                <tr><td>Purpose</td><td>{uru.purposeOfRecordAttempt || "N/A"}</td></tr>
-                <tr><td>Date of Attempt</td><td>{uru.dateOfAttempt ? new Date(uru.dateOfAttempt).toLocaleDateString() : "N/A"}</td></tr>
-                <tr><td>Venue</td><td>{uru.recordVenue || "N/A"}</td></tr>
-                <tr><td>Organisation/Group</td><td>{uru.organisationName || "N/A"}</td></tr>
+                <tr><td className="uru-label">Effort Type</td><td><strong>{uru.recordCategory || "N/A"}</strong></td></tr>
+                <tr><td className="uru-label">Submitting Category</td><td>{uru.formCategory || "N/A"}</td></tr>
+                <tr><td className="uru-label">Type</td><td>{uru.position || "N/A"}</td></tr>
+                <tr><td className="uru-label">Title</td><td>{uru.recordTitle || "N/A"}</td></tr>
+                <tr>
+                  <td className="uru-label">Description</td>
+                  <td>
+                    <p className="uru-text">
+                      {showFullDesc ? uru.recordDescription : uru.recordDescription?.slice(0, 250) + (uru.recordDescription?.length > 250 ? "..." : "")}
+                    </p>
+                    {uru.recordDescription?.length > 250 && (
+                      <button className="readmore-btn" onClick={() => setShowFullDesc(!showFullDesc)}>
+                        {showFullDesc ? "Read Less" : "Read More"}
+                      </button>
+                    )}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="uru-label">Purpose</td>
+                  <td>
+                    <p className="uru-text">
+                      {showFullPurpose ? uru.purposeOfRecordAttempt : uru.purposeOfRecordAttempt?.slice(0, 250) + (uru.purposeOfRecordAttempt?.length > 250 ? "..." : "")}
+                    </p>
+                    {uru.purposeOfRecordAttempt?.length > 250 && (
+                      <button className="readmore-btn" onClick={() => setShowFullPurpose(!showFullPurpose)}>
+                        {showFullPurpose ? "Read Less" : "Read More"}
+                      </button>
+                    )}
+                  </td>
+                </tr>
+                <tr><td className="uru-label">Date of Attempt</td><td>{uru.dateOfAttempt ? new Date(uru.dateOfAttempt).toLocaleDateString() : "N/A"}</td></tr>
+                <tr><td className="uru-label">Venue</td><td>{uru.recordVenue || "N/A"}</td></tr>
+                <tr><td className="uru-label">Organisation / Group</td><td>{uru.organisationName || "N/A"}</td></tr>
               </tbody>
             </table>
 
-            <h3>Witness Information</h3>
-            <table>
+            {/* Witness Information */}
+            <h3 className="section-heading">Witness - 1</h3>
+            <table className="uru-table">
               <tbody>
-                <tr><td>Witness 1 - Name</td><td>{uru.witness1?.name || "N/A"}</td></tr>
-                <tr><td>Witness 1 - Designation</td><td>{uru.witness1?.designation || "N/A"}</td></tr>
-                <tr><td>Witness 1 - Address</td><td>{uru.witness1?.address || "N/A"}</td></tr>
-                <tr><td>Witness 1 - Mobile</td><td>{uru.witness1?.mobileNumber || "N/A"}</td></tr>
-                <tr><td>Witness 1 - Email</td><td>{uru.witness1?.emailId || "N/A"}</td></tr>
-
-                <tr><td>Witness 2 - Name</td><td>{uru.witness2?.name || "N/A"}</td></tr>
-                <tr><td>Witness 2 - Designation</td><td>{uru.witness2?.designation || "N/A"}</td></tr>
-                <tr><td>Witness 2 - Address</td><td>{uru.witness2?.address || "N/A"}</td></tr>
-                <tr><td>Witness 2 - Mobile</td><td>{uru.witness2?.mobileNumber || "N/A"}</td></tr>
-                <tr><td>Witness 2 - Email</td><td>{uru.witness2?.emailId || "N/A"}</td></tr>
+                <tr><td className="uru-label">Name</td><td>{uru.witness1?.name || "N/A"}</td></tr>
+                <tr><td className="uru-label">Designation</td><td>{uru.witness1?.designation || "N/A"}</td></tr>
+                <tr><td className="uru-label">Address</td><td>{uru.witness1?.address || "N/A"}</td></tr>
+                <tr><td className="uru-label">Mobile</td><td>{uru.witness1?.mobileNumber || "N/A"}</td></tr>
+                <tr><td className="uru-label">Email</td><td>{uru.witness1?.emailId || "N/A"}</td></tr>
               </tbody>
             </table>
 
-            <h3>Evidence</h3>
-            <table>
+            <h3 className="section-heading">Witness - 2</h3>
+            <table className="uru-table">
               <tbody>
-                <tr><td>Google Drive</td><td>{uru.googleDriveLink || "N/A"}</td></tr>
-                <tr><td>Facebook</td><td>{uru.facebookLink || "N/A"}</td></tr>
-                <tr><td>YouTube</td><td>{uru.youtubeLink || "N/A"}</td></tr>
-                <tr><td>Instagram</td><td>{uru.instagramLink || "N/A"}</td></tr>
-                <tr><td>LinkedIn</td><td>{uru.linkedInLink || "N/A"}</td></tr>
-                <tr><td>X (Twitter)</td><td>{uru.xLink || "N/A"}</td></tr>
-                <tr><td>Pinterest</td><td>{uru.pinterestLink || "N/A"}</td></tr>
-                <tr><td>Other Media</td><td>{uru.otherMediaLink || "N/A"}</td></tr>
-                <tr>
-                  <td>Photo</td>
-                  <td>{uru.photoUrl ? <img src={uru.photoUrl} alt="Record" className="record-photo" /> : "N/A"}</td>
-                </tr>
-                <tr>
-                  <td>Video</td>
-                  <td>{uru.videoUrl ? <video src={uru.videoUrl} controls width="250" /> : "N/A"}</td>
-                </tr>
-                <tr>
-                  <td>Document</td>
-                  <td>{uru.documentUrl ? <a href={uru.documentUrl} target="_blank" rel="noreferrer">View Document</a> : "N/A"}</td>
-                </tr>
-                <tr>
-                  <td>Certificate</td>
-                  <td>{uru.certificateUrl ? <a href={uru.certificateUrl} target="_blank" rel="noreferrer">View Certificate</a> : "N/A"}</td>
-                </tr>
+                <tr><td className="uru-label">Name</td><td>{uru.witness2?.name || "N/A"}</td></tr>
+                <tr><td className="uru-label">Designation</td><td>{uru.witness2?.designation || "N/A"}</td></tr>
+                <tr><td className="uru-label">Address</td><td>{uru.witness2?.address || "N/A"}</td></tr>
+                <tr><td className="uru-label">Mobile</td><td>{uru.witness2?.mobileNumber || "N/A"}</td></tr>
+                <tr><td className="uru-label">Email</td><td>{uru.witness2?.emailId || "N/A"}</td></tr>
               </tbody>
             </table>
+
+           {/* Evidence */}
+<h3 className="section-heading">Evidence</h3>
+<table className="uru-table">
+  <tbody>
+    <tr>
+      <td className="uru-label">Google Drive</td>
+      <td>
+        {uru.googleDriveLink ? (
+          <a href={uru.googleDriveLink} target="_blank" rel="noreferrer" className="link-btn">
+            Open Link
+          </a>
+        ) : "N/A"}
+      </td>
+    </tr>
+    <tr>
+      <td className="uru-label">Facebook</td>
+      <td>
+        {uru.facebookLink ? (
+          <a href={uru.facebookLink} target="_blank" rel="noreferrer" className="link-btn">
+            Open Link
+          </a>
+        ) : "N/A"}
+      </td>
+    </tr>
+    <tr>
+      <td className="uru-label">YouTube</td>
+      <td>
+        {uru.youtubeLink ? (
+          <a href={uru.youtubeLink} target="_blank" rel="noreferrer" className="link-btn">
+            Open Link
+          </a>
+        ) : "N/A"}
+      </td>
+    </tr>
+    <tr>
+      <td className="uru-label">Instagram</td>
+      <td>
+        {uru.instagramLink ? (
+          <a href={uru.instagramLink} target="_blank" rel="noreferrer" className="link-btn">
+            Open Link
+          </a>
+        ) : "N/A"}
+      </td>
+    </tr>
+    <tr>
+      <td className="uru-label">LinkedIn</td>
+      <td>
+        {uru.linkedInLink ? (
+          <a href={uru.linkedInLink} target="_blank" rel="noreferrer" className="link-btn">
+            Open Link
+          </a>
+        ) : "N/A"}
+      </td>
+    </tr>
+    <tr>
+      <td className="uru-label">X (Twitter)</td>
+      <td>
+        {uru.xLink ? (
+          <a href={uru.xLink} target="_blank" rel="noreferrer" className="link-btn">
+            Open Link
+          </a>
+        ) : "N/A"}
+      </td>
+    </tr>
+    <tr>
+      <td className="uru-label">Pinterest</td>
+      <td>
+        {uru.pinterestLink ? (
+          <a href={uru.pinterestLink} target="_blank" rel="noreferrer" className="link-btn">
+            Open Link
+          </a>
+        ) : "N/A"}
+      </td>
+    </tr>
+    <tr>
+      <td className="uru-label">Other Media</td>
+      <td>
+        {uru.otherMediaLink ? (
+          <a href={uru.otherMediaLink} target="_blank" rel="noreferrer" className="link-btn">
+            Open Link
+          </a>
+        ) : "N/A"}
+      </td>
+    </tr>
+    <tr>
+      <td className="uru-label">Photo</td>
+      <td>
+        {uru.photoUrl ? (
+          <img src={uru.photoUrl} alt="Record" className="record-photo" />
+        ) : "N/A"}
+      </td>
+    </tr>
+    <tr>
+      <td className="uru-label">Video</td>
+      <td>
+        {uru.videoUrl ? (
+          <video src={uru.videoUrl} controls width="250" />
+        ) : "N/A"}
+      </td>
+    </tr>
+    <tr>
+      <td className="uru-label">Document</td>
+      <td>
+        {uru.documentUrl ? (
+          <a href={uru.documentUrl} target="_blank" rel="noreferrer" className="link-btn">
+            View Document
+          </a>
+        ) : "N/A"}
+      </td>
+    </tr>
+    <tr>
+      <td className="uru-label">Certificate</td>
+      <td>
+        {uru.certificateUrl ? (
+          <a href={uru.certificateUrl} target="_blank" rel="noreferrer" className="link-btn">
+            View Certificate
+          </a>
+        ) : "N/A"}
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+           {/* 🎉 Congratulations Message */}
+        <div className="congrats-message">
+          🎉 Congratulations..! <strong>{uru.applicantName}</strong> has been successfully registered in the <em>'Unique Records of Universe'</em>.
+        </div>
+
           </div>
+
         )}
       </div>
     </div>

@@ -21,16 +21,21 @@ const AdminPostAchievement = () => {
   const [categories, setCategories] = useState([]);
 
   // 🔹 Fetch categories on component mount
-  useEffect(() => {
-    axios
-      .get(`${API_URL}/categories`)
-      .then((response) => {
-        setCategories(response.data);
-      })
-      .catch((error) => {
-        console.error('Error fetching categories:', error);
-      });
-  }, []);
+useEffect(() => {
+  axios
+    .get(`${API_URL}/categories`)
+    .then((response) => {
+      // ✅ Sort categories alphabetically by name
+      const sortedCategories = response.data.sort((a, b) =>
+        a.name.localeCompare(b.name)
+      );
+      setCategories(sortedCategories);
+    })
+    .catch((error) => {
+      console.error('Error fetching categories:', error);
+    });
+}, []);
+
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -56,6 +61,8 @@ const AdminPostAchievement = () => {
     data.append('category', formData.category);
     data.append('tags', formData.tags.join(','));
     data.append('image', formData.image);
+    data.append('uruHolderLink', formData.uruHolderLink); // 🔹 Added in submit
+
 
     axios
       .post(`${API_URL}/achievements/post-achievement`, data)
@@ -71,6 +78,7 @@ const AdminPostAchievement = () => {
           category: '',
           tags: [],
           image: null,
+          uruHolderLink: '',
         });
         setTimeout(() => setSuccessMsg(''), 4000);
       })
@@ -118,6 +126,20 @@ const AdminPostAchievement = () => {
         <div className="achivement-post-form-group">
           <label className="achivement-post-label">Achiever Name*</label>
           <input type="text" name="achieverName" value={formData.achieverName} onChange={handleInputChange} required className="achivement-post-input" />
+        </div>
+
+          <div className="achivement-post-form-group">
+          <label className="achivement-post-label">URU Holder Details Link</label>
+          <div className="uru-holder-input-wrapper">
+            <input
+              type="url"
+              name="uruHolderLink"
+              placeholder="https://example.com/holder-details"
+              value={formData.uruHolderLink}
+              onChange={handleInputChange}
+              className="achivement-post-input"
+            />
+          </div>
         </div>
 
         <div className="achivement-post-form-group">

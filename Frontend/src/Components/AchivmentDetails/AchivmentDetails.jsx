@@ -5,7 +5,7 @@ import axios from 'axios';
 import { API_URL } from '../../Api';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faQuoteLeft, faPrint, faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faQuoteLeft, faPrint, faEnvelope, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import { 
@@ -104,8 +104,41 @@ const AchivmentDetails = () => {
             </div>
           </div>
 
-          <h1 className="Achivments-details-title">{achivmentDetails.title}</h1>
-          <div className="Achivments-details-paragraph" dangerouslySetInnerHTML={{ __html: achivmentDetails.content }}></div>
+{/* 🔽 Record Holder More Details Section 🔽 */}
+{achivmentDetails.uruHolderLink && (
+  <div className="record-holder-link">
+    <a 
+      href={achivmentDetails.uruHolderLink} 
+      target="_blank" 
+      rel="noopener noreferrer"
+      className="arrow-button"
+    >
+      URU Holder More Details
+    </a>
+  </div>
+)}
+
+<h1 className="Achivments-details-title">{achivmentDetails.title}</h1>
+
+<div 
+  className="Achivments-details-paragraph" 
+  dangerouslySetInnerHTML={{ __html: achivmentDetails.content }}
+></div>
+
+{/* 🔽 Record Holder More Details Section 🔽 */}
+{achivmentDetails.uruHolderLink && (
+  <div className="record-holder-link">
+    <a 
+      href={achivmentDetails.uruHolderLink} 
+      target="_blank" 
+      rel="noopener noreferrer"
+      className="arrow-button"
+    >
+      URU Holder More Details
+    </a>
+  </div>
+)}
+
 
           <div className="Achivments-details-community">
             <div className="Achivments-details-tags-row">

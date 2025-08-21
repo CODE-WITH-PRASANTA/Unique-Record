@@ -89,36 +89,52 @@ const AchiverSection = () => {
                 className="Achiver-Details-Photo"
                 onClick={() => setSelectedPhoto(achiever.certificateUrl)}
               />
-              <div className="Achiver-Details-Info">
-                <p className="achiver-details-serial">
-                  <strong>Serial No:</strong> {achievers.length - index}
-                </p>
+                      <div className="Achiver-Details-Info">
+            <p className="Achiver-Details-Application">
+              <strong>Application No:</strong> {achiever.applicationNumber}
+            </p>
 
-                <p className="Achiver-Details-Serial">
-                  <strong>Application No:</strong> {achiever.applicationNumber}
-                </p>
-                <p className="Achiver-Details-Category">
-                  <strong>Category:</strong> {achiever.position}
-                </p>
-                <p className="Achiver-Details-Name">
-                  <strong>Name:</strong> {achiever.applicantName}
-                </p>
-                <p className="Achiver-Details-Provider">
-                  <strong>Provider:</strong> Unique Records of Universe (Managment Team)
-                </p>
-                <p className="Achiver-Details-Date">
-                  <strong>Date Of Attempt:</strong>{" "}
-                  {new Date(achiever.dateOfAttempt).toLocaleDateString()}
-                </p>
-                <div className="Achiver-Details-CardBtnWrapper">
-                  <Link
-                    to={`/achiever/${achiever._id}`}
-                    className="Achiver-Details-CardBtn"
-                  >
-                    View Details
-                  </Link>
-                </div>
-              </div>
+            <p className="Achiver-Details-Name">
+              <strong>URU Holder's Name:</strong> {achiever.applicantName}
+            </p>
+
+            <p className="Achiver-Details-Address">
+              <strong>Address:</strong> {achiever.address}
+            </p>
+
+            <p className="Achiver-Details-Type">
+              <strong>Effort Type:</strong> {achiever.recordCategory}
+            </p>
+
+            <p className="Achiver-Details-Category">
+              <strong>Category:</strong> {achiever.position}
+            </p>
+
+            <p className="Achiver-Section-Title">
+              <strong>Title:</strong> {achiever.recordTitle}
+            </p>
+
+          <p className="Achiver-Details-Date">
+            <strong>Date of Digitalization:</strong>{" "}
+            {achiever.createdAt
+              ? new Date(achiever.createdAt).toLocaleDateString("en-GB", {
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "numeric",
+                })
+              : "N/A"}
+          </p>
+
+            <div className="Achiver-Details-CardBtnWrapper">
+              <Link
+                to={`/achiever/${achiever._id}`}
+                className="Achiver-Details-CardBtn"
+              >
+                View Details
+              </Link>
+            </div>
+                        </div>
+
             </div>
           ))
         ) : (

@@ -129,56 +129,60 @@ const ManageURU = () => {
 
       <div className="table-responsive">
         <table className="uru-table">
-          <thead>
-            <tr>
-              <th>S.No.</th>
-              <th>User ID</th>
-              <th>Application Number</th>
-              <th>Position</th>
-              <th>Applicant Name</th>
-              <th>Sex</th>
-              <th>Whatsapp Mobile Number</th>
-              <th>Email Id</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredData.map((data, index) => (
-              <tr key={data._id}>
-                <td>{index + 1}</td>
-                <td>{data.userId}</td>
-                <td>{data.applicationNumber}</td>
-                <td>{data.position}</td>
-                <td>{data.applicantName}</td>
-                <td>{data.sex}</td>
-                <td>{data.whatsappMobileNumber}</td>
-                <td>{data.emailId}</td>
-                <td className="manage-uru-actions">
-                  <button className="edit" onClick={() => handleEdit(data)}>
-                    Edit
-                  </button>
-                  <button
-                    className="delete"
-                    onClick={() => handleDelete(data._id)}
-                  >
-                    Delete
-                  </button>
-                  {data.isApproved ? (
-                    <button className="approved" disabled>
-                      Approved
-                    </button>
-                  ) : (
-                    <button
-                      className="approve"
-                      onClick={() => handleApprove(data._id)}
-                    >
-                      Approve
-                    </button>
-                  )}
-                </td>
+           <thead>
+              <tr>
+                <th>S.No.</th>
+                <th>Application Number</th>
+                <th>Position</th>
+                <th>Applicant Name</th>
+                <th>Sex</th>
+                <th>Whatsapp Mobile Number</th>
+                <th>Email Id</th>
+                <th>Country</th>   {/* New */}
+                <th>State</th>     {/* New */}
+                <th>Actions</th>
               </tr>
-            ))}
-          </tbody>
+            </thead>
+
+        <tbody>
+              {filteredData.map((data, index) => (
+                <tr key={data._id}>
+                  <td>{index + 1}</td>
+                  <td>{data.applicationNumber}</td>
+                  <td>{data.position}</td>
+                  <td>{data.applicantName}</td>
+                  <td>{data.sex}</td>
+                  <td>{data.whatsappMobileNumber}</td>
+                  <td>{data.emailId}</td>
+                  <td>{data.country}</td>  {/* New */}
+                  <td>{data.state}</td>    {/* New */}
+                  <td className="manage-uru-actions">
+                    <button className="edit" onClick={() => handleEdit(data)}>
+                      Edit
+                    </button>
+                    <button
+                      className="delete"
+                      onClick={() => handleDelete(data._id)}
+                    >
+                      Delete
+                    </button>
+                    {data.isApproved ? (
+                      <button className="approved" disabled>
+                        Approved
+                      </button>
+                    ) : (
+                      <button
+                        className="approve"
+                        onClick={() => handleApprove(data._id)}
+                      >
+                        Approve
+                      </button>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+
         </table>
       </div>
 

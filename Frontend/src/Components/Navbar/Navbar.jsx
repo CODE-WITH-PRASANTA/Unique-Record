@@ -60,7 +60,7 @@ const Navbar = () => {
 
        <li>
         <a href="/achievers">
-          <FiStar className="nav-icon" /> Achiever's Details
+          <FiStar className="nav-icon" /> URU Holder's
         </a>
       </li>
           <li>
@@ -153,7 +153,7 @@ const Navbar = () => {
           </li>
              <li>
             <a href="/achievers">
-              <FiStar className="nav-icon" /> Achiever's Details
+              <FiStar className="nav-icon" /> URU Holder's
             </a>
           </li>
           <li>

@@ -25,6 +25,10 @@ const achievementSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  uruHolderLink: {
+    type: String,
+    required: true,
+  },
   tags: {
     type: String,
     required: true,

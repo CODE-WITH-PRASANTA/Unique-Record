@@ -159,3 +159,49 @@
     padding: 10px;
   }
 }
+
+
+/* Form group wrapper */
+.achivement-post-form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+/* Label styling */
+.achivement-post-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #444;
+  margin-bottom: 8px;
+}
+
+/* Wrapper to control input width */
+.uru-holder-input-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 500px; /* keep input neat */
+}
+
+/* Input styling */
+.achivement-post-input {
+  width: 100%;
+  padding: 12px 15px;
+  font-size: 15px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+/* On focus */
+.achivement-post-input:focus {
+  border-color: #e94e77; /* your theme color */
+  box-shadow: 0 0 6px rgba(233, 78, 119, 0.3);
+}
+
+/* Placeholder style */
+.achivement-post-input::placeholder {
+  color: #aaa;
+  font-size: 14px;
+}
