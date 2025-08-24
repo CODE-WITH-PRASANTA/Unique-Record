@@ -22,6 +22,8 @@ const categoryRoutes = require("./Routes/categoryRoutes");
 const achievementRoutes = require('./Routes/achievementRoutes');
 const achivmentCommentRoutes = require('./Routes/achivmentCommentRoutes');
 const blogFeedbackRoutes = require('./Routes/blogFeedbackRoutes');
+const freeQuoteRoutes = require('./Routes/freeQuoteRoutes');
+const newsletterRoutes = require('./Routes/newsletterRoutes');
 
 
 
@@ -52,6 +54,9 @@ app.use('/api/categories', categoryRoutes);
 app.use('/api/achievements', achievementRoutes);
 app.use('/api/comment', achivmentCommentRoutes);
 app.use("/api/blogcmt", blogFeedbackRoutes);
+app.use('/api/freequotes', freeQuoteRoutes);
+app.use("/api/newsletter", newsletterRoutes);
+
 
 
 

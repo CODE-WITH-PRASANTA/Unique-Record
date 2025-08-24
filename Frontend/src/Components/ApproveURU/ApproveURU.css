@@ -1,85 +1,132 @@
+/* General Container */
 .Approve-URU-container {
   padding: 20px;
-  background-color: #f0f0f0;
+  background: linear-gradient(120deg, #f0f8ff, #e0f7fa);
+  min-height: 100vh;
+  font-family: 'Poppins', sans-serif;
 }
 
+/* Title */
 .Approve-URU-title {
   text-align: center;
-  margin-bottom: 20px;
-  color: #4CAF50;
+  margin-bottom: 25px;
+  font-size: 28px;
+  font-weight: 600;
+  color: #00796b;
+  text-shadow: 1px 1px 2px #a7ffeb;
 }
 
+/* Filter Section */
 .filter-container {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .filter-status-select {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #fff;
+  padding: 10px 15px;
+  border: 2px solid #00796b;
+  border-radius: 8px;
+  background-color: #ffffff;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter-status-select:hover {
+  border-color: #004d40;
 }
 
 .download-excel-btn {
-  padding: 10px 20px;
-  background-color: #4CAF50;
+  padding: 10px 25px;
+  background: linear-gradient(90deg, #26a69a, #80cbc4);
   color: #fff;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
+  font-weight: 500;
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .download-excel-btn:hover {
-  background-color: #3e8e41;
+  background: linear-gradient(90deg, #00796b, #26a69a);
 }
 
+/* Table Container */
 .Approve-URU-table-container {
   overflow-x: auto;
+  border-radius: 10px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
 }
 
+/* Table Styles */
 .Approve-URU-table {
   border-collapse: collapse;
   width: 100%;
-  background-color: #fff;
+  min-width: 800px;
 }
 
 .Approve-URU-table-header {
-  background-color: #4CAF50;
+  background: linear-gradient(90deg, #26a69a, #80cbc4);
   color: #fff;
-  padding: 10px;
+  padding: 12px;
+  font-weight: 600;
+  text-align: center;
   border: 1px solid #ddd;
 }
 
 .Approve-URU-table-data {
-  padding: 10px;
+  padding: 12px;
   border: 1px solid #ddd;
+  text-align: center;
+  font-size: 14px;
+  vertical-align: middle;
+  word-break: break-word;
 }
 
+/* Input Field */
 .Approve-URU-price-input {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  width: 100%;
+  padding: 8px 10px;
+  border: 2px solid #26a69a;
+  border-radius: 6px;
+  width: 80px;
+  text-align: center;
+  font-weight: 500;
+  transition: all 0.3s ease;
 }
 
-.Approve-URU-transition-id-input {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  width: 100%;
+.Approve-URU-price-input:focus {
+  border-color: #00796b;
+  outline: none;
 }
 
+/* Submit Button */
 .Approve-URU-submit-btn {
-  padding: 10px 20px;
-  background-color: #4CAF50;
+  padding: 8px 15px;
+  background: linear-gradient(90deg, #26a69a, #00796b);
   color: #fff;
   border: none;
-  border-radius: 5px;
+  border-radius: 6px;
   cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
 }
 
 .Approve-URU-submit-btn:hover {
-  background-color: #3e8e41;
+  background: linear-gradient(90deg, #004d40, #00796b);
 }
+
+/* Status Colors */
+span {
+  font-weight: 500;
+}
+
+span[style*="green"] {
+  font-weight: 600;
+  color: #2e7d32 !important;
+}
+

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { API_URL } from '../../Api';
 import "./AdminAchivmentComment.css";
+import Swal from "sweetalert2";
+
 
 const AdminAchivmentComment = () => {
   const [comments, setComments] = useState([]);
@@ -32,14 +34,40 @@ const fetchComments = async () => {
     }));
   };
 
-  const handleDelete = async (id) => {
-    try {
-      await axios.delete(`${API_URL}/comment/feedback/${id}`);
-      setComments(comments.filter((c) => c._id !== id));
-    } catch (error) {
-      console.error(error);
+
+const handleDelete = async (id) => {
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You won't be able to revert this!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, delete it!",
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      try {
+        await axios.delete(`${API_URL}/comment/feedback/${id}`);
+        setComments(comments.filter((c) => c._id !== id));
+
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success",
+          timer: 2000,
+          showConfirmButton: false,
+        });
+      } catch (error) {
+        console.error(error);
+        Swal.fire({
+          title: "Error!",
+          text: "Something went wrong while deleting.",
+          icon: "error",
+        });
+      }
     }
-  };
+  });
+};
 
   const handlePublish = async (id) => {
     try {

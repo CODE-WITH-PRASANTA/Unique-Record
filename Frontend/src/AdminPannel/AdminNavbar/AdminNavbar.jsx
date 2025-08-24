@@ -40,6 +40,8 @@ import AdminManageCategories from '../../Components/AdminManageCategories/AdminM
 import CreateBlogs from '../../Components/CreateBlogs/CreateBlogs';
 import AdminManageBlogComment from '../../Components/AdminManageBlogComment/AdminManageBlogComment';
 import AdminAchivmentComment from '../../Components/AdminAchivmentComment/AdminAchivmentComment';
+import UserOpinion from '../../Components/UserOpinion/UserOpinion';
+import SubscribedNewsletter from '../../Components/SubscribedNewsletter/SubscribedNewsletter';
 
 const NAVIGATION = [
   {
@@ -317,6 +319,24 @@ const NAVIGATION = [
   ],
 },
 
+{
+  kind: 'divider',
+},
+{
+  kind: 'header',
+  title: 'User Management',
+},
+{
+  segment: 'user-opinion',
+  title: "User's Opinion",
+  icon: <MessageIcon style={{ color: '#9c27b0' }} />,
+},
+{
+  segment: 'newsletter',
+  title: 'Subscribed Newsletter',
+  icon: <ArticleIcon style={{ color: '#3f51b5' }} />,
+},
+
   
 
 ];
@@ -406,6 +426,8 @@ export default function DashboardLayoutBasic({ window }) {
             {router.pathname === '/category' && <AdminManageCategories />}
             {router.pathname === '/comments/blog-comments' && <AdminManageBlogComment />}
             {router.pathname === '/comments/achievement-comments' && <AdminAchivmentComment />} 
+            {router.pathname === '/user-opinion' && <UserOpinion />} 
+            {router.pathname === '/newsletter' && <SubscribedNewsletter />}
 
           </PageContainer>
         </DashboardLayout>

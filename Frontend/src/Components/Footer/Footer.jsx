@@ -1,10 +1,31 @@
-import React from 'react';
+import React, { useState } from "react"; // ✅ FIX: add useState
 import { FaFacebookF, FaWhatsapp , FaXTwitter, FaTelegram  , FaInstagram, FaYoutube } from "react-icons/fa6";
 import { FaMapMarkerAlt, FaPhoneAlt, FaEnvelope } from "react-icons/fa";
 import footerlogo from "../../assets/UNQUE.png"
 import "./Footer.css";
+import axios from "axios";
+import { API_URL } from "../../Api"; 
 
 const Footer = () => {
+  
+ const [email, setEmail] = useState("");
+  const [msg, setMsg] = useState("");
+
+  const handleSubscribe = async () => {
+    if (!email) {
+      setMsg("⚠ Please enter your email");
+      return;
+    }
+
+    try {
+      const res = await axios.post(`${API_URL}/newsletter/subscribe`, { email });
+      setMsg(res.data.message);
+      setEmail("");
+    } catch (err) {
+      setMsg(err.response?.data?.message || "Something went wrong ❌");
+    }
+  };
+
   return (
     <footer className="footer">
       <div className="container footer-grid">
@@ -48,26 +69,27 @@ const Footer = () => {
     </ul>
 </div>
 
-        {/* Our Company */}
-        {/* <div className="footer-section">
-          <h4 className="footer-heading">Our Achivement</h4>
-          <ul className="footer-list">
-            <li>xxxxxxxxx</li>
-            <li>xxxxxxxxx</li>
-            <li>xxxxxxxxxx</li>
-            <li>xxxxxxxxxx</li>
-          </ul>
-        </div> */}
-        
-        {/* Newsletter */}
-        <div className="footer-section">
-          <h4 className="footer-heading">Newsletter</h4>
-          <p className="footer-text">Your Weekly/Monthly Dose of Knowledge and Inspiration</p>
-          <div className="footer-newsletter">
-            <input type="email" placeholder="Your email address" className="newsletter-input" />
-            <button className="newsletter-button">Subscribe</button>
-          </div>
+       
+       <div className="footer-section">
+        <h4 className="footer-heading">Newsletter</h4>
+        <p className="footer-text">
+          Your Weekly/Monthly Dose of Knowledge and Inspiration
+        </p>
+        <div className="footer-newsletter">
+          <input
+            type="email"
+            placeholder="Your email address"
+            className="newsletter-input"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <button className="newsletter-button" onClick={handleSubscribe}>
+            Subscribe
+          </button>
         </div>
+        {msg && <p className="newsletter-msg">{msg}</p>}
+      </div>
+
       </div>
       {/* Footer Bottom */}
       <div className="footer-bottom">

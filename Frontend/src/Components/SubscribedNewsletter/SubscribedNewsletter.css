@@ -1,0 +1,105 @@
+.subnewsletter-container {
+  padding: 25px;
+  background: linear-gradient(135deg, #f8f9fc, #eef2f7);
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  font-family: "Poppins", sans-serif;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.subnewsletter-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 18px;
+  text-align: center;
+  background: linear-gradient(90deg, #6a11cb, #2575fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.subnewsletter-table-wrapper {
+  overflow-x: auto;
+}
+
+.subnewsletter-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.subnewsletter-table th,
+.subnewsletter-table td {
+  padding: 14px 18px;
+  text-align: left;
+  font-size: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.subnewsletter-table th {
+  background: linear-gradient(90deg, #6a11cb, #2575fc);
+  color: #fff;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+}
+
+.subnewsletter-table tr:nth-child(even) {
+  background: #fafafa;
+}
+
+.subnewsletter-table tr:hover {
+  background: #f1f5ff;
+  transition: background 0.3s;
+}
+
+.subnewsletter-delete-btn {
+  background: linear-gradient(90deg, #ff416c, #ff4b2b);
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: 500;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s;
+  box-shadow: 0 4px 10px rgba(255, 75, 43, 0.2);
+}
+
+.subnewsletter-delete-btn:hover {
+  background: linear-gradient(90deg, #e84118, #c23616);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(255, 75, 43, 0.3);
+}
+
+/* ✅ Responsive Design */
+@media (max-width: 768px) {
+  .subnewsletter-title {
+    font-size: 18px;
+  }
+
+  .subnewsletter-table th,
+  .subnewsletter-table td {
+    padding: 10px 12px;
+  }
+
+  .subnewsletter-delete-btn {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .subnewsletter-container {
+    padding: 15px;
+  }
+
+
+  .subnewsletter-title {
+    font-size: 16px;
+  }
+}

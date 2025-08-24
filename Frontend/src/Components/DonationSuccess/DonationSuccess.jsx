@@ -26,7 +26,7 @@ const DonationSuccess = () => {
           <h2 className="donation-success-heading">Unique Record Of Universe</h2>
           <p className="donation-success-description">
             <strong>
-              Unique Records of Universe<br />Digitally Marking The Extraordinary Achievement
+            Digitally Marking The Extraordinary Achievement
             </strong>
           </p>
           <h3 className="donation-success-title">Donation Success</h3>

@@ -55,15 +55,7 @@
   gap: 10px;
 }
 
-.btn {
-  padding: 8px 14px;
-  font-size: 14px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.3s ease;
-}
+
 
 .btn.publish {
   background: #28a745;

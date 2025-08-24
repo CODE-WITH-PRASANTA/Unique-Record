@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './AdminManageHomeMedia.css';
 import { API_URL } from '../../Api'; // or '../config/api' depending on file structure
+import Swal from "sweetalert2";
+
 
 const API_BASE_URL = `${API_URL}/home-media`;
 
@@ -52,17 +54,37 @@ const AdminManageHomeMedia = () => {
     }
   };
 
-  const handleDelete = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this image?')) return;
+ const handleDelete = async (id) => {
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You won't be able to revert this!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, delete it!",
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      try {
+        await axios.delete(`${API_BASE_URL}/${id}`);
+        setUploadedImages((prev) => prev.filter((img) => img._id !== id));
 
-    try {
-      await axios.delete(`${API_BASE_URL}/${id}`);
-      setUploadedImages((prev) => prev.filter((img) => img._id !== id));
-    } catch (error) {
-      console.error('Delete failed:', error);
-      alert('Delete failed. Try again.');
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success",
+        });
+      } catch (error) {
+        console.error("Delete failed:", error);
+        Swal.fire({
+          title: "Error!",
+          text: "Delete failed. Try again.",
+          icon: "error",
+        });
+      }
     }
-  };
+  });
+};
 
   return (
     <div className="Admin-Manage-HomeMedia-Container">

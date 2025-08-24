@@ -1,7 +1,7 @@
 /* HomeAbout Section */
 .home-about {
     position: relative;
-    padding: 100px 0;
+    padding: 20px 0;
     background: linear-gradient(135deg, #ffffff 30%, #f9f9f9 100%);
     animation: fadeIn 2s ease-in-out;
 }
@@ -495,7 +495,7 @@
 
 
 .about-extra-section {
-  margin-top: 40px;
+    margin-bottom: 50px;
   padding: 25px;
   background: #f9fafc;
   border-radius: 12px;

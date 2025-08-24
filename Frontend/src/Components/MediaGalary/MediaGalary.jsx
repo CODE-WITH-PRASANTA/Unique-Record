@@ -127,6 +127,17 @@ useEffect(() => {
           >
             Online News
           </button>
+          <button
+            className={`filter-btn ${
+              selectedCategory === "Photos" ? "active-filter" : ""
+            }`}
+            onClick={() => {
+              setSelectedCategory("Photos");
+              setPhotoPage(0);
+            }}
+          >
+           Photos
+          </button>
         </div>
 
       <div className="gallery-grid" key={photoPage}>

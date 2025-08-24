@@ -16,14 +16,15 @@ const AdminPostAchievement = () => {
     tags: [],
     image: null,
     uruHolderLink: '',
-    address: '',            // 🔹 New field
-    effortType: '',         // 🔹 New field
+    address: '',
+    effortType: '',
   });
 
   const [successMsg, setSuccessMsg] = useState('');
   const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(false); // 🔹 New state for loading
 
-  // 🔹 Fetch categories on component mount
+  // Fetch categories
   useEffect(() => {
     axios
       .get(`${API_URL}/categories`)
@@ -52,6 +53,7 @@ const AdminPostAchievement = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoading(true); // 🔹 Set loading when submitting
 
     const data = new FormData();
     data.append('title', formData.title);
@@ -63,8 +65,8 @@ const AdminPostAchievement = () => {
     data.append('tags', formData.tags.join(','));
     data.append('image', formData.image);
     data.append('uruHolderLink', formData.uruHolderLink);
-    data.append('address', formData.address);        // 🔹 Added
-    data.append('effortType', formData.effortType);  // 🔹 Added
+    data.append('address', formData.address);
+    data.append('effortType', formData.effortType);
 
     axios
       .post(`${API_URL}/achievements/post-achievement`, data)
@@ -81,15 +83,19 @@ const AdminPostAchievement = () => {
           tags: [],
           image: null,
           uruHolderLink: '',
-          address: '',       // reset new field
-          effortType: '',    // reset new field
+          address: '',
+          effortType: '',
         });
         setTimeout(() => setSuccessMsg(''), 4000);
       })
       .catch((error) => {
         console.error(error);
+      })
+      .finally(() => {
+        setLoading(false); // 🔹 Reset loading after success or error
       });
   };
+
 
   return (
     <div className="achivement-post-container">
@@ -111,17 +117,42 @@ const AdminPostAchievement = () => {
         </div>
 
         <div className="achivement-post-form-group">
-          <label className="achivement-post-label">Achievement Content*</label>
-          <Editor
-            apiKey="38wljwg2resc6xba8ypjqp4duobboibboshf3czbuyv5iulv"
-            init={{
-              plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
-              toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
-              branding: false,
-            }}
-            value={formData.content}
-            onEditorChange={handleEditorChange}
-          />
+        <label className="achivement-post-label">Achievement Content*</label>
+        <Editor
+          apiKey="38wljwg2resc6xba8ypjqp4duobboibboshf3czbuyv5iulv"
+          init={{
+            height: 500,
+            plugins:
+              'anchor autolink charmap codesample emoticons image link lists media ' +
+              'searchreplace table visualblocks visualchars wordcount code paste preview ' +
+              'fullscreen insertdatetime advlist help',
+            toolbar:
+              'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough ' +
+              '| forecolor backcolor | link image media table | align lineheight | numlist bullist indent outdent ' +
+              '| emoticons charmap codesample | copy cut paste | removeformat | fullscreen preview code help',
+            menubar: 'file edit view insert format tools table help',
+            toolbar_mode: 'sliding',
+            branding: false,
+
+            // Enable clipboard context menu
+            contextmenu: 'copy cut paste link image table',
+
+            // Mobile optimized config
+            mobile: {
+              menubar: true,
+              plugins: 'autosave lists autolink paste',
+              toolbar:
+                'undo redo | bold italic underline | forecolor backcolor | ' +
+                'align bullist numlist | copy cut paste',
+            },
+
+            // Paste configuration
+            paste_data_images: true,  // Allow pasting images
+            paste_as_text: true,     // Keep formatting
+          }}
+          value={formData.content}
+          onEditorChange={handleEditorChange}
+        />
         </div>
 
         <div className="achivement-post-form-group">
@@ -210,7 +241,14 @@ const AdminPostAchievement = () => {
           <input type="file" name="image" onChange={handleFileChange} required className="achivement-post-file" />
         </div>
 
-        <button type="submit" className="achivement-post-button">Post Achievement</button>
+         <button 
+          type="submit" 
+          className="achivement-post-button" 
+          disabled={loading}  // 🔹 Disable while loading
+        >
+          {loading ? "Posting..." : "Post Achievement"} {/* 🔹 Dynamic text */}
+        </button>
+
       </form>
     </div>
   );

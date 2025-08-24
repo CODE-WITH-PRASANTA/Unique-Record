@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './ManageURU.css';
 import { API_URL } from '../../Api';
+import Swal from "sweetalert2";
+
 
 const ManageURU = () => {
   const [uruData, setUruData] = useState([]);
@@ -58,16 +60,40 @@ useEffect(() => {
     setShowModal(true);
   };
 
-  const handleDelete = async (id) => {
-    try {
-      await axios.delete(`${API_URL}/uru/delete-uru/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      getAllUru();
-    } catch (error) {
-      console.error(error);
+const handleDelete = async (id) => {
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You won't be able to revert this!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, delete it!"
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      try {
+        await axios.delete(`${API_URL}/uru/delete-uru/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success",
+        });
+
+        getAllUru(); // refresh after delete
+      } catch (error) {
+        console.error(error);
+        Swal.fire({
+          title: "Error!",
+          text: "Something went wrong while deleting.",
+          icon: "error",
+        });
+      }
     }
-  };
+  });
+};
 
   const handleUpdate = async (e) => {
     e.preventDefault();
@@ -237,16 +263,27 @@ useEffect(() => {
             <label>Applicant Name:</label>
             <input type="text" name="applicantName" value={editingData.applicantName} onChange={handleChange} readOnly={!!editingData.applicantName}  />
           </div>
-          <div className="manage-uru-form-group">
+         <div className="manage-uru-form-group">
             <label>Sex:</label>
-            <input type="text" name="sex" value={editingData.sex} onChange={handleChange} readOnly={!!editingData.sex}  />
+            <select 
+              name="sex" 
+              value={editingData.sex} 
+              onChange={handleChange} 
+              className="manage-uru-select"
+            >
+              <option value="">-- Select Sex --</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Transgender">Transgender</option>
+            </select>
           </div>
+
         </div>
 
         <div className="manage-uru-form-row">
           <div className="manage-uru-form-group">
             <label>Date of Birth:</label>
-            <input type="date" name="dateOfBirth" value={editingData.dateOfBirth ? editingData.dateOfBirth.slice(0,10) : ''} onChange={handleChange} readOnly={!!editingData.dateOfBirth}  />
+            <input type="date" name="dateOfBirth" value={editingData.dateOfBirth ? editingData.dateOfBirth.slice(0,10) : ''} onChange={handleChange} />
           </div>
           <div className="manage-uru-form-group">
             <label>Address:</label>
@@ -359,7 +396,7 @@ useEffect(() => {
         <div className="manage-uru-form-row">
           <div className="manage-uru-form-group">
             <label>Purpose of Record Attempt:</label>
-            <input type="text" name="purposeOfRecordAttempt" value={editingData.purposeOfRecordAttempt} onChange={handleChange} />
+            <textarea type="text" name="purposeOfRecordAttempt" value={editingData.purposeOfRecordAttempt} onChange={handleChange} />
           </div>
           <div className="manage-uru-form-group">
             <label>Date of Attempt:</label>

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./AdminManageBlogComment.css"; 
 import { API_URL } from "../../Api";
+import Swal from "sweetalert2";
+
 
 const AdminManageBlogComment = () => {
   const [comments, setComments] = useState([]);
@@ -36,17 +38,43 @@ const AdminManageBlogComment = () => {
     }));
   };
 
-  // ✅ Delete comment
-  const handleDelete = async (id) => {
-    try {
-      await fetch(`${API_URL}/blogcmt/feedback/${id}`, {
-        method: "DELETE",
-      });
-      setComments(comments.filter((c) => c._id !== id));
-    } catch (error) {
-      console.error("Error deleting comment:", error);
+
+// ✅ Delete comment
+const handleDelete = async (id) => {
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You won't be able to revert this!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, delete it!",
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      try {
+        await fetch(`${API_URL}/blogcmt/feedback/${id}`, {
+          method: "DELETE",
+        });
+
+        setComments((prev) => prev.filter((c) => c._id !== id));
+
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your comment has been deleted.",
+          icon: "success",
+        });
+      } catch (error) {
+        console.error("Error deleting comment:", error);
+        Swal.fire({
+          title: "Error!",
+          text: "Something went wrong while deleting.",
+          icon: "error",
+        });
+      }
     }
-  };
+  });
+};
+
 
   // ✅ Publish/Unpublish
   const handlePublish = async (id) => {

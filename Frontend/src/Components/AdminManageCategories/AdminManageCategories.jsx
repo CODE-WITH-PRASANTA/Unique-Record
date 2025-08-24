@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './AdminManageCategories.css';
 import { API_URL } from '../../Api'; // adjust path as needed
+import Swal from "sweetalert2";
 
 const AdminManageCategories = () => {
   const [categories, setCategories] = useState([]);
@@ -41,14 +42,37 @@ const AdminManageCategories = () => {
     }
   };
 
-  const handleDelete = async (id) => {
-    try {
-      await axios.delete(`${CATEGORY_API}/${id}`);
-      setCategories(categories.filter((cat) => cat._id !== id));
-    } catch (err) {
-      console.error('Error deleting category:', err);
+const handleDelete = async (id) => {
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You won't be able to revert this!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, delete it!",
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      try {
+        await axios.delete(`${CATEGORY_API}/${id}`);
+        setCategories((prev) => prev.filter((cat) => cat._id !== id));
+
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success",
+        });
+      } catch (err) {
+        console.error("Error deleting category:", err);
+        Swal.fire({
+          title: "Error!",
+          text: "Something went wrong while deleting.",
+          icon: "error",
+        });
+      }
     }
-  };
+  });
+};
 
   const handleEdit = (id, name) => {
     setInputValue(name);

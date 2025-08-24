@@ -81,17 +81,42 @@ const FinalURU = () => {
   };
 
   const handleDelete = async (id) => {
-    try {
-      await axios.delete(`${API_URL}/uru/delete-uru/${id}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-      fetchPaidUru();
-    } catch (error) {
-      console.error(error);
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You won't be able to revert this!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, delete it!",
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      try {
+        await axios.delete(`${API_URL}/uru/delete-uru/${id}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success",
+        });
+
+        fetchPaidUru(); // refresh list after deletion
+      } catch (error) {
+        console.error(error);
+        Swal.fire({
+          title: "Error!",
+          text: "Something went wrong while deleting.",
+          icon: "error",
+        });
+      }
     }
-  };
+  });
+};
+
 
   const handleReupload = (id) => {
     // Handle reupload logic here

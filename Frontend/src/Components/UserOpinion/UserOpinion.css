@@ -1,0 +1,160 @@
+.UserOpinion-container {
+  padding: 30px;
+  font-family: 'Poppins', sans-serif;
+  background: #f9f9f9;
+}
+
+.UserOpinion-title {
+  font-size: 26px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  background: linear-gradient(90deg, #6a11cb, #2575fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.UserOpinion-table-wrapper {
+  overflow-x: auto;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  background: white;
+}
+
+.UserOpinion-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 900px;
+  font-size: 15px; /* Increased font size */
+}
+
+.UserOpinion-table th,
+.UserOpinion-table td {
+  padding: 16px 20px; /* Increased padding */
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.UserOpinion-table th {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.6px;
+}
+
+.UserOpinion-table tr:nth-child(even) {
+  background: #f5f7ff;
+}
+
+.UserOpinion-table tr:hover {
+  background: #eef3ff;
+  transition: 0.3s ease;
+}
+
+/* Message Section */
+.UserOpinion-message {
+  max-height: 44px; /* ~2 lines */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Limit lines */
+  -webkit-box-orient: vertical;
+  transition: max-height 0.3s ease;
+  color: #333;
+  font-size: 14px; /* Slightly bigger */
+  line-height: 1.5;
+}
+
+.UserOpinion-message.expanded {
+  max-height: 300px; /* Allow expansion */
+  -webkit-line-clamp: unset;
+}
+
+/* Read More Button */
+.UserOpinion-readmore-btn {
+  background: none;
+  border: none;
+  color: #2563eb;
+  font-weight: 500;
+  margin-top: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: color 0.2s;
+}
+
+.UserOpinion-readmore-btn:hover {
+  color: #1d4ed8;
+  text-decoration: underline;
+}
+
+/* Delete Button */
+.UserOpinion-delete-btn {
+  padding: 8px 16px;
+  font-size: 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background: linear-gradient(135deg, #ff0844, #ff416c);
+  color: white;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.UserOpinion-delete-btn:hover {
+  background: linear-gradient(135deg, #e60023, #ff1744);
+  transform: scale(1.05);
+}
+
+/* ============================= */
+/* 📱 Responsive Design          */
+/* ============================= */
+@media (max-width: 768px) {
+  .UserOpinion-title {
+    font-size: 22px;
+    text-align: center;
+  }
+
+  .UserOpinion-table {
+    font-size: 14px;
+    min-width: 100%; /* Allow full width on mobile */
+  }
+
+  .UserOpinion-table th,
+  .UserOpinion-table td {
+    padding: 12px;
+    font-size: 13.5px;
+  }
+
+  .UserOpinion-readmore-btn {
+    font-size: 13px;
+  }
+
+  .UserOpinion-delete-btn {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .UserOpinion-title {
+    font-size: 20px;
+  }
+
+  /* Make table more scrollable on very small screens */
+  .UserOpinion-table-wrapper {
+    overflow-x: scroll;
+  }
+
+  .UserOpinion-table th,
+  .UserOpinion-table td {
+    padding: 10px 8px;
+    font-size: 13px;
+  }
+
+  .UserOpinion-delete-btn {
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+}

@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import { API_URL } from '../../Api';
 import axios from 'axios';
 
+
 const CreateBlogs = () => {
   const [blogTitle, setBlogTitle] = useState('');
   const [shortDescription, setShortDescription] = useState('');
@@ -75,20 +76,48 @@ const [address, setAddress] = useState('');
     setBlogContent(content);
   };
 
-   const handleDelete = async (id) => {
-  if (window.confirm("Are you sure you want to delete this blog?")) {
-    try {
-      const res = await fetch(`${API_URL}/blogs/delete/${id}`, {
-        method: 'DELETE',
-      });
-      const data = await res.json();
-      if (data.success) {
-        setBlogs((prev) => prev.filter((blog) => blog._id !== id));
+const handleDelete = async (id) => {
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You won't be able to revert this!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, delete it!",
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      try {
+        const res = await fetch(`${API_URL}/blogs/delete/${id}`, {
+          method: "DELETE",
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          setBlogs((prev) => prev.filter((blog) => blog._id !== id));
+
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your blog has been deleted.",
+            icon: "success",
+          });
+        } else {
+          Swal.fire({
+            title: "Error!",
+            text: "Failed to delete blog.",
+            icon: "error",
+          });
+        }
+      } catch (error) {
+        console.error("Failed to delete blog", error);
+        Swal.fire({
+          title: "Error!",
+          text: "Something went wrong while deleting.",
+          icon: "error",
+        });
       }
-    } catch (error) {
-      console.error('Failed to delete blog', error);
     }
-  }
+  });
 };
 
   const handleSubmit = async (e) => {
@@ -269,68 +298,36 @@ const [address, setAddress] = useState('');
 
         <div className="Create-Blog-Section">
           <label className="Create-Blog-Label">Blog Content</label>
-          <Editor
+             <Editor
   apiKey="38wljwg2resc6xba8ypjqp4duobboibboshf3czbuyv5iulv"
-  value={blogContent}
-  onEditorChange={handleEditorChange}
   init={{
-    height: 300,
-    menubar: false,
-    branding: false,
+    height: 500,
     plugins:
-      'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+      'anchor autolink charmap codesample emoticons image link lists media ' +
+      'searchreplace table visualblocks visualchars wordcount code paste preview ' +
+      'fullscreen insertdatetime advlist help',
     toolbar:
-      'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
-    content_style:
-      'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
-
-    setup: (editor) => {
-      let copyButton;
-
-      // Detect text selection
-      editor.on('NodeChange', () => {
-        const selection = editor.selection.getContent({ format: 'text' });
-        if (selection && selection.trim().length > 0) {
-          const rect = editor.selection.getRng().getBoundingClientRect();
-
-          if (!copyButton) {
-            copyButton = document.createElement('button');
-            copyButton.innerText = 'Copy';
-            copyButton.style.position = 'absolute';
-            copyButton.style.zIndex = '1000';
-            copyButton.style.padding = '5px 10px';
-            copyButton.style.background = '#333';
-            copyButton.style.color = '#fff';
-            copyButton.style.border = 'none';
-            copyButton.style.borderRadius = '5px';
-            copyButton.style.cursor = 'pointer';
-            copyButton.onclick = () => {
-              navigator.clipboard.writeText(selection);
-              copyButton.innerText = 'Copied!';
-              setTimeout(() => {
-                copyButton.innerText = 'Copy';
-              }, 1000);
-            };
-            document.body.appendChild(copyButton);
-          }
-
-          // Position the button near the selection
-          const iframeRect = editor.iframeElement.getBoundingClientRect();
-          copyButton.style.top = `${iframeRect.top + rect.top - 35}px`;
-          copyButton.style.left = `${iframeRect.left + rect.left}px`;
-          copyButton.style.display = 'block';
-        } else if (copyButton) {
-          copyButton.style.display = 'none';
-        }
-      });
-
-      // Hide on blur
-      editor.on('Blur', () => {
-        if (copyButton) copyButton.style.display = 'none';
-      });
+      'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough ' +
+      '| forecolor backcolor | link image media table | align lineheight | numlist bullist indent outdent ' +
+      '| emoticons charmap codesample | copy cut paste | removeformat | fullscreen preview code help',
+    menubar: 'file edit view insert format tools table help',
+    toolbar_mode: 'sliding',
+    branding: false,
+    contextmenu: 'copy cut paste link image table',
+    mobile: {
+      menubar: true,
+      plugins: 'autosave lists autolink paste',
+      toolbar:
+        'undo redo | bold italic underline | forecolor backcolor | ' +
+        'align bullist numlist | copy cut paste',
     },
+    paste_data_images: true,
+    paste_as_text: true,
   }}
+  value={blogContent}  
+  onEditorChange={handleEditorChange}
 />
+
 
         </div>
 

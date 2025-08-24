@@ -349,6 +349,7 @@ module.exports = {
   updatePrice: async (req, res) => {
     try {
       const { applicationNumber, price } = req.body;
+
       if (!applicationNumber || !price) {
         return res.status(400).json({ message: "Application number and price are required" });
       }
@@ -362,6 +363,7 @@ module.exports = {
         return res.status(400).json({ message: "Price has already been updated for this application" });
       }
 
+      // Update price in database
       const updatedUru = await URU.findOneAndUpdate(
         { applicationNumber },
         {
@@ -374,8 +376,94 @@ module.exports = {
         { new: true }
       );
 
-      res.status(200).json({ message: "Price updated successfully" });
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: "uruonline2025@gmail.com", // Admin URU email
+          pass: process.env.EMAIL_PASS, // Gmail App Password
+        },
+      });
+
+      const mailOptions = {
+  from: '"Unique Records of Universe Admin Team" <uruonline2025@gmail.com>',
+  to: uru.email, // applicant email from DB
+  subject: "✅ URU Application – Price Updated",
+  html: `
+    <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color:#f0f2f5; padding:20px 0;">
+      <table align="center" cellpadding="0" cellspacing="0" width="600" 
+        style="background:#ffffff; border-radius:12px; overflow:hidden; box-shadow:0 8px 20px rgba(0,0,0,0.1);">
+        
+        <!-- Header -->
+        <tr style="background: linear-gradient(90deg, #4e54c8, #8f94fb);">
+          <td style="padding:25px; text-align:center; color:#fff;">
+            <h1 style="margin:0; font-size:24px; font-weight:700;">Unique Records of Universe</h1>
+            <p style="margin:5px 0 0 0; font-size:14px; color:#e0e0ff;">Recognizing Achievements Worldwide</p>
+          </td>
+        </tr>
+        
+        <!-- Body -->
+        <tr>
+          <td style="padding:35px 30px; color:#333;">
+            <h2 style="margin-top:0; color:#4e54c8; font-size:20px;">Hello ${uru.applicantName},</h2>
+            <p style="font-size:16px; line-height:1.7; color:#555;">
+              Your application has been successfully <strong>updated</strong>. We have set the price to <strong style="color:#27ae60;">₹${price}</strong>.
+            </p>
+
+            <table cellpadding="0" cellspacing="0" width="100%" style="margin:20px 0; border-radius:8px; overflow:hidden; border:1px solid #ddd;">
+              <tr style="background:#f7f8fa;">
+                <td style="padding:15px; font-size:15px; font-weight:600; color:#444;">
+                  📌 Application Number:
+                </td>
+                <td style="padding:15px; font-size:15px; font-weight:600; color:#e67e22;">
+                  ${applicationNumber}
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:15px; font-size:15px; font-weight:600; color:#444;">
+                  💰 Updated Price:
+                </td>
+                <td style="padding:15px; font-size:15px; font-weight:600; color:#27ae60;">
+                  ₹${price}
+                </td>
+              </tr>
+            </table>
+
+            <p style="font-size:16px; line-height:1.7; color:#555;">
+              Our team will continue processing your application, and you will receive updates as the next steps are completed. Thank you for trusting <strong>Unique Records of Universe</strong>!
+            </p>
+
+            <!-- CTA Button -->
+            <div style="text-align:center; margin:30px 0;">
+              <a href="mailto:uruonline2025@gmail.com" 
+                 style="display:inline-block; padding:12px 30px; background:linear-gradient(90deg, #4e54c8, #8f94fb); color:#fff; text-decoration:none; font-size:16px; font-weight:600; border-radius:8px; box-shadow:0 4px 15px rgba(78,84,200,0.3);">
+                 📧 Contact Support
+              </a>
+            </div>
+
+            <p style="font-size:14px; color:#999; text-align:center; margin-top:40px;">
+              You are receiving this email because you submitted an application to <strong>Unique Records of Universe</strong>.
+            </p>
+          </td>
+        </tr>
+
+        <!-- Footer -->
+        <tr style="background:#f7f8fa;">
+          <td style="padding:20px; text-align:center; font-size:12px; color:#888;">
+            © ${new Date().getFullYear()} Unique Records of Universe. All Rights Reserved.<br>
+            Admin • <a href="mailto:uruonline2025@gmail.com" style="color:#4e54c8; text-decoration:none;">uruonline2025@gmail.com</a>
+          </td>
+        </tr>
+      </table>
+    </div>
+  `,
+        };
+
+
+      await transporter.sendMail(mailOptions);
+
+      res.status(200).json({ message: `Price updated successfully to ₹${price} and email sent.` });
     } catch (error) {
+      console.error(error);
       res.status(500).json({ message: error.message });
     }
   },

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { API_URL } from '../../Api'; // Import the API_URL constant
 import './AdminManageAchievements.css';
+import Swal from "sweetalert2";
 
 const AdminManageAchievements = () => {
   const [achievements, setAchievements] = useState([]);
@@ -18,14 +19,40 @@ const AdminManageAchievements = () => {
   }, []);
 
   const handleDelete = (id) => {
-    axios.delete(`${API_URL}/achievements/delete-achievement/${id}`)
-      .then(response => {
-        setAchievements(achievements.filter((achievement) => achievement._id !== id));
-      })
-      .catch(error => {
-        console.error(error);
-      });
-  };
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You won't be able to revert this!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, delete it!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      axios
+        .delete(`${API_URL}/achievements/delete-achievement/${id}`)
+        .then((response) => {
+          setAchievements((prev) =>
+            prev.filter((achievement) => achievement._id !== id)
+          );
+
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your file has been deleted.",
+            icon: "success",
+          });
+        })
+        .catch((error) => {
+          console.error(error);
+          Swal.fire({
+            title: "Error!",
+            text: "Something went wrong while deleting.",
+            icon: "error",
+          });
+        });
+    }
+  });
+};
 
   const handleImageChange = (id, image) => {
     const formData = new FormData();
