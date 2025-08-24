@@ -11,6 +11,7 @@ import {
   faTiktok,
 } from "@fortawesome/free-brands-svg-icons";
 import { API_URL } from '../../Api';
+import Companylogo from '../../assets/UNQUE.png'
 
 const UserDashboard = () => {
   const [categories, setCategories] = useState([]);
@@ -18,7 +19,9 @@ const UserDashboard = () => {
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
-    const [formData, setFormData] = useState({
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const [formData, setFormData] = useState({
       applicantName: "",
       sex: "",
       dateOfBirth: "",
@@ -61,7 +64,7 @@ const UserDashboard = () => {
       witness2MobileNumber: "",
       witness2EmailId: "",
       position: "",
-    });
+  });
 
    useEffect(() => {
   const fetchCategories = async () => {
@@ -77,9 +80,7 @@ const UserDashboard = () => {
     }
   };
   fetchCategories();
-}, []);
-
-
+  }, []);
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -88,48 +89,72 @@ const UserDashboard = () => {
     setFormData({ ...formData, [e.target.name]: e.target.files[0] });
   };
 
-  const handleNext = (e) => {
-    e.preventDefault();
-    setStep((prevStep) => prevStep + 1);
-  };
+    // Save draft in localStorage whenever "Save & Next" clicked
+    const handleNext = (e) => {
+      e.preventDefault();
+      const nextStep = step + 1;
+
+      // Save formData + currentStep in localStorage
+      localStorage.setItem("uruDraft", JSON.stringify({ 
+        formData, 
+        step: nextStep 
+      }));
+
+      setStep(nextStep);
+    };
+
+    // On component load, check for saved draft
+    useEffect(() => {
+      const savedDraft = localStorage.getItem("uruDraft");
+      if (savedDraft) {
+        const { formData: savedData, step: savedStep } = JSON.parse(savedDraft);
+        setFormData(savedData);
+        setStep(savedStep);
+      }
+    }, []);
+
 
   const handlePrevious = () => {
     setStep((prevStep) => prevStep - 1);
   };
 
-  const handleFinalSubmit = async (e) => {
-    e.preventDefault();
-    if (termsAccepted) {
-      try {
-        const formDataToSend = new FormData();
-        Object.keys(formData).forEach((key) => {
-          if (key === "photo" || key === "video" || key === "document") {
-            formDataToSend.append(key, formData[key]);
+    const handleFinalSubmit = async (e) => {
+      e.preventDefault();
+      if (termsAccepted) {
+        setIsSubmitting(true); // Set submitting state to true
+        try {
+          const formDataToSend = new FormData();
+          Object.keys(formData).forEach((key) => {
+            if (key === "photo" || key === "video" || key === "document") {
+              formDataToSend.append(key, formData[key]);
+            } else {
+              formDataToSend.append(key, formData[key]);
+            }
+          });
+          
+          const token = localStorage.getItem("token");
+          const response = await axios.post(`${API_URL}/uru/create-uru`, formDataToSend, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          
+          if (response.status === 201) {
+            setSubmitted(true);
+            localStorage.removeItem("uruDraft"); // Clear local storage
           } else {
-            formDataToSend.append(key, formData[key]);
+            console.error("Error submitting form:", response);
           }
-        });
-        
-        const token = localStorage.getItem("token");
-        const response = await axios.post(`${API_URL}/uru/create-uru`, formDataToSend, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        
-        if (response.status === 201) {
-          setSubmitted(true);
-        } else {
-          console.error("Error submitting form:", response);
+        } catch (error) {
+          console.error("Error submitting form:", error);
+        } finally {
+          setIsSubmitting(false); // Set submitting state to false
         }
-      } catch (error) {
-        console.error("Error submitting form:", error);
+      } else {
+        alert("Please accept the Terms and Conditions before submitting.");
       }
-    } else {
-      alert("Please accept the Terms and Conditions before submitting.");
-    }
-  };
+    };
 
   const progressStep = Math.min(Math.max(step - 1, 0), 5);
   const progressPercent = (progressStep / 5) * 100;
@@ -137,24 +162,34 @@ const UserDashboard = () => {
   return (
     <>
       <div className="achivment-container">
-        <div className="achievement-form-left-panel">
-          <div className="achievement-form-social-icons">
-            <a href="#"><FontAwesomeIcon icon={faFacebookF} /></a>
-            <a href="#"><FontAwesomeIcon icon={faXTwitter} /></a>
-            <a href="#"><FontAwesomeIcon icon={faInstagram} /></a>
-            <a href="#"><FontAwesomeIcon icon={faTiktok} /></a>
-          </div>
+       <div className="achievement-form-left-panel">
+  {/* Company Logo */}
+  <div className="achievement-form-logo">
+    <img src={Companylogo} alt="Company Logo" />
+  </div>
 
-          <div className="achievement-form-illustration">
-            <img src={img1} alt="Hiring Illustration" />
-          </div>
+  {/* Social Icons */}
+  <div className="achievement-form-social-icons">
+    <a href="#"><FontAwesomeIcon icon={faFacebookF} /></a>
+    <a href="#"><FontAwesomeIcon icon={faXTwitter} /></a>
+    <a href="#"><FontAwesomeIcon icon={faInstagram} /></a>
+    <a href="#"><FontAwesomeIcon icon={faTiktok} /></a>
+  </div>
 
-          <h1 className="achievement-form-heading">Unique Record Of Universe</h1>
+  {/* Illustration */}
+  <div className="achievement-form-illustration">
+    <img src={img1} alt="Hiring Illustration" />
+  </div>
 
-          <p className="achievement-form-description">
-          Unique Records Universe (URU) aims to provide a global platform and recognition to extraordinary, inspiring, verifiable human achievements, natural phenomena and innovations from around the world by digitally cataloguing them. Our aim is to preserve unique records or activities for positive inspiration to future generations with inclusive, transparent and ethical standards.
-          </p>
-        </div>
+  {/* Heading */}
+  <h1 className="achievement-form-heading">Unique Record Of Universe</h1>
+
+  {/* Description */}
+  <p className="achievement-form-description">
+    Unique Records Universe (URU) aims to provide a global platform and recognition to extraordinary, inspiring, verifiable human achievements, natural phenomena and innovations from around the world by digitally cataloguing them. Our aim is to preserve unique records or activities for positive inspiration to future generations with inclusive, transparent and ethical standards.
+  </p>
+      </div>
+
 
         <div className="right-panel">
           <div className="form-achivment-container">
@@ -289,7 +324,7 @@ const UserDashboard = () => {
                     </div>
                     <div className="achivment-form-group">
                       <label>Record/Activity Title*</label>
-                      <input type="text" name="recordTitle" value={formData.recordTitle} onChange={handleInputChange} required />
+                      < textarea type="text" name="recordTitle" value={formData.recordTitle} onChange={handleInputChange} required />
                     </div>
                     <div className="achivment-form-group">
                       <label>Description of Record/Activity*</label>
@@ -356,9 +391,18 @@ const UserDashboard = () => {
                       <input type="url" name="pinterestLink" value={formData.pinterestLink} onChange={handleInputChange} />
                     </div>
                     <div className="achivment-form-group">
-                      <label>Other Media Link</label>
-                      <input type="url" name="otherMediaLink" value={formData.otherMediaLink} onChange={handleInputChange} />
-                    </div>
+                          <label>Other Media Link</label>
+                          <input
+                            type="text"
+                            name="otherMediaLink"
+                            placeholder="Enter media link"
+                            value={formData.otherMediaLink}
+                            onChange={handleInputChange}
+                            pattern="^(https?:\/\/)?(www\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,}.*$"
+                            title="Please enter a valid link (with or without http/https/www)"
+                          />
+                        </div>
+
                     <div className="achivment-form-group">
                       <label>Photo*</label>
                       <input type="file" name="photo" onChange={handleFileChange} required />
@@ -434,178 +478,193 @@ const UserDashboard = () => {
             )}
 
           {step === 6 && !submitted && (
-  <form className="thank-you-achivment-container" onSubmit={handleFinalSubmit}>
-    <h2 className="heading">Thank you for your time</h2>
-    <p className="paragraph">
-      We will contact you shortly at the following email address 
-      <strong> {formData.emailId}</strong>
-    </p>
+        <form className="thank-you-achivment-container" onSubmit={handleFinalSubmit}>
+         <div className="thankyou-container">
+            <h2 className="thankyou-heading">
+              Thank you very much for your unique contribution.
+            </h2>
+            <div className="thankyou-system">
+              <p>
+                This is the final step of application to digitally secure your unique 
+                <span className="highlight"> record/activity legacy </span> in the universe.
+              </p>
+            </div>
+            <p className="thankyou-paragraph">
+              We will contact you shortly at the following email address 
+              <strong> {formData.emailId}</strong>
+            </p>
+          </div>
 
-    {/* Terms and Conditions Checkbox */}
-    <div className="checkbox-area">
-      <label>
-        <input 
-          type="checkbox" 
-          checked={termsAccepted} 
-          onChange={() => setTermsAccepted(!termsAccepted)} 
-        />
-        I accept the{" "}
-        <span className="terms-link" onClick={() => setShowTerms(true)}>
-          Terms and Conditions
-        </span>
-      </label>
-    </div>
 
-    {/* Footer */}
-    <div className="form-footer">
-      <button type="button" className="prev-button" onClick={handlePrevious}>
-        Previous
-      </button>
-      <button 
-        type="submit" 
-        className="submit-button" 
-        disabled={!termsAccepted}
-      >
-        Submit
-      </button>
-    </div>
-  </form>
-)}
-{/* Modal for Terms */}
-{showTerms && (
-  <div
-    className="user-dashboard-terms-overlay"
-    onClick={() => setShowTerms(false)}
-  >
-    <div
-      className="user-dashboard-terms-modal"
-      onClick={(e) => e.stopPropagation()}
-    >
-      <div className="user-dashboard-terms-header">
-        <h2>Policy, Rules, and Terms for Recording Achievements</h2>
-        <button
-          className="user-dashboard-close-btn"
-          onClick={() => setShowTerms(false)}
-        >
-          ✕
-        </button>
-      </div>
+          {/* Terms and Conditions Checkbox */}
+          <div className="checkbox-area">
+            <label>
+              <input 
+                type="checkbox" 
+                checked={termsAccepted} 
+                onChange={() => setTermsAccepted(!termsAccepted)} 
+              />
+              I accept the{" "}
+              <span className="terms-link" onClick={() => setShowTerms(true)}>
+                Terms and Conditions
+              </span>
+            </label>
+          </div>
 
-      <div className="user-dashboard-terms-content">
-        <h3>1. Objective</h3>
-        <p>
-          Unique Records of Universe (URU) aims to recognize and showcase extraordinary,
-          inspiring, and verified human achievements, natural phenomena, and innovations
-          on a global platform. Our goal is to preserve records with inclusive, transparent,
-          and ethical standards.
-        </p>
+          {/* Footer */}
+          <div className="form-footer">
+            <button type="button" className="prev-button" onClick={handlePrevious}>
+              Previous
+            </button>
+          <button 
+                type="submit" 
+                className="submit-button" 
+                disabled={!termsAccepted || isSubmitting}
+              >
+                {isSubmitting ? "Processing..." : "Submit"}
+          </button>
+                  </div>
+                </form>
+              )}
+              {/* Modal for Terms */}
+              {showTerms && (
+                <div
+                  className="user-dashboard-terms-overlay"
+                  onClick={() => setShowTerms(false)}
+                >
+                  <div
+                    className="user-dashboard-terms-modal"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <div className="user-dashboard-terms-header">
+                      <h2>Policy, Rules, and Terms for Recording Achievements</h2>
+                      <button
+                        className="user-dashboard-close-btn"
+                        onClick={() => setShowTerms(false)}
+                      >
+                        ✕
+                      </button>
+                    </div>
 
-        <h3>2. Eligibility</h3>
-        <p>
-          <strong>2.1 Applicants</strong>: Any individual, group, organization, or community
-          (regardless of age, gender, nationality, or background) may apply for a record.
-        </p>
-        <p><strong>2.2 Type of Achievement</strong>: Records may fall under, but are not limited to:</p>
-        <ul>
-          <li>Human skills (e.g., completing a task in the fastest time)</li>
-          <li>Natural phenomena (e.g., longest, shortest, highest, lowest)</li>
-          <li>Social impact (e.g., largest participation in a social initiative)</li>
-          <li>Technological innovations (e.g., smallest solar energy device)</li>
-          <li>Cultural and artistic achievements (e.g., longest, shortest, or collective dance performance)</li>
-        </ul>
-        <p>
-          <strong>2.3 Original Achievement</strong>: The record must be unique and not duplicate
-          any existing record in the URU database, unless it surpasses an existing record.
-        </p>
-        <p>
-          <strong>2.4 Ethics</strong>: The achievement must not be illegal, unethical, indecent,
-          obscene, or harmful to the environment or society in any way.
-        </p>
+                    <div className="user-dashboard-terms-content">
+                      <h3>1. Objective</h3>
+                      <p>
+                        Unique Records of Universe (URU) aims to recognize and showcase extraordinary,
+                        inspiring, and verified human achievements, natural phenomena, and innovations
+                        on a global platform. Our goal is to preserve records with inclusive, transparent,
+                        and ethical standards.
+                      </p>
 
-        <h3>3. Application Process</h3>
-        <p><strong>3.1 Application Form</strong>: Applicants must log in to the official URU website and complete the "Record Application Form." The form should include:</p>
-        <ul>
-          <li>Description of the achievement</li>
-          <li>Mention of category and uniqueness</li>
-          <li>Location, date, and time</li>
-          <li>Evidence for the proposed record (videos, photos, witness statements)</li>
-        </ul>
-        <p>
-          <strong>3.2 Initial Fee</strong>: A non-refundable initial fee of ₹3,693/- will be
-          charged to cover application review, verification process, and digital maintenance.
-          The fee may change over time as per the website’s information board.
-        </p>
-        <p>
-          <strong>3.3 Review Time</strong>: The initial review will be completed within
-          15 working days. If approved, the applicant will be directed to pay the designated
-          fee through their login ID. Upon successful payment, the entry and digital
-          certificate will be published on the website.
-        </p>
+                      <h3>2. Eligibility</h3>
+                      <p>
+                        <strong>2.1 Applicants</strong>: Any individual, group, organization, or community
+                        (regardless of age, gender, nationality, or background) may apply for a record.
+                      </p>
+                      <p><strong>2.2 Type of Achievement</strong>: Records may fall under, but are not limited to:</p>
+                      <ul>
+                        <li>Human skills (e.g., completing a task in the fastest time)</li>
+                        <li>Natural phenomena (e.g., longest, shortest, highest, lowest)</li>
+                        <li>Social impact (e.g., largest participation in a social initiative)</li>
+                        <li>Technological innovations (e.g., smallest solar energy device)</li>
+                        <li>Cultural and artistic achievements (e.g., longest, shortest, or collective dance performance)</li>
+                      </ul>
+                      <p>
+                        <strong>2.3 Original Achievement</strong>: The record must be unique and not duplicate
+                        any existing record in the URU database, unless it surpasses an existing record.
+                      </p>
+                      <p>
+                        <strong>2.4 Ethics</strong>: The achievement must not be illegal, unethical, indecent,
+                        obscene, or harmful to the environment or society in any way.
+                      </p>
 
-        <h3>4. Evidence and Verification</h3>
-        <p><strong>4.1 Types of Evidence:</strong></p>
-        <ul>
-          <li><strong>Visual Evidence</strong>: High-quality videos, photos, social media links with timestamps</li>
-          <li><strong>Written Evidence</strong>: Signed statements from at least two independent witnesses</li>
-          <li><strong>Technical Evidence</strong>: Calibration certificates for measuring devices (if applicable)</li>
-        </ul>
-        <p><strong>4.2 Independent Verification</strong>: URU may include experts based on the achievement’s nature or send a representative (expenses borne by the applicant).</p>
-        <p><strong>4.3 Transparency</strong>: Applicants will be regularly updated on verification progress.</p>
+                      <h3>3. Application Process</h3>
+                      <p><strong>3.1 Application Form</strong>: Applicants must log in to the official URU website and complete the "Record Application Form." The form should include:</p>
+                      <ul>
+                        <li>Description of the achievement</li>
+                        <li>Mention of category and uniqueness</li>
+                        <li>Location, date, and time</li>
+                        <li>Evidence for the proposed record (videos, photos, witness statements)</li>
+                      </ul>
+                      <p>
+                        <strong>3.2 Initial Fee</strong>: A non-refundable initial fee of ₹3,693/- will be
+                        charged to cover application review, verification process, and digital maintenance.
+                        The fee may change over time as per the website’s information board.
+                      </p>
+                      <p>
+                        <strong>3.3 Review Time</strong>: The initial review will be completed within
+                        15 working days. If approved, the applicant will be directed to pay the designated
+                        fee through their login ID. Upon successful payment, the entry and digital
+                        certificate will be published on the website.
+                      </p>
 
-        <h3>5. Rules and Terms</h3>
-        <p><strong>5.1 Accuracy</strong>: Applicants must provide truthful information. False or misleading details may result in cancellation, liability, or legal action.</p>
-        <p><strong>5.2 Ownership</strong>: URU reserves the right to use record-related materials (videos, photos, descriptions, etc.) for promotion with credit to the applicant.</p>
-        <p><strong>5.3 Dispute Resolution</strong>: Disputes will be resolved by URU’s expert panel, and their decision will be final.</p>
-        <p><strong>5.4 Right to Amend</strong>: URU may amend policies and terms without notice.</p>
-        <p><strong>5.5 Risk Responsibility</strong>: Applicants are solely responsible for injuries, damages, or legal issues during the attempt.</p>
+                      <h3>4. Evidence and Verification</h3>
+                      <p><strong>4.1 Types of Evidence:</strong></p>
+                      <ul>
+                        <li><strong>Visual Evidence</strong>: High-quality videos, photos, social media links with timestamps</li>
+                        <li><strong>Written Evidence</strong>: Signed statements from at least two independent witnesses</li>
+                        <li><strong>Technical Evidence</strong>: Calibration certificates for measuring devices (if applicable)</li>
+                      </ul>
+                      <p><strong>4.2 Independent Verification</strong>: URU may include experts based on the achievement’s nature or send a representative (expenses borne by the applicant).</p>
+                      <p><strong>4.3 Transparency</strong>: Applicants will be regularly updated on verification progress.</p>
 
-        <h3>6. Record Recognition</h3>
-        <p><strong>6.1 Certificate</strong>: Successfully verified records receive an official URU certificate.</p>
-        <p><strong>6.2 Publication</strong>: Records are featured on the URU website, magazine, and promotional materials.</p>
-        <p><strong>6.3 Validity</strong>: A record remains valid until surpassed. Outdated records are archived as “Historical Records.”</p>
+                      <h3>5. Rules and Terms</h3>
+                      <p><strong>5.1 Accuracy</strong>: Applicants must provide truthful information. False or misleading details may result in cancellation, liability, or legal action.</p>
+                      <p><strong>5.2 Ownership</strong>: URU reserves the right to use record-related materials (videos, photos, descriptions, etc.) for promotion with credit to the applicant.</p>
+                      <p><strong>5.3 Dispute Resolution</strong>: Disputes will be resolved by URU’s expert panel, and their decision will be final.</p>
+                      <p><strong>5.4 Right to Amend</strong>: URU may amend policies and terms without notice.</p>
+                      <p><strong>5.5 Risk Responsibility</strong>: Applicants are solely responsible for injuries, damages, or legal issues during the attempt.</p>
 
-        <h3>7. Privacy and Data Protection</h3>
-        <p><strong>7.1 Data Usage</strong>: Personal data will only be used for verification and promotion.</p>
-        <p><strong>7.2 Security</strong>: URU adopts technical measures to ensure confidentiality and security of applicant data.</p>
+                      <h3>6. Record Recognition</h3>
+                      <p><strong>6.1 Certificate</strong>: Successfully verified records receive an official URU certificate.</p>
+                      <p><strong>6.2 Publication</strong>: Records are featured on the URU website, magazine, and promotional materials.</p>
+                      <p><strong>6.3 Validity</strong>: A record remains valid until surpassed. Outdated records are archived as “Historical Records.”</p>
 
-        <h3>8. Contact and Support</h3>
-        <p><strong>8.1 Assistance</strong>: Applicants may contact URU through the official website or helpline.</p>
-        <p><strong>8.2 Feedback</strong>: URU welcomes suggestions for improvement.</p>
+                      <h3>7. Privacy and Data Protection</h3>
+                      <p><strong>7.1 Data Usage</strong>: Personal data will only be used for verification and promotion.</p>
+                      <p><strong>7.2 Security</strong>: URU adopts technical measures to ensure confidentiality and security of applicant data.</p>
 
-        <h3>9. Legal Compliance</h3>
-        <ul>
-          <li>Applicants must comply with all applicable laws (India and respective regions).</li>
-          <li>Use of the website for illegal activities is strictly prohibited.</li>
-        </ul>
+                      <h3>8. Contact and Support</h3>
+                      <p><strong>8.1 Assistance</strong>: Applicants may contact URU through the official website or helpline.</p>
+                      <p><strong>8.2 Feedback</strong>: URU welcomes suggestions for improvement.</p>
 
-        <h3>10. Security Guidelines</h3>
-        <ul>
-          <li><strong>Account Security</strong>: Use strong passwords and don’t share credentials.</li>
-          <li><strong>Secure Browsing</strong>: Keep devices safe (updated antivirus, etc.).</li>
-          <li><strong>Suspicious Activity</strong>: Report any suspicious activity immediately.</li>
-        </ul>
+                      <h3>9. Legal Compliance</h3>
+                      <ul>
+                        <li>Applicants must comply with all applicable laws (India and respective regions).</li>
+                        <li>Use of the website for illegal activities is strictly prohibited.</li>
+                      </ul>
 
-        <h3>11. Policy Updates</h3>
-        <p>
-          Policies may be updated periodically to reflect legal or technological changes.
-          Updates will be notified on the website, and continued use will be deemed acceptance
-          of the latest policy.
-        </p>
-      </div>
-    </div>
-  </div>
-)}
+                      <h3>10. Security Guidelines</h3>
+                      <ul>
+                        <li><strong>Account Security</strong>: Use strong passwords and don’t share credentials.</li>
+                        <li><strong>Secure Browsing</strong>: Keep devices safe (updated antivirus, etc.).</li>
+                        <li><strong>Suspicious Activity</strong>: Report any suspicious activity immediately.</li>
+                      </ul>
+
+                      <h3>11. Policy Updates</h3>
+                      <p>
+                        Policies may be updated periodically to reflect legal or technological changes.
+                        Updates will be notified on the website, and continued use will be deemed acceptance
+                        of the latest policy.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
 
             {submitted && (
-              <div className="thank-you-achivment-container">
-                <div className="thank-you-achivment-container">
+              <div className="thank-you-wrapper">
+                <div className="thank-you-card">
                   <div className="success-icon">
-                    <FontAwesomeIcon icon={faCircleCheck} size="3x" color="#14b866" />
+                    <FontAwesomeIcon icon={faCircleCheck} size="3x" color="#fff" />
                   </div>
-                  <h2 className="heading">Request successfully sent!</h2>
-                  <p className="paragraph">You will be see the submission successfull.</p>
+                  <h2 className="thank-heading">The application process was successful!</h2>
+                  <p className="thank-text">
+                    Your application for <strong>'Unique Record of Universe'</strong> Holder has been successfully received by URU Admin Section. 
+                    After application approval, go to the Application Status page and pay the prescribed fee.
+                  </p>
                 </div>
               </div>
+
             )}
           </div>
         </div>

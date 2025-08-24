@@ -118,3 +118,22 @@
     font-size: 12px;
   }
 }
+
+.Down-Certificate-Date {
+  font-size: 16px;
+  font-weight: 500;
+  color: #555;
+  margin: 6px 0;
+  padding: 4px 10px;
+  border-left: 3px solid #14b866;
+  background: #f9f9f9;
+  border-radius: 4px;
+  display: inline-block;
+  font-style: italic;
+  transition: all 0.3s ease;
+}
+
+.Down-Certificate-Date span {
+  color: #222;
+  font-weight: 600;
+}

@@ -192,8 +192,8 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   max-height: 90vh;
   overflow-y: auto;
-  width: 80%;
-  max-width: 800px;
+  width: 100%;
+  max-width: 1200px;
 }
 
 .edit-modal-content h2 {
@@ -406,4 +406,95 @@
 .search-btn:active {
   transform: translateY(0);
   box-shadow: none;
+}
+
+.manage-uru-form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.manage-uru-form-group label {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.form-category-select {
+  padding: 0.6rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  background: #fff;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.form-category-select:focus {
+  border-color: #4a90e2;
+  box-shadow: 0 0 6px rgba(74, 144, 226, 0.3);
+}
+
+.form-category-select option {
+  padding: 0.5rem;
+  font-size: 1rem;
+}
+
+.manage-uru-form-group select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.manage-uru-form-group select:focus {
+  border-color: #4a90e2;
+  box-shadow: 0 0 6px rgba(74, 144, 226, 0.4);
+}
+
+.manage-uru-form-group label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: block;
+  color: #333;
+}
+
+/* Larger text area */
+.large-textarea {
+  width: 100%;
+  height: 120px; /* bigger size for description */
+  font-size: 1.1rem;
+  padding: 12px 15px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  resize: vertical; /* user can resize if needed */
+  box-sizing: border-box;
+}
+
+button.approve {
+  background: #4caf50; /* green */
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button.approve:hover {
+  background: #43a047;
+}
+
+button.approved {
+  background: #999; /* grey for approved */
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: not-allowed;
 }

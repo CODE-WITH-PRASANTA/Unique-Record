@@ -175,30 +175,46 @@
   font-weight: 600;
   color: #333;
 }
-
 /* Blog Table Styling */
 .Create-Blog-Table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
   overflow-x: auto;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  background-color: #fff;
+  border-radius: 10px;
 }
 
-.Create-Blog-Table th,
-.Create-Blog-Table td {
-  border: 1px solid #e0e0e0;
-  padding: 12px;
+/* Table Head */
+.Create-Blog-Table th {
+  background-color: #4d62d9;
+  color: #fff;
+  font-weight: 600;
+  padding: 14px 12px;
   text-align: left;
   font-size: 16px;
-  color: #444;
+  position: sticky;
+  top: 0;
+  z-index: 2;
 }
 
-.Create-Blog-Table th {
-  background-color: #f7f9fc;
-  font-weight: 600;
-  color: #222;
+/* Table Body */
+.Create-Blog-Table td {
+  border-bottom: 1px solid #e0e0e0;
+  padding: 12px;
+  font-size: 15px;
+  color: #333;
+  vertical-align: middle;
 }
 
+/* Row Hover Effect */
+.Create-Blog-Table tbody tr:hover {
+  background-color: #f1f5ff;
+  transition: background-color 0.3s ease;
+}
+
+/* Images in Table */
 .Create-Blog-Table img {
   width: 60px;
   height: 60px;
@@ -207,20 +223,40 @@
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Button Styling */
+/* Buttons */
 .Create-Blog-Table button {
-  background-color: #4d62d9;
+  background: linear-gradient(90deg, #4d62d9, #6c82f7);
   color: #fff;
   border: none;
-  padding: 8px 14px;
+  padding: 8px 16px;
   border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
-  transition: background-color 0.3s ease;
+  font-weight: 500;
+  transition: all 0.3s ease;
 }
 
 .Create-Blog-Table button:hover {
-  background-color: #3a4ab5;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* Edit & Delete Button Styling */
+.edit-btn {
+  margin-right: 10px;
+  background-color: #f0ad4e;
+}
+
+.edit-btn:hover {
+  background-color: #ec9b39;
+}
+
+.Action-Btn button:last-child {
+  background-color: #e74c3c;
+}
+
+.Action-Btn button:last-child:hover {
+  background-color: #c0392b;
 }
 
 /* Search Bar Styling */
@@ -240,6 +276,12 @@
   border-radius: 6px;
   width: 300px;
   max-width: 100%;
+  transition: border-color 0.3s ease;
+}
+
+.search-bar-input:focus {
+  outline: none;
+  border-color: #4d62d9;
 }
 
 .search-bar-button {
@@ -257,100 +299,62 @@
   background-color: #3e8e41;
 }
 
-.edit-btn {
-  margin-right: 10px;
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .Create-Blog-Table th, .Create-Blog-Table td {
+    font-size: 14px;
+    padding: 10px;
+  }
 }
 
+@media (max-width: 992px) {
+  .Create-Blog-Table img {
+    width: 50px;
+    height: 50px;
+  }
 
-/* Media Queries for Responsiveness */
+  .Create-Blog-Table th, .Create-Blog-Table td {
+    font-size: 13px;
+    padding: 8px;
+  }
 
-/* For screens smaller than 1200px */
-@media (max-width: 1200px) {
+  .search-bar-input {
+    width: 250px;
+  }
+}
+
+@media (max-width: 768px) {
   .Create-Blog-Table {
-    width: 100%;
     display: block;
     overflow-x: auto;
   }
+
+  .Create-Blog-Table th, .Create-Blog-Table td {
+    white-space: nowrap;
+  }
+
+  .search-bar-container {
+    flex-direction: column;
+    gap: 8px;
+  }
 }
 
-/* For screens smaller than 768px (tablets and smaller) */
-@media (max-width: 768px) {
-  .Create-Blog-Table th,
-  .Create-Blog-Table td {
-    padding: 8px;
-    font-size: 14px;
-  }
-  
+@media (max-width: 480px) {
   .Create-Blog-Table img {
     width: 40px;
     height: 40px;
   }
-  
-  .search-bar-input {
-    width: 100%;
-    max-width: 250px;
-  }
-  
-  .search-bar-button {
-    padding: 8px 16px;
-    font-size: 14px;
-  }
-}
 
-/* For screens smaller than 480px (mobile phones) */
-@media (max-width: 480px) {
-  .Create-Blog-Table {
-    margin-top: 10px;
-  }
-  
-  .Create-Blog-Table th,
-  .Create-Blog-Table td {
-    padding: 6px;
+  .Create-Blog-Table button {
+    padding: 6px 12px;
     font-size: 12px;
   }
-  
-  .Create-Blog-Table img {
-    width: 30px;
-    height: 30px;
-  }
-  
-  .search-bar-container {
-    margin: 10px 10px 0;
-    flex-direction: column;
-  }
-  
+
   .search-bar-input {
     width: 100%;
-    max-width: 100%;
   }
-  
-  .search-bar-button {
-    padding: 8px 16px;
-    font-size: 14px;
-    width: 100%;
-  }
-  
-  .Action-Btn {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .edit-btn {
-    margin-right: 0;
-    margin-bottom: 10px;
-  }
-}
 
-/* For screens smaller than 320px (smaller mobile phones) */
-@media (max-width: 320px) {
-  .Create-Blog-Table th,
-  .Create-Blog-Table td {
-    padding: 4px;
-    font-size: 10px;
-  }
-  
-  .Create-Blog-Table img {
-    width: 20px;
-    height: 20px;
+  .search-bar-button {
+    width: 100%;
   }
 }

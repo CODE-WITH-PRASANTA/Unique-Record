@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./AchiversAbout.css";
-import { FaFacebookF, FaWhatsapp, FaEnvelope, FaShareAlt } from "react-icons/fa";
+import { FaFacebookF, FaWhatsapp, FaEnvelope, FaShareAlt , FaInstagram  } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";  // modern X logo
 import { FiDownload } from "react-icons/fi";
 import { API_URL } from '../../Api';
@@ -18,6 +18,25 @@ const [showFullDesc, setShowFullDesc] = useState(false);
 const [showFullPurpose, setShowFullPurpose] = useState(false);
 
 
+  const shareOnInstagram = async (url, name, postUrl) => {
+    try {
+      const text = getShareMessage(name, postUrl);
+
+      if (navigator.share) {
+        await navigator.share({
+          title: `${name}'s Unique Record`,
+          text,
+          url: postUrl,
+        });
+      } else {
+        // Fallback: copy link to clipboard
+        await navigator.clipboard.writeText(postUrl);
+        alert("Link copied! Open Instagram and paste it in your post or story.");
+      }
+    } catch (error) {
+      console.error("Error sharing on Instagram:", error);
+    }
+  };
 
   useEffect(() => {
     const fetchPublishedUruById = async () => {
@@ -188,17 +207,14 @@ const [showFullPurpose, setShowFullPurpose] = useState(false);
       className="achiver-applicant-photo"
     />
   </div>
-</div>
-
-
-  {/* Download Button */}
-  <button
-    className="achiver-download-btn"
-    onClick={() => downloadCertificate(uru.certificateUrl, uru.applicantName)}
-  >
-    <FiDownload className="Achiver-download-icon" /> Download
-  </button>
-
+  </div>
+    {/* Download Button */}
+    <button
+      className="achiver-download-btn"
+      onClick={() => downloadCertificate(uru.certificateUrl, uru.applicantName)}
+    >
+      <FiDownload className="Achiver-download-icon" /> Download
+    </button>
     {/* Share Buttons */}
     <div className="achiver-share-buttons">
       <button
@@ -216,6 +232,14 @@ const [showFullPurpose, setShowFullPurpose] = useState(false);
         }
       >
         <FaXTwitter  />
+      </button>
+       <button
+        className="share-btn insta"
+        onClick={() =>
+          shareOnInstagram(uru.certificateUrl, uru.applicantName, sharableLink)
+        }
+      >
+        <FaInstagram />
       </button>
       <button
         className="share-btn wa"
@@ -276,7 +300,16 @@ const [showFullPurpose, setShowFullPurpose] = useState(false);
                 <tr><td className="uru-label">Application Number</td><td>{uru.applicationNumber || "N/A"}</td></tr>
                 <tr><td className="uru-label">Applicant Name</td><td>{uru.applicantName || "N/A"}</td></tr>
                 <tr><td className="uru-label">Applicant Date</td><td>{uru.createdAt ? new Date(uru.createdAt).toLocaleDateString() : "N/A"}</td></tr>
-                <tr><td className="uru-label">Sex</td><td><strong>{uru.sex || "N/A"}</strong></td></tr>
+                <tr>
+                    <td className="uru-label">Sex</td>
+                    <td>
+                      <strong>
+                        {uru.sex
+                          ? uru.sex.charAt(0).toUpperCase() + uru.sex.slice(1).toLowerCase()
+                          : "N/A"}
+                      </strong>
+                    </td>
+                  </tr>
                 <tr><td className="uru-label">Date of Birth</td><td>{uru.dateOfBirth ? new Date(uru.dateOfBirth).toLocaleDateString() : "N/A"}</td></tr>
                 <tr><td className="uru-label">Address</td><td>{uru.address || "N/A"}</td></tr>
                 <tr><td className="uru-label">District</td><td>{uru.district || "N/A"}</td></tr>

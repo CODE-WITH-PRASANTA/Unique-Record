@@ -15,27 +15,28 @@ const AdminPostAchievement = () => {
     category: '',
     tags: [],
     image: null,
+    uruHolderLink: '',
+    address: '',            // 🔹 New field
+    effortType: '',         // 🔹 New field
   });
 
   const [successMsg, setSuccessMsg] = useState('');
   const [categories, setCategories] = useState([]);
 
   // 🔹 Fetch categories on component mount
-useEffect(() => {
-  axios
-    .get(`${API_URL}/categories`)
-    .then((response) => {
-      // ✅ Sort categories alphabetically by name
-      const sortedCategories = response.data.sort((a, b) =>
-        a.name.localeCompare(b.name)
-      );
-      setCategories(sortedCategories);
-    })
-    .catch((error) => {
-      console.error('Error fetching categories:', error);
-    });
-}, []);
-
+  useEffect(() => {
+    axios
+      .get(`${API_URL}/categories`)
+      .then((response) => {
+        const sortedCategories = response.data.sort((a, b) =>
+          a.name.localeCompare(b.name)
+        );
+        setCategories(sortedCategories);
+      })
+      .catch((error) => {
+        console.error('Error fetching categories:', error);
+      });
+  }, []);
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -61,8 +62,9 @@ useEffect(() => {
     data.append('category', formData.category);
     data.append('tags', formData.tags.join(','));
     data.append('image', formData.image);
-    data.append('uruHolderLink', formData.uruHolderLink); // 🔹 Added in submit
-
+    data.append('uruHolderLink', formData.uruHolderLink);
+    data.append('address', formData.address);        // 🔹 Added
+    data.append('effortType', formData.effortType);  // 🔹 Added
 
     axios
       .post(`${API_URL}/achievements/post-achievement`, data)
@@ -79,6 +81,8 @@ useEffect(() => {
           tags: [],
           image: null,
           uruHolderLink: '',
+          address: '',       // reset new field
+          effortType: '',    // reset new field
         });
         setTimeout(() => setSuccessMsg(''), 4000);
       })
@@ -94,6 +98,8 @@ useEffect(() => {
       {successMsg && <div className="achivement-post-success-alert">{successMsg}</div>}
 
       <form onSubmit={handleSubmit} className="achivement-post-form">
+      
+        {/* 🔹 Rest of your fields */}
         <div className="achivement-post-form-group">
           <label className="achivement-post-label">Achievement Title*</label>
           <input type="text" name="title" value={formData.title} onChange={handleInputChange} required className="achivement-post-input" />
@@ -128,7 +134,7 @@ useEffect(() => {
           <input type="text" name="achieverName" value={formData.achieverName} onChange={handleInputChange} required className="achivement-post-input" />
         </div>
 
-          <div className="achivement-post-form-group">
+        <div className="achivement-post-form-group">
           <label className="achivement-post-label">URU Holder Details Link</label>
           <div className="uru-holder-input-wrapper">
             <input
@@ -141,6 +147,37 @@ useEffect(() => {
             />
           </div>
         </div>
+
+          
+        {/* 🔹 Address Field */}
+        <div className="achivement-post-form-group">
+          <label className="achivement-post-label">Address*</label>
+          <input 
+            type="text" 
+            name="address" 
+            value={formData.address} 
+            onChange={handleInputChange} 
+            required 
+            className="achivement-post-input" 
+          />
+        </div>
+
+        {/* 🔹 Effort Type Field */}
+        <div className="achivement-post-form-group">
+          <label className="achivement-post-label">Effort Type*</label>
+          <select 
+            name="effortType" 
+            value={formData.effortType} 
+            onChange={handleInputChange} 
+            required 
+            className="achivement-post-select"
+          >
+            <option value="">Select Effort Type</option>
+            <option value="Individual Effort">Individual Effort</option>
+            <option value="Group Effort">Group Effort</option>
+          </select>
+        </div>
+
 
         <div className="achivement-post-form-group">
           <label className="achivement-post-label">Achievement Category*</label>

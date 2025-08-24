@@ -1,0 +1,309 @@
+.admin-comment-container {
+  padding: 25px;
+  background: #f9fafc;
+  border-radius: 12px;
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.08);
+  margin: 20px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.admin-comment-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.admin-comment-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.admin-comment-table th,
+.admin-comment-table td {
+  padding: 14px 16px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+  font-size: 15px;
+  vertical-align: top;
+}
+
+.admin-comment-table th {
+  background: #4a90e2;
+  color: #fff;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.admin-comment-table tr:hover {
+  background: #f1f7ff;
+  transition: 0.3s ease;
+}
+
+.admin-comment-subject,
+.admin-comment-message {
+  max-width: 250px;
+  word-wrap: break-word;
+}
+
+.admin-comment-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn {
+  padding: 8px 14px;
+  font-size: 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn.publish {
+  background: #28a745;
+  color: white;
+}
+.btn.publish.unpublish {
+  background: #6c757d;
+}
+.btn.publish:hover {
+  opacity: 0.9;
+}
+
+.btn.edit {
+  background: #ffc107;
+  color: #333;
+}
+.btn.edit:hover {
+  background: #e0a800;
+}
+
+.btn.delete {
+  background: #dc3545;
+  color: white;
+}
+.btn.delete:hover {
+  background: #c82333;
+}
+
+.btn.save {
+  background: #007bff;
+  color: white;
+}
+.btn.cancel {
+  background: #6c757d;
+  color: white;
+}
+
+/* Read More button */
+.admin-readmore-btn {
+  margin-left: 6px;
+  background: none;
+  border: none;
+  color: #007bff;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.3s;
+}
+.admin-readmore-btn:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
+
+/* Modal */
+.admin-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-modal-content {
+  background: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  width: 450px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.admin-modal-content h3 {
+  margin-bottom: 15px;
+  font-size: 20px;
+  color: #333;
+}
+
+.admin-modal-content input,
+.admin-modal-content textarea {
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+}
+
+.admin-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Base Styles are same as yours */
+
+/* Responsive Media Queries */
+@media (max-width: 1024px) {
+  .admin-comment-title {
+    font-size: 22px;
+  }
+
+  .admin-comment-table th,
+  .admin-comment-table td {
+    font-size: 14px;
+    padding: 12px;
+  }
+
+  .btn {
+    font-size: 13px;
+    padding: 7px 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-comment-container {
+    padding: 15px;
+    margin: 10px;
+  }
+
+  .admin-comment-title {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+
+  .admin-comment-table {
+    border-radius: 8px;
+  }
+
+  .admin-comment-table th,
+  .admin-comment-table td {
+    font-size: 13px;
+    padding: 10px;
+  }
+
+  .btn {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+
+  /* Stack actions vertically */
+  .admin-comment-actions {
+    flex-direction: column;
+    gap: 6px;
+  }
+}
+
+@media (max-width: 576px) {
+  .admin-comment-title {
+    font-size: 18px;
+  }
+
+  /* Convert table to card layout for better readability */
+  .admin-comment-table,
+  .admin-comment-table thead,
+  .admin-comment-table tbody,
+  .admin-comment-table th,
+  .admin-comment-table td,
+  .admin-comment-table tr {
+    display: block;
+    width: 100%;
+  }
+
+  .admin-comment-table thead {
+    display: none; /* hide table headers */
+  }
+
+  .admin-comment-table tr {
+    background: #fff;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    padding: 12px;
+  }
+
+  .admin-comment-table td {
+    border: none;
+    font-size: 18px;
+    padding: 8px 0;
+    display: flex;
+    justify-content: space-between;
+    text-align: start;
+  }
+
+  .admin-comment-table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #333;
+    flex: 1;
+    margin-right: 10px;
+    text-transform: capitalize;
+  }
+
+  /* Action buttons full width */
+  .admin-comment-actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: flex-start;
+  }
+
+  .btn {
+    flex: 1;
+    text-align: center;
+    font-size: 13px;
+    padding: 8px;
+  }
+
+  /* Modal mobile optimization */
+  .admin-modal-content {
+    width: 95%;
+    padding: 15px;
+  }
+  .admin-modal-content input,
+  .admin-modal-content textarea {
+    font-size: 13px;
+    padding: 8px;
+  }
+
+  .admin-modal-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .btn.save,
+  .btn.cancel {
+    width: 100%;
+  }
+}

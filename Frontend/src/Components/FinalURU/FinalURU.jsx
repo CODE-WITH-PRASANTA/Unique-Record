@@ -198,70 +198,84 @@ const FinalURU = () => {
       </div>
       <table className="Final-Uru-Table table-responsive">
         <thead>
-          <tr>
-            <th className="Final-Uru-Table-Header">Sl No.</th>
-            <th className="Final-Uru-Table-Header">Application No.</th>
-            <th className="Final-Uru-Table-Header">Applicant Name</th>
-            <th className="Final-Uru-Table-Header">Payment Status</th>
-            <th className="Final-Uru-Table-Header">Upload Certificate</th>
-            <th className="Final-Uru-Table-Header">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredData && filteredData.length > 0 ? (
-            filteredData.map((data, index) => (
-              <tr key={data._id}>
-                <td className="Final-Uru-Table-Data">{index + 1}</td>
-                <td className="Final-Uru-Table-Data">{data.applicationNumber}</td>
-                <td className="Final-Uru-Table-Data">{data.applicantName}</td>
-                <td className="Final-Uru-Table-Data">{data.paymentStatus}</td>
-                <td className="Final-Uru-Table-Data">
-                  <input
-                    type="file"
-                    onChange={(event) => handleCertificateUpload(data.applicationNumber, event.target.files[0])}
-                    className="Final-Uru-File-Input"
-                  />
-                 
-                </td>
-                <td className="Final-Uru-Table-Data">
-                   <button
-                    onClick={() => handleCertificateSubmit(data.applicationNumber)}
-                    className="Final-Uru-Submit-Button"
-                  >
-                    Submit
-                  </button>
-                  <button
-                    onClick={() => handleDelete(data._id)}
-                    className="Final-Uru-Delete-Button"
-                  >
-                    Delete
-                  </button>
-                  {data.isPublished ? (
-                    <button
-                      onClick={() => handleUnpublish(data._id)}
-                      className="Final-Uru-Unpublish-Button"
-                    >
-                      Unpublish
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() => handlePublish(data._id)}
-                      className="Final-Uru-Publish-Button"
-                    >
-                      Publish
-                    </button>
-                  )}
-                </td>
-              </tr>
-            ))
-          ) : (
             <tr>
-              <td colSpan={6} className="Final-Uru-No-Data-Found">
-                No data found
-              </td>
+              <th className="Final-Uru-Table-Header">Sl No.</th>
+              <th className="Final-Uru-Table-Header">Application No.</th>
+              <th className="Final-Uru-Table-Header">Application Date</th> {/* ✅ New */}
+              <th className="Final-Uru-Table-Header">Applicant Name</th>
+              <th className="Final-Uru-Table-Header">Payment Status</th>
+              <th className="Final-Uru-Table-Header">Upload Certificate</th>
+              <th className="Final-Uru-Table-Header">Action</th>
             </tr>
+          </thead>
+
+     <tbody>
+  {filteredData && filteredData.length > 0 ? (
+    filteredData.map((data, index) => (
+      <tr key={data._id}>
+        <td className="Final-Uru-Table-Data">{index + 1}</td>
+        <td className="Final-Uru-Table-Data">{data.applicationNumber}</td>
+       <td className="Final-Uru-Table-Data">
+          {data.createdAt
+            ? new Date(data.createdAt).toLocaleDateString("en-GB", {
+                day: "2-digit",
+                month: "short",
+                year: "numeric",
+              })
+            : "N/A"}
+        </td>
+
+        <td className="Final-Uru-Table-Data">{data.applicantName}</td>
+        <td className="Final-Uru-Table-Data">{data.paymentStatus}</td>
+        <td className="Final-Uru-Table-Data">
+          <input
+            type="file"
+            onChange={(event) =>
+              handleCertificateUpload(data.applicationNumber, event.target.files[0])
+            }
+            className="Final-Uru-File-Input"
+          />
+        </td>
+        <td className="Final-Uru-Table-Data">
+          <button
+            onClick={() => handleCertificateSubmit(data.applicationNumber)}
+            className="Final-Uru-Submit-Button"
+          >
+            Submit
+          </button>
+          <button
+            onClick={() => handleDelete(data._id)}
+            className="Final-Uru-Delete-Button"
+          >
+            Delete
+          </button>
+          {data.isPublished ? (
+            <button
+              onClick={() => handleUnpublish(data._id)}
+              className="Final-Uru-Unpublish-Button"
+            >
+              Unpublish
+            </button>
+          ) : (
+            <button
+              onClick={() => handlePublish(data._id)}
+              className="Final-Uru-Publish-Button"
+            >
+              Publish
+            </button>
           )}
-        </tbody>
+        </td>
+      </tr>
+    ))
+  ) : (
+    <tr>
+      <td colSpan={7} className="Final-Uru-No-Data-Found">
+        No data found
+      </td>
+    </tr>
+  )}
+</tbody>
+
       </table>
     </div>
   );

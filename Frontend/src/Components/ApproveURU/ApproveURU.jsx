@@ -107,58 +107,74 @@ const ApproveURU = () => {
       </div>
       <div className="Approve-URU-table-container">
         <table className="Approve-URU-table">
-          <thead>
-            <tr>
-              <th className="Approve-URU-table-header">Serial No.</th>
-              <th className="Approve-URU-table-header">Application Number</th>
-              <th className="Approve-URU-table-header">Name</th>
-              <th className="Approve-URU-table-header">Price</th>
-              <th className="Approve-URU-table-header">Transition ID</th>
-              <th className="Approve-URU-table-header">Payment Status</th>
-              <th className="Approve-URU-table-header">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredUrus.map((uru, index) => (
-              <tr key={uru.applicationNumber}>
-                <td className="Approve-URU-table-data">{index + 1}</td>
-                <td className="Approve-URU-table-data">{uru.applicationNumber}</td>
-                <td className="Approve-URU-table-data">{uru.applicantName}</td>
-                <td className="Approve-URU-table-data">
-                  {uru.priceUpdated ? (
-                    <span style={{ color: 'green' }}>{uru.price}</span>
-                  ) : (
-                    <input
-                      type="number"
-                      value={prices[uru.applicationNumber] || uru.price}
-                      onChange={(e) => handlePriceChange(uru.applicationNumber, parseInt(e.target.value))}
-                      className="Approve-URU-price-input"
-                    />
-                  )}
-                </td>
-                <td className="Approve-URU-table-data">
-                  {uru.razorpayPaymentId ? (
-                    <span style={{ color: 'green' }}>{uru.razorpayPaymentId}</span>
-                  ) : (
-                    <span>N/A</span>
-                  )}
-                </td>
-                <td className="Approve-URU-table-data">{uru.paymentStatus}</td>
-                <td className="Approve-URU-table-data">
-                  {uru.priceUpdated ? (
-                    <span style={{ color: 'green' }}>Price Updated</span>
-                  ) : (
-                    <button
-                      className="Approve-URU-submit-btn"
-                      onClick={() => handleSubmit(uru.applicationNumber)}
-                    >
-                      Submit
-                    </button>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
+       <thead>
+  <tr>
+    <th className="Approve-URU-table-header">Serial No.</th>
+    <th className="Approve-URU-table-header">Application Number</th>
+    <th className="Approve-URU-table-header">Application Date</th>
+    <th className="Approve-URU-table-header">Name</th>
+    <th className="Approve-URU-table-header">Price</th>
+    <th className="Approve-URU-table-header">Transaction ID</th>
+    <th className="Approve-URU-table-header">Payment Status</th>
+    <th className="Approve-URU-table-header">Action</th>
+  </tr>
+</thead>
+<tbody>
+  {filteredUrus.map((uru, index) => (
+    <tr key={uru.applicationNumber}>
+      <td className="Approve-URU-table-data">{index + 1}</td>
+      <td className="Approve-URU-table-data">{uru.applicationNumber}</td>
+      <td className="Approve-URU-table-data">
+        {uru.createdAt
+          ? new Date(uru.createdAt).toLocaleDateString("en-GB", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric",
+            })
+          : "N/A"}
+      </td>
+      <td className="Approve-URU-table-data">{uru.applicantName}</td>
+      <td className="Approve-URU-table-data">
+        {uru.priceUpdated ? (
+          <span style={{ color: "green" }}>{uru.price}</span>
+        ) : (
+          <input
+            type="number"
+            value={prices[uru.applicationNumber] || uru.price}
+            onChange={(e) =>
+              handlePriceChange(
+                uru.applicationNumber,
+                parseInt(e.target.value)
+              )
+            }
+            className="Approve-URU-price-input"
+          />
+        )}
+      </td>
+      <td className="Approve-URU-table-data">
+        {uru.razorpayPaymentId ? (
+          <span style={{ color: "green" }}>{uru.razorpayPaymentId}</span>
+        ) : (
+          <span>N/A</span>
+        )}
+      </td>
+      <td className="Approve-URU-table-data">{uru.paymentStatus}</td>
+      <td className="Approve-URU-table-data">
+        {uru.priceUpdated ? (
+          <span style={{ color: "green" }}>Price Updated</span>
+        ) : (
+          <button
+            className="Approve-URU-submit-btn"
+            onClick={() => handleSubmit(uru.applicationNumber)}
+          >
+            Submit
+          </button>
+        )}
+      </td>
+    </tr>
+  ))}
+</tbody>
+
         </table>
       </div>
     </div>

@@ -330,6 +330,7 @@
     width: 320px;
     height: 320px;
   }
+
 }
 
 /* For tablets (max 1024px) */
@@ -361,7 +362,7 @@
     height: 280px;
   }
   .achiver-description-table td {
-    font-size: 14px;
+    font-size: 20px;
     padding: 12px;
   }
 }
@@ -403,6 +404,10 @@
     font-size: 18px;
     padding: 12px;
   }
+
+  .achiver-tab-content{
+    padding: 0px;
+  }
 }
 
 /* For small mobiles (max 480px) */
@@ -425,9 +430,8 @@
     padding: 12px;
   }
   .achiver-description-table td {
-    font-size: 13px;
     padding: 10px;
-    text-align: justify;
+    text-align: start;
   }
   .achiver-about-details{
     margin-top: 0px;
@@ -544,7 +548,6 @@
     margin: 15px;
   }
   .uru-title {
-    font-size: 22px;
     line-height: 1.4;
   }
   .uru-highlight {
@@ -680,4 +683,11 @@
   background: linear-gradient(135deg, #ff6a88, #ffcc70);
   transform: translateY(-2px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+}
+
+.achiver-description-table td {
+  word-break: break-word;
+}
+.achiver-description-table tr:nth-child(even) td:first-child {
+  white-space: nowrap;
 }

@@ -24,14 +24,19 @@ const DonationSuccess = () => {
         <div className="donation-success-card">
           <img src={logo} alt="Logo" className="donation-success-logo" />
           <h2 className="donation-success-heading">Unique Record Of Universe</h2>
+          <p className="donation-success-description">
+            <strong>
+              Unique Records of Universe<br />Digitally Marking The Extraordinary Achievement
+            </strong>
+          </p>
           <h3 className="donation-success-title">Donation Success</h3>
+
 
           <div className="donation-success-receipt-container">
             <p className="donation-success-top-text"> Payment ID: <strong>{paymentId || "N/A"}</strong></p>
 
             <div className="donation-success-receipt-box">
               <div className="donation-success-receipt-header">
-                <span><strong>Payment ID:</strong> {paymentId || "N/A"}</span>
                 <span><strong>Transaction ID:</strong> {paymentId || "N/A"}</span>
               </div>
             
@@ -45,7 +50,7 @@ const DonationSuccess = () => {
 
                 <div className="donation-success-from">
                   <p><strong>From:</strong></p>
-                  <p><strong>Unique Records of Universe<br />Digitally Marking The Extraordinary Achievement</strong></p>
+                  
                   <p>Thekma,<br />District-Azamgarh (Uttar Pradesh)<br />Pin- 276303</p>
                   <p>Email: uruonline2025@gmail.com</p>
                   <p>Phone: +91 9472351693</p>

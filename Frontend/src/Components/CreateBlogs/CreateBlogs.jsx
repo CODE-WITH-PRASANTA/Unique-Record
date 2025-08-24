@@ -445,39 +445,47 @@ const [address, setAddress] = useState('');
 </div>
  
   <table className="Create-Blog-Table">
-    <thead>
-      <tr>
-        <th>S.No.</th>
-        <th>Title</th>
-        <th>Photo</th>
-        <th>Author Name</th>
-        <th>Author Designation</th>
-        <th>Phone Number</th>
-        <th>Email</th>
-        <th>Address</th>
-        <th>Actions</th>
+  <thead>
+    <tr>
+      <th>S.No.</th>
+      <th>Date Received</th> {/* New Column */}
+      <th>Title</th>
+      <th>Photo</th>
+      <th>Author Name</th>
+      <th>Author Designation</th>
+      <th>Phone Number</th>
+      <th>Email</th>
+      <th>Address</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {filteredBlogs.map((blog, index) => (
+      <tr key={blog._id}>
+        <td>{index + 1}</td>
+        <td>
+          {new Date(blog.createdAt).toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+          })}
+        </td>
+        <td>{blog.blogTitle}</td>
+        <td><img src={blog.imageUrl} alt={blog.blogTitle} /></td>
+        <td>{blog.authorName}</td>
+        <td>{blog.authorDesignation || "N/A"}</td>
+        <td>{blog.phoneNumber || "N/A"}</td>
+        <td>{blog.email || "N/A"}</td>
+        <td>{blog.address || "N/A"}</td>
+        <td className='Action-Btn'>
+          <button className="edit-btn" onClick={() => handleEditBlog(blog)}>Edit</button>
+          <button onClick={() => handleDelete(blog._id)}>Delete</button>
+        </td>
       </tr>
-    </thead>
-    <tbody>
-      {filteredBlogs.map((blog, index) => (
-        <tr key={blog._id}>
-          <td>{index + 1}</td>
-          <td>{blog.blogTitle}</td>
-          <td><img src={blog.imageUrl} alt={blog.blogTitle} /></td>
-          <td>{blog.authorName}</td>
-          <td>{blog.authorDesignation || "N/A"}</td>
-          <td>{blog.phoneNumber || "N/A"}</td>
-          <td>{blog.email || "N/A"}</td>
-          <td>{blog.address || "N/A"}</td>
-          <td className='Action-Btn'>
-    <button className="edit-btn" onClick={() => handleEditBlog(blog)} >Edit</button>
-    <button  onClick={() => handleDelete(blog._id)}  >Delete</button>
-  </td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
-      
+    ))}
+  </tbody>
+</table>
+
     </div>
   );
 };

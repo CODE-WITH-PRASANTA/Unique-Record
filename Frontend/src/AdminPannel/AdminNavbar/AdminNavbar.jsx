@@ -2,6 +2,7 @@ import React from 'react';
 import { extendTheme } from '@mui/material/styles';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import ArticleIcon from '@mui/icons-material/Article';
+import MessageIcon from '@mui/icons-material/Message';
 import CreateIcon from '@mui/icons-material/Create';
 import AnnouncementIcon from '@mui/icons-material/Announcement';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
@@ -37,6 +38,8 @@ import AdminPostAchievement from '../../Components/AdminPostAchievement/AdminPos
 import AdminManageAchievements from '../../Components/AdminManageAchievements/AdminManageAchievements';
 import AdminManageCategories from '../../Components/AdminManageCategories/AdminManageCategories';
 import CreateBlogs from '../../Components/CreateBlogs/CreateBlogs';
+import AdminManageBlogComment from '../../Components/AdminManageBlogComment/AdminManageBlogComment';
+import AdminAchivmentComment from '../../Components/AdminAchivmentComment/AdminAchivmentComment';
 
 const NAVIGATION = [
   {
@@ -289,10 +292,30 @@ const NAVIGATION = [
         title: 'Photo Manage',
         icon: <PhotoLibraryIcon style={{ color: '#3f51b5' }} />,
       },
-
-
     ],
   },
+
+  {
+  kind: 'header',
+  title: 'Comments Management',
+},
+{
+  segment: 'comments',
+  title: 'Manage Comments',
+  icon: <MessageIcon style={{ color: '#2196f3' }} />, // Import MessageIcon from '@mui/icons-material/Message';
+  children: [
+    {
+      segment: 'blog-comments',
+      title: 'Blog Comments',
+      icon: <ArticleIcon style={{ color: '#ff5722' }} />,
+    },
+    {
+      segment: 'achievement-comments',
+      title: 'Achievement Comments',
+      icon: <DashboardIcon style={{ color: '#8bc34a' }} />,
+    },
+  ],
+},
 
   
 
@@ -356,7 +379,7 @@ export default function DashboardLayoutBasic({ window }) {
         theme={demoTheme}
         window={demoWindow}
       >
-        <DashboardLayout>
+        <DashboardLayout >
           <PageContainer>
             {router.pathname === '/dashboard' && <AdminDashboard />}
             {router.pathname === '/blog/create' && <CreateBlogs />}
@@ -381,6 +404,8 @@ export default function DashboardLayoutBasic({ window }) {
             {router.pathname === '/achievements/post' && <AdminPostAchievement />}
             {router.pathname === '/achievements/manage' && <AdminManageAchievements />}
             {router.pathname === '/category' && <AdminManageCategories />}
+            {router.pathname === '/comments/blog-comments' && <AdminManageBlogComment />}
+            {router.pathname === '/comments/achievement-comments' && <AdminAchivmentComment />} 
 
           </PageContainer>
         </DashboardLayout>

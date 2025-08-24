@@ -8,28 +8,23 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faQuoteLeft, faPrint, faEnvelope, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';
-import { 
-  FaCalendarAlt, 
-  FaUser, 
-  FaArrowRight, 
-  FaPaperPlane, 
-  FaFacebookF, 
-  FaInstagram, 
-  FaTwitter, 
-  FaWhatsapp 
-} from 'react-icons/fa';
+import { FaFacebookF, FaWhatsapp, FaEnvelope, FaShareAlt , FaInstagram  } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";  // modern X logo
 
 library.add(fab);
 
 const AchivmentDetails = () => {
   const { id } = useParams();
-  
   const [achivmentDetails, setAchivmentDetails] = useState({});
   const [latestAchievements, setLatestAchievements] = useState([]);
   const [categories, setCategories] = useState([]);
   const [tags, setTags] = useState([]);
   const [showAllCategories, setShowAllCategories] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [status, setStatus] = useState(""); // to show success or error messages
+  const [comments, setComments] = useState([]);
+  const [loadingComments, setLoadingComments] = useState(true);
+  const [expandedComments, setExpandedComments] = useState({}); // track readmore per comment
 
   useEffect(() => {
     const fetchAchievement = async () => {
@@ -79,6 +74,65 @@ const AchivmentDetails = () => {
     e.preventDefault();
     console.log('Search term:', searchTerm);
   };
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    subject: "",
+    address: "",
+    message: "",
+  });
+
+  // handle input change
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+    // handle form submit
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+
+      try {
+        const res = await axios.post(`${API_URL}/comment/feedback`, formData, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        setStatus("✅ Feedback submitted successfully!");
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          subject: "",
+          address: "",
+          message: "",
+        }); // reset form
+      } catch (err) {
+        console.error(err.response.data); // log the error response
+        setStatus(`❌ Failed to submit feedback. ${err.response.data.message || 'Try again.'}`);
+      }
+    };
+    // Fetch published comments from backend
+    useEffect(() => {
+      const fetchComments = async () => {
+        try {
+          const res = await axios.get(`${API_URL}/comment/feedbacks`);
+          setComments(res.data);
+        } catch (error) {
+          console.error("Error fetching comments:", error);
+        } finally {
+          setLoadingComments(false);
+        }
+      };
+      fetchComments();
+    }, []);
+
+    // Toggle read more
+    const toggleReadMore = (id) => {
+      setExpandedComments((prev) => ({
+        ...prev,
+        [id]: !prev[id]
+      }));
+    };
 
   return (
     <div className="Achivments-details-container">
@@ -86,60 +140,79 @@ const AchivmentDetails = () => {
         <div className="Achivments-details-content-area">
           <div className="Achivments-details-image-section-one">
             <img src={achivmentDetails.image} alt={achivmentDetails.title} />
-            <div className="Achivments-details-footer">
-              <div className="date-container">
-                <FaCalendarAlt className="achivement-details-icon" /> 
-                <span>{new Date(achivmentDetails.createdAt).toLocaleDateString()}</span>
-              </div>
-              <div className="author-container">
-                <FaUser className="achivement-details-icon" /> 
-                <strong>Achiever Name: {achivmentDetails.achieverName}</strong>
-              </div>
-              <div className="location-container">
-                <strong>Category: {achivmentDetails.category}</strong>
-              </div>
-              <div className="email-container">
-                <span className="achievement-provider">Provider: {achivmentDetails.providerName}</span>
-              </div>
-            </div>
+            <div className="achievement-details-footer">
+  {/* Date */}
+  <div className="achievement-detail date">
+    <span className="emoji">📅</span>
+    <span className="text">Date: {new Date(achivmentDetails.createdAt).toLocaleDateString()}</span>
+  </div>
+
+  {/* Achiever Name */}
+  <div className="achievement-detail name">
+    <span className="emoji">🏆</span>
+    <span className="text">Achiever Name: {achivmentDetails.achieverName}</span>
+  </div>
+
+  {/* Address */}
+  <div className="achievement-detail address">
+    <span className="emoji">📍</span>
+    <span className="text">Address: {achivmentDetails.address}</span>
+  </div>
+
+  {/* Category */}
+  <div className="achievement-detail category">
+    <span className="emoji">📂</span>
+    <span className="text">Category: {achivmentDetails.category}</span>
+  </div>
+
+  {/* Effort Type */}
+  <div className="achievement-detail effort">
+    <span className="emoji">💪</span>
+    <span className="text">Effort Type: {achivmentDetails.effortType}</span>
+  </div>
+
+  {/* Provider */}
+  <div className="achievement-detail provider">
+    <span className="emoji">🤝</span>
+    <span className="text">Provider: {achivmentDetails.providerName}</span>
+  </div>
           </div>
 
-{/* 🔽 Record Holder More Details Section 🔽 */}
-{achivmentDetails.uruHolderLink && (
-  <div className="record-holder-link">
-    <a 
-      href={achivmentDetails.uruHolderLink} 
-      target="_blank" 
-      rel="noopener noreferrer"
-      className="arrow-button"
-    >
-      URU Holder More Details
-    </a>
-  </div>
-)}
+          </div>
 
-<h1 className="Achivments-details-title">{achivmentDetails.title}</h1>
+            {/* 🔽 Record Holder More Details Section 🔽 */}
+            {achivmentDetails.uruHolderLink && (
+              <div className="record-holder-link">
+                <a 
+                  href={achivmentDetails.uruHolderLink} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="arrow-button"
+                >
+                  URU Holder More Details
+                </a>
+              </div>
+            )}
 
-<div 
-  className="Achivments-details-paragraph" 
-  dangerouslySetInnerHTML={{ __html: achivmentDetails.content }}
-></div>
+            <h1 className="Achivments-details-title">{achivmentDetails.title}</h1>
+            <div 
+              className="Achivments-details-paragraph" 
+              dangerouslySetInnerHTML={{ __html: achivmentDetails.content }}
+            ></div>
 
-{/* 🔽 Record Holder More Details Section 🔽 */}
-{achivmentDetails.uruHolderLink && (
-  <div className="record-holder-link">
-    <a 
-      href={achivmentDetails.uruHolderLink} 
-      target="_blank" 
-      rel="noopener noreferrer"
-      className="arrow-button"
-    >
-      URU Holder More Details
-    </a>
-  </div>
-)}
-
-
+          {/* 🔽 Record Holder More Details Section 🔽 */}
+          {achivmentDetails.uruHolderLink && (
+            <div className="record-holder-link">
+              <a 
+                href={achivmentDetails.uruHolderLink} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="arrow-button"
+              >
+                URU Holder More Details
+              </a>
+            </div>
+          )}
           <div className="Achivments-details-community">
             <div className="Achivments-details-tags-row">
               <div className="tags">
@@ -150,25 +223,22 @@ const AchivmentDetails = () => {
               </div>
               <div className="social-share">
                 <strong>Share:</strong>
-                <button className="social-Achivments-icon" onClick={() => window.open(`https://www.facebook.com/sharer/sharer.php?u=${window.location.href}`, '_blank')}>
+                <button className="social-Achivments-icon fb" onClick={() => window.open(`https://www.facebook.com/sharer/sharer.php?u=${window.location.href}`, '_blank')}>
                   <FontAwesomeIcon icon={['fab', 'facebook-f']} />
                 </button>
-                <button className="social-Achivments-icon" onClick={() => window.open(`https://twitter.com/intent/tweet?url=${window.location.href}`, '_blank')}>
+                <button className="social-Achivments-icon x" onClick={() => window.open(`https://twitter.com/intent/tweet?url=${window.location.href}`, '_blank')}>
                   <FontAwesomeIcon icon={['fab', 'twitter']} />
                 </button>
-                <button className="social-Achivments-icon" onClick={() => window.open(`https://www.linkedin.com/sharing/share?url=${window.location.href}`, '_blank')}>
+                <button className="social-Achivments-icon linkedin" onClick={() => window.open(`https://www.linkedin.com/sharing/share?url=${window.location.href}`, '_blank')}>
                   <FontAwesomeIcon icon={['fab', 'linkedin-in']} />
                 </button>
-                <button className="social-Achivments-icon" onClick={() => window.open(`https://wa.me/?text=${window.location.href}`, '_blank')}>
+                <button className="social-Achivments-icon wa" onClick={() => window.open(`https://wa.me/?text=${window.location.href}`, '_blank')}>
                   <FontAwesomeIcon icon={['fab', 'whatsapp']} />
                 </button>
-                <button className="social-Achivments-icon" onClick={() => window.open(`https://telegram.me/share/url?url=${window.location.href}`, '_blank')}>
+                <button className="social-Achivments-icon telegram" onClick={() => window.open(`https://telegram.me/share/url?url=${window.location.href}`, '_blank')}>
                   <FontAwesomeIcon icon={['fab', 'telegram-plane']} />
                 </button>
-                <button className="social-Achivments-icon" onClick={() => window.print()}>
-                  <FontAwesomeIcon icon={faPrint} />
-                </button>
-                <button className="social-Achivments-icon" onClick={() => window.location.href = `mailto:?subject=${achivmentDetails.title}&body=${window.location.href}`}>
+                <button className="social-Achivments-icon more" onClick={() => window.location.href = `mailto:?subject=${achivmentDetails.title}&body=${window.location.href}`}>
                   <FontAwesomeIcon icon={faEnvelope} />
                 </button>
               </div>
@@ -176,21 +246,62 @@ const AchivmentDetails = () => {
           </div>
 
           <div className="comments-reply-form">
-            <h2>Please Share Your Feedback or Suggestions.?</h2>
-            <form>
-              <div className="Achivments-form-row">
-                <input type="text" placeholder="Name" />
-                <input type="email" placeholder="Email" />
-              </div>
-              <div className="Achivments-form-row">
-                <input type="tel" placeholder="Phone" />
-                <input type="text" placeholder="Subject" />
-                <input type="text" placeholder="Address" />
-              </div>
-              <textarea placeholder="Message"></textarea>
-              <button type="submit">Submit Now →</button>
-            </form>
+      <h2>Please Share Your Feedback or Suggestions.?</h2>
+      <form onSubmit={handleSubmit}>
+        <div className="Achivments-form-row">
+          <input
+            type="text"
+            name="name"
+            placeholder="Name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="Achivments-form-row">
+          <input
+            type="tel"
+            name="phone"
+            placeholder="Phone"
+            value={formData.phone}
+            onChange={handleChange}
+          />
+          <input
+            type="text"
+            name="subject"
+            placeholder="Subject"
+            value={formData.subject}
+            onChange={handleChange}
+          />
+          <input
+            type="text"
+            name="address"
+            placeholder="Address"
+            value={formData.address}
+            onChange={handleChange}
+          />
+        </div>
+        <textarea
+          name="message"
+          placeholder="Message"
+          value={formData.message}
+          onChange={handleChange}
+          required
+        ></textarea>
+        <button type="submit">Submit Now →</button>
+      </form>
+
+      {status && <p>{status}</p>}
           </div>
+
         </div>
 
         <aside className="Achivments-details-sidebar">
@@ -244,10 +355,55 @@ const AchivmentDetails = () => {
               ))}
             </div>
           </div>
+
+        <div className="AchivmentCmt-sidebar">
+              <h2 className="AchivmentCmt-title">💬 Comments</h2>
+
+              {loadingComments ? (
+                <p>Loading comments...</p>
+              ) : comments.length === 0 ? (
+                <p>No comments yet.</p>
+              ) : (
+                <div className="AchivmentCmt-list">
+                  {comments.map((comment) => {
+                    const expanded = expandedComments[comment._id] || false;
+                    const truncatedMessage =
+                      comment.message.length > 120
+                        ? comment.message.substring(0, 120) + "..."
+                        : comment.message;
+
+                    return (
+                      <div key={comment._id} className="AchivmentCmt-item">
+                        <p className="AchivmentCmt-field">
+                          <span>Name:</span> {comment.name}
+                        </p>
+                        <p className="AchivmentCmt-field">
+                          <span>Email:</span> {comment.email}
+                        </p>
+                        <p className="AchivmentCmt-field">
+                          <span>Address:</span> {comment.address}
+                        </p>
+                        <p className="AchivmentCmt-message">
+                          {expanded ? comment.message : truncatedMessage}
+                        </p>
+
+                        {comment.message.length > 120 && (
+                          <button
+                            className="AchivmentCmt-readmore"
+                            onClick={() => toggleReadMore(comment._id)}
+                          >
+                            {expanded ? "Show Less" : "Read More"}
+                          </button>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
         </aside>
       </div>
-
-      
     </div>
   );
 };

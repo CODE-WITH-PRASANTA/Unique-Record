@@ -10,19 +10,26 @@ const ApplicationStatus = () => {
   const [applications, setApplications] = useState([]);
   const token = localStorage.getItem('token'); 
 
-  useEffect(() => {
-    const fetchApplications = async () => {
-      try {
-        const response = await axios.get(`${API_URL}/uru/fetch-applied-uru-by-user`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setApplications(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchApplications();
-  }, []);
+useEffect(() => {
+  const fetchApplications = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/uru/fetch-applied-uru-by-user`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      // ✅ Sort by latest created date
+      const sortedApps = response.data.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      );
+
+      setApplications(sortedApps);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  fetchApplications();
+}, []);
+
 
   const handlePayment = async (applicationNumber) => {
     try {
@@ -124,10 +131,27 @@ const ApplicationStatus = () => {
       {applications.map((application) => (
         <div key={application.applicationNumber} className="Application-status-card">
           <div className="Application-status-header">
-            <div className="Application-status-header-left">
+           <div className="Application-status-header-left">
               <p className="Application-status-label">Application No.</p>
               <p className="Application-status-value">{application.applicationNumber}</p>
+
+              {/* ✅ Application Date */}
+              <p className="Application-status-date">
+                Date: {new Date(application.createdAt).toLocaleDateString("en-GB", {
+                  day: "numeric",
+                  month: "short",
+                  year: "numeric"
+                }).replace(/(\d{1,2})(?=\s)/, (d) => {
+                  const day = parseInt(d);
+                  if (day % 10 === 1 && day !== 11) return day + "st";
+                  if (day % 10 === 2 && day !== 12) return day + "nd";
+                  if (day % 10 === 3 && day !== 13) return day + "rd";
+                  return day + "th";
+                })}
+              </p>
+
             </div>
+
             <div className="Application-status-header-right">
               <p className="Application-status-label">Applicant Name</p>
               <p className="Application-status-value">{application.applicantName}</p>
@@ -210,21 +234,25 @@ const ApplicationStatus = () => {
             </div>
 
             <div className="Application-status-line" />
-            <div className={`Application-status-step payment ${application.paymentStatus === 'Success' ? 'completed' : ''}`}>
-              <div
-                className={`Application-status-circle ${application.paymentStatus === 'Success' ? 'green' : 'blue'}`}
-                onClick={() => application.paymentStatus !== 'Success' && handlePayment(application.applicationNumber)}
-              >
-                {application.paymentStatus === 'Success' ? (
-                  <FaCheckCircle className="Application-status-icon" />
-                ) : (
-                  <MdPayment className="Application-status-icon" />
-                )}
-              </div>
-              <p className={`Application-status-label ${application.paymentStatus === 'Success' ? 'success' : 'pending'}`}>
-                {application.paymentStatus === 'Success' ? 'Paid' : 'Make Payment'}
-              </p>
+          <div className={`Application-status-step payment ${application.paymentStatus === 'Success' ? 'completed' : ''}`}>
+             <div className={`Application-status-step payment`}>
+  <div
+    className={`Application-status-circle ${application.paymentStatus === 'Success' ? 'green' : 'blink-circle'}`}
+    onClick={() => application.paymentStatus !== 'Success' && handlePayment(application.applicationNumber)}
+  >
+    {application.paymentStatus === 'Success' ? (
+      <FaCheckCircle className="Application-status-icon" />
+    ) : (
+      <MdPayment className="Application-status-icon" />
+    )}
+  </div>
+  <p className={`Application-status-label ${application.paymentStatus === 'Success' ? 'success' : 'pending'}`}>
+    {application.paymentStatus === 'Success' ? 'Paid' : 'Make Payment'}
+  </p>
+</div>
+
             </div>
+
           </div>
 
           {/* ✅ After Payment Success – Show Transaction ID */}

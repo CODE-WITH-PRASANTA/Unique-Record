@@ -3,14 +3,14 @@ const cloudinary = require('../Config/cloudinary');
 
 exports.postAchievement = async (req, res) => {
   try {
-    const { title, shortDescription, content, providerName,uruHolderLink, achieverName, category, tags } = req.body;
+    const { title, shortDescription, content, providerName,uruHolderLink, achieverName, category, tags , address , effortType } = req.body;
     const image = req.file;
 
     if (!image) {
       return res.status(400).json({ message: 'Image is required' });
     }
 
-    if (!title || !shortDescription || !content || !providerName || !achieverName || !uruHolderLink || !category) {
+    if (!title || !shortDescription || !content || !providerName || !achieverName || !uruHolderLink ||!address ||!effortType || !category) {
       return res.status(400).json({ message: 'All fields are required' });
     }
 
@@ -25,6 +25,8 @@ exports.postAchievement = async (req, res) => {
       category,
       tags,
     uruHolderLink ,
+    address,
+    effortType,
       image: result.secure_url,
       publicId: result.public_id,
     });

@@ -263,18 +263,31 @@
 }
 
 .social-share button.social-Achivments-icon {
-  margin-left: 0.5rem;
-  background-color: var(--primary-color);
-  border: none;
-  color: white;
-  font-weight: 700;
-  width: 28px;
-  height: 28px;
-  border-radius: 4px;
+    border: none;
+  padding: 14px;
+  border-radius: 10px;
   cursor: pointer;
-  font-size: 0.8rem;
-  transition: background-color 0.3s ease;
+  font-size: 20px;
+  color: white;
+  transition: all 0.3s ease;
+  margin-right: 10px;
 }
+
+
+.fb { background: linear-gradient(135deg, #3b5998, #4c70ba); }
+.x { background: linear-gradient(135deg, #000, #434343); }
+.wa { background: linear-gradient(135deg, #25D366, #3ee97f); }
+.mail { background: linear-gradient(135deg, #ff5722, #ff784e); }
+.more { background: linear-gradient(135deg, #4caf50, #6fdc6f); }
+.linkedin { 
+  background: linear-gradient(135deg, #0077b5, #00a0dc); 
+}
+
+.telegram { 
+  background: linear-gradient(135deg, #0088cc, #00c6ff); 
+}
+
+
 
 .social-share button.social-Achivments-icon:hover {
   background-color: var(--secondary-color);
@@ -785,4 +798,164 @@
     font-weight: 600;
     clip-path: polygon(0 0, 92% 0, 100% 50%, 92% 100%, 0 100%);
   }
+}
+
+.achievement-details-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 25px;
+  background: linear-gradient(135deg, #f9fafb, #f3f4f6);
+  border-radius: 16px;
+  box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.08);
+  margin-top: 25px;
+  justify-content: space-between;
+  transition: all 0.3s ease;
+}
+
+/* Each detail card */
+.achievement-detail {
+  flex: 1 1 45%;
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  color: #222;
+  background: #fff;
+  padding: 14px 18px;
+  border-radius: 10px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.achievement-detail:hover {
+  transform: translateY(-3px);
+  box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.12);
+}
+
+/* Emojis */
+.achievement-detail .emoji {
+  margin-right: 10px;
+  font-size: 20px;
+}
+
+/* Text */
+.achievement-detail .text {
+  font-weight: 500;
+  color: #333;
+}
+
+/* Specific Class Styling */
+.achievement-detail.date { border-left: 4px solid #3b82f6; }      /* Blue */
+.achievement-detail.name { border-left: 4px solid #f59e0b; }      /* Amber */
+.achievement-detail.address { border-left: 4px solid #10b981; }   /* Green */
+.achievement-detail.category { border-left: 4px solid #6366f1; }  /* Indigo */
+.achievement-detail.effort { border-left: 4px solid #ef4444; }    /* Red */
+.achievement-detail.provider { border-left: 4px solid #8b5cf6; }  /* Purple */
+
+/* Responsive Design */
+@media (max-width: 992px) {
+  .achievement-detail {
+    flex: 1 1 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .achievement-details-footer {
+    padding: 18px;
+    gap: 15px;
+  }
+
+  .achievement-detail {
+    font-size: 15px;
+    padding: 12px 14px;
+  }
+
+  .achievement-detail .emoji {
+    font-size: 18px;
+  }
+}
+
+
+/* Sidebar container */
+.AchivmentCmt-sidebar {
+  background: #f9fafc;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  margin-top: 25px;
+}
+
+/* Title */
+.AchivmentCmt-title {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #2c3e50;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* List container */
+.AchivmentCmt-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Each Comment */
+.AchivmentCmt-item {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.AchivmentCmt-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+/* Field Labels */
+.AchivmentCmt-field {
+  font-size: 18px;
+  margin: 4px 0;
+  color: #34495e;
+}
+
+.AchivmentCmt-field span {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+/* Message section */
+.AchivmentCmt-message {
+  margin-top: 8px;
+  font-size: 18px;
+  line-height: 1.5;
+  color: #555;
+  background: #f4f6f8;
+  padding: 10px;
+  border-left: 4px solid #4a90e2;
+  border-radius: 6px;
+}
+
+
+.AchivmentCmt-readmore {
+  background: none;
+  border: none;
+  color: #1976d2;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.2s ease;
+}
+
+.AchivmentCmt-readmore:hover {
+  color: #0d47a1;
+  text-decoration: underline;
 }

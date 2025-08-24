@@ -20,6 +20,9 @@ const blogRoutes = require("./Routes/blogRoutes");
 const uruRoutes = require("./Routes/uruRoutes");
 const categoryRoutes = require("./Routes/categoryRoutes");
 const achievementRoutes = require('./Routes/achievementRoutes');
+const achivmentCommentRoutes = require('./Routes/achivmentCommentRoutes');
+const blogFeedbackRoutes = require('./Routes/blogFeedbackRoutes');
+
 
 
 dotenv.config();
@@ -47,6 +50,10 @@ app.use("/api/blogs", blogRoutes);
 app.use("/api/uru", uruRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/achievements', achievementRoutes);
+app.use('/api/comment', achivmentCommentRoutes);
+app.use("/api/blogcmt", blogFeedbackRoutes);
+
+
 
 
 app.get('/', (req, res) => {

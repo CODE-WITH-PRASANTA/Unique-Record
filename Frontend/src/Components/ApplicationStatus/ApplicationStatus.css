@@ -96,6 +96,7 @@
   }
 
   .Application-status-heading {
+    margin-top: 30px;
     font-size: 26px;
   }
 
@@ -555,4 +556,64 @@
 .payment-successful .transaction-id:hover {
   background: #edf2f7;
   border-color: #a0aec0;
+}
+.Application-status-date {
+  font-size: 15px;
+  font-weight: 500;
+  color: #444;
+  margin-top: 6px;
+  font-style: italic;
+  background: linear-gradient(90deg, #eceff1, #f5f5f5);
+  padding: 6px 12px;
+  border-left: 3px solid #6a11cb;
+  border-radius: 6px;
+  display: inline-block;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.Application-status-date:hover {
+  background: #f9f9f9;
+  color: #222;
+  transform: translateY(-2px);
+}
+
+.Application-status-circle {
+  width: 50px; 
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+/* Icon inside circle */
+.Application-status-icon {
+  font-size: 28px;
+  color: white;
+}
+
+/* Success circle */
+.green {
+  background-color: #28a745;
+}
+
+/* Make Payment blinking & slightly bigger */
+.blink-circle {
+  background-color: #f06595;
+  width: 60px;   /* slightly bigger */
+  height: 60px;  /* slightly bigger */
+  animation: blink 1s infinite, scalePulse 1s infinite;
+}
+
+@keyframes blink {
+  0%, 50%, 100% { opacity: 1; }
+  25%, 75% { opacity: 0.5; }
+}
+
+@keyframes scalePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); } /* grows bigger in pulse */
 }
