@@ -19,7 +19,7 @@ const Contact = () => {
 
     <ContactForm />
     <GoogleMapSection />
-    <NewsletterSection />
+    {/* <NewsletterSection /> */}
     
     </>
   );

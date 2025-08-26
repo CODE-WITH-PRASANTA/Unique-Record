@@ -1,15 +1,26 @@
-const express = require('express');
-const { createFreeQuote, getAllFreeQuotes, deleteFreeQuote } = require('../Controllers/freeQuoteController');
-
+const express = require("express");
 const router = express.Router();
+const {
+  createFreeQuote,
+  getAllFreeQuotes,
+  getPublishedFreeQuotes,
+  togglePublishFreeQuote,
+  deleteFreeQuote,
+} = require("../Controllers/freeQuoteController");
 
-// POST -> Create a new Free Quote
-router.post('/create', createFreeQuote);
+// ✅ Route for creating quote
+router.post("/create", createFreeQuote);
 
-// GET -> Get all Free Quotes
-router.get('/', getAllFreeQuotes);
+// Get all quotes (admin)
+router.get("/", getAllFreeQuotes);
 
-// DELETE -> Delete a Free Quote by ID
-router.delete('/:id', deleteFreeQuote);
+// Get only published quotes (public)
+router.get("/published", getPublishedFreeQuotes);
+
+// Publish/Unpublish quote
+router.put("/:id/publish", togglePublishFreeQuote);
+
+// Delete quote
+router.delete("/:id", deleteFreeQuote);
 
 module.exports = router;

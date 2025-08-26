@@ -9,6 +9,9 @@ const freeQuoteSchema = new mongoose.Schema(
     designation: { type: String, trim: true },
     address: { type: String, trim: true },
     message: { type: String, required: true },
+
+    // NEW FIELD
+    isPublished: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

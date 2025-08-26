@@ -1,41 +1,56 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
+import { API_URL } from '../../Api'; // e.g., "http://localhost:5007/api"
+import profileDefault from "../../assets/default-profile.png"; // default profile image
 import "./Testimonials.css";
 
-import profile1 from "../../assets/profile-pic.png";
-import profile2 from "../../assets/profile-pic.png";
-import profile3 from "../../assets/profile-pic.png";
-import profile4 from "../../assets/profile-pic.png";
-import profile5 from "../../assets/profile-pic.png";
-import profile6 from "../../assets/profile-pic.png";
-import profile7 from "../../assets/profile-pic.png";
-import profile8 from "../../assets/profile-pic.png";
-import profile9 from "../../assets/profile-pic.png";
-import profile10 from "../../assets/profile-pic.png";
-
-const reviews = [
-  { name: "Dianne Russell", role: "Founder", image: profile1 },
-  { name: "Priscilla Lucas", role: "Founder", image: profile2 },
-  { name: "James Anderson", role: "CEO", image: profile3 },
-  { name: "Sophia Patel", role: "Manager", image: profile4 },
-  { name: "Michael Chen", role: "Entrepreneur", image: profile5 },
-  { name: "Emma Johnson", role: "Developer", image: profile6 },
-  { name: "William Brown", role: "Designer", image: profile7 },
-  { name: "Olivia Wilson", role: "Marketer", image: profile8 },
-  { name: "Liam Martinez", role: "Consultant", image: profile9 },
-  { name: "Isabella Thomas", role: "Freelancer", image: profile10 },
-];
-
 const Testimonials = () => {
+  const [reviews, setReviews] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  // Fetch published quotes from backend
+  const fetchReviews = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`${API_URL}/freequotes/published`);
+      const data = await res.json();
+      if (data.success) {
+        // Map backend data to review format
+        const formattedReviews = data.data.map((item) => ({
+          name: item.name,
+          role: item.designation || "Participant",
+          image: profileDefault,
+          feedback: item.message,
+        }));
+        setReviews(formattedReviews);
+      } else {
+        setError("Failed to fetch testimonials");
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Something went wrong while fetching testimonials");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchReviews();
+  }, []);
+
+  if (loading) return <p style={{ textAlign: "center" }}>Loading testimonials...</p>;
+  if (error) return <p style={{ textAlign: "center", color: "red" }}>{error}</p>;
+
   return (
     <section className="Testimonials-section">
       <div className="Testimonials-header">
-        <h2>What people say's about us</h2>
+        <h2>What people say about us</h2>
       </div>
-      
+
       <div className="Testimonials-desktop">
         <Swiper
           modules={[Pagination]}
@@ -52,14 +67,12 @@ const Testimonials = () => {
                   <p>{review.role}</p>
                 </div>
               </div>
-              <p className="Testimonials-text">
-                Campoal is great for people to bring changes to what they believe in, it's nice to see some good morals and common sense being acknowledged where modern governments fail.
-              </p>
+              <p className="Testimonials-text">{review.feedback}</p>
             </SwiperSlide>
           ))}
         </Swiper>
       </div>
-      
+
       <div className="Testimonials-mobile">
         <Swiper
           modules={[Pagination]}
@@ -76,9 +89,7 @@ const Testimonials = () => {
                   <p>{review.role}</p>
                 </div>
               </div>
-              <p className="Testimonials-text">
-                Campoal is great for people to bring changes to what they believe in, it's nice to see some good morals and common sense being acknowledged where modern governments fail.
-              </p>
+              <p className="Testimonials-text">{review.feedback}</p>
             </SwiperSlide>
           ))}
         </Swiper>

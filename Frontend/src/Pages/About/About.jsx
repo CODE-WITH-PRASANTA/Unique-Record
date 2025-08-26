@@ -3,8 +3,8 @@ import "./About.css";
 import WhoWeAre from "../../Components/WhoWeAre/WhoWeAre";
 import AboutMission from "../../Components/AboutMission/AboutMission";
 import WhyChooseUs from "../../Components/WhyChooseUs/WhyChooseUs";
-import AboutAgent from "../../Components/AboutAgent/AboutAgent";
 import ClientFeedBack from "../../Components/ClientsFeedback/ClientsFeedBack";
+import MeetOurAgent from "../../Components/MeetOurAgent/MeetOurAgent";
 
 const AboutUs = () => {
 
@@ -26,7 +26,7 @@ const AboutUs = () => {
       <WhoWeAre />
       <AboutMission />
       <WhyChooseUs />
-      <AboutAgent />
+      <MeetOurAgent />
       <ClientFeedBack />
     </>
   );

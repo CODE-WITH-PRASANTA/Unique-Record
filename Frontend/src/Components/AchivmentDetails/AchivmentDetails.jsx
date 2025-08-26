@@ -3,6 +3,7 @@ import './AchivmentDetails.css';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { API_URL } from '../../Api';
+import { Helmet } from "react-helmet";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faQuoteLeft, faPrint, faEnvelope, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
@@ -22,9 +23,7 @@ const AchivmentDetails = () => {
   const [showAllCategories, setShowAllCategories] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [status, setStatus] = useState(""); // to show success or error messages
-  const [comments, setComments] = useState([]);
-  const [loadingComments, setLoadingComments] = useState(true);
-  const [expandedComments, setExpandedComments] = useState({}); // track readmore per comment
+  const [expandedComments, setExpandedComments] = useState({}); 
 
   useEffect(() => {
     const fetchAchievement = async () => {
@@ -87,44 +86,39 @@ const AchivmentDetails = () => {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-    // handle form submit
     const handleSubmit = async (e) => {
-      e.preventDefault();
+  e.preventDefault();
+  try {
+    const res = await axios.post(`${API_URL}/comment/feedback`, formData, {
+      headers: { 'Content-Type': 'application/json' }
+    });
+    setStatus("✅ Feedback submitted successfully!");
+    setFormData({ name: "", email: "", phone: "", subject: "", address: "", message: "" });
+  } catch (err) {
+    console.error(err.response.data);
+    setStatus(`❌ Failed to submit feedback. ${err.response.data.message || 'Try again.'}`);
+  }
+};
 
-      try {
-        const res = await axios.post(`${API_URL}/comment/feedback`, formData, {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        });
-        setStatus("✅ Feedback submitted successfully!");
-        setFormData({
-          name: "",
-          email: "",
-          phone: "",
-          subject: "",
-          address: "",
-          message: "",
-        }); // reset form
-      } catch (err) {
-        console.error(err.response.data); // log the error response
-        setStatus(`❌ Failed to submit feedback. ${err.response.data.message || 'Try again.'}`);
-      }
-    };
-    // Fetch published comments from backend
-    useEffect(() => {
-      const fetchComments = async () => {
-        try {
-          const res = await axios.get(`${API_URL}/comment/feedbacks`);
-          setComments(res.data);
-        } catch (error) {
-          console.error("Error fetching comments:", error);
-        } finally {
-          setLoadingComments(false);
-        }
-      };
-      fetchComments();
-    }, []);
+
+   const [comments, setComments] = useState([]);
+const [loadingComments, setLoadingComments] = useState(true);
+
+useEffect(() => {
+  const fetchComments = async () => {
+    try {
+      const res = await axios.get(`${API_URL}/comment/feedbacks`);
+      setComments(res.data);
+    } catch (error) {
+      console.error("Error fetching comments:", error);
+    } finally {
+      setLoadingComments(false);
+    }
+  };
+  fetchComments();
+}, []);
+
+
 
     // Toggle read more
     const toggleReadMore = (id) => {
@@ -136,48 +130,64 @@ const AchivmentDetails = () => {
 
   return (
     <div className="Achivments-details-container">
+        <Helmet>
+          <title>{achivmentDetails.title}</title>
+          <meta name="description" content={achivmentDetails.content?.replace(/<[^>]+>/g, '').substring(0, 150)} />
+
+          {/* Open Graph Tags */}
+          <meta property="og:title" content={achivmentDetails.title} />
+          <meta property="og:description" content={`${achivmentDetails.title} - Read more inside`} />
+          <meta property="og:image" content={achivmentDetails.image} />
+          <meta property="og:url" content={window.location.href} />
+          <meta property="og:type" content="Provider" />
+
+          {/* Twitter Card */}
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content={achivmentDetails.title} />
+          <meta name="twitter:description" content={`${achivmentDetails.title} - Read more inside`} />
+          <meta name="twitter:image" content={achivmentDetails.image} />
+        </Helmet>
       <div className="Achivments-details-main-content">
         <div className="Achivments-details-content-area">
           <div className="Achivments-details-image-section-one">
             <img src={achivmentDetails.image} alt={achivmentDetails.title} />
             <div className="achievement-details-footer">
-  {/* Date */}
-  <div className="achievement-detail date">
-    <span className="emoji">📅</span>
-    <span className="text">Date: {new Date(achivmentDetails.createdAt).toLocaleDateString()}</span>
-  </div>
+                {/* Date */}
+                <div className="achievement-detail date">
+                  <span className="emoji">📅</span>
+                  <span className="text">Date: {new Date(achivmentDetails.createdAt).toLocaleDateString()}</span>
+                </div>
 
-  {/* Achiever Name */}
-  <div className="achievement-detail name">
-    <span className="emoji">🏆</span>
-    <span className="text">Achiever Name: {achivmentDetails.achieverName}</span>
-  </div>
+                {/* Achiever Name */}
+                <div className="achievement-detail name">
+                  <span className="emoji">🏆</span>
+                  <span className="text">Achiever Name: {achivmentDetails.achieverName}</span>
+                </div>
 
-  {/* Address */}
-  <div className="achievement-detail address">
-    <span className="emoji">📍</span>
-    <span className="text">Address: {achivmentDetails.address}</span>
-  </div>
+                {/* Address */}
+                <div className="achievement-detail address">
+                  <span className="emoji">📍</span>
+                  <span className="text">Address: {achivmentDetails.address}</span>
+                </div>
 
-  {/* Category */}
-  <div className="achievement-detail category">
-    <span className="emoji">📂</span>
-    <span className="text">Category: {achivmentDetails.category}</span>
-  </div>
+                {/* Category */}
+                <div className="achievement-detail category">
+                  <span className="emoji">📂</span>
+                  <span className="text">Category: {achivmentDetails.category}</span>
+                </div>
 
-  {/* Effort Type */}
-  <div className="achievement-detail effort">
-    <span className="emoji">💪</span>
-    <span className="text">Effort Type: {achivmentDetails.effortType}</span>
-  </div>
+                {/* Effort Type */}
+                <div className="achievement-detail effort">
+                  <span className="emoji">💪</span>
+                  <span className="text">Effort Type: {achivmentDetails.effortType}</span>
+                </div>
 
-  {/* Provider */}
-  <div className="achievement-detail provider">
-    <span className="emoji">🤝</span>
-    <span className="text">Provider: {achivmentDetails.providerName}</span>
-  </div>
+                {/* Provider */}
+                <div className="achievement-detail provider">
+                  <span className="emoji">🤝</span>
+                  <span className="text">Provider: {achivmentDetails.providerName}</span>
+                </div>
           </div>
-
           </div>
 
             {/* 🔽 Record Holder More Details Section 🔽 */}
@@ -221,27 +231,96 @@ const AchivmentDetails = () => {
                   <span key={tag} className="Achivments-details-tag">{tag}</span>
                 ))}
               </div>
-              <div className="social-share">
-                <strong>Share:</strong>
-                <button className="social-Achivments-icon fb" onClick={() => window.open(`https://www.facebook.com/sharer/sharer.php?u=${window.location.href}`, '_blank')}>
-                  <FontAwesomeIcon icon={['fab', 'facebook-f']} />
-                </button>
-                <button className="social-Achivments-icon x" onClick={() => window.open(`https://twitter.com/intent/tweet?url=${window.location.href}`, '_blank')}>
-                  <FontAwesomeIcon icon={['fab', 'twitter']} />
-                </button>
-                <button className="social-Achivments-icon linkedin" onClick={() => window.open(`https://www.linkedin.com/sharing/share?url=${window.location.href}`, '_blank')}>
-                  <FontAwesomeIcon icon={['fab', 'linkedin-in']} />
-                </button>
-                <button className="social-Achivments-icon wa" onClick={() => window.open(`https://wa.me/?text=${window.location.href}`, '_blank')}>
-                  <FontAwesomeIcon icon={['fab', 'whatsapp']} />
-                </button>
-                <button className="social-Achivments-icon telegram" onClick={() => window.open(`https://telegram.me/share/url?url=${window.location.href}`, '_blank')}>
-                  <FontAwesomeIcon icon={['fab', 'telegram-plane']} />
-                </button>
-                <button className="social-Achivments-icon more" onClick={() => window.location.href = `mailto:?subject=${achivmentDetails.title}&body=${window.location.href}`}>
-                  <FontAwesomeIcon icon={faEnvelope} />
-                </button>
-              </div>
+           <div className="social-share">
+              <strong>Share:</strong>
+
+              {/* Facebook */}
+              <button
+                className="social-Achivments-icon fb"
+                onClick={() =>
+                  window.open(
+                    `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`,
+                    "_blank"
+                  )
+                }
+              >
+                <FontAwesomeIcon icon={['fab', 'facebook-f']} />
+              </button>
+
+              {/* Twitter (X) */}
+              <button
+                className="social-Achivments-icon x"
+                onClick={() =>
+                  window.open(
+                    `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+                      `${achivmentDetails.title}\n\n©Provider: ${achivmentDetails.providerName}\n\nRead link 👇\n${window.location.href}`
+                    )}`,
+                    "_blank"
+                  )
+                }
+              >
+              <FaXTwitter />
+
+              </button>
+
+              {/* LinkedIn */}
+              <button
+                className="social-Achivments-icon linkedin"
+                onClick={() =>
+                  window.open(
+                    `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}&summary=${encodeURIComponent(
+                      `${achivmentDetails.title}\n\n©Provider: ${achivmentDetails.providerName}\n\nRead link 👇\n${window.location.href}`
+                    )}`,
+                    "_blank"
+                  )
+                }
+              >
+                <FontAwesomeIcon icon={['fab', 'linkedin-in']} />
+              </button>
+
+              {/* WhatsApp */}
+              <button
+                className="social-Achivments-icon wa"
+                onClick={() =>
+                  window.open(
+                    `https://wa.me/?text=${encodeURIComponent(
+                      `${achivmentDetails.title}\n\n©Provider: ${achivmentDetails.providerName}\n\nRead link 👇\n${window.location.href}`
+                    )}`,
+                    "_blank"
+                  )
+                }
+              >
+                <FontAwesomeIcon icon={['fab', 'whatsapp']} />
+              </button>
+
+              {/* Telegram */}
+              <button
+                className="social-Achivments-icon telegram"
+                onClick={() =>
+                  window.open(
+                    `https://telegram.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(
+                      `${achivmentDetails.title}\n\n©Provider: ${achivmentDetails.providerName}\n\nRead link 👇\n${window.location.href}`
+                    )}`,
+                    "_blank"
+                  )
+                }
+              >
+                <FontAwesomeIcon icon={['fab', 'telegram-plane']} />
+              </button>
+
+              {/* Email */}
+              <button
+                className="social-Achivments-icon more"
+                onClick={() =>
+                  (window.location.href = `mailto:?subject=${achivmentDetails.title}&body=${encodeURIComponent(
+                    `${achivmentDetails.title}\n\n©Provider: ${achivmentDetails.providerName}\n\nRead link 👇\n${window.location.href}`
+                  )}`)
+                }
+              >
+                <FontAwesomeIcon icon={faEnvelope} />
+              </button>
+            </div>
+
             </div>
           </div>
 
@@ -340,7 +419,7 @@ const AchivmentDetails = () => {
                 <img src={post.image} alt="Post" />
                 <div className="Achivments-details-recent-post-content">
                   <h3>{post.title}</h3>
-                  <a href={`/achievement/${post._id}`} className="Achivments-details-read-more">Read More</a>
+                  <a href={`/achivment-details/${post._id}`} className="Achivments-details-read-more">Read More</a>
                 </div>
               </div>
             ))}

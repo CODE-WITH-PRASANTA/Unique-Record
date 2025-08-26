@@ -18,6 +18,27 @@
     color: #333;
     margin: 0;
   }
+  /* Search Bar Styling */
+.donation-search {
+  margin: 20px 0;
+  text-align: right; /* Align search to the right */
+}
+
+.donation-search input {
+  width: 300px;           /* Adjust width as needed */
+  padding: 8px 12px;      /* Add padding inside input */
+  border: 1px solid #ccc; /* Light gray border */
+  border-radius: 5px;     /* Rounded corners */
+  font-size: 14px;        /* Font size */
+  transition: all 0.3s ease;
+}
+
+.donation-search input:focus {
+  outline: none;          /* Remove default outline */
+  border-color: #E94e77; /* Highlight border color on focus */
+  box-shadow: 0 0 5px rgba(233, 78, 119, 0.5); /* Soft glow */
+}
+
   
   .notification {
     display: flex;

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './UserOpinion.css';
-import { API_URL } from '../../Api'; // Example: "http://localhost:5000/api"
-  import Swal from "sweetalert2";
-
+import { API_URL } from '../../Api'; 
+import Swal from "sweetalert2";
 
 const UserOpinion = () => {
   const [data, setData] = useState([]);
@@ -29,52 +28,92 @@ const UserOpinion = () => {
     }
   };
 
-
-// Delete a quote
-const handleDelete = async (id) => {
-  Swal.fire({
-    title: "Are you sure?",
-    text: "You won't be able to revert this!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#3085d6",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Yes, delete it!",
-  }).then(async (result) => {
-    if (result.isConfirmed) {
-      try {
-        const response = await fetch(`${API_URL}/freequotes/${id}`, {
-          method: "DELETE",
-        });
-        const resultData = await response.json();
-
-        if (response.ok) {
-          setData((prev) => prev.filter((item) => item._id !== id));
-
-          Swal.fire({
-            title: "Deleted!",
-            text: resultData.message || "Your file has been deleted.",
-            icon: "success",
+  // Delete a quote
+  const handleDelete = async (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const response = await fetch(`${API_URL}/freequotes/${id}`, {
+            method: "DELETE",
           });
-        } else {
+          const resultData = await response.json();
+
+          if (response.ok) {
+            setData((prev) => prev.filter((item) => item._id !== id));
+
+            Swal.fire({
+              title: "Deleted!",
+              text: resultData.message || "Your file has been deleted.",
+              icon: "success",
+            });
+          } else {
+            Swal.fire({
+              title: "Error!",
+              text: resultData.message || "Delete failed!",
+              icon: "error",
+            });
+          }
+        } catch (err) {
+          console.error(err);
           Swal.fire({
             title: "Error!",
-            text: resultData.message || "Delete failed!",
+            text: "Something went wrong while deleting.",
             icon: "error",
           });
         }
-      } catch (err) {
-        console.error(err);
+      }
+    });
+  };
+
+  // ✅ Publish / Unpublish a quote
+  const handleTogglePublish = async (id, currentStatus) => {
+    try {
+      const response = await fetch(`${API_URL}/freequotes/${id}/publish`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ isPublished: !currentStatus }),
+      });
+
+      const resultData = await response.json();
+
+      if (response.ok) {
+        setData((prev) =>
+          prev.map((item) =>
+            item._id === id ? { ...item, isPublished: !currentStatus } : item
+          )
+        );
+
+        Swal.fire({
+          title: "Success!",
+          text: resultData.message,
+          icon: "success",
+        });
+      } else {
         Swal.fire({
           title: "Error!",
-          text: "Something went wrong while deleting.",
+          text: resultData.message || "Failed to update publish status.",
           icon: "error",
         });
       }
+    } catch (err) {
+      console.error(err);
+      Swal.fire({
+        title: "Error!",
+        text: "Something went wrong while updating publish status.",
+        icon: "error",
+      });
     }
-  });
-};
-
+  };
 
   // Toggle Read More/Less
   const toggleExpand = (id) => {
@@ -108,6 +147,7 @@ const handleDelete = async (id) => {
               <th>Designation</th>
               <th>Address</th>
               <th>Message</th>
+              <th>Status</th> {/* ✅ new column */}
               <th>Actions</th>
             </tr>
           </thead>
@@ -139,7 +179,27 @@ const handleDelete = async (id) => {
                       </button>
                     )}
                   </td>
+                  {/* ✅ Publish status column */}
                   <td>
+                    {user.isPublished ? (
+                      <span className="status published">Published</span>
+                    ) : (
+                      <span className="status unpublished">Unpublished</span>
+                    )}
+                  </td>
+                  <td>
+                    {/* ✅ Publish/Unpublish button */}
+                    <button
+                      className={`UserOpinion-publish-btn ${
+                        user.isPublished ? "unpublish" : "publish"
+                      }`}
+                      onClick={() =>
+                        handleTogglePublish(user._id, user.isPublished)
+                      }
+                    >
+                      {user.isPublished ? "Unpublish" : "Publish"}
+                    </button>
+
                     <button
                       className="UserOpinion-delete-btn"
                       onClick={() => handleDelete(user._id)}
@@ -151,7 +211,7 @@ const handleDelete = async (id) => {
               ))
             ) : (
               <tr>
-                <td colSpan="9" style={{ textAlign: "center" }}>
+                <td colSpan="10" style={{ textAlign: "center" }}>
                   No data available
                 </td>
               </tr>

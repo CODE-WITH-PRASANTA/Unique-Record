@@ -158,3 +158,32 @@
     font-size: 12px;
   }
 }
+/* Base button style */
+.UserOpinion-publish-btn {
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  margin-bottom: 20px;
+}
+
+/* Gradient for Publish */
+.UserOpinion-publish-btn.publish {
+  background: linear-gradient(135deg, #00c6ff, #0072ff);
+}
+
+/* Gradient for Unpublish */
+.UserOpinion-publish-btn.unpublish {
+  background: linear-gradient(135deg, #ff512f, #dd2476);
+}
+
+/* Hover Effect */
+.UserOpinion-publish-btn:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+}

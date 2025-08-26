@@ -205,19 +205,36 @@ const MakeUserPost = () => {
         {/* Content */}
         <div className="Make-User-Post-FormGroupFull">
           <label>Content<span>*</span></label>
-          <Editor
-            apiKey="38wljwg2resc6xba8ypjqp4duobboibboshf3czbuyv5iulv"
-            value={formData.content}
-            init={{
-              plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
-              toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
-              menubar: false,
-              height: 300,
-              branding: false,
-              promotion: false,
-            }}
-            onEditorChange={handleEditorChange}
-          />
+         <Editor
+          apiKey="38wljwg2resc6xba8ypjqp4duobboibboshf3czbuyv5iulv"
+          init={{
+            height: 500,
+            plugins:
+              'anchor autolink charmap codesample emoticons image link lists media ' +
+              'searchreplace table visualblocks visualchars wordcount code paste preview ' +
+              'fullscreen insertdatetime advlist help',
+            toolbar:
+              'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough ' +
+              '| forecolor backcolor | link image media table | align lineheight | numlist bullist indent outdent ' +
+              '| emoticons charmap codesample | copy cut paste | removeformat | fullscreen preview code help',
+            menubar: 'file edit view insert format tools table help',
+            toolbar_mode: 'sliding',
+            branding: false,
+            contextmenu: 'copy cut paste link image table',
+            mobile: {
+              menubar: true,
+              plugins: 'autosave lists autolink paste',
+              toolbar:
+                'undo redo | bold italic underline | forecolor backcolor | ' +
+                'align bullist numlist | copy cut paste',
+            },
+            paste_data_images: true,
+            paste_as_text: true,
+          }}
+          value={formData.content}  
+          onEditorChange={handleEditorChange}
+        />
+
         </div>
 
         {/* Author Information */}

@@ -6,6 +6,7 @@ import { FiDownload } from "react-icons/fi";
 import { API_URL } from '../../Api';
 import { useParams } from "react-router-dom";
 import { QRCodeCanvas } from "qrcode.react";
+import { Helmet } from "react-helmet";
 
 
 const AchiversAbout = () => {
@@ -142,6 +143,17 @@ const [showFullPurpose, setShowFullPurpose] = useState(false);
 
   return (
     <div className="achiver-about-wrapper">
+      <Helmet>
+        <title>{uru.applicantName} | URU Achiever</title>
+        <meta property="og:title" content={`${uru.applicantName}'s Unique Record`} />
+        <meta property="og:description" content={uru.recordDescription?.slice(0, 150) || "Unique Record on URU"} />
+        <meta property="og:image" content={uru.photoUrl || uru.certificateUrl} />
+        <meta property="og:url" content={sharableLink} />
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary_large_image" />
+      </Helmet>
+
+
       {/* Header Card */}
      <div className="achiver-about-card">
   {/* Left Side Image */}
@@ -215,6 +227,7 @@ const [showFullPurpose, setShowFullPurpose] = useState(false);
     >
       <FiDownload className="Achiver-download-icon" /> Download
     </button>
+
     {/* Share Buttons */}
     <div className="achiver-share-buttons">
       <button
@@ -267,6 +280,7 @@ const [showFullPurpose, setShowFullPurpose] = useState(false);
       </button>
     </div>
   </div>
+
       </div>
       {/* Tabs Section */}
       <div className="achiver-tabs">

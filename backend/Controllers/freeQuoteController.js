@@ -18,6 +18,7 @@ const createFreeQuote = async (req, res) => {
       designation,
       address,
       message,
+      isPublished: false, // default unpublished
     });
 
     const savedQuote = await freeQuote.save();
@@ -31,6 +32,7 @@ const createFreeQuote = async (req, res) => {
       },
     });
 
+   
     const mailOptions = {
       from: `"UNIQUE RECORD OF UNIVERSE ADMIN TEAM" <${process.env.EMAIL_USER}>`,
       to: email,
@@ -89,6 +91,43 @@ const getAllFreeQuotes = async (req, res) => {
   }
 };
 
+// @desc Get only Published Free Quotes
+const getPublishedFreeQuotes = async (req, res) => {
+  try {
+    const publishedQuotes = await FreeQuote.find({ isPublished: true }).sort({ createdAt: -1 });
+    res.status(200).json({ success: true, data: publishedQuotes });
+  } catch (err) {
+    console.error("Error fetching published Free Quotes:", err);
+    res.status(500).json({ message: 'Server Error' });
+  }
+};
+
+// @desc Publish/Unpublish a Free Quote
+const togglePublishFreeQuote = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { isPublished } = req.body; // expects true/false from frontend
+
+    const updatedQuote = await FreeQuote.findByIdAndUpdate(
+      id,
+      { isPublished },
+      { new: true }
+    );
+
+    if (!updatedQuote) {
+      return res.status(404).json({ message: "Quote not found" });
+    }
+
+    res.status(200).json({
+      message: `Quote ${isPublished ? "Published ✅" : "Unpublished ❌"}`,
+      data: updatedQuote,
+    });
+  } catch (err) {
+    console.error("Error updating publish status:", err);
+    res.status(500).json({ message: "Server Error" });
+  }
+};
+
 // @desc Delete a Free Quote by ID
 const deleteFreeQuote = async (req, res) => {
   try {
@@ -109,5 +148,7 @@ const deleteFreeQuote = async (req, res) => {
 module.exports = {
   createFreeQuote,
   getAllFreeQuotes,
+  getPublishedFreeQuotes,
+  togglePublishFreeQuote,
   deleteFreeQuote,
 };

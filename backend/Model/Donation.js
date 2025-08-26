@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const donationSchema = new mongoose.Schema({
+  paymentNumber: { type: String, unique: true }, // NEW
   amount: { type: Number, required: true },
   name: { type: String, required: true },
   phone: { type: String, required: true },
@@ -13,5 +14,6 @@ const donationSchema = new mongoose.Schema({
   signature: { type: String },
   createdAt: { type: Date, default: Date.now },
 });
+
 
 module.exports = mongoose.model("Donation", donationSchema);

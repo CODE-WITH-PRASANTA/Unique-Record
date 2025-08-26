@@ -16,8 +16,35 @@ const OurAchievementsRecords = () => {
   const [visibleCategories, setVisibleCategories] = useState(6);
   const [showMoreCategories, setShowMoreCategories] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [filteredAchievements, setFilteredAchievements] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleSubscribe = async (e) => {
+    e.preventDefault();
+    setMessage("");
+
+    if (!email.trim()) {
+      setMessage("Please enter your email");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const response = await axios.post(`${API_URL}/newsletter/subscribe`, { email });
+      setMessage(response.data.message);
+      setEmail(""); // clear input on success
+    } catch (error) {
+      if (error.response) {
+        setMessage(error.response.data.message); // show server error message
+      } else {
+        setMessage("Something went wrong. Please try again.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     axios.get(`${API_URL}/achievements/get-all-achievements`)
@@ -53,8 +80,6 @@ const OurAchievementsRecords = () => {
 
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
-    const filtered = achievements.filter(achievement => achievement.category === category.name);
-    setFilteredAchievements(filtered);
   };
 
   const handleSearch = (e) => {
@@ -66,73 +91,80 @@ const OurAchievementsRecords = () => {
     return words.slice(0, wordLimit).join(' ') + (words.length > wordLimit ? '...' : '');
   };
 
+  // Unified filtered achievements based on category & search term
+  const getFilteredAchievements = () => {
+    let filtered = achievements;
+
+    if (selectedCategory) {
+      filtered = filtered.filter(achievement => achievement.category === selectedCategory.name);
+    }
+
+    if (searchTerm.trim() !== '') {
+      filtered = filtered.filter(achievement =>
+        achievement.title.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    return filtered;
+  };
+
   return (
     <div className="our-achievements-record-container">
       <div className="our-achievements-record-main">
+        {/* Posts Section */}
         <div className="our-achievements-record-posts">
-          {selectedCategory ? 
-            filteredAchievements.filter(post => post.title.toLowerCase().includes(searchTerm.toLowerCase())).map((achievement, index) => (
-              <div key={index} className="our-achievements-record-post">
-                <img src={achievement.image} alt="Post 1" />
-                <div className="our-achievements-record-post-details">
-                  <div className="our-achievements-record-post-category">
-                    <strong>🏆 {achievement.category}</strong>
+          {getFilteredAchievements().map((achievement, index) => (
+            <div key={index} className="our-achievements-record-post">
+              <img src={achievement.image} alt={achievement.title} />
+              <div className="our-achievements-record-post-details">
+                <div className="our-achievements-record-post-category">
+                  <strong>🏆 {achievement.category}</strong>
+                  <span className="our-achievements-record-dot"></span>
+                  <span>📅 {moment(achievement.createdAt).format('MMMM DD, YYYY')}</span>
+
+                  <div className="our-achievements-record-post-category achiever-info">
                     <span className="our-achievements-record-dot"></span>
-                    <span>📅 {moment(achievement.createdAt).format('MMMM DD, YYYY')}</span>
-
-                    <div className="our-achievements-record-post-category achiever-info">
-                      <span className="our-achievements-record-dot"></span>
-                      <strong>👤 Achiever Name: {achievement.achieverName}</strong>
-                    </div>
-
-                    <span className="achievement-provider">🏢 Provider: {achievement.providerName}</span>
+                    <strong>👤 Achiever Name: {achievement.achieverName}</strong>
                   </div>
 
-                  <h2>{achievement.title}</h2>
-                  <p>{truncateDescription(achievement.shortDescription, 20)}</p>
-                  <Link to={`/achivment-details/${achievement._id}`} className="our-achievements-record-read-post">READ POST <FontAwesomeIcon icon={faArrowRight} /></Link>
+                  <span className="achievement-provider">🏢 Provider: {achievement.providerName}</span>
                 </div>
+
+                <h2>{achievement.title}</h2>
+                <p>{truncateDescription(achievement.shortDescription, selectedCategory ? 20 : 90)}</p>
+                <Link to={`/achivment-details/${achievement._id}`} className="our-achievements-record-read-post">
+                  READ POST <FontAwesomeIcon icon={faArrowRight} />
+                </Link>
               </div>
-            )) 
-            : 
-            achievements.filter(post => post.title.toLowerCase().includes(searchTerm.toLowerCase())).map((achievement, index) => (
-              <div key={index} className="our-achievements-record-post">
-                <img src={achievement.image} alt="Post 1" />
-                <div className="our-achievements-record-post-details">
-                  <div className="our-achievements-record-post-category">
-                    <strong>🏆 {achievement.category}</strong>
-                    <span className="our-achievements-record-dot"></span>
-                    <span>📅 {moment(achievement.createdAt).format('MMMM DD, YYYY')}</span>
-
-                    <div className="our-achievements-record-post-category achiever-info">
-                      <span className="our-achievements-record-dot"></span>
-                      <strong>👤 Achiever Name: {achievement.achieverName}</strong>
-                    </div>
-
-                    <span className="achievement-provider">🏢 Provider: {achievement.providerName}</span>
-                  </div>
-
-                  <h2>{achievement.title}</h2>
-                  <p>{truncateDescription(achievement.shortDescription, 90)}</p>
-                  <Link to={`/achivment-details/${achievement._id}`} className="our-achievements-record-read-post">READ POST <FontAwesomeIcon icon={faArrowRight} /></Link>
-                </div>
-              </div>
-            ))
-          }
+            </div>
+          ))}
         </div>
 
+        {/* Sidebar Section */}
         <div className="our-achievements-record-sidebar">
+
+          {/* Search Box */}
           <div className="our-achievements-record-search-box our-achievements-record-sidebar-section">
-            <input type="text" placeholder="Search" value={searchTerm} onChange={handleSearch} />
+            <input 
+              type="text" 
+              placeholder="Search" 
+              value={searchTerm} 
+              onChange={handleSearch} 
+            />
             <button>
               <FontAwesomeIcon icon={faSearch} className="our-achievements-record-search-icon" />
             </button>
           </div>
 
+          {/* Categories */}
           <div className="our-achievements-record-categories our-achievements-record-sidebar-section">
             <h2>Categories</h2>
             {categories.slice(0, visibleCategories).map((category, index) => (
-              <div key={index} className="our-achievements-record-category-item" onClick={() => handleCategoryClick(category)}>
+              <div 
+                key={index} 
+                className={`our-achievements-record-category-item ${selectedCategory?.name === category.name ? 'active' : ''}`} 
+                onClick={() => handleCategoryClick(category)}
+              >
                 <FontAwesomeIcon icon={faArrowRight} /> {category.name}
               </div>
             ))}
@@ -144,13 +176,14 @@ const OurAchievementsRecords = () => {
             )}
           </div>
 
+        {/* Latest Articles */}
           <div className="our-achievements-record-latest-articles our-achievements-record-sidebar-section">
             <h2>Latest Articles</h2>
             {latestPosts.map((post, index) => (
               <div key={index} className="our-achievements-record-article">
                 {index === 0 ? (
                   <div>
-                    <img src={post.image} alt="Article 1" />
+                    <img src={post.image} alt={post.title} />
                     <h3>{post.title}</h3>
                   </div>
                 ) : (
@@ -158,36 +191,33 @@ const OurAchievementsRecords = () => {
                     <h3>{post.title}</h3>
                   </div>
                 )}
-                <div className="our-achievements-record-read-now">READ NOW <FontAwesomeIcon icon={faArrowRight} /></div>
+                {/* Make READ NOW a clickable Link */}
+                <Link to={`/achivment-details/${post._id}`} className="our-achievements-record-read-now">
+                  READ NOW <FontAwesomeIcon icon={faArrowRight} />
+                </Link>
               </div>
             ))}
           </div>
 
-          <div className="our-achievements-record-subscribe our-achievements-record-sidebar-section">
+        <div className="our-achievements-record-subscribe our-achievements-record-sidebar-section">
             <h2>Subscribe To Our News</h2>
             <p>Find out about the last days and the latest promotions of our Corporation</p>
-            <div className="our-achievements-record-subscribe-form">
-              <input type="email" placeholder="Email" />
-              <button>
+            <form className="our-achievements-record-subscribe-form" onSubmit={handleSubscribe}>
+              <input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+              <button type="submit" disabled={loading}>
                 <FontAwesomeIcon icon={faPaperPlane} />
               </button>
-            </div>
-            <div className="our-achievements-record-social-icons">
-              <a href="#" target="_blank" rel="noopener noreferrer">
-                <FontAwesomeIcon icon={faFacebookF} />
-              </a>
-              <a href="#" target="_blank" rel="noopener noreferrer">
-                <FontAwesomeIcon icon={faInstagram} />
-              </a>
-              <a href="#" target="_blank" rel="noopener noreferrer">
-                <FontAwesomeIcon icon={faTwitter} />
-              </a>
-              <a href="#" target="_blank" rel="noopener noreferrer">
-                <FontAwesomeIcon icon={faWhatsapp} />
-              </a>
-            </div>
+            </form>
+            {message && <p className="subscribe-message">{message}</p>}
           </div>
 
+          {/* Tags */}
           <div className="our-achievements-record-tags our-achievements-record-sidebar-section">
             <h2>Tags</h2>
             <div className="our-achievements-record-tag-list">
@@ -196,6 +226,7 @@ const OurAchievementsRecords = () => {
               ))}
             </div>
           </div>
+
         </div>
       </div>
     </div>

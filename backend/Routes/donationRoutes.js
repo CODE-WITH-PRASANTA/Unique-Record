@@ -1,13 +1,14 @@
 const express = require("express");
 const router = express.Router();
-const { createOrder, verifyPayment , getAllDonations , sendDonationEmail } = require("../Controllers/donationController");
+const { createOrder, verifyPayment , getAllDonations  , deleteDonation} = require("../Controllers/donationController");
 
 router.post("/create-order", createOrder);
 router.post("/verify-payment", verifyPayment);
-router.get("/all", getAllDonations); // 👈 new route to get all donation data
+router.get("/all", getAllDonations); 
 
-// 👉 Admin Trigger Mail Route
-router.post("/send-mail/:donationId", sendDonationEmail);
+
+// DELETE donation route
+router.delete("/delete/:donationId", deleteDonation);
 
 
 module.exports = router;
