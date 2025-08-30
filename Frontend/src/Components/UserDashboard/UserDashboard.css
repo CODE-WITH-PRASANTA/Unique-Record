@@ -900,4 +900,156 @@
   box-shadow: none;
 }
 
+/* ===== Form group ===== */
+.achivment-form-group {
+  margin-bottom: 1.5rem;
+}
+.achivment-form-group label {
+  font-weight: 600;
+  color: #444;
+  display: block;
+  margin-bottom: 0.5rem;
+}
 
+/* ===== Input + buttons group ===== */
+.link-input-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+/* ===== Inputs ===== */
+.link-input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  background: linear-gradient(145deg, #f9fafb, #f3f4f6);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.link-input:focus {
+  border-color: #3b82f6;
+  outline: none;
+  box-shadow: 0 0 6px rgba(59, 130, 246, 0.3);
+}
+
+/* ===== Buttons general ===== */
+.step-btn {
+  padding: 8px 14px;
+  font-size: 14px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background: #e5e7eb;
+  color: #111827;
+  transition: all 0.3s ease;
+}
+.step-btn:hover {
+  background: #d1d5db;
+}
+
+/* ===== Add Button (blue instead of green) ===== */
+.step-btn-add {
+  background-color: #99a0ac;
+  color: white;
+}
+.step-btn-add:hover {
+  background-color: #99a0ac;
+}
+
+/* ===== Remove Button (neutral grey instead of red) ===== */
+.step-btn-remove {
+  background-color: #9ca3af;
+  color: white;
+}
+.step-btn-remove:hover {
+  background-color: #6b7280;
+}
+
+/* ===== File preview ===== */
+.file-preview-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 10px;
+}
+.file-preview {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  border-radius: 8px;
+  background: #f3f4f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+.file-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+.step-btn-remove-file {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background-color: #9ca3af;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background 0.3s ease;
+}
+.step-btn-remove-file:hover {
+  background-color: #6b7280;
+}
+
+/* ===== Videos & Documents ===== */
+.file-list {
+  margin-top: 10px;
+}
+.file-list-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+}
+.file-video {
+  width: 140px;
+  height: 90px;
+  border-radius: 8px;
+  background: #f3f4f6;
+}
+.file-name {
+  font-size: 14px;
+  color: #374151;
+}
+
+/* ===== Navigation footer ===== */
+.form-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+}
+.step-btn-prev {
+  background-color: #9ca3af;
+  color: white;
+}
+.step-btn-prev:hover {
+  background-color: #6b7280;
+}
+.step-btn-next {
+  background-color: #3b82f6;
+  color: white;
+}
+.step-btn-next:hover {
+  background-color: #2563eb;
+}

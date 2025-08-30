@@ -24,17 +24,26 @@ const uruSchema = new mongoose.Schema({
   dateOfAttempt: { type: Date, required: true },
   recordVenue: { type: String, required: true },
   organisationName: { type: String },
-  googleDriveLink: { type: String },
-  facebookLink: { type: String },
-  youtubeLink: { type: String },
-  instagramLink: { type: String },
-  linkedInLink: { type: String },
-  xLink: { type: String },
-  pinterestLink: { type: String },
-  otherMediaLink: { type: String },
-  photoUrl: { type: String },
-  videoUrl: { type: String },
-  documentUrl: { type: String },
+
+  // ✅ Make these arrays
+  googleDriveLink: [{ type: String }], 
+  facebookLink: [{ type: String }], 
+  youtubeLink: [{ type: String }], 
+  instagramLink: [{ type: String }], 
+  linkedInLink: [{ type: String }], 
+  xLink: [{ type: String }], 
+  pinterestLink: [{ type: String }], 
+  otherMediaLink: [{ type: String }], 
+
+  photos: [{ type: String }],    
+  videos: [{ type: String }],
+  documents: [
+  {
+    url: String,
+    public_id: String
+  }
+],
+  
   status: { 
     type: String, 
     enum: ["Pending", "Approved", "Rejected", "Paid"], 

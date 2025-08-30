@@ -5,8 +5,15 @@ import { FaXTwitter } from "react-icons/fa6";  // modern X logo
 import { FiDownload } from "react-icons/fi";
 import { API_URL } from '../../Api';
 import { useParams } from "react-router-dom";
-import { QRCodeCanvas } from "qrcode.react";
 import { Helmet } from "react-helmet";
+
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+
+// Import modules directly from 'swiper/modules'
+import { Navigation, Pagination } from "swiper/modules";
 
 
 const AchiversAbout = () => {
@@ -17,6 +24,8 @@ const AchiversAbout = () => {
   // State for read more / read less
 const [showFullDesc, setShowFullDesc] = useState(false);
 const [showFullPurpose, setShowFullPurpose] = useState(false);
+  const [openPhoto, setOpenPhoto] = useState(null);
+
 
 
   const shareOnInstagram = async (url, name, postUrl) => {
@@ -143,38 +152,37 @@ const [showFullPurpose, setShowFullPurpose] = useState(false);
 
   return (
     <div className="achiver-about-wrapper">
-      <Helmet>
-        <title>{uru.applicantName} | URU Achiever</title>
-        <meta property="og:title" content={`${uru.applicantName}'s Unique Record`} />
-        <meta property="og:description" content={uru.recordDescription?.slice(0, 150) || "Unique Record on URU"} />
-        <meta property="og:image" content={uru.photoUrl || uru.certificateUrl} />
-        <meta property="og:url" content={sharableLink} />
-        <meta property="og:type" content="article" />
-        <meta name="twitter:card" content="summary_large_image" />
-      </Helmet>
-
+    <Helmet>
+      <title>{uru.applicantName ? `${uru.applicantName} | URU Achiever` : "URU Achiever"}</title>
+      <meta property="og:title" content={uru.applicantName ? `${uru.applicantName}'s Unique Record` : "Unique Record"} />
+      <meta property="og:description" content={uru.recordDescription ? uru.recordDescription.slice(0, 150) : "Unique Record on URU"} />
+      <meta property="og:image" content={uru.photoUrl || uru.certificateUrl || ""} />
+      <meta property="og:url" content={sharableLink} />
+      <meta property="og:type" content="article" />
+      <meta name="twitter:card" content="summary_large_image" />
+    </Helmet>
 
       {/* Header Card */}
      <div className="achiver-about-card">
-  {/* Left Side Image */}
-  <div className="achiver-about-left">
-    <img
-      src={uru.certificateUrl}
-      alt={uru.applicantName}
-      className="achiver-about-photo"
-    />
-  </div>
+    {/* Left Side Image */}
+    <div className="achiver-about-left">
+      <img
+        src={uru.certificateUrl}
+        alt={uru.applicantName}
+        className="achiver-about-photo"
+      />
+    </div>
 
- <div className="achiver-about-right">
-  <h2 className="achiver-about-title">
-   {uru.position}
-  </h2>
+  <div className="achiver-about-right">
+    <h2 className="achiver-about-title">
+    {uru.position}
+    </h2>
 
-{/* Wrap details + photo in flex */}
-<div className="achiver-right-top">
-<div className="uru-details-card">
+  {/* Wrap details + photo in flex */}
+  <div className="achiver-right-top">
+  <div className="uru-details-card">
   <h2 className="uru-title">
-    Unique Records of Universe Holder's Name :{" "}
+    Unique Records of Universe Holder's Name:{" "}
     <span className="uru-highlight">{uru.applicantName}</span>
   </h2>
 
@@ -187,15 +195,10 @@ const [showFullPurpose, setShowFullPurpose] = useState(false);
   <div className="uru-details-list">
     <p className="uru-detail"><strong>Registration No:</strong> {uru.regNo}</p>
     <p className="uru-detail">
-      <strong>Reg. Date:</strong>{" "}
-      {uru.createdAt ? formatDate(uru.createdAt) : "N/A"}
+      <strong>Reg. Date:</strong> {uru.createdAt ? formatDate(uru.createdAt) : "N/A"}
     </p>
-    <p className="uru-detail">
-      <strong>Category:</strong> {uru.formCategory}
-    </p>
-    <p className="uru-detail">
-      <strong>Effort Type:</strong> {uru.recordCategory}
-    </p>
+    <p className="uru-detail"><strong>Category:</strong> {uru.formCategory}</p>
+    <p className="uru-detail"><strong>Effort Type:</strong> {uru.recordCategory}</p>
     <p className="uru-detail">
       <strong>Date of Digitization in the Universe:</strong>{" "}
       {uru.createdAt
@@ -209,17 +212,66 @@ const [showFullPurpose, setShowFullPurpose] = useState(false);
         : "N/A"}
     </p>
   </div>
+
+<div className="uru-existing-base">
+  <p className="existing-base-text">
+    <strong>Existing Base:</strong> Milky Way Galaxy
+  </p>
 </div>
 
-  {/* Applicant Photo */}
-  <div className="achiver-about-photo-section">
-    <img
-      src={uru.photoUrl}
-      alt={`${uru.applicantName} Profile`}
-      className="achiver-applicant-photo"
-    />
+</div>
+
+  
+<div className="achiver-about-photo-section">
+  {uru.photos && uru.photos.length > 0 ? (
+    <>
+      <Swiper
+        modules={[Navigation, Pagination]}
+        navigation={{
+          nextEl: ".swiper-button-next-custom",
+          prevEl: ".swiper-button-prev-custom",
+        }}
+        pagination={{ clickable: true }}
+        spaceBetween={10}
+        slidesPerView={1}
+        loop={true}
+        style={{ width: "400px", height: "400px" }}
+      >
+        {uru.photos.map((photo, index) => (
+          <SwiperSlide key={index}>
+            <img
+              src={photo}
+              alt={`${uru.applicantName} - ${index + 1}`}
+              className="achiver-applicant-photo"
+              onClick={() => setOpenPhoto(photo)}
+              style={{ cursor: "pointer" }}
+            />
+          </SwiperSlide>
+        ))}
+      </Swiper>
+
+      {/* Custom navigation buttons */}
+      <div className="swiper-button-prev-custom">&lt;</div>
+      <div className="swiper-button-next-custom">&gt;</div>
+
+      {/* Lightbox Modal */}
+      {openPhoto && (
+        <div
+          className="photo-lightbox"
+          onClick={() => setOpenPhoto(null)}
+        >
+          <img src={openPhoto} alt="Original" className="lightbox-img" />
+        </div>
+      )}
+    </>
+  ) : (
+    <p>No photos uploaded</p>
+  )}
+</div>
+
+
   </div>
-  </div>
+
     {/* Download Button */}
     <button
       className="achiver-download-btn"
@@ -303,7 +355,7 @@ const [showFullPurpose, setShowFullPurpose] = useState(false);
        {activeTab === "summary" ? (
         <div className="achiver-summary-section">
           <h3 className="achiver-summary-heading">Records / Activity Description</h3>
-          <p className="achiver-summary">{uru.recordDescription}</p>
+          <p className="achiver-summary">{uru.recordTitle}</p>
         </div>
         ) : (
             <div className="achiver-description-table">
@@ -311,9 +363,19 @@ const [showFullPurpose, setShowFullPurpose] = useState(false);
             <h3 className="section-heading">Basic Information</h3>
             <table className="uru-table">
               <tbody>
-                <tr><td className="uru-label">Application Number</td><td>{uru.applicationNumber || "N/A"}</td></tr>
-                <tr><td className="uru-label">Applicant Name</td><td>{uru.applicantName || "N/A"}</td></tr>
-                <tr><td className="uru-label">Applicant Date</td><td>{uru.createdAt ? new Date(uru.createdAt).toLocaleDateString() : "N/A"}</td></tr>
+              <tr>
+                <td className="uru-label">Application Number</td>
+                <td className="uru-value">{uru.applicationNumber || "N/A"}</td>
+              </tr>
+              <tr>
+                <td className="uru-label">Applicant Date</td>
+                <td className="uru-value">{uru.createdAt ? new Date(uru.createdAt).toLocaleDateString() : "N/A"}</td>
+              </tr>
+              <tr>
+                <td className="uru-label">Applicant Name</td>
+                <td className="uru-value">{uru.applicantName || "N/A"}</td>
+              </tr>
+
                 <tr>
                     <td className="uru-label">Sex</td>
                     <td>
@@ -400,137 +462,146 @@ const [showFullPurpose, setShowFullPurpose] = useState(false);
               </tbody>
             </table>
 
-           {/* Evidence */}
-<h3 className="section-heading">Evidence</h3>
-<table className="uru-table">
-  <tbody>
-    <tr>
-      <td className="uru-label">Google Drive</td>
-      <td>
-        {uru.googleDriveLink ? (
-          <a href={uru.googleDriveLink} target="_blank" rel="noreferrer" className="link-btn">
-            Open Link
-          </a>
-        ) : "N/A"}
-      </td>
-    </tr>
-    <tr>
-      <td className="uru-label">Facebook</td>
-      <td>
-        {uru.facebookLink ? (
-          <a href={uru.facebookLink} target="_blank" rel="noreferrer" className="link-btn">
-            Open Link
-          </a>
-        ) : "N/A"}
-      </td>
-    </tr>
-    <tr>
-      <td className="uru-label">YouTube</td>
-      <td>
-        {uru.youtubeLink ? (
-          <a href={uru.youtubeLink} target="_blank" rel="noreferrer" className="link-btn">
-            Open Link
-          </a>
-        ) : "N/A"}
-      </td>
-    </tr>
-    <tr>
-      <td className="uru-label">Instagram</td>
-      <td>
-        {uru.instagramLink ? (
-          <a href={uru.instagramLink} target="_blank" rel="noreferrer" className="link-btn">
-            Open Link
-          </a>
-        ) : "N/A"}
-      </td>
-    </tr>
-    <tr>
-      <td className="uru-label">LinkedIn</td>
-      <td>
-        {uru.linkedInLink ? (
-          <a href={uru.linkedInLink} target="_blank" rel="noreferrer" className="link-btn">
-            Open Link
-          </a>
-        ) : "N/A"}
-      </td>
-    </tr>
-    <tr>
-      <td className="uru-label">X (Twitter)</td>
-      <td>
-        {uru.xLink ? (
-          <a href={uru.xLink} target="_blank" rel="noreferrer" className="link-btn">
-            Open Link
-          </a>
-        ) : "N/A"}
-      </td>
-    </tr>
-    <tr>
-      <td className="uru-label">Pinterest</td>
-      <td>
-        {uru.pinterestLink ? (
-          <a href={uru.pinterestLink} target="_blank" rel="noreferrer" className="link-btn">
-            Open Link
-          </a>
-        ) : "N/A"}
-      </td>
-    </tr>
-    <tr>
-      <td className="uru-label">Other Media</td>
-      <td>
-        {uru.otherMediaLink ? (
-          <a href={uru.otherMediaLink} target="_blank" rel="noreferrer" className="link-btn">
-            Open Link
-          </a>
-        ) : "N/A"}
-      </td>
-    </tr>
-    <tr>
-      <td className="uru-label">Photo</td>
-      <td>
-        {uru.photoUrl ? (
-          <img src={uru.photoUrl} alt="Record" className="record-photo" />
-        ) : "N/A"}
-      </td>
-    </tr>
-    <tr>
-      <td className="uru-label">Video</td>
-      <td>
-        {uru.videoUrl ? (
-          <video src={uru.videoUrl} controls width="250" />
-        ) : "N/A"}
-      </td>
-    </tr>
-    <tr>
-      <td className="uru-label">Document</td>
-      <td>
-        {uru.documentUrl ? (
-          <a href={uru.documentUrl} target="_blank" rel="noreferrer" className="link-btn">
-            View Document
-          </a>
-        ) : "N/A"}
-      </td>
-    </tr>
-    <tr>
-      <td className="uru-label">Certificate</td>
-      <td>
-        {uru.certificateUrl ? (
-          <a href={uru.certificateUrl} target="_blank" rel="noreferrer" className="link-btn">
-            View Certificate
-          </a>
-        ) : "N/A"}
-      </td>
-    </tr>
-  </tbody>
-</table>
+                {/* Evidence */}
+            <h3 className="section-heading">Evidence</h3>
+            <table className="uru-table">
 
+            <tbody>
+  {/* Links */}
+  {[
+    { label: "Google Drive", key: "googleDriveLink", prefix: "Link" },
+    { label: "Facebook", key: "facebookLink", prefix: "Link" },
+    { label: "YouTube", key: "youtubeLink", prefix: "Link" },
+    { label: "Instagram", key: "instagramLink", prefix: "Link" },
+    { label: "LinkedIn", key: "linkedInLink", prefix: "Link" },
+    { label: "X (Twitter)", key: "xLink", prefix: "Link" },
+    { label: "Pinterest", key: "pinterestLink", prefix: "Link" },
+    { label: "Other Media", key: "otherMediaLink", prefix: "Link" },
+  ].map((item) => {
+    const value = uru[item.key];
+    const links = value
+      ? Array.isArray(value)
+        ? value
+        : value.split(",")
+      : [];
+    return (
+      <tr key={item.key}>
+        <td className="uru-label">{item.label}</td>
+        <td>
+          {links.length > 0 ? (
+            links.map((link, index) => (
+              <span key={index}>
+                <a
+                  href={link.trim()}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="link-btn"
+                >
+                  {item.prefix} {index + 1}
+                </a>
+                {index < links.length - 1 && " | "}
+              </span>
+            ))
+          ) : (
+            "N/A"
+          )}
+        </td>
+      </tr>
+    );
+  })}
+
+  {/* Photos */}
+  <tr>
+    <td className="uru-label">Photo</td>
+    <td>
+      {uru.photos && uru.photos.length > 0 ? (
+        uru.photos.map((photo, index) => (
+          <img
+            key={index}
+            src={photo}
+            alt={`Record ${index + 1}`}
+            className="record-photo"
+            style={{ marginRight: "10px", maxWidth: "120px", marginBottom: "10px" }}
+          />
+        ))
+      ) : (
+        "N/A"
+      )}
+    </td>
+  </tr>
+
+  {/* Videos */}
+  <tr>
+    <td className="uru-label">Video</td>
+    <td>
+      {uru.videos && uru.videos.length > 0 ? (
+        uru.videos.map((video, index) => (
+          <video
+            key={index}
+            src={video}
+            controls
+            width="250"
+            style={{ display: "block", marginBottom: "10px" }}
+          />
+        ))
+      ) : (
+        "N/A"
+      )}
+    </td>
+  </tr>
+
+  {/* Documents */}
+  <tr>
+    <td className="uru-label">Document</td>
+    <td>
+      {uru.documents && uru.documents.length > 0 ? (
+        uru.documents.map((doc, index) => (
+          <span key={index}>
+            <a
+              href={doc.url}
+              target="_blank"
+              rel="noreferrer"
+              className="link-btn"
+            >
+              Document {index + 1}
+            </a>
+            {index < uru.documents.length - 1 && " | "}
+          </span>
+        ))
+      ) : (
+        "N/A"
+      )}
+    </td>
+  </tr>
+
+  {/* Certificate */}
+  <tr>
+    <td className="uru-label">Certificate</td>
+    <td>
+      {uru.certificateUrl ? (
+        <a
+          href={uru.certificateUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="link-btn"
+        >
+          View Certificate
+        </a>
+      ) : (
+        "N/A"
+      )}
+    </td>
+  </tr>
+</tbody>
+
+
+            </table>
 
            {/* 🎉 Congratulations Message */}
         <div className="congrats-message">
           🎉 Congratulations..! <strong>{uru.applicantName}</strong> has been successfully registered in the <em>'Unique Records of Universe'</em>.
         </div>
-
-          </div>
-
+        </div>
         )}
       </div>
     </div>

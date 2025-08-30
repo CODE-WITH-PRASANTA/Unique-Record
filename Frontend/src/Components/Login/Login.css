@@ -310,6 +310,7 @@
     }
   
     .login-page-input {
+      width: 100%;
       padding: 12px 0px;
     }
   
@@ -324,6 +325,9 @@
 
     .login-page-social-icon {
       font-size: 18px;
+    }
+    .login-page-row{
+      display: block;
     }
   }
 
@@ -415,4 +419,29 @@
 
 .whatsapp-link:hover .whatsapp-icon {
   transform: scale(1.2);
+}
+
+
+/* Common style for messages */
+.login-message {
+  padding: 12px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+}
+
+/* Error Message */
+.error-message {
+  background-color: #ffe5e5;
+  color: #d9534f;
+  border: 1px solid #f5c2c2;
+}
+
+/* Success Message */
+.success-message {
+  background-color: #e5f9e7;
+  color: #28a745;
+  border: 1px solid #b8e6c1;
 }

@@ -48,6 +48,10 @@ const achievementSchema = new mongoose.Schema({
   publicId: {
     type: String,
   },
+  isPublished: {
+    type: Boolean,
+    default: false, // new field added
+  },
 }, {
   timestamps: true
 });

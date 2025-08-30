@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { API_URL } from "../../Api"; // Importing API_URL
+import { API_URL } from "../../Api";
 import "./ForgotPassword.css";
 import RightSideCompanyLogo from "../../assets/UNQUE.png";
+import Swal from "sweetalert2";
 
 const ForgotPassword = () => {
   const [step, setStep] = useState(1);
@@ -13,50 +14,68 @@ const ForgotPassword = () => {
     confirmPassword: "",
   });
 
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Reusable SweetAlert
+  const showAlert = (title, message, type = "success") => {
+    let timerInterval;
+    Swal.fire({
+      title,
+      html: `${message} <br/><br/>Closing in <b></b> ms.`,
+      icon: type,
+      timer: 2000,
+      timerProgressBar: true,
+      didOpen: () => {
+        Swal.showLoading();
+        const timer = Swal.getPopup().querySelector("b");
+        timerInterval = setInterval(() => {
+          timer.textContent = `${Swal.getTimerLeft()}`;
+        }, 100);
+      },
+      willClose: () => {
+        clearInterval(timerInterval);
+      },
+    });
+  };
+
   const handleSubmitEmail = async () => {
     setLoading(true);
-    setError("");
     try {
       const res = await axios.post(`${API_URL}/forgot-password/forgot-password`, {
         email: formData.email,
       });
-      alert(res.data.message);
+      showAlert("OTP Sent!", res.data.message, "success");
       setStep(2);
     } catch (err) {
-      setError(err.response?.data?.message || "Something went wrong");
+      showAlert("Error!", err.response?.data?.message || "Something went wrong", "error");
     }
     setLoading(false);
   };
 
   const handleSubmitOtp = async () => {
     setLoading(true);
-    setError("");
     try {
       const res = await axios.post(`${API_URL}/forgot-password/verify-otp`, {
         email: formData.email,
         otp: formData.otp,
       });
-      alert(res.data.message);
+      showAlert("OTP Verified!", res.data.message, "success");
       setStep(3);
     } catch (err) {
-      setError(err.response?.data?.message || "Invalid OTP");
+      showAlert("Invalid OTP", err.response?.data?.message || "Try again", "error");
     }
     setLoading(false);
   };
 
   const handleResetPassword = async () => {
     setLoading(true);
-    setError("");
     try {
       if (formData.newPassword !== formData.confirmPassword) {
-        setError("Passwords do not match");
+        showAlert("Error", "Passwords do not match", "error");
         setLoading(false);
         return;
       }
@@ -65,15 +84,14 @@ const ForgotPassword = () => {
         newPassword: formData.newPassword,
         confirmPassword: formData.confirmPassword,
       });
-      alert(res.data.message);
+      showAlert("Success!", res.data.message, "success");
       setStep(1);
       setFormData({ email: "", otp: "", newPassword: "", confirmPassword: "" });
     } catch (err) {
-      setError(err.response?.data?.message || "Error resetting password");
+      showAlert("Error", err.response?.data?.message || "Error resetting password", "error");
     }
     setLoading(false);
   };
-
 
   return (
     <div className="forgot-password-container">
@@ -88,11 +106,13 @@ const ForgotPassword = () => {
       </div>
 
       <div className="forgot-password-right-section">
-        <img src={RightSideCompanyLogo} alt="Company Logo" className="forgot-password-company-logo" />
+        <img
+          src={RightSideCompanyLogo}
+          alt="Company Logo"
+          className="forgot-password-company-logo"
+        />
 
         <div className="forgot-password-form-container">
-          {error && <p className="error-message">{error}</p>}
-
           {step === 1 && (
             <>
               <h2 className="forgot-password-heading">Enter Your Email</h2>
@@ -104,7 +124,11 @@ const ForgotPassword = () => {
                 onChange={handleChange}
                 required
               />
-              <button className="forgot-password-button" onClick={handleSubmitEmail} disabled={loading}>
+              <button
+                className="forgot-password-button"
+                onClick={handleSubmitEmail}
+                disabled={loading}
+              >
                 {loading ? "Sending..." : "Submit"}
               </button>
             </>
@@ -121,7 +145,11 @@ const ForgotPassword = () => {
                 onChange={handleChange}
                 required
               />
-              <button className="forgot-password-button" onClick={handleSubmitOtp} disabled={loading}>
+              <button
+                className="forgot-password-button"
+                onClick={handleSubmitOtp}
+                disabled={loading}
+              >
                 {loading ? "Verifying..." : "Verify OTP"}
               </button>
             </>
@@ -146,7 +174,11 @@ const ForgotPassword = () => {
                 onChange={handleChange}
                 required
               />
-              <button className="forgot-password-button" onClick={handleResetPassword} disabled={loading}>
+              <button
+                className="forgot-password-button"
+                onClick={handleResetPassword}
+                disabled={loading}
+              >
                 {loading ? "Saving..." : "Save Password"}
               </button>
             </>

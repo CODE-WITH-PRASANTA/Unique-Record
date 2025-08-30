@@ -47,7 +47,7 @@ const OurAchievementsRecords = () => {
   };
 
   useEffect(() => {
-    axios.get(`${API_URL}/achievements/get-all-achievements`)
+    axios.get(`${API_URL}/achievements/get-published-achievements`)
       .then(response => {
         setAchievements(response.data);
         setLatestPosts(response.data.slice(0, 3));
@@ -67,6 +67,7 @@ const OurAchievementsRecords = () => {
         console.error(error);
       });
   }, []);
+
 
   const handleShowMoreCategories = () => {
     setVisibleCategories(categories.length);

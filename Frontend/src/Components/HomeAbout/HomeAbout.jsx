@@ -35,10 +35,10 @@ const HomeAbout = () => {
   }, []);
 
   return (
-    <div className={`home-about ${isVisible ? 'animate' : ''}`} ref={sectionRef}>
+    <div className={`home-about`} ref={sectionRef}>
       <div className="home-about-container">
         {/* Left Side with Images */}
-        <div className={`about-images ${isVisible ? 'animate-images' : ''}`}>
+        <div className={`about-images ${ 'animate-images'}`}>
           <img src={aboutoneimg} alt="Business Team" className="about-main-img" />
           <img src={abouttwoimg} alt="Discussion" className="about-secondary-img" />
           <div className="certified-badge">

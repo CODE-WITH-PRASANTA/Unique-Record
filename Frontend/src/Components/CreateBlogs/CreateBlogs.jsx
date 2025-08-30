@@ -26,6 +26,8 @@ const CreateBlogs = () => {
   const [email, setEmail] = useState('');
 const [phoneNumber, setPhoneNumber] = useState('');
 const [address, setAddress] = useState('');
+const [isSubmitting, setIsSubmitting] = useState(false);
+
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -122,6 +124,7 @@ const handleDelete = async (id) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+  setIsSubmitting(true);
 
     const formData = new FormData();
     formData.append("blogTitle", blogTitle);
@@ -189,6 +192,7 @@ const handleDelete = async (id) => {
         draggable: true
       });
     }
+      setIsSubmitting(false);
   };
 
   const handleEditBlog = async (blog) => {
@@ -231,6 +235,42 @@ const handleDelete = async (id) => {
     const selectedText = window.getSelection().toString();
     navigator.clipboard.writeText(selectedText);
   };
+
+const handleTogglePublish = async (id, isCurrentlyPublished) => {
+  try {
+    const url = `${API_URL}/blogs/${isCurrentlyPublished ? 'unpublish' : 'publish'}/${id}`;
+    const response = await axios.put(url);
+
+    if (response.data.success) {
+      Swal.fire({
+        title: response.data.message,
+        icon: "success",
+        timer: 1500,
+        showConfirmButton: false,
+      });
+
+      // Update the blog state to reflect the new publish status
+      setBlogs(
+        blogs.map((blog) =>
+          blog._id === id ? { ...blog, isPublished: !isCurrentlyPublished } : blog
+        )
+      );
+    } else {
+      Swal.fire({
+        title: "Error",
+        text: response.data.message,
+        icon: "error",
+      });
+    }
+  } catch (error) {
+    console.error("Publish/Unpublish error:", error);
+    Swal.fire({
+      title: "Error",
+      text: "Something went wrong!",
+      icon: "error",
+    });
+  }
+};
 
   return (
     <div className="Create-Blog-Container">
@@ -423,9 +463,9 @@ const handleDelete = async (id) => {
           )}
         </div>
 
-        <button type="submit" className="Create-Blog-SubmitBtn">
-          {editingBlog ? "Update Blog" : "Publish Blog"}
-        </button>
+       <button type="submit" className="Create-Blog-SubmitBtn" disabled={isSubmitting}>
+  {editingBlog ? "Update Blog" : "Publish Blog"}
+</button>
       </form>
 
      <h2 className='Create-Blog-heading-table'>Blogs</h2>
@@ -477,7 +517,15 @@ const handleDelete = async (id) => {
         <td className='Action-Btn'>
           <button className="edit-btn" onClick={() => handleEditBlog(blog)}>Edit</button>
           <button onClick={() => handleDelete(blog._id)}>Delete</button>
+          <button
+            className={`publish-toggle-btn ${blog.isPublished ? 'published' : 'unpublished'}`}
+            onClick={() => handleTogglePublish(blog._id, blog.isPublished)}
+          >
+            {blog.isPublished ? 'Published' : 'Unpublished'}
+          </button>
+
         </td>
+
       </tr>
     ))}
   </tbody>

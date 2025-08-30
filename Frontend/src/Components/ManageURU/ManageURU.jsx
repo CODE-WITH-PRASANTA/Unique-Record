@@ -4,37 +4,36 @@ import './ManageURU.css';
 import { API_URL } from '../../Api';
 import Swal from "sweetalert2";
 
-
 const ManageURU = () => {
   const [uruData, setUruData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [editingData, setEditingData] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-const [categories, setCategories] = useState([]);
-  const [allData, setAllData] = useState([]); // ✅ now you can use setAllData
-
+  const [categories, setCategories] = useState([]);
+  const [filterStatus, setFilterStatus] = useState('all'); // New state for filter status
 
   const token = localStorage.getItem('token');
 
-   const fetchCategories = async () => {
-  try {
-    const res = await fetch(`${API_URL}/categories`);
-    if (!res.ok) {
-      throw new Error(`HTTP error! status: ${res.status}`);
+  
+  const fetchCategories = async () => {
+    try {
+      const res = await fetch(`${API_URL}/categories`);
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      const data = await res.json();
+      const sortedCategories = data.sort((a, b) => a.name.localeCompare(b.name));
+      setCategories(sortedCategories);
+    } catch (error) {
+      console.error('Error fetching categories:', error);
     }
-    const data = await res.json();
-    const sortedCategories = data.sort((a, b) => a.name.localeCompare(b.name));
-    setCategories(sortedCategories);
-  } catch (error) {
-    console.error('Error fetching categories:', error);
-  }
-};
+  };
 
-useEffect(() => {
-  getAllUru();
-  fetchCategories();
-}, []);
+  useEffect(() => {
+    getAllUru();
+    fetchCategories();
+  }, []);
 
   const getAllUru = async () => {
     try {
@@ -42,7 +41,6 @@ useEffect(() => {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      // Latest data first (reverse order)
       const reversed = response.data.reverse();
       setUruData(reversed);
       setFilteredData(reversed);
@@ -54,46 +52,57 @@ useEffect(() => {
   const handleEdit = (data) => {
     setEditingData({
       ...data,
-      witness1: data.witness1 || {},
-      witness2: data.witness2 || {},
+    witness1: data.witness1 || {},
+    witness2: data.witness2 || {},
+    photoUrls: data.photos || [],    // map backend → frontend
+    videoUrls: data.videos || [],
+    documentUrls: data.documents || [],
+    googleDriveLinks: data.googleDriveLink ? [data.googleDriveLink] : [],
+    youtubeLinks: data.youtubeLink ? [data.youtubeLink] : [],
+    instagramLinks: data.instagramLink ? [data.instagramLink] : [],
+    facebookLinks: data.facebookLink ? [data.facebookLink] : [],
+    linkedInLinks: data.linkedInLink ? [data.linkedInLink] : [],
+    xLinks: data.xLink ? [data.xLink] : [],
+    pinterestLinks: data.pinterestLink ? [data.pinterestLink] : [],
+    otherMediaLinks: data.otherMediaLink ? [data.otherMediaLink] : []
     });
     setShowModal(true);
   };
 
-const handleDelete = async (id) => {
-  Swal.fire({
-    title: "Are you sure?",
-    text: "You won't be able to revert this!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#3085d6",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Yes, delete it!"
-  }).then(async (result) => {
-    if (result.isConfirmed) {
-      try {
-        await axios.delete(`${API_URL}/uru/delete-uru/${id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+  const handleDelete = async (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!"
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await axios.delete(`${API_URL}/uru/delete-uru/${id}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
 
-        Swal.fire({
-          title: "Deleted!",
-          text: "Your file has been deleted.",
-          icon: "success",
-        });
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your file has been deleted.",
+            icon: "success",
+          });
 
-        getAllUru(); // refresh after delete
-      } catch (error) {
-        console.error(error);
-        Swal.fire({
-          title: "Error!",
-          text: "Something went wrong while deleting.",
-          icon: "error",
-        });
+          getAllUru(); 
+        } catch (error) {
+          console.error(error);
+          Swal.fire({
+            title: "Error!",
+            text: "Something went wrong while deleting.",
+            icon: "error",
+          });
+        }
       }
-    }
-  });
-};
+    });
+  };
 
   const handleUpdate = async (e) => {
     e.preventDefault();
@@ -110,33 +119,29 @@ const handleDelete = async (id) => {
     }
   };
 
-
   const handleApprove = async (id) => {
-  try {
-    await axios.put(
-      `${API_URL}/uru/approve-uru/${id}`,
-      {},
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
+    try {
+      await axios.put(
+        `${API_URL}/uru/approve-uru/${id}`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
-    // Update state immediately so UI toggles without waiting for getAllUru()
-    setUruData((prevData) =>
-      prevData.map((item) =>
-        item._id === id ? { ...item, isApproved: true } : item
-      )
-    );
+      setUruData((prevData) =>
+        prevData.map((item) =>
+          item._id === id ? { ...item, isApproved: true } : item
+        )
+      );
 
-    setFilteredData((prevData) =>
-      prevData.map((item) =>
-        item._id === id ? { ...item, isApproved: true } : item
-      )
-    );
-  } catch (error) {
-    console.error(error.response?.data || error);
-  }
-};
-
-
+      setFilteredData((prevData) =>
+        prevData.map((item) =>
+          item._id === id ? { ...item, isApproved: true } : item
+        )
+      );
+    } catch (error) {
+      console.error(error.response?.data || error);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -155,7 +160,7 @@ const handleDelete = async (id) => {
 
   const handleSearch = () => {
     if (!searchTerm.trim()) {
-      setFilteredData(uruData);
+      filterData(uruData);
     } else {
       const term = searchTerm.toLowerCase();
       const results = uruData.filter(
@@ -165,10 +170,26 @@ const handleDelete = async (id) => {
           item.emailId?.toLowerCase().includes(term) ||
           item.whatsappMobileNumber?.toLowerCase().includes(term)
       );
-      setFilteredData(results);
+      filterData(results);
     }
   };
 
+  const filterData = (data) => {
+    if (filterStatus === 'all') {
+      setFilteredData(data);
+    } else if (filterStatus === 'approved') {
+      setFilteredData(data.filter(item => item.isApproved));
+    } else if (filterStatus === 'notApproved') {
+      setFilteredData(data.filter(item => !item.isApproved));
+    }
+  };
+  
+  useEffect(() => {
+    handleSearch();
+  }, [filterStatus]);
+
+
+  
   return (
     <div className="manage-uru-container">
       <h1 className="manage-uru-heading">Manage URU</h1>
@@ -188,61 +209,60 @@ const handleDelete = async (id) => {
 
       <div className="table-responsive">
         <table className="uru-table">
-           <thead>
-              <tr>
-                <th>S.No.</th>
-                <th>Application Number</th>
-                <th>Position</th>
-                <th>Applicant Name</th>
-                <th>Sex</th>
-                <th>Whatsapp Mobile Number</th>
-                <th>Email Id</th>
-                <th>Country</th>   {/* New */}
-                <th>State</th>     {/* New */}
-                <th>Actions</th>
-              </tr>
-            </thead>
+          <thead>
+            <tr>
+              <th>S.No.</th>
+              <th>Application Number</th>
+              <th>Position</th>
+              <th>Applicant Name</th>
+              <th>Sex</th>
+              <th>Whatsapp Mobile Number</th>
+              <th>Email Id</th>
+              <th>Country</th>   
+              <th>State</th>     
+              <th>Actions</th>
+            </tr>
+          </thead>
 
-        <tbody>
-              {filteredData.map((data, index) => (
-                <tr key={data._id}>
-                  <td>{index + 1}</td>
-                  <td>{data.applicationNumber}</td>
-                  <td>{data.position}</td>
-                  <td>{data.applicantName}</td>
-                  <td>{data.sex}</td>
-                  <td>{data.whatsappMobileNumber}</td>
-                  <td>{data.emailId}</td>
-                  <td>{data.country}</td>  {/* New */}
-                  <td>{data.state}</td>    {/* New */}
-                  <td className="manage-uru-actions">
-                    <button className="edit" onClick={() => handleEdit(data)}>
-                      Edit
+          <tbody>
+            {filteredData.map((data, index) => (
+              <tr key={data._id}>
+                <td>{filteredData.length - index}</td>
+                <td>{data.applicationNumber}</td>
+                <td>{data.position}</td>
+                <td>{data.applicantName}</td>
+                <td>{data.sex}</td>
+                <td>{data.whatsappMobileNumber}</td>
+                <td>{data.emailId}</td>
+                <td>{data.country}</td>  
+                <td>{data.state}</td>    
+                <td className="manage-uru-actions">
+                  <button className="edit" onClick={() => handleEdit(data)}>
+                    Edit
+                  </button>
+                  <button
+                    className="delete"
+                    onClick={() => handleDelete(data._id)}
+                  >
+                    Delete
+                  </button>
+                  {data.status === "Approved" ? (
+                    <button className="approved" disabled>
+                      Approved
                     </button>
+                  ) : (
                     <button
-                      className="delete"
-                      onClick={() => handleDelete(data._id)}
+                      className="approve"
+                      onClick={() => handleApprove(data._id)}
                     >
-                      Delete
+                      Approve
                     </button>
-                   {data.isApproved ? (
-  <button className="approved" disabled>
-    Approved
-  </button>
-                        ) : (
-                          <button
-                            className="approve"
-                            onClick={() => handleApprove(data._id)}
-                          >
-                            Approve
-                          </button>
-                        )}
+                  )}
 
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-
+                </td>
+              </tr>
+            ))}
+          </tbody>
         </table>
       </div>
 
@@ -261,20 +281,23 @@ const handleDelete = async (id) => {
           </div>
           <div className="manage-uru-form-group">
             <label>Applicant Name:</label>
-            <input type="text" name="applicantName" value={editingData.applicantName} onChange={handleChange} readOnly={!!editingData.applicantName}  />
+            <input type="text" name="applicantName" value={editingData.applicantName} onChange={handleChange} readOnly={!!editingData.applicantName} />
           </div>
-         <div className="manage-uru-form-group">
+          {/* Sex */}
+          <div className="manage-uru-form-group">
             <label>Sex:</label>
-            <select 
-              name="sex" 
-              value={editingData.sex} 
-              onChange={handleChange} 
+            <select
+              name="sex"
+              value={editingData.sex ? editingData.sex.toLowerCase() : ""}
+              onChange={(e) =>
+                setEditingData({ ...editingData, sex: e.target.value })
+              }
               className="manage-uru-select"
             >
               <option value="">-- Select Sex --</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-              <option value="Transgender">Transgender</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="transgender">Transgender</option>
             </select>
           </div>
 
@@ -330,14 +353,9 @@ const handleDelete = async (id) => {
             <label>Occupation:</label>
             <input type="text" name="occupation" value={editingData.occupation} onChange={handleChange} />
           </div>
-         <div className="manage-uru-form-group">
+          <div className="manage-uru-form-group">
             <label>Form Category:</label>
-            <select
-              name="formCategory"
-              value={editingData.formCategory}
-              onChange={handleChange}
-              className="form-category-select"
-            >
+            <select name="formCategory" value={editingData.formCategory} onChange={handleChange} className="form-category-select">
               <option value="">-- Select Category --</option>
               {categories.map((cat) => (
                 <option key={cat._id} value={cat.name}>
@@ -346,8 +364,6 @@ const handleDelete = async (id) => {
               ))}
             </select>
           </div>
-
-
           <div className="manage-uru-form-group">
             <label>Price:</label>
             <input type="number" name="price" value={editingData.price} onChange={handleChange} readOnly />
@@ -357,46 +373,36 @@ const handleDelete = async (id) => {
         {/* 2. Record Details */}
         <h3>2. Record Details</h3>
         <div className="manage-uru-form-row">
-          <div className="manage-uru-form-group">
+        <div className="manage-uru-form-group">
             <label>Effort Type:</label>
             <select
               name="recordCategory"
-              value={editingData.recordCategory}
-              onChange={handleChange}
+              value={editingData.recordCategory?.toLowerCase() || ""}
+              onChange={(e) =>
+                setEditingData({ ...editingData, recordCategory: e.target.value.toLowerCase() })
+              }
             >
               <option value="">-- Select Effort Type --</option>
-              <option value="Individual Effort">Individual Effort</option>
-              <option value="Group Effort">Group Effort</option>
+              <option value="individual">Individual Effort</option>
+              <option value="group">Group Effort</option>
             </select>
-          </div>
 
-         <div className="manage-uru-form-group">
-            <label>Record Title:</label>
-            <textarea
-              type="text"
-              name="recordTitle"
-              value={editingData.recordTitle}
-              onChange={handleChange}
-              className="large-textarea"
-            />
           </div>
 
           <div className="manage-uru-form-group">
-            <label>Record Description:</label>
-            <textarea
-              name="recordDescription"
-              value={editingData.recordDescription}
-              onChange={handleChange}
-              className="large-textarea"
-            />
+            <label>Record Title:</label>
+            <textarea name="recordTitle" value={editingData.recordTitle} onChange={handleChange} className="large-textarea" />
           </div>
-
+          <div className="manage-uru-form-group">
+            <label>Record Description:</label>
+            <textarea name="recordDescription" value={editingData.recordDescription} onChange={handleChange} className="large-textarea" />
+          </div>
         </div>
 
         <div className="manage-uru-form-row">
           <div className="manage-uru-form-group">
             <label>Purpose of Record Attempt:</label>
-            <textarea type="text" name="purposeOfRecordAttempt" value={editingData.purposeOfRecordAttempt} onChange={handleChange} />
+            <textarea name="purposeOfRecordAttempt" value={editingData.purposeOfRecordAttempt} onChange={handleChange} />
           </div>
           <div className="manage-uru-form-group">
             <label>Date of Attempt:</label>
@@ -413,60 +419,215 @@ const handleDelete = async (id) => {
             <label>Organisation Name:</label>
             <input type="text" name="organisationName" value={editingData.organisationName} onChange={handleChange} />
           </div>
-          <div className="manage-uru-form-group">
-            <label>Google Drive Link:</label>
-            <input type="text" name="googleDriveLink" value={editingData.googleDriveLink} onChange={handleChange} />
-          </div>
-          <div className="manage-uru-form-group">
-            <label>Facebook Link:</label>
-            <input type="text" name="facebookLink" value={editingData.facebookLink} onChange={handleChange} />
-          </div>
         </div>
 
-        <div className="manage-uru-form-row">
-          <div className="manage-uru-form-group">
-            <label>Youtube Link:</label>
-            <input type="text" name="youtubeLink" value={editingData.youtubeLink} onChange={handleChange} />
-          </div>
-          <div className="manage-uru-form-group">
-            <label>Instagram Link:</label>
-            <input type="text" name="instagramLink" value={editingData.instagramLink} onChange={handleChange} />
-          </div>
-          <div className="manage-uru-form-group">
-            <label>LinkedIn Link:</label>
-            <input type="text" name="linkedInLink" value={editingData.linkedInLink} onChange={handleChange} />
-          </div>
-        </div>
+          <h3>Social Media Links</h3>
+          <div className="manage-uru-form-row">
+            {/* Google Drive */}
+            <div className="manage-uru-form-group">
+              <label>Google Drive Links:</label>
+              <ul>
+                {editingData.googleDriveLink?.length > 0 ? (
+                  editingData.googleDriveLink.map((link, index) => (
+                    <li key={`gdrive-${index}`}>
+                      <a href={link} target="_blank" rel="noopener noreferrer">{link}</a>
+                    </li>
+                  ))
+                ) : (
+                  <p>No Google Drive links</p>
+                )}
+              </ul>
+            </div>
 
-        <div className="manage-uru-form-row">
-          <div className="manage-uru-form-group">
-            <label>X Link:</label>
-            <input type="text" name="xLink" value={editingData.xLink} onChange={handleChange} />
-          </div>
-          <div className="manage-uru-form-group">
-            <label>Pinterest Link:</label>
-            <input type="text" name="pinterestLink" value={editingData.pinterestLink} onChange={handleChange} />
-          </div>
-          <div className="manage-uru-form-group">
-            <label>Other Media Link:</label>
-            <input type="text" name="otherMediaLink" value={editingData.otherMediaLink} onChange={handleChange} />
-          </div>
-        </div>
+            {/* YouTube */}
+            <div className="manage-uru-form-group">
+              <label>YouTube Links:</label>
+              <ul>
+                {editingData.youtubeLink?.length > 0 ? (
+                  editingData.youtubeLink.map((link, index) => (
+                    <li key={`yt-${index}`}>
+                      <a href={link} target="_blank" rel="noopener noreferrer">{link}</a>
+                    </li>
+                  ))
+                ) : (
+                  <p>No YouTube links</p>
+                )}
+              </ul>
+            </div>
 
-        {/* 3. Media Uploads */}
+            {/* Instagram */}
+            <div className="manage-uru-form-group">
+              <label>Instagram Links:</label>
+              <ul>
+                {editingData.instagramLink?.length > 0 ? (
+                  editingData.instagramLink.map((link, index) => (
+                    <li key={`ig-${index}`}>
+                      <a href={link} target="_blank" rel="noopener noreferrer">{link}</a>
+                    </li>
+                  ))
+                ) : (
+                  <p>No Instagram links</p>
+                )}
+              </ul>
+            </div>
+          </div>
+          <div className='manage-uru-form-row'>
+          {/* Facebook */}
+          <div className="manage-uru-form-group">
+            <label>Facebook Links:</label>
+            <ul>
+              {editingData.facebookLink?.length > 0 ? (
+                editingData.facebookLink.map((link, index) => (
+                  <li key={`fb-${index}`}>
+                    <a href={link} target="_blank" rel="noopener noreferrer">{link}</a>
+                  </li>
+                ))
+              ) : (
+                <p>No Facebook links</p>
+              )}
+            </ul>
+          </div>
+
+          {/* LinkedIn */}
+          <div className="manage-uru-form-group">
+            <label>LinkedIn Links:</label>
+            <ul>
+              {editingData.linkedInLink?.length > 0 ? (
+                editingData.linkedInLink.map((link, index) => (
+                  <li key={`li-${index}`}>
+                    <a href={link} target="_blank" rel="noopener noreferrer">{link}</a>
+                  </li>
+                ))
+              ) : (
+                <p>No LinkedIn links</p>
+              )}
+            </ul>
+          </div>
+
+          {/* X (Twitter) */}
+          <div className="manage-uru-form-group">
+            <label>X (Twitter) Links:</label>
+            <ul>
+              {editingData.xLink?.length > 0 ? (
+                editingData.xLink.map((link, index) => (
+                  <li key={`x-${index}`}>
+                    <a href={link} target="_blank" rel="noopener noreferrer">{link}</a>
+                  </li>
+                ))
+              ) : (
+                <p>No X links</p>
+              )}
+            </ul>
+          </div>
+
+          {/* Pinterest */}
+          <div className="manage-uru-form-group">
+            <label>Pinterest Links:</label>
+            <ul>
+              {editingData.pinterestLink?.length > 0 ? (
+                editingData.pinterestLink.map((link, index) => (
+                  <li key={`pin-${index}`}>
+                    <a href={link} target="_blank" rel="noopener noreferrer">{link}</a>
+                  </li>
+                ))
+              ) : (
+                <p>No Pinterest links</p>
+              )}
+            </ul>
+          </div>
+
+          {/* Other Media */}
+          <div className="manage-uru-form-group">
+            <label>Other Media Links:</label>
+            <ul>
+              {editingData.otherMediaLink?.length > 0 ? (
+                editingData.otherMediaLink.map((link, index) => (
+                  <li key={`other-${index}`}>
+                    <a href={link} target="_blank" rel="noopener noreferrer">{link}</a>
+                  </li>
+                ))
+              ) : (
+                <p>No Other Media links</p>
+              )}
+            </ul>
+          </div>
+
+          </div>
+
+        {/* 3. Media & Documents */}
         <h3>3. Media & Documents</h3>
         <div className="manage-uru-form-row">
-          <div className="manage-uru-form-group">
-            <label>Photo URL:</label>
-            <input type="text" name="photoUrl" value={editingData.photoUrl} onChange={handleChange} readOnly />
+         <div className="manage-uru-form-group">
+          <label>Photos:</label>
+          <div className="media-preview">
+            {editingData.photoUrls?.length > 0 ? (
+              editingData.photoUrls.map((url, index) => (
+                <a
+                  key={`photo-${index}`}
+                  href={url}
+                  download={`photo-${index + 1}.jpg`} // forces download
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img
+                    src={url}
+                    alt={`photo-${index}`}
+                    style={{
+                      width: "80px",
+                      height: "80px",
+                      objectFit: "cover",
+                      marginRight: "8px",
+                      borderRadius: "6px",
+                      cursor: "pointer"
+                    }}
+                  />
+                </a>
+              ))
+            ) : (
+              <p>No photos uploaded</p>
+            )}
           </div>
+        </div>
+
+
           <div className="manage-uru-form-group">
-            <label>Video URL:</label>
-            <input type="text" name="videoUrl" value={editingData.videoUrl} onChange={handleChange} readOnly />
+            <label>Videos:</label>
+            <div className="media-preview">
+              {editingData.videoUrls?.length > 0 ? (
+                editingData.videoUrls.map((url, index) => (
+                  <video key={`video-${index}`} src={url} controls style={{ width: "120px", height: "80px", marginRight: "8px", borderRadius: "6px" }} />
+                ))
+              ) : (
+                <p>No videos uploaded</p>
+              )}
+            </div>
           </div>
-          <div className="manage-uru-form-group">
-            <label>Document URL:</label>
-            <input type="text" name="documentUrl" value={editingData.documentUrl} onChange={handleChange} readOnly />
+
+        <div className="manage-uru-form-group">
+            <label>Documents:</label>
+            <ul>
+              {editingData.documents?.length > 0 ? (
+                editingData.documents.map((doc, index) => {
+                  // Generate download link using public_id
+                  const downloadUrl = `https://res.cloudinary.com/dorcgl1jg/raw/upload/fl_attachment/${doc.public_id}`;
+
+                  return (
+                    <li key={`doc-${index}`}>
+                      {/* View option */}
+                      <a href={doc.url} target="_blank" rel="noopener noreferrer" style={{ marginRight: "10px" }}>
+                        View Document {index + 1}
+                      </a>
+                      {/* Download option */}
+                      <a href={downloadUrl}>
+                        ⬇️ Download
+                      </a>
+                    </li>
+                  );
+                })
+              ) : (
+                <p>No documents uploaded</p>
+              )}
+            </ul>
           </div>
         </div>
 
@@ -542,9 +703,21 @@ const handleDelete = async (id) => {
         </div>
         {/* Buttons */}
         <div className="manage-uru-form-row" style={{ justifyContent: 'flex-end' }}>
-          <button type="button" className="manage-uru-button" onClick={() => setShowModal(false)}>Cancel</button>
-          <button type="submit" className="manage-uru-submit">Update</button>
+          <button 
+            type="button" 
+            className="btn-cancel" 
+            onClick={() => setShowModal(false)}
+          >
+            Cancel
+          </button>
+          <button 
+            type="submit" 
+            className="btn-update"
+          >
+            Update
+          </button>
         </div>
+
       </form>
     </div>
   </div>

@@ -358,3 +358,25 @@
     width: 100%;
   }
 }
+
+
+
+.publish-toggle-btn {
+  padding: 5px 12px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-left: 5px;
+}
+
+.publish-toggle-btn.published {
+  background: linear-gradient(90deg, #4caf50, #66bb6a);
+  color: white;
+}
+
+.publish-toggle-btn.unpublished {
+  background: linear-gradient(90deg, #f44336, #ef5350);
+  color: white;
+}

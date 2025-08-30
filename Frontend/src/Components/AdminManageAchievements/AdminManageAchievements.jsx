@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { API_URL } from '../../Api'; // Import the API_URL constant
+import { API_URL } from '../../Api'; 
 import './AdminManageAchievements.css';
 import Swal from "sweetalert2";
 
@@ -19,40 +19,39 @@ const AdminManageAchievements = () => {
   }, []);
 
   const handleDelete = (id) => {
-  Swal.fire({
-    title: "Are you sure?",
-    text: "You won't be able to revert this!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#3085d6",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Yes, delete it!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      axios
-        .delete(`${API_URL}/achievements/delete-achievement/${id}`)
-        .then((response) => {
-          setAchievements((prev) =>
-            prev.filter((achievement) => achievement._id !== id)
-          );
-
-          Swal.fire({
-            title: "Deleted!",
-            text: "Your file has been deleted.",
-            icon: "success",
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`${API_URL}/achievements/delete-achievement/${id}`)
+          .then((response) => {
+            setAchievements((prev) =>
+              prev.filter((achievement) => achievement._id !== id)
+            );
+            Swal.fire({
+              title: "Deleted!",
+              text: "Achievement has been deleted.",
+              icon: "success",
+            });
+          })
+          .catch((error) => {
+            console.error(error);
+            Swal.fire({
+              title: "Error!",
+              text: "Something went wrong while deleting.",
+              icon: "error",
+            });
           });
-        })
-        .catch((error) => {
-          console.error(error);
-          Swal.fire({
-            title: "Error!",
-            text: "Something went wrong while deleting.",
-            icon: "error",
-          });
-        });
-    }
-  });
-};
+      }
+    });
+  };
 
   const handleImageChange = (id, image) => {
     const formData = new FormData();
@@ -69,6 +68,37 @@ const AdminManageAchievements = () => {
       })
       .catch((error) => {
         console.error('Upload error:', error.response?.data || error.message);
+      });
+  };
+
+  // NEW: Handle Publish / Unpublish
+  const handleTogglePublish = (id, isPublished) => {
+    const url = isPublished
+      ? `${API_URL}/achievements/unpublish-achievement/${id}`
+      : `${API_URL}/achievements/publish-achievement/${id}`;
+
+    axios.put(url)
+      .then((response) => {
+        setAchievements(
+          achievements.map((achievement) =>
+            achievement._id === id
+              ? { ...achievement, isPublished: !isPublished }
+              : achievement
+          )
+        );
+        Swal.fire({
+          title: "Success!",
+          text: `Achievement has been ${isPublished ? 'unpublished' : 'published'}.`,
+          icon: "success",
+        });
+      })
+      .catch((error) => {
+        console.error('Publish toggle error:', error.response?.data || error.message);
+        Swal.fire({
+          title: "Error!",
+          text: "Something went wrong while updating publish status.",
+          icon: "error",
+        });
       });
   };
 
@@ -92,30 +122,40 @@ const AdminManageAchievements = () => {
             </tr>
           </thead>
           <tbody className="manage-achievements-table-body">
-           {achievements.map((achievement, index) => (
-  <tr key={achievement._id} className="manage-achievements-table-row">
-    <td className="manage-achievements-table-data">{index + 1}</td>
-    <td className="manage-achievements-table-data">
-      {achievement.title.length > 10 ? achievement.title.substring(0, 10) + '...' : achievement.title}
-    </td>
-    <td className="manage-achievements-table-data">{achievement.achieverName}</td>
-    <td className="manage-achievements-table-data manage-achievements-image-container">
-      <img src={achievement.image} alt={achievement.title} className="manage-achievements-image" />
-    </td>
-    <td className="manage-achievements-table-data manage-achievements-change-image-container">
-      <input
-        type="file"
-        onChange={(e) => handleImageChange(achievement._id, e.target.files[0])}
-        className="manage-achievements-change-image-input"
-      />
-    </td>
-    <td className="manage-achievements-table-data manage-achievements-actions-container">
-      <button className="manage-achievements-delete-btn" onClick={() => handleDelete(achievement._id)}>
-        Delete
-      </button>
-    </td>
-  </tr>
-))}
+            {achievements.map((achievement, index) => (
+              <tr key={achievement._id} className="manage-achievements-table-row">
+                <td className="manage-achievements-table-data">{index + 1}</td>
+                <td className="manage-achievements-table-data">
+                  {truncateText(achievement.title, 10)}
+                </td>
+                <td className="manage-achievements-table-data">{achievement.achieverName}</td>
+                <td className="manage-achievements-table-data manage-achievements-image-container">
+                  <img src={achievement.image} alt={achievement.title} className="manage-achievements-image" />
+                </td>
+                <td className="manage-achievements-table-data manage-achievements-change-image-container">
+                  <input
+                    type="file"
+                    onChange={(e) => handleImageChange(achievement._id, e.target.files[0])}
+                    className="manage-achievements-change-image-input"
+                  />
+                </td>
+                <td className="manage-achievements-table-data manage-achievements-actions-container">
+                  <button
+                    className={`publish-toggle-btn ${achievement.isPublished ? 'published' : 'unpublished'}`}
+                    onClick={() => handleTogglePublish(achievement._id, achievement.isPublished)}
+                  >
+                    {achievement.isPublished ? 'Published' : 'Unpublished'}
+                  </button>
+
+                  <button
+                    className="manage-achievements-delete-btn"
+                    onClick={() => handleDelete(achievement._id)}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

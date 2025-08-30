@@ -26,7 +26,7 @@ const StyledBlog = () => {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const response = await fetch(`${API_URL}/blogs/all`);
+        const response = await fetch(`${API_URL}/blogs/published`);
         const result = await response.json();
 
         if (result.success) {

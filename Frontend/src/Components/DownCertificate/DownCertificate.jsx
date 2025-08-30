@@ -10,7 +10,6 @@ const DownCertificate = () => {
   const token = localStorage.getItem('token'); 
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
     if (!token) {
       console.error('Token not found');
       return;
@@ -19,14 +18,14 @@ const DownCertificate = () => {
     const fetchCertificates = async () => {
       try {
         const response = await axios.get(`${API_URL}/uru/fetch-applied-uru-by-user`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         });
         setCertificates(response.data);
+
         const verified = {};
         response.data.forEach((certificate) => {
-          verified[certificate._id] = certificate.certificateUrl !== null && certificate.certificateUrl !== undefined;
+          verified[certificate._id] =
+            certificate.certificateUrl !== null && certificate.certificateUrl !== undefined;
         });
         setVerifiedCertificates(verified);
       } catch (error) {
@@ -38,18 +37,21 @@ const DownCertificate = () => {
       }
     };
     fetchCertificates();
-  }, []);
+  }, [token]);
 
   const handleDownload = async (certificate) => {
     try {
-      const response = await axios.get(`${API_URL}/uru/download-certificate/${certificate.applicationNumber}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-        responseType: 'blob',
-      });
+      const response = await axios.get(
+        `${API_URL}/uru/download-certificate/${certificate.applicationNumber}`,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+          responseType: 'blob',
+        }
+      );
 
-      const url = window.URL.createObjectURL(new Blob([response.data], { type: response.headers['content-type'] }));
+      const url = window.URL.createObjectURL(
+        new Blob([response.data], { type: response.headers['content-type'] })
+      );
       const link = document.createElement('a');
       link.href = url;
       link.setAttribute('download', '');
@@ -58,7 +60,7 @@ const DownCertificate = () => {
       document.body.removeChild(link);
     } catch (error) {
       if (error.response && error.response.status === 404) {
-        alert('Wait For 24 hour Your Certificate is being in progress');
+        alert('Wait for 24 hours, your certificate is being processed.');
       } else {
         console.error(error);
       }
@@ -69,51 +71,67 @@ const DownCertificate = () => {
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const day = date.getDate();
-    const suffix = (day % 10 === 1 && day !== 11) ? "st" :
-                   (day % 10 === 2 && day !== 12) ? "nd" :
-                   (day % 10 === 3 && day !== 13) ? "rd" : "th";
-    const options = { month: "short", year: "numeric" };
-    return `${day}${suffix} ${date.toLocaleDateString("en-US", options)}`;
+    const suffix =
+      day % 10 === 1 && day !== 11
+        ? 'st'
+        : day % 10 === 2 && day !== 12
+        ? 'nd'
+        : day % 10 === 3 && day !== 13
+        ? 'rd'
+        : 'th';
+    const options = { month: 'short', year: 'numeric' };
+    return `${day}${suffix} ${date.toLocaleDateString('en-US', options)}`;
   };
 
   return (
     <div className="Down-Certificate-Wrapper">
-      {certificates.map((certificate) => (
-        <div key={certificate._id} className="Down-Certificate-Card">
-          <h1 className="Down-Certificate-Heading"> Download Your Certificate</h1>
-          
-          <p className="Down-Certificate-Application-No">
-            Application No.: <span>{certificate.applicationNumber}</span>
-          </p>
+      {certificates.length > 0 ? (
+        certificates.map((certificate) => (
+          <div key={certificate._id} className="Down-Certificate-Card">
+            <h1 className="Down-Certificate-Heading">Download Your Certificate</h1>
 
-          {/* ✅ New Application Date Section */}
-          <p className="Down-Certificate-Date">
-            Application Date: <span>{formatDate(certificate.createdAt)}</span>
-          </p>
+            <p className="Down-Certificate-Application-No">
+              Application No.: <span>{certificate.applicationNumber}</span>
+            </p>
 
-          <p className="Down-Certificate-Applicant-Name">
-            Applicant Name: <span>{certificate.applicantName}</span>
-          </p>
+            <p className="Down-Certificate-Date">
+              Application Date: <span>{formatDate(certificate.createdAt)}</span>
+            </p>
 
-          <p className="Down-Certificate-Description">
-            {verifiedCertificates[certificate._id]
-              ? 'Congratulations on your achievement! Click below to download your certificate.'
-              : 'After verification, acceptance and successful receipt of the prescribed fee, the button to download the digital certificate of Unique Records of Universe holder will be enabled. Please wait till then.'}
-          </p>
+            <p className="Down-Certificate-Applicant-Name">
+              Applicant Name: <span>{certificate.applicantName}</span>
+            </p>
 
-          <div className="Down-Certificate-Icon-Wrapper">
-            <FaDownload className="Down-Certificate-Icon" />
+            <p className="Down-Certificate-Description">
+              {verifiedCertificates[certificate._id]
+                ? '🎉 Congratulations on your achievement! Click below to download your certificate.'
+                : 'After verification, acceptance, and successful receipt of the prescribed fee, the button to download your digital certificate will be enabled. Please wait till then.'}
+            </p>
+
+            <div className="Down-Certificate-Icon-Wrapper">
+              <FaDownload className="Down-Certificate-Icon" />
+            </div>
+
+            <button
+              className="Down-Certificate-Button"
+              onClick={() => handleDownload(certificate)}
+              disabled={!verifiedCertificates[certificate._id]}
+            >
+              {verifiedCertificates[certificate._id]
+                ? 'Download Certificate'
+                : 'Verifying...'}
+            </button>
           </div>
-
-          <button
-            className="Down-Certificate-Button"
-            onClick={() => handleDownload(certificate)}
-            disabled={!verifiedCertificates[certificate._id]}
-          >
-            {verifiedCertificates[certificate._id] ? 'Download Certificate' : 'Verifying...'}
-          </button>
+        ))
+      ) : (
+        <div className="No-Certificate-Found">
+          <h2>No Certificates Achieved Yet</h2>
+          <p>
+            You haven’t achieved any certificates so far. <br />
+            👉 First, apply for a certificate to get started on your recognition journey.
+          </p>
         </div>
-      ))}
+      )}
     </div>
   );
 };

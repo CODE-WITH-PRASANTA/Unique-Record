@@ -124,7 +124,7 @@ const BlogSection = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   useEffect(() => {
-     axios.get(`${API_URL}/blogs/all`) // Use API_URL
+     axios.get(`${API_URL}/blogs/published`) // Use API_URL
       .then(res => {
         const blogs = res.data.data;
         setBlogPosts(blogs);

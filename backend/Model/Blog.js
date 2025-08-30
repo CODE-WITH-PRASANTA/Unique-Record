@@ -14,6 +14,10 @@ const blogSchema = new mongoose.Schema(
     address: { type: String },
     tags: [{ type: String }],
     imageUrl: { type: String, required: true },
+    isPublished: {
+      type: Boolean,
+      default: false, // new field added
+    },
   },
   { timestamps: true }
 );

@@ -16,14 +16,14 @@ const AboutMission = () => {
         <h2 className="mission-title">About Divine<span>Grand Launch</span>
         </h2>
         <p className="mission-intro">
-        The divine, grand launch of the "Unique Record of Universe™" Web Portal was done on 25 June 2025 during the Hindi-Thai Culture Mahasammelan program organized at the International forum in the capital Bangkok, Thailand. This program was organized successful with the joint effort of Devanagari Utthan Foundation, (Hyderabad, Telangana) Dharadham International (Gorakhpur, Uttar Pradesh) and DPHRC Trust (Azamgarh, Uttar Pradesh). In which more than 250 extraordinary people from government and government institutions from all over the world participated.        </p>
+        The divine, grand launch of the "Unique Record of Universe™" Web Portal was done on 25 May 2025 during the Hindi-Thai Culture Mahasammelan program organized at the International forum in the capital Bangkok, Thailand. This program was organized successful with the joint effort of Devanagari Utthan Foundation, (Hyderabad, Telangana) Dharadham International (Gorakhpur, Uttar Pradesh) and DPHRC Trust (Azamgarh, Uttar Pradesh). In which more than 250 extraordinary people from government and government institutions from all over the world participated.        </p>
         <h2 className="mission-title">About DPKHRC <span>Trust</span> </h2>
         <p className="mission-text">
         Divya Prerak Kahaniyan Humanity Research Centre is the first research institute of the country/world which is committed to establish high ideals of humanity and morality in humans along with unique and new initiatives. For world peace, progress, development, it will change the lives of people by freeing their mentality from enemies like lust, anger, pride, attachment, greed, ego, jealousy, hatred, deceit, fraud, deception etc. and will drenched them with the sweet juice of truth, love, non-violence, goodwill, cooperation and human unity, brotherhood and is an important catalytic center point for economic, social, intellectual change.
-<br />
-This research institute has the option of doing free research on more than 120 topics related to humanity in the practical world. So far, 98 researchers have registered for research on various topics of humanity through this research institute.
-<br />
-ISO 21001:2018 certified Divya Prerak Kahaniyan Humanity Research Centre was registered on 03/05/2023 at the Sub-Registrar's Office Lalganj under Azamgarh district of Uttar Pradesh state under the Indian Trust Act Law-1882. Whose registration number is- 04/36/2023. The main objective of this research center is to conduct practical research on hundreds of topics related to humanity and to establish the high values ​​of humanity.
+        <br />
+        This research institute has the option of doing free research on more than 120 topics related to humanity in the practical world. So far, 98 researchers have registered for research on various topics of humanity through this research institute.
+        <br />
+        ISO 21001:2018 certified Divya Prerak Kahaniyan Humanity Research Centre was registered on 03/05/2023 at the Sub-Registrar's Office Lalganj under Azamgarh district of Uttar Pradesh state under the Indian Trust Act Law-1882. Whose registration number is- 04/36/2023. The main objective of this research center is to conduct practical research on hundreds of topics related to humanity and to establish the high values ​​of humanity.
 
         </p>
         <p className="mission-text">

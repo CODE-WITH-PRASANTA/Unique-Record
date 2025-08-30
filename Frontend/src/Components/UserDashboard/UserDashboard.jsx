@@ -20,6 +20,9 @@ const UserDashboard = () => {
   const [submitted, setSubmitted] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const progressStep = Math.min(Math.max(step - 1, 0), 5);
+  const progressPercent = (progressStep / 5) * 100;
+
 
   const [formData, setFormData] = useState({
       applicantName: "",
@@ -42,17 +45,23 @@ const UserDashboard = () => {
       dateOfAttempt: "",
       recordVenue: "",
       organisationName: "",
-      googleDriveLink: "",
-      facebookLink: "",
-      youtubeLink: "",
-      instagramLink: "",
-      linkedInLink: "",
-      xLink: "",
-      pinterestLink: "",
-      otherMediaLink: "",
-      photo: null,
-      video: null,
-      document: null,
+
+      googleDriveLink: [""],
+      facebookLink: [""],
+      youtubeLink: [""],
+      instagramLink: [""],
+      linkedInLink: [""],
+      xLink: [""],
+      pinterestLink: [""],
+      otherMediaLink: [""],
+
+
+      // ✅ files
+      photos: [],
+      videos: [],
+      documents: [],
+
+      // ✅ witnesses
       witness1Name: "",
       witness1Designation: "",
       witness1Address: "",
@@ -63,10 +72,47 @@ const UserDashboard = () => {
       witness2Address: "",
       witness2MobileNumber: "",
       witness2EmailId: "",
-      position: "",
-  });
 
-   useEffect(() => {
+      position: "",
+      
+  });
+  const handleLinkChange = (e, field, index) => {
+  const { value } = e.target;
+  setFormData((prev) => {
+    const updated = [...prev[field]];
+    updated[index] = value;
+    return { ...prev, [field]: updated };
+  });
+};
+
+// ➕ Add new link field
+const addLinkField = (field) => {
+  setFormData((prev) => ({
+    ...prev,
+    [field]: [...prev[field], ""],
+  }));
+};
+
+// ❌ Remove a link field
+const removeLinkField = (field, index) => {
+  setFormData((prev) => {
+    const updated = [...prev[field]];
+    updated.splice(index, 1);
+    return { ...prev, [field]: updated };
+  });
+};
+
+const removeFile = (field, index) => {
+  setFormData((prev) => {
+    const updated = [...prev[field]];
+    updated.splice(index, 1);
+    return { ...prev, [field]: updated };
+  });
+};
+
+
+
+  useEffect(() => {
   const fetchCategories = async () => {
     try {
       const response = await axios.get(`${API_URL}/categories`);
@@ -84,13 +130,16 @@ const UserDashboard = () => {
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+  const handleFileChange = (e, field) => {
+  const files = Array.from(e.target.files);
+  setFormData((prev) => ({
+    ...prev,
+    [field]: [...prev[field], ...files], // append files
+  }));
+};
 
-  const handleFileChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.files[0] });
-  };
 
-    // Save draft in localStorage whenever "Save & Next" clicked
-    const handleNext = (e) => {
+  const handleNext = (e) => {
       e.preventDefault();
       const nextStep = step + 1;
 
@@ -101,36 +150,50 @@ const UserDashboard = () => {
       }));
 
       setStep(nextStep);
-    };
+  };
+  useEffect(() => {
+    const savedDraft = localStorage.getItem("uruDraft");
+    if (savedDraft) {
+      const { formData: savedData, step: savedStep } = JSON.parse(savedDraft);
 
-    // On component load, check for saved draft
-    useEffect(() => {
-      const savedDraft = localStorage.getItem("uruDraft");
-      if (savedDraft) {
-        const { formData: savedData, step: savedStep } = JSON.parse(savedDraft);
-        setFormData(savedData);
-        setStep(savedStep);
-      }
-    }, []);
+      // ensure all link fields are arrays
+      const normalizedData = {
+        ...savedData,
+        googleDriveLink: Array.isArray(savedData.googleDriveLink) ? savedData.googleDriveLink : [savedData.googleDriveLink || ""],
+        facebookLink: Array.isArray(savedData.facebookLink) ? savedData.facebookLink : [savedData.facebookLink || ""],
+        youtubeLink: Array.isArray(savedData.youtubeLink) ? savedData.youtubeLink : [savedData.youtubeLink || ""],
+        instagramLink: Array.isArray(savedData.instagramLink) ? savedData.instagramLink : [savedData.instagramLink || ""],
+        linkedInLink: Array.isArray(savedData.linkedInLink) ? savedData.linkedInLink : [savedData.linkedInLink || ""],
+        xLink: Array.isArray(savedData.xLink) ? savedData.xLink : [savedData.xLink || ""],
+        pinterestLink: Array.isArray(savedData.pinterestLink) ? savedData.pinterestLink : [savedData.pinterestLink || ""],
+        otherMediaLink: Array.isArray(savedData.otherMediaLink) ? savedData.otherMediaLink : [savedData.otherMediaLink || ""],
+      };
 
-
+      setFormData(normalizedData);
+      setStep(savedStep);
+    }
+  }, []);
   const handlePrevious = () => {
     setStep((prevStep) => prevStep - 1);
   };
-
-    const handleFinalSubmit = async (e) => {
+  const handleFinalSubmit = async (e) => {
       e.preventDefault();
       if (termsAccepted) {
         setIsSubmitting(true); // Set submitting state to true
         try {
           const formDataToSend = new FormData();
           Object.keys(formData).forEach((key) => {
-            if (key === "photo" || key === "video" || key === "document") {
-              formDataToSend.append(key, formData[key]);
-            } else {
-              formDataToSend.append(key, formData[key]);
-            }
+  if (Array.isArray(formData[key])) {
+    // Handle arrays (links & files)
+    formData[key].forEach((val) => {
+      formDataToSend.append(key, val);
+    });
+  } else {
+    // Handle normal single fields
+    formDataToSend.append(key, formData[key]);
+  }
           });
+
           
           const token = localStorage.getItem("token");
           const response = await axios.post(`${API_URL}/uru/create-uru`, formDataToSend, {
@@ -154,55 +217,49 @@ const UserDashboard = () => {
       } else {
         alert("Please accept the Terms and Conditions before submitting.");
       }
-    };
-
-  const progressStep = Math.min(Math.max(step - 1, 0), 5);
-  const progressPercent = (progressStep / 5) * 100;
-
+  };
+ 
   return (
     <>
       <div className="achivment-container">
        <div className="achievement-form-left-panel">
-  {/* Company Logo */}
-  <div className="achievement-form-logo">
-    <img src={Companylogo} alt="Company Logo" />
-  </div>
+          {/* Company Logo */}
+          <div className="achievement-form-logo">
+            <img src={Companylogo} alt="Company Logo" />
+          </div>
 
-  {/* Social Icons */}
-  <div className="achievement-form-social-icons">
-    <a href="#"><FontAwesomeIcon icon={faFacebookF} /></a>
-    <a href="#"><FontAwesomeIcon icon={faXTwitter} /></a>
-    <a href="#"><FontAwesomeIcon icon={faInstagram} /></a>
-    <a href="#"><FontAwesomeIcon icon={faTiktok} /></a>
-  </div>
+          {/* Social Icons */}
+          <div className="achievement-form-social-icons">
+            <a href="#"><FontAwesomeIcon icon={faFacebookF} /></a>
+            <a href="#"><FontAwesomeIcon icon={faXTwitter} /></a>
+            <a href="#"><FontAwesomeIcon icon={faInstagram} /></a>
+            <a href="#"><FontAwesomeIcon icon={faTiktok} /></a>
+          </div>
 
-  {/* Illustration */}
-  <div className="achievement-form-illustration">
-    <img src={img1} alt="Hiring Illustration" />
-  </div>
+          {/* Illustration */}
+          <div className="achievement-form-illustration">
+            <img src={img1} alt="Hiring Illustration" />
+          </div>
 
-  {/* Heading */}
-  <h1 className="achievement-form-heading">Unique Record Of Universe</h1>
+          {/* Heading */}
+          <h1 className="achievement-form-heading">Unique Record Of Universe</h1>
 
-  {/* Description */}
-  <p className="achievement-form-description">
-    Unique Records Universe (URU) aims to provide a global platform and recognition to extraordinary, inspiring, verifiable human achievements, natural phenomena and innovations from around the world by digitally cataloguing them. Our aim is to preserve unique records or activities for positive inspiration to future generations with inclusive, transparent and ethical standards.
-  </p>
+          {/* Description */}
+          <p className="achievement-form-description">
+            Unique Records Universe (URU) aims to provide a global platform and recognition to extraordinary, inspiring, verifiable human achievements, natural phenomena and innovations from around the world by digitally cataloguing them. Our aim is to preserve unique records or activities for positive inspiration to future generations with inclusive, transparent and ethical standards.
+          </p>
       </div>
-
 
         <div className="right-panel">
           <div className="form-achivment-container">
             <h2 className="heading">Apply Online Appliction Form</h2>
             <small className="Sub-heading">Apply online to have your unique record or activity registered in the digital archives of the universe</small>
-
             <div className="progress-bar-achivment-container">
               <div className="progress-text">{progressStep} of 5 completed</div>
               <div className="progress-bar">
                 <div className="progress-fill" style={{ width: `${progressPercent}%` }}></div>
               </div>
             </div>
-
             {step === 1 && (
               <>
                 <p className="paragraph">Select the position you are applying for:</p>
@@ -222,7 +279,6 @@ const UserDashboard = () => {
                 </form>
               </>
             )}
-
             {step === 2 && (
               <>
                 <p className="section-title">Please fill in your personal details:</p>
@@ -289,7 +345,6 @@ const UserDashboard = () => {
                 </form>
               </>
             )}
-
             {step === 3 && (
               <>
                 <p className="section-title">Fill about Record/Activity Details:</p>
@@ -354,76 +409,385 @@ const UserDashboard = () => {
                 </form>
               </>
               )}
-
-
             {step === 4 && (
-              <>
-                <p className="section-title"><h2 className="evidence-heading">Evidence :</h2> 
-                  You should attach full details of evidence related to your achievements, photographs, biodata including newspaper cuttings and various types of social media and web links.</p>
-                <form className="personal-form" onSubmit={handleNext}>
-                  <div className="grid-form">
-                    <div className="achivment-form-group">
-                      <label>Google Drive Link</label>
-                      <input type="url" name="googleDriveLink" value={formData.googleDriveLink} onChange={handleInputChange} />
-                    </div>
-                    <div className="achivment-form-group">
-                      <label>Facebook Link</label>
-                      <input type="url" name="facebookLink" value={formData.facebookLink} onChange={handleInputChange} />
-                    </div>
-                    <div className="achivment-form-group">
-                      <label>YouTube Link</label>
-                      <input type="url" name="youtubeLink" value={formData.youtubeLink} onChange={handleInputChange} />
-                    </div>
-                    <div className="achivment-form-group">
-                      <label>Instagram Link</label>
-                      <input type="url" name="instagramLink" value={formData.instagramLink} onChange={handleInputChange} />
-                    </div>
-                    <div className="achivment-form-group">
-                      <label>LinkedIn Link</label>
-                      <input type="url" name="linkedInLink" value={formData.linkedInLink} onClick={handleInputChange} />
-                    </div>
-                    <div className="achivment-form-group">
-                      <label>X Link</label>
-                      <input type="url" name="xLink" value={formData.xLink} onChange={handleInputChange} />
-                    </div>
-                    <div className="achivment-form-group">
-                      <label>Pinterest Link</label>
-                      <input type="url" name="pinterestLink" value={formData.pinterestLink} onChange={handleInputChange} />
-                    </div>
-                    <div className="achivment-form-group">
-                          <label>Other Media Link</label>
-                          <input
-                            type="text"
-                            name="otherMediaLink"
-                            placeholder="Enter media link"
-                            value={formData.otherMediaLink}
-                            onChange={handleInputChange}
-                            pattern="^(https?:\/\/)?(www\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,}.*$"
-                            title="Please enter a valid link (with or without http/https/www)"
-                          />
+                <>
+                  <div className="section-title">
+                    <h2 className="evidence-heading">Evidence :</h2>
+                    <p>
+                      You should attach full details of evidence related to your achievements,
+                      photographs, biodata including newspaper cuttings and various types of
+                      social media and web links.
+                    </p>
+                  </div>
+
+                  <form className="personal-form" onSubmit={handleNext}>
+                    <div className="grid-form">
+
+                      {/* 🔗 Google Drive Links */}
+                      <div className="achivment-form-group">
+                        <label>Google Drive Links</label>
+                        {formData.googleDriveLink.map((link, index) => (
+                          <div key={index} className="link-input-group">
+                            <input
+                              type="url"
+                              value={link}
+                              onChange={(e) => handleLinkChange(e, "googleDriveLink", index)}
+                              placeholder="Enter Google Drive link"
+                              className="link-input"
+                            />
+                            {index === formData.googleDriveLink.length - 1 && (
+                              <button
+                                type="button"
+                                onClick={() => addLinkField("googleDriveLink")}
+                                className="step-btn step-btn-add"
+                              >
+                                ➕
+                              </button>
+                            )}
+                            {formData.googleDriveLink.length > 1 && (
+                              <button
+                                type="button"
+                                onClick={() => removeLinkField("googleDriveLink", index)}
+                                className="step-btn step-btn-remove"
+                              >
+                                ❌
+                              </button>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* 🔗 Facebook Links */}
+                      <div className="achivment-form-group">
+                        <label>Facebook Links</label>
+                        {formData.facebookLink.map((link, index) => (
+                          <div key={index} className="link-input-group">
+                            <input
+                              type="url"
+                              value={link}
+                              onChange={(e) => handleLinkChange(e, "facebookLink", index)}
+                              placeholder="Enter Facebook link"
+                              className="link-input"
+                            />
+                            {index === formData.facebookLink.length - 1 && (
+                              <button
+                                type="button"
+                                onClick={() => addLinkField("facebookLink")}
+                                className="step-btn step-btn-add"
+                              >
+                                ➕
+                              </button>
+                            )}
+                            {formData.facebookLink.length > 1 && (
+                              <button
+                                type="button"
+                                onClick={() => removeLinkField("facebookLink", index)}
+                                className="step-btn step-btn-remove"
+                              >
+                                ❌
+                              </button>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* 🔗 YouTube Links */}
+                      <div className="achivment-form-group">
+                        <label>YouTube Links</label>
+                        {formData.youtubeLink.map((link, index) => (
+                          <div key={index} className="link-input-group">
+                            <input
+                              type="url"
+                              value={link}
+                              onChange={(e) => handleLinkChange(e, "youtubeLink", index)}
+                              placeholder="Enter YouTube link"
+                              className="link-input"
+                            />
+                            {index === formData.youtubeLink.length - 1 && (
+                              <button
+                                type="button"
+                                onClick={() => addLinkField("youtubeLink")}
+                                className="step-btn step-btn-add"
+                              >
+                                ➕
+                              </button>
+                            )}
+                            {formData.youtubeLink.length > 1 && (
+                              <button
+                                type="button"
+                                onClick={() => removeLinkField("youtubeLink", index)}
+                                className="step-btn step-btn-remove"
+                              >
+                                ❌
+                              </button>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* 🔗 Instagram Links */}
+                      <div className="achivment-form-group">
+                        <label>Instagram Links</label>
+                        {formData.instagramLink.map((link, index) => (
+                          <div key={index} className="link-input-group">
+                            <input
+                              type="url"
+                              value={link}
+                              onChange={(e) => handleLinkChange(e, "instagramLink", index)}
+                              placeholder="Enter Instagram link"
+                              className="link-input"
+                            />
+                            {index === formData.instagramLink.length - 1 && (
+                              <button
+                                type="button"
+                                onClick={() => addLinkField("instagramLink")}
+                                className="step-btn step-btn-add"
+                              >
+                                ➕
+                              </button>
+                            )}
+                            {formData.instagramLink.length > 1 && (
+                              <button
+                                type="button"
+                                onClick={() => removeLinkField("instagramLink", index)}
+                                className="step-btn step-btn-remove"
+                              >
+                                ❌
+                              </button>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* 🔗 LinkedIn Links */}
+                      <div className="achivment-form-group">
+                        <label>LinkedIn Links</label>
+                        {formData.linkedInLink.map((link, index) => (
+                          <div key={index} className="link-input-group">
+                            <input
+                              type="url"
+                              value={link}
+                              onChange={(e) => handleLinkChange(e, "linkedInLink", index)}
+                              placeholder="Enter LinkedIn link"
+                              className="link-input"
+                            />
+                            {index === formData.linkedInLink.length - 1 && (
+                              <button
+                                type="button"
+                                onClick={() => addLinkField("linkedInLink")}
+                                className="step-btn step-btn-add"
+                              >
+                                ➕
+                              </button>
+                            )}
+                            {formData.linkedInLink.length > 1 && (
+                              <button
+                                type="button"
+                                onClick={() => removeLinkField("linkedInLink", index)}
+                                className="step-btn step-btn-remove"
+                              >
+                                ❌
+                              </button>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* 🔗 X (Twitter) Links */}
+                      <div className="achivment-form-group">
+                        <label>X (Twitter) Links</label>
+                        {formData.xLink.map((link, index) => (
+                          <div key={index} className="link-input-group">
+                            <input
+                              type="url"
+                              value={link}
+                              onChange={(e) => handleLinkChange(e, "xLink", index)}
+                              placeholder="Enter X (Twitter) link"
+                              className="link-input"
+                            />
+                            {index === formData.xLink.length - 1 && (
+                              <button
+                                type="button"
+                                onClick={() => addLinkField("xLink")}
+                                className="step-btn step-btn-add"
+                              >
+                                ➕
+                              </button>
+                            )}
+                            {formData.xLink.length > 1 && (
+                              <button
+                                type="button"
+                                onClick={() => removeLinkField("xLink", index)}
+                                className="step-btn step-btn-remove"
+                              >
+                                ❌
+                              </button>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* 🔗 Pinterest Links */}
+                      <div className="achivment-form-group">
+                        <label>Pinterest Links</label>
+                        {formData.pinterestLink.map((link, index) => (
+                          <div key={index} className="link-input-group">
+                            <input
+                              type="url"
+                              value={link}
+                              onChange={(e) => handleLinkChange(e, "pinterestLink", index)}
+                              placeholder="Enter Pinterest link"
+                              className="link-input"
+                            />
+                            {index === formData.pinterestLink.length - 1 && (
+                              <button
+                                type="button"
+                                onClick={() => addLinkField("pinterestLink")}
+                                className="step-btn step-btn-add"
+                              >
+                                ➕
+                              </button>
+                            )}
+                            {formData.pinterestLink.length > 1 && (
+                              <button
+                                type="button"
+                                onClick={() => removeLinkField("pinterestLink", index)}
+                                className="step-btn step-btn-remove"
+                              >
+                                ❌
+                              </button>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* 🔗 Other Media Links */}
+                      <div className="achivment-form-group">
+                        <label>Other Media Links</label>
+                        {formData.otherMediaLink.map((link, index) => (
+                          <div key={index} className="link-input-group">
+                            <input
+                              type="url"
+                              value={link}
+                              onChange={(e) => handleLinkChange(e, "otherMediaLink", index)}
+                              placeholder="Enter Other Media link"
+                              className="link-input"
+                            />
+                            {index === formData.otherMediaLink.length - 1 && (
+                              <button
+                                type="button"
+                                onClick={() => addLinkField("otherMediaLink")}
+                                className="step-btn step-btn-add"
+                              >
+                                ➕
+                              </button>
+                            )}
+                            {formData.otherMediaLink.length > 1 && (
+                              <button
+                                type="button"
+                                onClick={() => removeLinkField("otherMediaLink", index)}
+                                className="step-btn step-btn-remove"
+                              >
+                                ❌
+                              </button>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* 📷 Photos */}
+                      <div className="achivment-form-group">
+                        <label>Upload Photos*</label>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          multiple
+                          onChange={(e) => handleFileChange(e, "photos")}
+                        />
+                        <div className="file-preview-container">
+                          {formData.photos.map((file, index) => (
+                            <div key={index} className="file-preview">
+                              <img
+                                src={URL.createObjectURL(file)}
+                                alt="preview"
+                                className="file-img"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => removeFile("photos", index)}
+                                className="step-btn-remove-file"
+                              >
+                                ❌
+                              </button>
+                            </div>
+                          ))}
                         </div>
+                      </div>
 
-                    <div className="achivment-form-group">
-                      <label>Photo*</label>
-                      <input type="file" name="photo" onChange={handleFileChange} required />
+                      {/* 🎥 Videos */}
+                      <div className="achivment-form-group">
+                        <label>Upload Videos</label>
+                        <input
+                          type="file"
+                          accept="video/*"
+                          multiple
+                          onChange={(e) => handleFileChange(e, "videos")}
+                        />
+                        <ul className="file-list">
+                          {formData.videos.map((file, index) => (
+                            <li key={index} className="file-list-item">
+                              <video
+                                src={URL.createObjectURL(file)}
+                                controls
+                                className="file-video"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => removeFile("videos", index)}
+                                className="step-btn step-btn-remove"
+                              >
+                                ❌
+                              </button>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      {/* 📄 Documents */}
+                      <div className="achivment-form-group">
+                        <label>Upload Documents (PDF)</label>
+                        <input
+                          type="file"
+                          accept=".pdf"
+                          multiple
+                          onChange={(e) => handleFileChange(e, "documents")}
+                        />
+                        <ul className="file-list">
+                          {formData.documents.map((file, index) => (
+                            <li key={index} className="file-list-item">
+                              <span className="file-name">{file.name}</span>
+                              <button
+                                type="button"
+                                onClick={() => removeFile("documents", index)}
+                                className="step-btn step-btn-remove"
+                              >
+                                ❌
+                              </button>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
                     </div>
-                    <div className="achivment-form-group">
-                      <label>Video</label>
-                      <input type="file" name="video" onChange={handleFileChange} />
+
+                    {/* Navigation */}
+                    <div className="form-footer">
+                      <button type="button" className="prev-button" onClick={handlePrevious}>← Previous</button>
+                      <button type="submit" className="next-button">Save & Next</button>
                     </div>
-                    <div className="achivment-form-group">
-                      <label>Documents (PDF)</label>
-                      <input type="file" name="document" onChange={handleFileChange} />
-                    </div>
-                  </div>
-                  <div className="form-footer">
-                    <button type="button" className="prev-button" onClick={handlePrevious}>← Previous</button>
-                    <button type="submit" className="next-button">Save & Next</button>
-                  </div>
-                </form>
-              </>
+                  </form>
+                </>
             )}
-
             {step === 5 && (
               <>
                 <p className="section-title">Witness Details (Optional):</p>
@@ -476,58 +840,56 @@ const UserDashboard = () => {
                 </form>
               </>
             )}
-
-          {step === 6 && !submitted && (
-        <form className="thank-you-achivment-container" onSubmit={handleFinalSubmit}>
-         <div className="thankyou-container">
-            <h2 className="thankyou-heading">
-              Thank you very much for your unique contribution.
-            </h2>
-            <div className="thankyou-system">
-              <p>
-                This is the final step of application to digitally secure your unique 
-                <span className="highlight"> record/activity legacy </span> in the universe.
+            {step === 6 && !submitted && (
+          <form className="thank-you-achivment-container" onSubmit={handleFinalSubmit}>
+          <div className="thankyou-container">
+              <h2 className="thankyou-heading">
+                Thank you very much for your unique contribution.
+              </h2>
+              <div className="thankyou-system">
+                <p>
+                  This is the final step of application to digitally secure your unique 
+                  <span className="highlight"> record/activity legacy </span> in the universe.
+                </p>
+              </div>
+              <p className="thankyou-paragraph">
+                We will contact you shortly at the following email address 
+                <strong> {formData.emailId}</strong>
               </p>
             </div>
-            <p className="thankyou-paragraph">
-              We will contact you shortly at the following email address 
-              <strong> {formData.emailId}</strong>
-            </p>
-          </div>
 
 
-          {/* Terms and Conditions Checkbox */}
-          <div className="checkbox-area">
-            <label>
-              <input 
-                type="checkbox" 
-                checked={termsAccepted} 
-                onChange={() => setTermsAccepted(!termsAccepted)} 
-              />
-              I accept the{" "}
-              <span className="terms-link" onClick={() => setShowTerms(true)}>
-                Terms and Conditions
-              </span>
-            </label>
-          </div>
+            {/* Terms and Conditions Checkbox */}
+            <div className="checkbox-area">
+              <label>
+                <input 
+                  type="checkbox" 
+                  checked={termsAccepted} 
+                  onChange={() => setTermsAccepted(!termsAccepted)} 
+                />
+                I accept the{" "}
+                <span className="terms-link" onClick={() => setShowTerms(true)}>
+                  Terms and Conditions
+                </span>
+              </label>
+            </div>
 
-          {/* Footer */}
-          <div className="form-footer">
-            <button type="button" className="prev-button" onClick={handlePrevious}>
-              Previous
+            {/* Footer */}
+            <div className="form-footer">
+              <button type="button" className="prev-button" onClick={handlePrevious}>
+                Previous
+              </button>
+            <button 
+                  type="submit" 
+                  className="submit-button" 
+                  disabled={!termsAccepted || isSubmitting}
+                >
+                  {isSubmitting ? "Processing..." : "Submit"}
             </button>
-          <button 
-                type="submit" 
-                className="submit-button" 
-                disabled={!termsAccepted || isSubmitting}
-              >
-                {isSubmitting ? "Processing..." : "Submit"}
-          </button>
-                  </div>
-                </form>
-              )}
-              {/* Modal for Terms */}
-              {showTerms && (
+                    </div>
+                  </form>
+            )}
+            {showTerms && (
                 <div
                   className="user-dashboard-terms-overlay"
                   onClick={() => setShowTerms(false)}
@@ -649,8 +1011,7 @@ const UserDashboard = () => {
                     </div>
                   </div>
                 </div>
-              )}
-
+            )}
             {submitted && (
               <div className="thank-you-wrapper">
                 <div className="thank-you-card">
@@ -664,7 +1025,6 @@ const UserDashboard = () => {
                   </p>
                 </div>
               </div>
-
             )}
           </div>
         </div>

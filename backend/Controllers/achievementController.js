@@ -120,3 +120,50 @@ exports.getAchievementById = async (req, res) => {
     res.status(500).json({ message: 'Error fetching achievement' });
   }
 };
+
+// Publish Achievement
+exports.publishAchievement = async (req, res) => {
+  try {
+    const achievement = await Achievement.findById(req.params.id);
+    if (!achievement) {
+      return res.status(404).json({ message: 'Achievement not found' });
+    }
+
+    achievement.isPublished = true;
+    await achievement.save();
+
+    res.status(200).json({ message: 'Achievement published successfully', achievement });
+  } catch (error) {
+    console.error('Error publishing achievement:', error);
+    res.status(500).json({ message: 'Error publishing achievement' });
+  }
+};
+
+// Unpublish Achievement
+exports.unpublishAchievement = async (req, res) => {
+  try {
+    const achievement = await Achievement.findById(req.params.id);
+    if (!achievement) {
+      return res.status(404).json({ message: 'Achievement not found' });
+    }
+
+    achievement.isPublished = false;
+    await achievement.save();
+
+    res.status(200).json({ message: 'Achievement unpublished successfully', achievement });
+  } catch (error) {
+    console.error('Error unpublishing achievement:', error);
+    res.status(500).json({ message: 'Error unpublishing achievement' });
+  }
+};
+
+// Fetch only published achievements
+exports.getPublishedAchievements = async (req, res) => {
+  try {
+    const achievements = await Achievement.find({ isPublished: true });
+    res.status(200).json(achievements);
+  } catch (error) {
+    console.error('Error fetching published achievements:', error);
+    res.status(500).json({ message: 'Error fetching published achievements' });
+  }
+};

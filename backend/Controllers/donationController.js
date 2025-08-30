@@ -2,6 +2,8 @@ const Razorpay = require("razorpay");
 const crypto = require("crypto");
 const Donation = require("../Model/Donation");
 const sendEmail = require("../Utils/email");
+const nodemailer = require("nodemailer");
+
 
 // Initialize Razorpay
 const razorpay = new Razorpay({
@@ -66,7 +68,7 @@ const verifyPayment = async (req, res) => {
         if (!donationExists) exists = false;
       }
 
-      // Create donation
+      // Create donation in DB
       const donation = new Donation({
         ...formData,
         paymentNumber,
@@ -76,6 +78,17 @@ const verifyPayment = async (req, res) => {
       });
 
       await donation.save();
+
+      // ------------------
+      // Setup Nodemailer Transporter
+      // ------------------
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: "uruonline2025@gmail.com",
+          pass: process.env.EMAIL_PASS, // Gmail App Password (not normal password)
+        },
+      });
 
       // ------------------
       // Send Professional Email
@@ -151,7 +164,7 @@ const verifyPayment = async (req, res) => {
         `,
       };
 
-      await sendEmail(mailOptions);
+      await transporter.sendMail(mailOptions);
 
       res.status(200).json({
         success: true,

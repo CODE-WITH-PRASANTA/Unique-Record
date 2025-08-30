@@ -10,26 +10,25 @@ const ApplicationStatus = () => {
   const [applications, setApplications] = useState([]);
   const token = localStorage.getItem('token'); 
 
-useEffect(() => {
-  const fetchApplications = async () => {
-    try {
-      const response = await axios.get(`${API_URL}/uru/fetch-applied-uru-by-user`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+  useEffect(() => {
+    const fetchApplications = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/uru/fetch-applied-uru-by-user`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
-      // ✅ Sort by latest created date
-      const sortedApps = response.data.sort(
-        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-      );
+        // Sort by latest created date
+        const sortedApps = response.data.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
 
-      setApplications(sortedApps);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  fetchApplications();
-}, []);
-
+        setApplications(sortedApps);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchApplications();
+  }, []);
 
   const handlePayment = async (applicationNumber) => {
     try {
@@ -128,144 +127,147 @@ useEffect(() => {
 
   return (
     <div className="Application-status-wrapper">
-      {applications.map((application) => (
-        <div key={application.applicationNumber} className="Application-status-card">
-          <div className="Application-status-header">
-           <div className="Application-status-header-left">
-              <p className="Application-status-label">Application No.</p>
-              <p className="Application-status-value">{application.applicationNumber}</p>
+      {applications.length === 0 ? (
+        <div className="no-applications-found">
+          <h2>No Applications Found</h2>
+          <p>You haven’t submitted any applications yet. Once you apply, your application status will appear here.</p>
+        </div>
+      ) : (
+        applications.map((application) => (
+          <div key={application.applicationNumber} className="Application-status-card">
+            <div className="Application-status-header">
+              <div className="Application-status-header-left">
+                <p className="Application-status-label">Application No.</p>
+                <p className="Application-status-value">{application.applicationNumber}</p>
 
-              {/* ✅ Application Date */}
-              <p className="Application-status-date">
-                Date: {new Date(application.createdAt).toLocaleDateString("en-GB", {
-                  day: "numeric",
-                  month: "short",
-                  year: "numeric"
-                }).replace(/(\d{1,2})(?=\s)/, (d) => {
-                  const day = parseInt(d);
-                  if (day % 10 === 1 && day !== 11) return day + "st";
-                  if (day % 10 === 2 && day !== 12) return day + "nd";
-                  if (day % 10 === 3 && day !== 13) return day + "rd";
-                  return day + "th";
-                })}
-              </p>
+                {/* Application Date */}
+                <p className="Application-status-date">
+                  Date: {new Date(application.createdAt).toLocaleDateString("en-GB", {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric"
+                  }).replace(/(\d{1,2})(?=\s)/, (d) => {
+                    const day = parseInt(d);
+                    if (day % 10 === 1 && day !== 11) return day + "st";
+                    if (day % 10 === 2 && day !== 12) return day + "nd";
+                    if (day % 10 === 3 && day !== 13) return day + "rd";
+                    return day + "th";
+                  })}
+                </p>
+              </div>
 
-            </div>
-
-            <div className="Application-status-header-right">
-              <p className="Application-status-label">Applicant Name</p>
-              <p className="Application-status-value">{application.applicantName}</p>
-              <div className="Application-status-options">
-                <FaEllipsisV className="Application-status-options-icon" />
-                <div className="Application-status-options-menu">
-                  <a href={``} target="_blank" rel="noopener noreferrer">
-                    Download Your Application Form
-                  </a>
+              <div className="Application-status-header-right">
+                <p className="Application-status-label">Applicant Name</p>
+                <p className="Application-status-value">{application.applicantName}</p>
+                <div className="Application-status-options">
+                  <FaEllipsisV className="Application-status-options-icon" />
+                  <div className="Application-status-options-menu">
+                    <a href={``} target="_blank" rel="noopener noreferrer">
+                      Download Your Application Form
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <h2 className="Application-status-heading">Application Status Tracker</h2>
-          <p className="Application-status-description">
-            Follow your application's journey from submission to final payment. Stay updated every step of the way.
-          </p>
-
-          <div className="Application-status-info">
-            <p className="Application-status-label">Position:</p>
-            <p className="Application-status-value">{application.position}</p>
-
-            <p className="Application-status-label">Payment Status:</p>
-            <p className={`Application-status-value ${application.paymentStatus === 'Success' ? 'success' : 'pending'}`}>
-              {application.paymentStatus === 'Success' ? 'Payment Successful' : 'Payment Pending'}
+            <h2 className="Application-status-heading">Application Status Tracker</h2>
+            <p className="Application-status-description">
+              Follow your application's journey from submission to final payment. Stay updated every step of the way.
             </p>
 
-           <p className="Application-status-label">Payment Allotment:</p>
-            {application.price && application.price > 0 ? (
-              <p className="Application-status-value">₹{application.price}</p>
-            ) : (
-              <p className="Application-status-wait">⏳ Wait 24 Hr for verifying and allot your payment</p>
+            <div className="Application-status-info">
+              <p className="Application-status-label">Position:</p>
+              <p className="Application-status-value">{application.position}</p>
+
+              <p className="Application-status-label">Payment Status:</p>
+              <p className={`Application-status-value ${application.paymentStatus === 'Success' ? 'success' : 'pending'}`}>
+                {application.paymentStatus === 'Success' ? 'Payment Successful' : 'Payment Pending'}
+              </p>
+
+              <p className="Application-status-label">Payment Allotment:</p>
+              {application.price && application.price > 0 ? (
+                <p className="Application-status-value">₹{application.price}</p>
+              ) : (
+                <p className="Application-status-wait">⏳ Wait 24 Hr for verifying and allot your payment</p>
+              )}
+            </div>
+
+            {/* Timeline */}
+            <div className="Application-status-timeline">
+              <div className={`Application-status-step ${['Pending', 'Approved', 'Paid'].includes(application.status) ? 'completed' : ''}`}>
+                <div className="Application-status-circle green">
+                  <FaCheckCircle className="Application-status-icon" />
+                </div>
+                <p className="Application-status-label">Application Submitted</p>
+              </div>
+
+              <div className="Application-status-line" />
+
+              <div className={`Application-status-step ${['Approved', 'Paid'].includes(application.status) ? 'completed' : ''}`}>
+                <div className="Application-status-circle green">
+                  <FaCheckCircle className="Application-status-icon" />
+                </div>
+                <p className="Application-status-label">URU Investigator Checks</p>
+              </div>
+
+              <div className="Application-status-line" />
+
+              <div className={`Application-status-step ${['Approved', 'Paid'].includes(application.status) ? 'completed' : ''}`}>
+                <div className="Application-status-circle green">
+                  <FaCheckCircle className="Application-status-icon" />
+                </div>
+                <p className="Application-status-label">Document Verified</p>
+              </div>
+
+              <div className="Application-status-line" />
+
+              <div className={`Application-status-step final ${['Approved', 'Paid'].includes(application.status) ? 'completed' : application.status === 'Pending' ? 'pending' : ''}`}>
+                <div className={`Application-status-circle ${
+                  application.status === 'Approved' ? 'green' :
+                  application.status === 'Pending' ? 'yellow' :
+                  application.status === 'Paid' ? 'green' : ''
+                }`}>
+                  <FaCheckCircle className="Application-status-icon" />
+                </div>
+                <p className="Application-status-label">
+                  {application.status === 'Approved' ? 'Approved' :
+                  application.status === 'Pending' ? 'Pending Approval' :
+                  application.status === 'Paid' ? 'Approved & Paid' : ''}
+                </p>
+              </div>
+
+              <div className="Application-status-line" />
+              <div className={`Application-status-step payment ${application.paymentStatus === 'Success' ? 'completed' : ''}`}>
+                <div className={`Application-status-step payment`}>
+                  <div
+                    className={`Application-status-circle ${application.paymentStatus === 'Success' ? 'green' : 'blink-circle'}`}
+                    onClick={() => application.paymentStatus !== 'Success' && handlePayment(application.applicationNumber)}
+                  >
+                    {application.paymentStatus === 'Success' ? (
+                      <FaCheckCircle className="Application-status-icon" />
+                    ) : (
+                      <MdPayment className="Application-status-icon" />
+                    )}
+                  </div>
+                  <p className={`Application-status-label ${application.paymentStatus === 'Success' ? 'success' : 'pending'}`}>
+                    {application.paymentStatus === 'Success' ? 'Paid' : 'Make Payment'}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* After Payment Success – Show Transaction ID */}
+            {application.paymentStatus === 'Success' && application.razorpayPaymentId && (
+              <div className="payment-successful">
+                <p className="success">🎉 Thank you for your payment!</p>
+                <p className="transaction-id">
+                  Payment ID: <b>{application.razorpayPaymentId}</b>
+                </p>
+              </div>
             )}
-
           </div>
-
-          {/* Timeline */}
-          <div className="Application-status-timeline">
-            <div className={`Application-status-step ${['Pending', 'Approved', 'Paid'].includes(application.status) ? 'completed' : ''}`}>
-              <div className="Application-status-circle green">
-                <FaCheckCircle className="Application-status-icon" />
-              </div>
-              <p className="Application-status-label">Application Submitted</p>
-            </div>
-
-            <div className="Application-status-line" />
-
-            <div className={`Application-status-step ${['Approved', 'Paid'].includes(application.status) ? 'completed' : ''}`}>
-              <div className="Application-status-circle green">
-                <FaCheckCircle className="Application-status-icon" />
-              </div>
-              <p className="Application-status-label">URU Investigator Checks</p>
-            </div>
-
-            <div className="Application-status-line" />
-
-            <div className={`Application-status-step ${['Approved', 'Paid'].includes(application.status) ? 'completed' : ''}`}>
-              <div className="Application-status-circle green">
-                <FaCheckCircle className="Application-status-icon" />
-              </div>
-              <p className="Application-status-label">Document Verified</p>
-            </div>
-
-            <div className="Application-status-line" />
-
-            <div className={`Application-status-step final ${['Approved', 'Paid'].includes(application.status) ? 'completed' : application.status === 'Pending' ? 'pending' : ''}`}>
-              <div className={`Application-status-circle ${
-                application.status === 'Approved' ? 'green' :
-                application.status === 'Pending' ? 'yellow' :
-                application.status === 'Paid' ? 'green' : ''
-              }`}>
-                <FaCheckCircle className="Application-status-icon" />
-              </div>
-              <p className="Application-status-label">
-                {application.status === 'Approved' ? 'Approved' :
-                application.status === 'Pending' ? 'Pending Approval' :
-                application.status === 'Paid' ? 'Approved & Paid' : ''}
-              </p>
-            </div>
-
-            <div className="Application-status-line" />
-          <div className={`Application-status-step payment ${application.paymentStatus === 'Success' ? 'completed' : ''}`}>
-             <div className={`Application-status-step payment`}>
-  <div
-    className={`Application-status-circle ${application.paymentStatus === 'Success' ? 'green' : 'blink-circle'}`}
-    onClick={() => application.paymentStatus !== 'Success' && handlePayment(application.applicationNumber)}
-  >
-    {application.paymentStatus === 'Success' ? (
-      <FaCheckCircle className="Application-status-icon" />
-    ) : (
-      <MdPayment className="Application-status-icon" />
-    )}
-  </div>
-  <p className={`Application-status-label ${application.paymentStatus === 'Success' ? 'success' : 'pending'}`}>
-    {application.paymentStatus === 'Success' ? 'Paid' : 'Make Payment'}
-  </p>
-</div>
-
-            </div>
-
-          </div>
-
-          {/* ✅ After Payment Success – Show Transaction ID */}
-          {application.paymentStatus === 'Success' && application.razorpayPaymentId && (
-            <div className="payment-successful">
-              <p className="success">🎉 Thank you for your payment!</p>
-              <p className="transaction-id">
-                Payment ID: <b>{application.razorpayPaymentId}</b>
-              </p>
-            </div>
-          )}
-        </div>
-      ))}
+        ))
+      )}
     </div>
   );
 };

@@ -130,3 +130,27 @@
     width: 100%;
   }
 }
+
+.publish-toggle-btn {
+  padding: 8px 15px;
+  margin-right: 8px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #fff;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.publish-toggle-btn.published {
+  background: linear-gradient(90deg, #27ae60, #2ecc71);
+}
+
+.publish-toggle-btn.unpublished {
+  background: linear-gradient(90deg, #c0392b, #e74c3c);
+}
+
+.publish-toggle-btn:hover {
+  opacity: 0.85;
+}

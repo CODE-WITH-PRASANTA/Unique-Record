@@ -12,14 +12,14 @@ const {
   updatePrice,
   getUruByApplicationNumber,
   createRazorpayOrder ,
-verifyRazorpayPayment,
-fetchPaidUru,
-uploadCertificate,
-downloadCertificate,
-fetchAppliedUruByUser ,
-updatePublishStatus,
-fetchPublishedUru,
-fetchPublishedUruById
+  verifyRazorpayPayment,
+  fetchPaidUru,
+  uploadCertificate,
+  downloadCertificate,
+  fetchAppliedUruByUser ,
+  updatePublishStatus,
+  fetchPublishedUru,
+  fetchPublishedUruById
 } = require("../Controllers/uruController");
 const authenticate = require("../Middleware/authMiddleware");
 const upload = require("../Middleware/multer");
@@ -28,9 +28,9 @@ router.post(
   "/create-uru",
   authenticate,
   upload.fields([
-    { name: "photo", maxCount: 1 },
-    { name: "video", maxCount: 1 },
-    { name: "document", maxCount: 1 },
+    { name: "photos", maxCount: 10 },     // multiple photos
+    { name: "videos", maxCount: 5 },      // multiple videos
+    { name: "documents", maxCount: 10 }   // multiple documents (PDFs, etc.)
   ]),
   createUru
 );

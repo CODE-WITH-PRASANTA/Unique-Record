@@ -234,64 +234,69 @@ const FinalURU = () => {
             </tr>
           </thead>
 
-     <tbody>
+    <tbody>
   {filteredData && filteredData.length > 0 ? (
-    filteredData.map((data, index) => (
-      <tr key={data._id}>
-        <td className="Final-Uru-Table-Data">{index + 1}</td>
-        <td className="Final-Uru-Table-Data">{data.applicationNumber}</td>
-       <td className="Final-Uru-Table-Data">
-          {data.createdAt
-            ? new Date(data.createdAt).toLocaleDateString("en-GB", {
-                day: "2-digit",
-                month: "short",
-                year: "numeric",
-              })
-            : "N/A"}
-        </td>
-
-        <td className="Final-Uru-Table-Data">{data.applicantName}</td>
-        <td className="Final-Uru-Table-Data">{data.paymentStatus}</td>
-        <td className="Final-Uru-Table-Data">
-          <input
-            type="file"
-            onChange={(event) =>
-              handleCertificateUpload(data.applicationNumber, event.target.files[0])
-            }
-            className="Final-Uru-File-Input"
-          />
-        </td>
-        <td className="Final-Uru-Table-Data">
-          <button
-            onClick={() => handleCertificateSubmit(data.applicationNumber)}
-            className="Final-Uru-Submit-Button"
-          >
-            Submit
-          </button>
-          <button
-            onClick={() => handleDelete(data._id)}
-            className="Final-Uru-Delete-Button"
-          >
-            Delete
-          </button>
-          {data.isPublished ? (
+    filteredData
+      .slice() // create a shallow copy to avoid mutating state
+      .reverse() // show latest entries on top
+      .map((item) => (
+        <tr key={item._id}>
+          {/* Original serial number from the original data array */}
+          <td className="Final-Uru-Table-Data">
+            {data.findIndex((d) => d._id === item._id) + 1}
+          </td>
+          <td className="Final-Uru-Table-Data">{item.applicationNumber}</td>
+          <td className="Final-Uru-Table-Data">
+            {item.createdAt
+              ? new Date(item.createdAt).toLocaleDateString("en-GB", {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric",
+                })
+              : "N/A"}
+          </td>
+          <td className="Final-Uru-Table-Data">{item.applicantName}</td>
+          <td className="Final-Uru-Table-Data">{item.paymentStatus}</td>
+          <td className="Final-Uru-Table-Data">
+            <input
+              type="file"
+              onChange={(event) =>
+                handleCertificateUpload(item.applicationNumber, event.target.files[0])
+              }
+              className="Final-Uru-File-Input"
+            />
+          </td>
+          <td className="Final-Uru-Table-Data">
             <button
-              onClick={() => handleUnpublish(data._id)}
-              className="Final-Uru-Unpublish-Button"
+              onClick={() => handleCertificateSubmit(item.applicationNumber)}
+              className="Final-Uru-Submit-Button"
             >
-              Unpublish
+              Submit
             </button>
-          ) : (
             <button
-              onClick={() => handlePublish(data._id)}
-              className="Final-Uru-Publish-Button"
+              onClick={() => handleDelete(item._id)}
+              className="Final-Uru-Delete-Button"
             >
-              Publish
+              Delete
             </button>
-          )}
-        </td>
-      </tr>
-    ))
+            {item.isPublished ? (
+              <button
+                onClick={() => handleUnpublish(item._id)}
+                className="Final-Uru-Unpublish-Button"
+              >
+                Unpublish
+              </button>
+            ) : (
+              <button
+                onClick={() => handlePublish(item._id)}
+                className="Final-Uru-Publish-Button"
+              >
+                Publish
+              </button>
+            )}
+          </td>
+        </tr>
+      ))
   ) : (
     <tr>
       <td colSpan={7} className="Final-Uru-No-Data-Found">
@@ -300,6 +305,7 @@ const FinalURU = () => {
     </tr>
   )}
 </tbody>
+
 
       </table>
     </div>

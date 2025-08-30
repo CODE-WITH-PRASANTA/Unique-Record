@@ -27,7 +27,8 @@ exports.forgotPassword = async (req, res) => {
         const newOtp = new GeneratingOtp({ email, otp: otpCode, expiresAt });
         await newOtp.save();
 
-        await sendEmail(email, "Reset Password OTP", `Your OTP is ${otpCode}`);
+       await sendEmail(email, "Reset Password OTP", otpCode);
+
 
         res.json({ message: "OTP sent successfully" });
     } catch (error) {

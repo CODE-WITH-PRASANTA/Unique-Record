@@ -127,6 +127,48 @@ const deleteBlog = async (req, res) => {
   }
 };
 
+// Publish Blog
+const publishBlog = async (req, res) => {
+  try {
+    const blog = await Blog.findById(req.params.id);
+    if (!blog) return res.status(404).json({ success: false, message: "Blog not found" });
+
+    blog.isPublished = true;
+    await blog.save();
+
+    res.status(200).json({ success: true, message: "Blog published successfully", data: blog });
+  } catch (error) {
+    console.error("Error publishing blog:", error);
+    res.status(500).json({ success: false, message: "Failed to publish blog" });
+  }
+};
+
+// Unpublish Blog
+const unpublishBlog = async (req, res) => {
+  try {
+    const blog = await Blog.findById(req.params.id);
+    if (!blog) return res.status(404).json({ success: false, message: "Blog not found" });
+
+    blog.isPublished = false;
+    await blog.save();
+
+    res.status(200).json({ success: true, message: "Blog unpublished successfully", data: blog });
+  } catch (error) {
+    console.error("Error unpublishing blog:", error);
+    res.status(500).json({ success: false, message: "Failed to unpublish blog" });
+  }
+};
+
+// Get Published Blogs Only
+const getPublishedBlogs = async (req, res) => {
+  try {
+    const blogs = await Blog.find({ isPublished: true }).sort({ createdAt: -1 });
+    res.status(200).json({ success: true, data: blogs });
+  } catch (error) {
+    console.error("Error fetching published blogs:", error);
+    res.status(500).json({ success: false, message: "Failed to fetch published blogs" });
+  }
+};
 
 module.exports = {
   createBlog,
@@ -134,4 +176,7 @@ module.exports = {
   getBlogById,
   updateBlog,
   deleteBlog,
+  publishBlog,
+  unpublishBlog,
+  getPublishedBlogs
 };
