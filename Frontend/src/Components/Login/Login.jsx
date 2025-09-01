@@ -1,8 +1,15 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { API_URL } from "../../Api";
-import { FaFacebookF, FaTwitter, FaGoogle, FaLinkedinIn, FaPinterestP } from "react-icons/fa";
-import { FaPhoneAlt, FaWhatsapp } from "react-icons/fa";
+import {
+  FaFacebookF,
+  FaTwitter,
+  FaGoogle,
+  FaLinkedinIn,
+  FaPinterestP,
+  FaPhoneAlt,
+  FaWhatsapp,
+} from "react-icons/fa";
 import "./Login.css";
 import RightSideCompanyLogo from "../../assets/UNQUE.png";
 import { useNavigate } from "react-router-dom";
@@ -30,11 +37,10 @@ const Login = () => {
   // Handle Submit
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       if (isRegister) {
-        const { fullName, phoneNumber, email, password, confirmPassword } = formData;
-
+        const { fullName, phoneNumber, email, password, confirmPassword } =
+          formData;
         if (password !== confirmPassword) {
           return Swal.fire({
             icon: "error",
@@ -42,7 +48,6 @@ const Login = () => {
             text: "Passwords do not match!",
           });
         }
-
         const res = await axios.post(`${API_URL}/auth/register`, {
           fullName,
           phoneNumber,
@@ -50,13 +55,11 @@ const Login = () => {
           password,
           confirmPassword,
         });
-
         Swal.fire({
           icon: "success",
           title: "Registration Successful 🎉",
           text: res.data.message,
         });
-
       } else {
         const { emailOrPhone, password } = formData;
         const res = await axios.post(`${API_URL}/auth/login`, {
@@ -74,7 +77,6 @@ const Login = () => {
           timer: 1500,
           showConfirmButton: false,
         });
-
         setTimeout(() => navigate("/dashboard"), 1500);
       }
     } catch (err) {
@@ -92,16 +94,23 @@ const Login = () => {
       <div className="login-page-left-section">
         <h2 className="login-page-welcome-text">Welcome To</h2>
         <h1 className="login-page-title">
-          Unique Records of Universe <span className="login-page-brand">Login Portal</span>
+          Unique Records of Universe{" "}
+          <span className="login-page-brand">Login Portal</span>
         </h1>
         <p className="login-page-description">
-          Create your account and login to register your name as "Unique Records of the Universe" holder and apply online to participate in various events and felicitation/award ceremonies.
+          Create your account and login to register your name as a "Unique
+          Records of the Universe" holder. Apply online to participate in
+          various events and award ceremonies.
         </p>
       </div>
 
       {/* Right Side Content */}
       <div className="login-page-right-section">
-        <img src={RightSideCompanyLogo} alt="Company Logo" className="login-page-company-logo" />
+        <img
+          src={RightSideCompanyLogo}
+          alt="Company Logo"
+          className="login-page-company-logo"
+        />
 
         <div className="login-page-toggle-buttons">
           <button
@@ -210,7 +219,7 @@ const Login = () => {
         {/* Assistance Section */}
         <p className="login-assistance-call">
           <FaPhoneAlt className="icon phone-icon" />
-          For any Assistance Call or WhatsApp:{" "}
+          For Assistance Call or WhatsApp:{" "}
           <a href={`tel:${phoneNumber}`} className="call-link">
             {phoneNumber}
           </a>

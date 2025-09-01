@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 const { createHmac } = require('crypto');
 const nodemailer = require("nodemailer");
+  const PDFDocument = require("pdfkit");
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
@@ -21,19 +22,21 @@ const transporter = nodemailer.createTransport({
 });
 
 const generateRegNo = () => {
-  const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
-  let regNo = "";
-  for (let i = 0; i < 10; i++) {
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"; // Uppercase alphanumeric
+  let regNo = "369"; // First three digits fixed
+
+  for (let i = 0; i < 7; i++) { // Remaining 7 characters
     regNo += chars.charAt(Math.floor(Math.random() * chars.length));
   }
-  return regNo.toUpperCase(); // Optional: make it uppercase
+
+  return regNo;
 };
 
 module.exports = {
  createUru: async (req, res) => {
   try {
     const {
-       position,
+      position,
       applicantName,
       sex,
       dateOfBirth,
@@ -81,38 +84,47 @@ module.exports = {
     const userId = req.user.id;
 
     // ================== Upload multiple files ===================
-    let photoUrls = [];
-    let videoUrls = [];
-    let documentUrls = [];
+    let photoFiles = [];
+    let videoFiles = [];
+    let documentFiles = [];
 
     if (req.files && req.files.photos) {
       for (const file of req.files.photos) {
-        const result = await cloudinary.uploader.upload(file.path);
-        photoUrls.push(result.secure_url);
+        const result = await cloudinary.uploader.upload(file.path, {
+          folder: "uru/photos",
+        });
+        photoFiles.push({
+          url: result.secure_url,
+          public_id: result.public_id,
+        });
       }
     }
 
     if (req.files && req.files.videos) {
       for (const file of req.files.videos) {
-        const result = await cloudinary.uploader.upload(file.path, { resource_type: "video" });
-        videoUrls.push(result.secure_url);
+        const result = await cloudinary.uploader.upload(file.path, {
+          resource_type: "video",
+          folder: "uru/videos",
+        });
+        videoFiles.push({
+          url: result.secure_url,
+          public_id: result.public_id,
+        });
       }
     }
 
-   if (req.files && req.files.documents) {
-        for (const file of req.files.documents) {
-          const result = await cloudinary.uploader.upload(file.path, {
-            resource_type: "raw",   // for pdf/doc files
-            folder: "uru/documents",
-          });
-
-          // Store both secure_url and public_id
-          documentUrls.push({
-            url: result.secure_url,        // for viewing
-            public_id: result.public_id    // for generating download links
-          });
-        }
+    if (req.files && req.files.documents) {
+      for (const file of req.files.documents) {
+        const result = await cloudinary.uploader.upload(file.path, {
+          resource_type: "raw", // for pdf/doc files
+          folder: "uru/documents",
+        });
+        documentFiles.push({
+          url: result.secure_url,
+          public_id: result.public_id,
+        });
       }
+    }
 
     // ================== Generate application number ===================
     let applicationNumber;
@@ -123,7 +135,8 @@ module.exports = {
       const existingUru = await URU.findOne({ applicationNumber });
       if (!existingUru) isUnique = true;
     }
-    // Generate unique regNo
+
+    // ================== Generate unique regNo ===================
     let regNo;
     let regNoUnique = false;
     while (!regNoUnique) {
@@ -131,6 +144,7 @@ module.exports = {
       const existingReg = await URU.findOne({ regNo });
       if (!existingReg) regNoUnique = true;
     }
+
     // ================== Save to DB ===================
     const uru = new URU({
       position,
@@ -168,9 +182,9 @@ module.exports = {
       pinterestLink: Array.isArray(pinterestLink) ? pinterestLink : pinterestLink ? [pinterestLink] : [],
       otherMediaLink: Array.isArray(otherMediaLink) ? otherMediaLink : otherMediaLink ? [otherMediaLink] : [],
 
-      photos: photoUrls,
-      videos: videoUrls,
-      documents: documentUrls,
+      photos: photoFiles,
+      videos: videoFiles,
+      documents: documentFiles,
 
       witness1: {
         name: witness1Name,
@@ -186,8 +200,8 @@ module.exports = {
         mobileNumber: witness2MobileNumber,
         emailId: witness2EmailId,
       },
-
     });
+
     await uru.save();
     const mailOptions = {
           from: '"Unique Records of Universe Admin Team" <uruonline2025@gmail.com>',
@@ -272,41 +286,175 @@ module.exports = {
   },
 
   getAllUru: async (req, res) => {
-    try {
-      const urus = await URU.find().populate("userId", "name email");
-      res.status(200).json(urus);
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
+  try {
+    const urus = await URU.find()
+      .populate("userId", "name email")
+      .lean(); // use lean to return plain JS objects (faster, lighter)
+
+    // Format response (optional: ensure empty arrays are returned if no files)
+    const formattedUrus = urus.map(uru => ({
+      ...uru,
+      photos: uru.photos || [],
+      videos: uru.videos || [],
+      documents: uru.documents || [],
+    }));
+
+    res.status(200).json(formattedUrus);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  }
   },
 
   getUruById: async (req, res) => {
     try {
-      const uru = await URU.findById(req.params.id).populate("userId", "name email");
+      const uru = await URU.findById(req.params.id)
+        .populate("userId", "name email")
+        .lean();
+
       if (!uru) {
         return res.status(404).json({ message: "URU application not found" });
       }
-      res.status(200).json(uru);
+
+      // Ensure files are structured arrays
+      const formattedUru = {
+        ...uru,
+        photos: uru.photos || [],
+        videos: uru.videos || [],
+        documents: uru.documents || [],
+      };
+
+      res.status(200).json(formattedUru);
     } catch (error) {
+      console.error(error);
       res.status(500).json({ message: error.message });
     }
   },
 
   updateUru: async (req, res) => {
-    try {
-      const uru = await URU.findById(req.params.id);
-      if (!uru) {
-        return res.status(404).json({ message: "URU application not found" });
-      }
-      const updatedUru = await URU.findByIdAndUpdate(req.params.id, req.body, {
-        new: true,
-      });
-      res.status(200).json(updatedUru);
-    } catch (error) {
-      res.status(500).json({ message: error.message });
+  try {
+    let uru = await URU.findById(req.params.id);
+    if (!uru) {
+      return res.status(404).json({ message: "URU application not found" });
     }
-  },
 
+    // ================= Parse removal arrays =================
+    const { removedPhotos = "[]", removedVideos = "[]", removedDocuments = "[]" } = req.body;
+    const removedPhotosArr = JSON.parse(removedPhotos);
+    const removedVideosArr = JSON.parse(removedVideos);
+    const removedDocumentsArr = JSON.parse(removedDocuments);
+
+    // ================= Handle removals =================
+    if (removedPhotosArr.length) {
+      for (const p of removedPhotosArr) {
+        if (p.public_id) await cloudinary.uploader.destroy(p.public_id);
+      }
+      uru.photos = uru.photos.filter((p) => !removedPhotosArr.find((rp) => rp.public_id === p.public_id));
+    }
+
+    if (removedVideosArr.length) {
+      for (const v of removedVideosArr) {
+        if (v.public_id) await cloudinary.uploader.destroy(v.public_id, { resource_type: "video" });
+      }
+      uru.videos = uru.videos.filter((v) => !removedVideosArr.find((rv) => rv.public_id === v.public_id));
+    }
+
+    if (removedDocumentsArr.length) {
+      for (const d of removedDocumentsArr) {
+        if (d.public_id) await cloudinary.uploader.destroy(d.public_id, { resource_type: "raw" });
+      }
+      uru.documents = uru.documents.filter((d) => !removedDocumentsArr.find((rd) => rd.public_id === d.public_id));
+    }
+
+    // ================= Handle new uploads =================
+    if (req.files && req.files.photos) {
+      for (const file of req.files.photos) {
+        if (file.size > 10 * 1024 * 1024) {
+          return res.status(400).json({ message: "Photo size must be ≤ 10MB" });
+        }
+        const result = await cloudinary.uploader.upload(file.path, {
+          folder: "uru/photos",
+        });
+        uru.photos.push({
+          url: result.secure_url,
+          public_id: result.public_id,
+        });
+      }
+    }
+
+    if (req.files && req.files.videos) {
+      for (const file of req.files.videos) {
+        if (file.size > 100 * 1024 * 1024) {
+          return res.status(400).json({ message: "Video size must be ≤ 100MB" });
+        }
+        const result = await cloudinary.uploader.upload(file.path, {
+          resource_type: "video",
+          folder: "uru/videos",
+        });
+        uru.videos.push({
+          url: result.secure_url,
+          public_id: result.public_id,
+        });
+      }
+    }
+
+    if (req.files && req.files.documents) {
+      for (const file of req.files.documents) {
+        if (file.size > 10 * 1024 * 1024) {
+          return res.status(400).json({ message: "Document size must be ≤ 10MB" });
+        }
+        const result = await cloudinary.uploader.upload(file.path, {
+          resource_type: "raw",
+          folder: "uru/documents",
+        });
+        uru.documents.push({
+          url: result.secure_url,
+          public_id: result.public_id,
+        });
+      }
+    }
+        ["googleDriveLink", "facebookLink", "youtubeLink", "instagramLink", "linkedInLink", "xLink", "pinterestLink", "otherMediaLink"].forEach(field => {
+      if (req.body[field] && typeof req.body[field] === "string") {
+        try {
+          req.body[field] = JSON.parse(req.body[field]);
+        } catch (e) {
+          req.body[field] = [];
+        }
+      }
+    });
+
+      // ================= Update other fields =================
+      let updateData = { ...req.body };
+
+      // If witness1 and witness2 are strings, parse them
+      if (req.body.witness1 && typeof req.body.witness1 === "string") {
+        try {
+          updateData.witness1 = JSON.parse(req.body.witness1);
+        } catch (e) {
+          console.error("Invalid witness1 JSON:", req.body.witness1);
+          updateData.witness1 = {};
+        }
+      }
+
+      if (req.body.witness2 && typeof req.body.witness2 === "string") {
+        try {
+          updateData.witness2 = JSON.parse(req.body.witness2);
+        } catch (e) {
+          console.error("Invalid witness2 JSON:", req.body.witness2);
+          updateData.witness2 = {};
+        }
+      }
+
+      Object.assign(uru, updateData);
+      await uru.save();
+
+
+    res.status(200).json({ message: "URU updated successfully", uru });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  }
+  },
   deleteUru: async (req, res) => {
     try {
       const uru = await URU.findById(req.params.id);
@@ -615,13 +763,21 @@ module.exports = {
               Our team will continue processing your application, and you will receive updates as the next steps are completed. Thank you for trusting <strong>Unique Records of Universe</strong>!
             </p>
 
-            <!-- CTA Button -->
-            <div style="text-align:center; margin:30px 0;">
-              <a href="mailto:uruonline2025@gmail.com" 
-                 style="display:inline-block; padding:12px 30px; background:linear-gradient(90deg, #4e54c8, #8f94fb); color:#fff; text-decoration:none; font-size:16px; font-weight:600; border-radius:8px; box-shadow:0 4px 15px rgba(78,84,200,0.3);">
-                 📧 Contact Support
-              </a>
-            </div>
+           <!-- CTA Buttons -->
+          <div style="text-align:center; margin:30px 0;">
+            <!-- Contact Support Button -->
+            <a href="mailto:uruonline2025@gmail.com" 
+              style="display:inline-block; padding:12px 30px; background:linear-gradient(90deg, #4e54c8, #8f94fb); color:#fff; text-decoration:none; font-size:16px; font-weight:600; border-radius:8px; box-shadow:0 4px 15px rgba(78,84,200,0.3); margin-right:15px;">
+              📧 Contact Support
+            </a>
+
+            <!-- Pay Now Button -->
+            <a href="https://ouruniverse.in/login" target="_blank"
+              style="display:inline-block; padding:12px 30px; background:linear-gradient(90deg, #ff416c, #ff4b2b); color:#fff; text-decoration:none; font-size:16px; font-weight:600; border-radius:8px; box-shadow:0 4px 15px rgba(255,65,108,0.3);">
+              💳 Pay Now
+            </a>
+          </div>
+
 
             <p style="font-size:14px; color:#999; text-align:center; margin-top:40px;">
               You are receiving this email because you submitted an application to <strong>Unique Records of Universe</strong>.
@@ -972,26 +1128,268 @@ module.exports = {
       res.status(500).json({ message: error.message });
     }
   },
-  fetchPublishedUru: async (req, res) => {
-    try {
-      const urus = await URU.find({ isPublished: true });
-      res.status(200).json(urus);
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
-  },
-  fetchPublishedUruById: async (req, res) => {
-    try {
-      const { id } = req.params;
+  // controllers/uruController.js
+fetchPublishedUruById: async (req, res) => {
+  try {
+    const { id } = req.params;
 
-      const uru = await URU.findOne({ _id: id, isPublished: true });
-      if (!uru) {
-        return res.status(404).json({ message: "Published URU not found" });
-      }
+    const uru = await URU.findOne({ _id: id, isPublished: true })
+      .select("-razorpayOrderId -razorpayPaymentId -razorpaySignature -price -paymentStatus"); // hide payment fields
 
-      res.status(200).json(uru);
-    } catch (error) {
-      res.status(500).json({ message: error.message });
+    if (!uru) {
+      return res.status(404).json({ message: "Published URU not found" });
     }
+
+    res.status(200).json(uru);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+},
+
+fetchPublishedUru: async (req, res) => {
+  try {
+    const urus = await URU.find({ isPublished: true })
+      .select("-razorpayOrderId -razorpayPaymentId -razorpaySignature -price -paymentStatus");
+
+    res.status(200).json(urus);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+},
+
+  downloadApplicationForm: async (req, res) => {
+  try {
+    const { applicationNumber } = req.params;
+    const uru = await URU.findOne({ applicationNumber });
+
+    if (!uru) {
+      return res.status(404).json({ message: "Application not found" });
+    }
+
+    // Remove sensitive/payment fields
+    const {
+      razorpayOrderId,
+      razorpayPaymentId,
+      razorpaySignature,
+      price,
+      paymentStatus,
+      ...cleanData
+    } = uru.toObject();
+
+    // Create PDF
+    const doc = new PDFDocument({ margin: 40, size: "A4" });
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename=${applicationNumber}.pdf`
+    );
+    res.setHeader("Content-Type", "application/pdf");
+
+    doc.pipe(res);
+
+    // ================== HEADER ==================
+    doc
+      .rect(0, 0, doc.page.width, 70)
+      .fill("#041e22"); // header background
+    doc
+      .fillColor("#ffffff")
+      .fontSize(22)
+      .text("Unique Records of Universe", 40, 25, { align: "left" })
+      .fontSize(12)
+      .text("Official Application Form", { align: "right" });
+
+    doc.moveDown(3);
+
+    // Draw separator line
+    doc.moveTo(40, 100).lineTo(doc.page.width - 40, 100).stroke("#cccccc");
+
+    doc.moveDown(2);
+
+    // ================== HELPER ==================
+    const addField = (label, value, x = 60) => {
+      doc
+        .font("Helvetica-Bold")
+        .fontSize(11)
+        .fillColor("#000")
+        .text(`${label}:`, x, doc.y, { continued: true });
+      doc
+        .font("Helvetica")
+        .fontSize(11)
+        .fillColor("#444")
+        .text(` ${value || "N/A"}`);
+      doc.moveDown(0.3);
+    };
+
+    const addSection = (title) => {
+      doc
+        .moveDown(1)
+        .font("Helvetica-Bold")
+        .fontSize(14)
+        .fillColor("#041e22")
+        .text(title, { underline: true });
+      doc.moveDown(0.5);
+    };
+const addTable = (title, rows) => {
+  doc.moveDown(1);
+
+  // Title Bar
+  doc
+    .rect(40, doc.y, doc.page.width - 80, 22)
+    .fill("#041e22")
+    .stroke()
+    .fillColor("#fff")
+    .font("Helvetica-Bold")
+    .fontSize(12)
+    .text(title, 50, doc.y + 5);
+
+  doc.moveDown(2);
+
+  const rowHeight = 22;
+  let y = doc.y;
+
+  rows.forEach((row, i) => {
+    // ✅ Page break check
+    if (y + rowHeight > doc.page.height - 60) {
+      doc.addPage();
+      y = 60; // reset cursor
+    }
+
+    const bgColor = i % 2 === 0 ? "#f8f9fa" : "#e9f7ef";
+    doc.rect(40, y, doc.page.width - 80, rowHeight).fill(bgColor);
+
+    // Label
+    if (row.label) {
+      doc
+        .fillColor("#041e22")
+        .font("Helvetica-Bold")
+        .fontSize(10)
+        .text(row.label, 50, y + 6, { width: 200 });
+    }
+
+    // Value
+    doc
+      .fillColor("#333")
+      .font("Helvetica")
+      .fontSize(10)
+      .text(row.value || "N/A", 260, y + 6, {
+        width: doc.page.width - 320,
+      });
+
+    y += rowHeight;
+    doc.moveTo(40, y).lineTo(doc.page.width - 40, y).stroke("#ccc");
+  });
+
+  doc.y = y + 10; // keep cursor aligned instead of moveDown()
+};
+
+
+    // ================== APPLICANT INFO ==================
+  // Applicant Details
+  addTable("Applicant Details", [
+    { label: "Application Number", value: uru.applicationNumber },
+    { label: "Reg No", value: uru.regNo },
+    { label: "Applicant Name", value: uru.applicantName },
+    { label: "Sex", value: uru.sex },
+    { label: "Date of Birth", value: uru.dateOfBirth ? new Date(uru.dateOfBirth).toDateString() : "N/A" },
+    { label: "Address", value: uru.address },
+    { label: "District", value: uru.district },
+    { label: "State", value: uru.state },
+    { label: "Country", value: uru.country },
+    { label: "Pincode", value: uru.pinCode },
+    { label: "Mobile", value: uru.whatsappMobileNumber },
+    { label: "Email", value: uru.emailId },
+    { label: "Occupation", value: uru.occupation },
+    { label: "Education", value: uru.educationalQualification },
+  ]);
+
+      // ================== RECORD INFO ==================
+      addSection("Record Details");
+
+      addField("Form Category", uru.formCategory);
+      addField("Record Category", uru.recordCategory);
+      addField("Record Title", uru.recordTitle);
+      addField("Record Description", uru.recordDescription);
+      addField("Purpose of Attempt", uru.purposeOfRecordAttempt);
+      addField(
+        "Date of Attempt",
+        uru.dateOfAttempt ? new Date(uru.dateOfAttempt).toDateString() : "N/A"
+      );
+      addField("Venue", uru.recordVenue);
+      addField("Organisation", uru.organisationName);
+
+  // ================== WITNESSES ==================
+  const witnessRows = [];
+  if (uru.witness1) {
+    witnessRows.push(
+      { label: "Witness 1 Name", value: uru.witness1.name },
+      { label: "Designation", value: uru.witness1.designation },
+      { label: "Address", value: uru.witness1.address },
+      { label: "Mobile", value: uru.witness1.mobileNumber },
+      { label: "Email", value: uru.witness1.emailId }
+    );
+  }
+  if (uru.witness2) {
+    witnessRows.push(
+      { label: "Witness 2 Name", value: uru.witness2.name },
+      { label: "Designation", value: uru.witness2.designation },
+      { label: "Address", value: uru.witness2.address },
+      { label: "Mobile", value: uru.witness2.mobileNumber },
+      { label: "Email", value: uru.witness2.emailId }
+    );
+  }
+  if (witnessRows.length > 0) {
+    addTable("Witnesses", witnessRows);
+  }
+// ================== SOCIAL LINKS ==================
+const socialRows = [];
+const mediaLinks = [
+  { label: "Google Drive", value: uru.googleDriveLink },
+  { label: "Facebook", value: uru.facebookLink },
+  { label: "YouTube", value: uru.youtubeLink },
+  { label: "Instagram", value: uru.instagramLink },
+  { label: "LinkedIn", value: uru.linkedInLink },
+  { label: "X (Twitter)", value: uru.xLink },
+  { label: "Pinterest", value: uru.pinterestLink },
+  { label: "Other", value: uru.otherMediaLink },
+];
+
+// Expand multiple links as separate rows
+mediaLinks.forEach((link) => {
+  if (Array.isArray(link.value) && link.value.length > 0) {
+    link.value.forEach((val, idx) => {
+      socialRows.push({
+        label: idx === 0 ? link.label : "", // only show label once
+        value: val,
+      });
+    });
+  } else if (typeof link.value === "string" && link.value.trim().length > 0) {
+    socialRows.push({ label: link.label, value: link.value });
+  }
+});
+
+if (socialRows.length > 0) {
+  addTable("Social / Media Links", socialRows);
+}
+
+
+    // ================== FOOTER ==================
+    const bottom = doc.page.height - 50;
+    doc
+      .moveTo(40, bottom - 15)
+      .lineTo(doc.page.width - 40, bottom - 15)
+      .stroke("#cccccc");
+    doc
+      .fontSize(10)
+      .fillColor("#666")
+      .text("Unique Records of Universe © All Rights Reserved", 40, bottom, {
+        align: "center",
+        width: doc.page.width - 80,
+      });
+
+    // ================== END ==================
+    doc.end();
+  } catch (error) {
+    console.error("PDF generation error:", error);
+    res.status(500).json({ message: "Error generating application PDF" });
+  }
   },
 };

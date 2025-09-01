@@ -220,35 +220,34 @@ const [showFullPurpose, setShowFullPurpose] = useState(false);
 </div>
 
 </div>
-
-  
 <div className="achiver-about-photo-section">
   {uru.photos && uru.photos.length > 0 ? (
     <>
-      <Swiper
-        modules={[Navigation, Pagination]}
-        navigation={{
-          nextEl: ".swiper-button-next-custom",
-          prevEl: ".swiper-button-prev-custom",
-        }}
-        pagination={{ clickable: true }}
-        spaceBetween={10}
-        slidesPerView={1}
-        loop={true}
-        style={{ width: "400px", height: "400px" }}
-      >
-        {uru.photos.map((photo, index) => (
-          <SwiperSlide key={index}>
-            <img
-              src={photo}
-              alt={`${uru.applicantName} - ${index + 1}`}
-              className="achiver-applicant-photo"
-              onClick={() => setOpenPhoto(photo)}
-              style={{ cursor: "pointer" }}
-            />
-          </SwiperSlide>
-        ))}
-      </Swiper>
+   <Swiper
+  modules={[Navigation, Pagination]}
+  navigation={{
+    nextEl: ".swiper-button-next-custom",
+    prevEl: ".swiper-button-prev-custom",
+  }}
+  pagination={{ clickable: true }}
+  spaceBetween={10}
+  slidesPerView={1}
+  loop={true}
+  className="achiver-swiper"
+>
+  {uru.photos.map((photo, index) => (
+    <SwiperSlide key={index}>
+      <img
+        src={photo.url}
+        alt={`${uru.applicantName} - ${index + 1}`}
+        className="achiver-applicant-photo"
+        onClick={() => setOpenPhoto(photo.url)}
+        style={{ cursor: "pointer" }}
+      />
+    </SwiperSlide>
+  ))}
+</Swiper>
+
 
       {/* Custom navigation buttons */}
       <div className="swiper-button-prev-custom">&lt;</div>
@@ -269,9 +268,7 @@ const [showFullPurpose, setShowFullPurpose] = useState(false);
   )}
 </div>
 
-
   </div>
-
     {/* Download Button */}
     <button
       className="achiver-download-btn"
@@ -354,9 +351,22 @@ const [showFullPurpose, setShowFullPurpose] = useState(false);
       <div className="achiver-tab-content">
        {activeTab === "summary" ? (
         <div className="achiver-summary-section">
-          <h3 className="achiver-summary-heading">Records / Activity Description</h3>
-          <p className="achiver-summary">{uru.recordTitle}</p>
-        </div>
+            {/* Record Title */}
+            <h3 className="achiver-summary-title">{uru.recordTitle}</h3>
+
+            {/* Record Description */}
+            <p className="achiver-summary-description">
+              {uru.recordDescription || "No description available."}
+            </p>
+
+            {/* Purpose of Record */}
+            <div className="achiver-summary-purpose">
+              <h4 className="purpose-heading">Purpose of Record Attempt</h4>
+              <p className="purpose-text">
+                {uru.purposeOfRecordAttempt || "No purpose provided."}
+              </p>
+            </div>
+          </div>
         ) : (
             <div className="achiver-description-table">
             {/* Basic Information */}
@@ -367,9 +377,16 @@ const [showFullPurpose, setShowFullPurpose] = useState(false);
                 <td className="uru-label">Application Number</td>
                 <td className="uru-value">{uru.applicationNumber || "N/A"}</td>
               </tr>
-              <tr>
+             <tr>
                 <td className="uru-label">Applicant Date</td>
-                <td className="uru-value">{uru.createdAt ? new Date(uru.createdAt).toLocaleDateString() : "N/A"}</td>
+                <td className="uru-value">
+                  {uru.createdAt
+                    ? `${new Date(uru.createdAt).getDate().toString().padStart(2, '0')}-${(
+                        new Date(uru.createdAt).getMonth() + 1
+                      ).toString().padStart(2, '0')}-${new Date(uru.createdAt).getFullYear()}`
+                    : "N/A"
+                  }
+                </td>
               </tr>
               <tr>
                 <td className="uru-label">Applicant Name</td>
@@ -386,7 +403,17 @@ const [showFullPurpose, setShowFullPurpose] = useState(false);
                       </strong>
                     </td>
                   </tr>
-                <tr><td className="uru-label">Date of Birth</td><td>{uru.dateOfBirth ? new Date(uru.dateOfBirth).toLocaleDateString() : "N/A"}</td></tr>
+               <tr>
+                <td className="uru-label">Date of Birth</td>
+                <td>
+                  {uru.dateOfBirth
+                    ? `${new Date(uru.dateOfBirth).getDate().toString().padStart(2, '0')}-${(
+                        new Date(uru.dateOfBirth).getMonth() + 1
+                      ).toString().padStart(2, '0')}-${new Date(uru.dateOfBirth).getFullYear()}`
+                    : "N/A"
+                  }
+                </td>
+              </tr>
                 <tr><td className="uru-label">Address</td><td>{uru.address || "N/A"}</td></tr>
                 <tr><td className="uru-label">District</td><td>{uru.district || "N/A"}</td></tr>
                 <tr><td className="uru-label">State</td><td>{uru.state || "N/A"}</td></tr>
@@ -466,142 +493,139 @@ const [showFullPurpose, setShowFullPurpose] = useState(false);
             <h3 className="section-heading">Evidence</h3>
             <table className="uru-table">
 
-            <tbody>
-  {/* Links */}
-  {[
-    { label: "Google Drive", key: "googleDriveLink", prefix: "Link" },
-    { label: "Facebook", key: "facebookLink", prefix: "Link" },
-    { label: "YouTube", key: "youtubeLink", prefix: "Link" },
-    { label: "Instagram", key: "instagramLink", prefix: "Link" },
-    { label: "LinkedIn", key: "linkedInLink", prefix: "Link" },
-    { label: "X (Twitter)", key: "xLink", prefix: "Link" },
-    { label: "Pinterest", key: "pinterestLink", prefix: "Link" },
-    { label: "Other Media", key: "otherMediaLink", prefix: "Link" },
-  ].map((item) => {
-    const value = uru[item.key];
-    const links = value
-      ? Array.isArray(value)
-        ? value
-        : value.split(",")
-      : [];
-    return (
-      <tr key={item.key}>
-        <td className="uru-label">{item.label}</td>
-        <td>
-          {links.length > 0 ? (
-            links.map((link, index) => (
-              <span key={index}>
-                <a
-                  href={link.trim()}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="link-btn"
-                >
-                  {item.prefix} {index + 1}
-                </a>
-                {index < links.length - 1 && " | "}
-              </span>
-            ))
-          ) : (
-            "N/A"
-          )}
-        </td>
-      </tr>
-    );
-  })}
+           <tbody>
+                {/* Links */}
+                {[
+                  { label: "Google Drive", key: "googleDriveLink", prefix: "Link" },
+                  { label: "Facebook", key: "facebookLink", prefix: "Link" },
+                  { label: "YouTube", key: "youtubeLink", prefix: "Link" },
+                  { label: "Instagram", key: "instagramLink", prefix: "Link" },
+                  { label: "LinkedIn", key: "linkedInLink", prefix: "Link" },
+                  { label: "X (Twitter)", key: "xLink", prefix: "Link" },
+                  { label: "Pinterest", key: "pinterestLink", prefix: "Link" },
+                  { label: "Other Media", key: "otherMediaLink", prefix: "Link" },
+                ].map((item) => {
+                  const links = Array.isArray(uru[item.key]) ? uru[item.key] : [];
+                  return (
+                    <tr key={item.key}>
+                      <td className="uru-label">{item.label}</td>
+                      <td>
+                        {links.length > 0 ? (
+                          links.map((link, index) => (
+                            <span key={index}>
+                              <a
+                                href={link}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="link-btn"
+                              >
+                                {item.prefix} {index + 1}
+                              </a>
+                              {index < links.length - 1 && " | "}
+                            </span>
+                          ))
+                        ) : (
+                          "N/A"
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
 
-  {/* Photos */}
-  <tr>
-    <td className="uru-label">Photo</td>
-    <td>
-      {uru.photos && uru.photos.length > 0 ? (
-        uru.photos.map((photo, index) => (
-          <img
-            key={index}
-            src={photo}
-            alt={`Record ${index + 1}`}
-            className="record-photo"
-            style={{ marginRight: "10px", maxWidth: "120px", marginBottom: "10px" }}
-          />
-        ))
-      ) : (
-        "N/A"
-      )}
-    </td>
-  </tr>
+                {/* Photos */}
+                <tr>
+                  <td className="uru-label">Photo</td>
+                  <td>
+                    {uru.photos?.length > 0 ? (
+                      uru.photos.map((photo, index) => (
+                        <img
+                          key={index}
+                          src={photo.url}  
+                          alt={`Record ${index + 1}`}
+                          className="record-photo"
+                          style={{
+                            marginRight: "10px",
+                            maxWidth: "120px",
+                            marginBottom: "10px",
+                          }}
+                        />
+                      ))
+                    ) : (
+                      "N/A"
+                    )}
+                  </td>
+                </tr>
 
-  {/* Videos */}
-  <tr>
-    <td className="uru-label">Video</td>
-    <td>
-      {uru.videos && uru.videos.length > 0 ? (
-        uru.videos.map((video, index) => (
-          <video
-            key={index}
-            src={video}
-            controls
-            width="250"
-            style={{ display: "block", marginBottom: "10px" }}
-          />
-        ))
-      ) : (
-        "N/A"
-      )}
-    </td>
-  </tr>
+                {/* Videos */}
+                <tr>
+                  <td className="uru-label">Video</td>
+                  <td>
+                    {uru.videos?.length > 0 ? (
+                      uru.videos.map((video, index) => (
+                        <video
+                          key={index}
+                          src={video.url}  
+                          controls
+                          width="250"
+                          style={{ display: "block", marginBottom: "10px" }}
+                        />
+                      ))
+                    ) : (
+                      "N/A"
+                    )}
+                  </td>
+                </tr>
 
-  {/* Documents */}
-  <tr>
-    <td className="uru-label">Document</td>
-    <td>
-      {uru.documents && uru.documents.length > 0 ? (
-        uru.documents.map((doc, index) => (
-          <span key={index}>
-            <a
-              href={doc.url}
-              target="_blank"
-              rel="noreferrer"
-              className="link-btn"
-            >
-              Document {index + 1}
-            </a>
-            {index < uru.documents.length - 1 && " | "}
-          </span>
-        ))
-      ) : (
-        "N/A"
-      )}
-    </td>
-  </tr>
+                {/* Documents */}
+                <tr>
+                  <td className="uru-label">Document</td>
+                  <td>
+                    {uru.documents?.length > 0 ? (
+                      uru.documents.map((doc, index) => (
+                        <span key={index}>
+                          <a
+                            href={doc.url}   
+                            target="_blank"
+                            rel="noreferrer"
+                            className="link-btn"
+                          >
+                            Document {index + 1}
+                          </a>
+                          {index < uru.documents.length - 1 && " | "}
+                        </span>
+                      ))
+                    ) : (
+                      "N/A"
+                    )}
+                  </td>
+                </tr>
 
-  {/* Certificate */}
-  <tr>
-    <td className="uru-label">Certificate</td>
-    <td>
-      {uru.certificateUrl ? (
-        <a
-          href={uru.certificateUrl}
-          target="_blank"
-          rel="noreferrer"
-          className="link-btn"
-        >
-          View Certificate
-        </a>
-      ) : (
-        "N/A"
-      )}
-    </td>
-  </tr>
-</tbody>
-
-
+                {/* Certificate */}
+                <tr>
+                  <td className="uru-label">Certificate</td>
+                  <td>
+                    {uru.certificateUrl ? (
+                      <a
+                        href={uru.certificateUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="link-btn"
+                      >
+                        View Certificate
+                      </a>
+                    ) : (
+                      "N/A"
+                    )}
+                  </td>
+                </tr>
+              </tbody>
             </table>
 
            {/* 🎉 Congratulations Message */}
         <div className="congrats-message">
           🎉 Congratulations..! <strong>{uru.applicantName}</strong> has been successfully registered in the <em>'Unique Records of Universe'</em>.
         </div>
-        </div>
+              </div>
         )}
       </div>
     </div>

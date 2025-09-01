@@ -34,16 +34,27 @@ const uruSchema = new mongoose.Schema({
   xLink: [{ type: String }], 
   pinterestLink: [{ type: String }], 
   otherMediaLink: [{ type: String }], 
+        
+      photos: [
+        {
+          url: String,
+          public_id: String
+        }
+      ],
+      videos: [
+        {
+          url: String,
+          public_id: String
+        }
+      ],
+      documents: [
+        {
+          url: String,
+          public_id: String
+        }
+      ],
 
-  photos: [{ type: String }],    
-  videos: [{ type: String }],
-  documents: [
-  {
-    url: String,
-    public_id: String
-  }
-],
-  
+        
   status: { 
     type: String, 
     enum: ["Pending", "Approved", "Rejected", "Paid"], 

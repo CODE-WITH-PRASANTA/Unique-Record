@@ -1053,3 +1053,10 @@
 .step-btn-next:hover {
   background-color: #2563eb;
 }
+
+.error-text {
+  color: red;
+  font-size: 0.9rem;
+  margin-top: 4px;
+}
+

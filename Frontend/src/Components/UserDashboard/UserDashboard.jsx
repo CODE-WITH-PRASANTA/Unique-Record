@@ -12,6 +12,8 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import { API_URL } from '../../Api';
 import Companylogo from '../../assets/UNQUE.png'
+import Swal from "sweetalert2";
+
 
 const UserDashboard = () => {
   const [categories, setCategories] = useState([]);
@@ -22,6 +24,10 @@ const UserDashboard = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const progressStep = Math.min(Math.max(step - 1, 0), 5);
   const progressPercent = (progressStep / 5) * 100;
+  const [photoSizeError, setPhotoSizeError] = useState(false);
+const [videoSizeError, setVideoSizeError] = useState(false);
+const [docSizeError, setDocSizeError] = useState(false);
+
 
 
   const [formData, setFormData] = useState({
@@ -76,6 +82,7 @@ const UserDashboard = () => {
       position: "",
       
   });
+
   const handleLinkChange = (e, field, index) => {
   const { value } = e.target;
   setFormData((prev) => {
@@ -130,13 +137,50 @@ const removeFile = (field, index) => {
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-  const handleFileChange = (e, field) => {
+
+const handleFileChange = (e, type) => {
   const files = Array.from(e.target.files);
-  setFormData((prev) => ({
-    ...prev,
-    [field]: [...prev[field], ...files], // append files
-  }));
+
+  if (type === "photos") {
+    const totalSize = [...formData.photos, ...files].reduce(
+      (acc, file) => acc + file.size,
+      0
+    );
+    if (totalSize > 10 * 1024 * 1024) {
+      setPhotoSizeError(true);
+      return; // ❌ Block adding
+    } else {
+      setPhotoSizeError(false);
+      setFormData({ ...formData, photos: [...formData.photos, ...files] });
+    }
+  }
+
+  if (type === "videos") {
+    const totalSize = [...formData.videos, ...files].reduce(
+      (acc, file) => acc + file.size,
+      0
+    );
+    if (totalSize > 100 * 1024 * 1024) {
+      setVideoSizeError(true);
+      return; // ❌ Block adding
+    } else {
+      setVideoSizeError(false);
+      setFormData({ ...formData, videos: [...formData.videos, ...files] });
+    }
+  }
+
+  if (type === "documents") {
+    const invalidDoc = files.find((file) => file.size > 10 * 1024 * 1024);
+    if (invalidDoc) {
+      setDocSizeError(true);
+      return; // ❌ Block adding
+    } else {
+      setDocSizeError(false);
+      setFormData({ ...formData, documents: [...formData.documents, ...files] });
+    }
+  }
 };
+
 
 
   const handleNext = (e) => {
@@ -151,6 +195,11 @@ const removeFile = (field, index) => {
 
       setStep(nextStep);
   };
+
+  const handlePrevious = () => {
+    setStep((prevStep) => prevStep - 1);
+  };
+
   useEffect(() => {
     const savedDraft = localStorage.getItem("uruDraft");
     if (savedDraft) {
@@ -173,52 +222,116 @@ const removeFile = (field, index) => {
       setStep(savedStep);
     }
   }, []);
-  const handlePrevious = () => {
-    setStep((prevStep) => prevStep - 1);
-  };
-  const handleFinalSubmit = async (e) => {
-      e.preventDefault();
-      if (termsAccepted) {
-        setIsSubmitting(true); // Set submitting state to true
-        try {
-          const formDataToSend = new FormData();
-          Object.keys(formData).forEach((key) => {
-  if (Array.isArray(formData[key])) {
-    // Handle arrays (links & files)
-    formData[key].forEach((val) => {
-      formDataToSend.append(key, val);
-    });
-  } else {
-    // Handle normal single fields
-    formDataToSend.append(key, formData[key]);
-  }
-          });
+  
+const handleFinalSubmit = async (e) => {
+  e.preventDefault();
 
-          
-          const token = localStorage.getItem("token");
-          const response = await axios.post(`${API_URL}/uru/create-uru`, formDataToSend, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${token}`,
-            },
-          });
-          
-          if (response.status === 201) {
-            setSubmitted(true);
-            localStorage.removeItem("uruDraft"); // Clear local storage
-          } else {
-            console.error("Error submitting form:", response);
-          }
-        } catch (error) {
-          console.error("Error submitting form:", error);
-        } finally {
-          setIsSubmitting(false); // Set submitting state to false
+  if (!termsAccepted) {
+    // ⚠️ Terms not accepted
+    Swal.fire({
+      icon: "warning",
+      title: "Please accept the Terms and Conditions",
+      timer: 2000,
+      timerProgressBar: true,
+      showConfirmButton: false,
+    });
+    return;
+  }
+
+  setIsSubmitting(true);
+
+  let timerInterval;
+  Swal.fire({
+    title: "Processing Submission...",
+    html: "You are uploading high quality documents.<br/> Please wait up to <b>60</b> seconds while we verify your submission.",
+    timer: 60000, // 60 sec max
+    timerProgressBar: true,
+    allowOutsideClick: false,
+    didOpen: () => {
+      Swal.showLoading();
+      const timer = Swal.getPopup().querySelector("b");
+      timerInterval = setInterval(() => {
+        if (timer) {
+          timer.textContent = Math.ceil(Swal.getTimerLeft() / 1000); // show seconds left
         }
+      }, 1000);
+    },
+    willClose: () => {
+      clearInterval(timerInterval);
+    },
+  });
+
+  try {
+    const formDataToSend = new FormData();
+    Object.keys(formData).forEach((key) => {
+      if (Array.isArray(formData[key])) {
+        formData[key].forEach((val) => {
+          formDataToSend.append(key, val);
+        });
       } else {
-        alert("Please accept the Terms and Conditions before submitting.");
+        formDataToSend.append(key, formData[key]);
       }
-  };
- 
+    });
+
+    const token = localStorage.getItem("token");
+    const response = await axios.post(
+      `${API_URL}/uru/create-uru`,
+      formDataToSend,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    Swal.close(); // close the countdown popup
+
+    if (response.status === 201) {
+      setSubmitted(true);
+      localStorage.removeItem("uruDraft");
+
+      Swal.fire({
+        icon: "success",
+        title: "Form submitted successfully ✅",
+        text: "Your record has been securely stored in the universe.",
+        timer: 2500,
+        showConfirmButton: false,
+      });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Something went wrong",
+        text: "Please try again.",
+        timer: 2500,
+        showConfirmButton: false,
+      });
+    }
+  } catch (error) {
+    Swal.close();
+    console.error("Error submitting form:", error);
+
+    let errorMessage = "Unexpected error occurred. Please try again.";
+    if (error.response && error.response.data) {
+      errorMessage = error.response.data.message || errorMessage;
+    } else if (error.message) {
+      errorMessage = error.message;
+    }
+
+    Swal.fire({
+      icon: "error",
+      title: "Submission Failed",
+      text: errorMessage,
+      timer: 3000,
+      timerProgressBar: true,
+      showConfirmButton: false,
+    });
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
+
   return (
     <>
       <div className="achivment-container">
@@ -695,88 +808,111 @@ const removeFile = (field, index) => {
                         ))}
                       </div>
 
-                      {/* 📷 Photos */}
-                      <div className="achivment-form-group">
-                        <label>Upload Photos*</label>
-                        <input
-                          type="file"
-                          accept="image/*"
-                          multiple
-                          onChange={(e) => handleFileChange(e, "photos")}
-                        />
-                        <div className="file-preview-container">
-                          {formData.photos.map((file, index) => (
-                            <div key={index} className="file-preview">
+                    {/* 📷 Photos */}
+                    <div className="achivment-form-group">
+                      <label>
+                        Upload Photos (JPG/PNG) <small>(Max total 10MB)</small>
+                      </label>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        onChange={(e) => handleFileChange(e, "photos")}
+                      />
+                      <div className="file-preview-container">
+                        {formData.photos.map((file, index) => (
+                          <div key={index} className="file-preview">
+                            {file instanceof File ? (
                               <img
                                 src={URL.createObjectURL(file)}
                                 alt="preview"
                                 className="file-img"
                               />
-                              <button
-                                type="button"
-                                onClick={() => removeFile("photos", index)}
-                                className="step-btn-remove-file"
-                              >
-                                ❌
-                              </button>
-                            </div>
-                          ))}
-                        </div>
+                            ) : (
+                              <img src={file} alt="preview" className="file-img" />
+                            )}
+                            <button
+                              type="button"
+                              onClick={() => removeFile("photos", index)}
+                              className="step-btn-remove-file"
+                            >
+                              ❌
+                            </button>
+                          </div>
+                        ))}
                       </div>
+                      {/* Warning for Photos */}
+                      {photoSizeError && (
+                        <p className="error-text">⚠️ Total photo size must be under 10MB</p>
+                      )}
+                    </div>
 
-                      {/* 🎥 Videos */}
-                      <div className="achivment-form-group">
-                        <label>Upload Videos</label>
-                        <input
-                          type="file"
-                          accept="video/*"
-                          multiple
-                          onChange={(e) => handleFileChange(e, "videos")}
-                        />
-                        <ul className="file-list">
-                          {formData.videos.map((file, index) => (
-                            <li key={index} className="file-list-item">
-                              <video
-                                src={URL.createObjectURL(file)}
-                                controls
-                                className="file-video"
-                              />
-                              <button
-                                type="button"
-                                onClick={() => removeFile("videos", index)}
-                                className="step-btn step-btn-remove"
-                              >
-                                ❌
-                              </button>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
+                    {/* 🎥 Videos */}
+                    <div className="achivment-form-group">
+                      <label>
+                        Upload Videos (MP4) <small>(Max total 100MB)</small>
+                      </label>
+                      <input
+                        type="file"
+                        accept="video/*"
+                        multiple
+                        onChange={(e) => handleFileChange(e, "videos")}
+                      />
+                      <ul className="file-list">
+                        {formData.videos.map((file, index) => (
+                          <li key={index} className="file-list-item">
+                            {file instanceof File ? (
+                              <video src={URL.createObjectURL(file)} controls className="file-video" />
+                            ) : (
+                              <video src={file} controls className="file-video" />
+                            )}
+                            <button
+                              type="button"
+                              onClick={() => removeFile("videos", index)}
+                              className="step-btn step-btn-remove"
+                            >
+                              ❌
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                      {/* Warning for Videos */}
+                      {videoSizeError && (
+                        <p className="error-text">⚠️ Total video size must be under 100MB</p>
+                      )}
+                    </div>
 
-                      {/* 📄 Documents */}
-                      <div className="achivment-form-group">
-                        <label>Upload Documents (PDF)</label>
-                        <input
-                          type="file"
-                          accept=".pdf"
-                          multiple
-                          onChange={(e) => handleFileChange(e, "documents")}
-                        />
-                        <ul className="file-list">
-                          {formData.documents.map((file, index) => (
-                            <li key={index} className="file-list-item">
-                              <span className="file-name">{file.name}</span>
-                              <button
-                                type="button"
-                                onClick={() => removeFile("documents", index)}
-                                className="step-btn step-btn-remove"
-                              >
-                                ❌
-                              </button>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
+                    {/* 📄 Documents */}
+                    <div className="achivment-form-group">
+                      <label>
+                        Upload Documents (PDF) <small>(Each max 10MB)</small>
+                      </label>
+                      <input
+                        type="file"
+                        accept=".pdf"
+                        multiple
+                        onChange={(e) => handleFileChange(e, "documents")}
+                      />
+                      <ul className="file-list">
+                        {formData.documents.map((file, index) => (
+                          <li key={index} className="file-list-item">
+                            <span className="file-name">{file.name}</span>
+                            <button
+                              type="button"
+                              onClick={() => removeFile("documents", index)}
+                              className="step-btn step-btn-remove"
+                            >
+                              ❌
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                      {/* Warning for Documents */}
+                      {docSizeError && (
+                        <p className="error-text">⚠️ Each document must be under 10MB</p>
+                      )}
+                    </div>
+
 
                     </div>
 

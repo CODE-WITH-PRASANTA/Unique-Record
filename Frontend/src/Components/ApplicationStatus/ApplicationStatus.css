@@ -661,3 +661,28 @@
 .no-applications-found {
   animation: fadeIn 0.6s ease-in-out;
 }
+
+
+.application-sts-download-btn {
+  background: linear-gradient(135deg, #041e22, #0a4d52);
+  color: #fff;
+  padding: 6px 14px;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  font-family: "Poppins", sans-serif;
+}
+
+.application-sts-download-btn:hover {
+  background: linear-gradient(135deg, #0a4d52, #0e6e74);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.2);
+}
+
+.application-sts-download-btn:active {
+  transform: scale(0.97);
+}

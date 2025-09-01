@@ -125,6 +125,36 @@ const ApplicationStatus = () => {
     }
   };
 
+  const handleDownload = async (applicationNumber) => {
+  try {
+    const token = localStorage.getItem("token"); // or however you store it
+
+    const res = await fetch(
+      `${API_URL}/uru/download-application-form/${applicationNumber}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (!res.ok) throw new Error("Download failed");
+
+    // Convert response to Blob and trigger download
+    const blob = await res.blob();
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `${applicationNumber}.pdf`;
+    link.click();
+    window.URL.revokeObjectURL(url);
+  } catch (err) {
+    console.error(err);
+    alert("Error downloading file");
+  }
+};
+
   return (
     <div className="Application-status-wrapper">
       {applications.length === 0 ? (
@@ -160,13 +190,17 @@ const ApplicationStatus = () => {
                 <p className="Application-status-label">Applicant Name</p>
                 <p className="Application-status-value">{application.applicantName}</p>
                 <div className="Application-status-options">
-                  <FaEllipsisV className="Application-status-options-icon" />
-                  <div className="Application-status-options-menu">
-                    <a href={``} target="_blank" rel="noopener noreferrer">
-                      Download Your Application Form
-                    </a>
-                  </div>
+                    <FaEllipsisV className="Application-status-options-icon" />
+                      <div className="Application-status-options-menu">
+                        <button 
+                        className="application-sts-download-btn" 
+                        onClick={() => handleDownload(application.applicationNumber)}
+                      >
+                        Download Your Application Form
+                      </button>
+                      </div>
                 </div>
+
               </div>
             </div>
 

@@ -41,7 +41,7 @@ const createFreeQuote = async (req, res) => {
         <div style="background-color:#f4f6f9; padding:40px 0; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
           <div style="max-width:600px; margin:0 auto; background:#ffffff; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1); overflow:hidden;">
             <div style="background:linear-gradient(135deg,#2c3e50,#3498db); padding:20px; text-align:center;">
-              <h1 style="color:#fff; margin:0; font-size:24px;">UNIQUE RECORD OF UNIVERSE</h1>
+              <h1 style="color:#fff; margin:0; font-size:19px;">UNIQUE RECORD OF UNIVERSE</h1>
               <p style="color:#dfe6e9; margin:5px 0 0;">Admin Team</p>
             </div>
             <div style="padding:30px;">

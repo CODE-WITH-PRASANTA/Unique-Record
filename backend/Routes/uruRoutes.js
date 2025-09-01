@@ -19,10 +19,12 @@ const {
   fetchAppliedUruByUser ,
   updatePublishStatus,
   fetchPublishedUru,
-  fetchPublishedUruById
+  fetchPublishedUruById,
+  downloadApplicationForm,
 } = require("../Controllers/uruController");
 const authenticate = require("../Middleware/authMiddleware");
 const upload = require("../Middleware/multer");
+
 
 router.post(
   "/create-uru",
@@ -37,7 +39,15 @@ router.post(
 
 router.get("/get-all-uru", getAllUru);
 router.get("/get-uru-by-id/:id", authenticate, getUruById);
-router.put("/update-uru/:id", updateUru);
+router.put(
+  "/update-uru/:id",
+  upload.fields([
+    { name: "photos", maxCount: 10 },
+    { name: "videos", maxCount: 5 },
+    { name: "documents", maxCount: 10 },
+  ]),
+  updateUru
+);
 router.delete("/delete-uru/:id", deleteUru);
 router.put("/approve-uru/:id", approveUru);
 router.get("/fetch-approved-uru", fetchApprovedUru);
@@ -56,5 +66,13 @@ router.get("/fetch-applied-uru-by-user", authenticate, fetchAppliedUruByUser);
 router.put("/publish-uru/:id", updatePublishStatus);
 router.get("/fetch-published-uru", fetchPublishedUru);
 router.get("/fetch-published-uru/:id", fetchPublishedUruById);
+
+
+router.get(
+  "/download-application-form/:applicationNumber",
+  authenticate,
+  downloadApplicationForm
+);
+
 
 module.exports = router;
