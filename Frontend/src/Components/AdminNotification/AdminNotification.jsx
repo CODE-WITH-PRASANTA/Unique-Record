@@ -59,18 +59,22 @@ const AdminNotification = () => {
       }
     };
 
-    const fetchNotifications = async () => {
-      try {
-        const res = await fetch(`${API_URL}/freequotes`);
-        const result = await res.json();
-        if (result.success) {
-          const lastFive = result.data.slice(-5).reverse();
-          setNotifications(lastFive);
-        }
-      } catch (error) {
-        console.error("Error fetching notifications:", error);
-      }
-    };
+  const fetchNotifications = async () => {
+  try {
+    const res = await fetch(`${API_URL}/freequotes`);
+    const result = await res.json();
+    if (result.success) {
+      const sorted = result.data.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      );
+      const latestFive = sorted.slice(0, 5); // ✅ Take recent 5
+      setNotifications(latestFive);
+    }
+  } catch (error) {
+    console.error("Error fetching notifications:", error);
+  }
+};
+
 
     fetchPaid();
     fetchExpenses();
@@ -80,7 +84,7 @@ const AdminNotification = () => {
   return (
     <div className="admin-notification-container">
       {/* ✅ Recent Achievements */}
-      <div className="admin-card gradient-blue">
+    <div className="admin-card gradient-blue">
         <h3 className="admin-card-title">Recent Achievements</h3>
         <ul className="admin-list">
           {recentAchievements.length > 0 ? (
@@ -104,81 +108,77 @@ const AdminNotification = () => {
             <p className="admin-empty-text">No recent achievements found</p>
           )}
         </ul>
+    </div>
+    {/* ✅ Total Expenses */}
+    <div className="admin-card gradient-green">
+      <div className="admin-card-header">
+        <h3 className="total-ex admin-card-title">Total Expenses</h3>
       </div>
+      <div className="admin-chart-container">
+        <ResponsiveContainer width="100%" height={500}>
+          <PieChart>
+            <defs>
+              {/* Shadow Effect */}
+              <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+                <feDropShadow dx="0" dy="4" stdDeviation="6" floodColor="#000" floodOpacity="0.25"/>
+              </filter>
+            </defs>
 
-{/* ✅ Total Expenses */}
-<div className="admin-card gradient-green">
-  <div className="admin-card-header">
-    <h3 className="total-ex admin-card-title">Total Expenses</h3>
-  </div>
-  <div className="admin-chart-container">
-    <ResponsiveContainer width="100%" height={500}>
-      <PieChart>
-        <defs>
-          {/* Shadow Effect */}
-          <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
-            <feDropShadow dx="0" dy="4" stdDeviation="6" floodColor="#000" floodOpacity="0.25"/>
-          </filter>
-        </defs>
+            <Pie
+              data={expenseData}
+              dataKey="value"
+              nameKey="name"
+              innerRadius={90}
+              outerRadius={140}
+              paddingAngle={4}
+              labelLine={{ stroke: "#ccc", strokeWidth: 1 }}
+              label={({ name, value }) => `${name}: ₹${value.toLocaleString()}`}
+              cx="50%"
+              cy="50%"
+              style={{ filter: "url(#shadow)" }}
+            >
+              {expenseData.map((entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={entry.color}
+                  stroke="#fff"
+                  strokeWidth={2}
+                  cursor="pointer"
+                />
+              ))}
+            </Pie>
 
-        <Pie
-          data={expenseData}
-          dataKey="value"
-          nameKey="name"
-          innerRadius={90}
-          outerRadius={140}
-          paddingAngle={4}
-          labelLine={{ stroke: "#ccc", strokeWidth: 1 }}
-          label={({ name, value }) => `${name}: ₹${value.toLocaleString()}`}
-          cx="50%"
-          cy="50%"
-          style={{ filter: "url(#shadow)" }}
-        >
-          {expenseData.map((entry, index) => (
-            <Cell
-              key={`cell-${index}`}
-              fill={entry.color}
-              stroke="#fff"
-              strokeWidth={2}
-              cursor="pointer"
+            {/* Tooltip */}
+            <Tooltip
+              contentStyle={{
+                backgroundColor: "#1e293b",
+                borderRadius: "10px",
+                border: "none",
+                color: "#fff",
+                fontSize: "14px",
+                padding: "10px 14px",
+                boxShadow: "0px 4px 12px rgba(0,0,0,0.2)",
+              }}
+              formatter={(value) => `₹${value.toLocaleString()}`}
             />
-          ))}
-        </Pie>
 
-        {/* Tooltip */}
-        <Tooltip
-          contentStyle={{
-            backgroundColor: "#1e293b",
-            borderRadius: "10px",
-            border: "none",
-            color: "#fff",
-            fontSize: "14px",
-            padding: "10px 14px",
-            boxShadow: "0px 4px 12px rgba(0,0,0,0.2)",
-          }}
-          formatter={(value) => `₹${value.toLocaleString()}`}
-        />
-
-        {/* Legend */}
-        <Legend
-          verticalAlign="bottom"
-          align="center"
-          iconType="circle"
-          wrapperStyle={{
-            fontSize: "14px",
-            marginTop: "40px",
-            paddingTop: "10px",
-          }}
-        />
-      </PieChart>
-    </ResponsiveContainer>
-  </div>
-</div>
-
-
-
-      {/* ✅ Notifications */}
-      <div className="admin-card gradient-purple">
+            {/* Legend */}
+            <Legend
+              verticalAlign="bottom"
+              align="center"
+              iconType="circle"
+              wrapperStyle={{
+                fontSize: "14px",
+                marginTop: "40px",
+                paddingTop: "10px",
+              }}
+            />
+          </PieChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
+    {/* ✅ Notifications */}
+    <div className="admin-card gradient-purple">
         <h3 className="admin-card-title">Notifications</h3>
         <ul className="admin-list">
           {notifications.length > 0 ? (
@@ -225,7 +225,7 @@ const AdminNotification = () => {
             <p className="admin-empty-text">No new notifications</p>
           )}
         </ul>
-      </div>
+    </div>
     </div>
   );
 };
