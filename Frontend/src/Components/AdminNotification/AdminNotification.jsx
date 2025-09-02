@@ -1,142 +1,230 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./AdminNotification.css";
-import {
-  PieChart,
-  Pie,
-  Cell,
-  ResponsiveContainer,
-} from "recharts";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from "recharts";
+import { API_URL } from "../../Api";
 
 const AdminNotification = () => {
-  const expenseData = [
-    { name: "Pending", value: 3202, color: "#F5C71A" }, // Yellow
-    { name: "Paid", value: 45050, color: "#1ABC9C" },   // Green
-    { name: "Overdue", value: 25000, color: "#E74C3C" }, // Red
-    { name: "Draft", value: 7694, color: "#5DADE2" },   // Blue
-  ];
+  const [recentAchievements, setRecentAchievements] = useState([]);
+  const [expenseData, setExpenseData] = useState([]);
+  const [notifications, setNotifications] = useState([]);
+  const [expandedMessages, setExpandedMessages] = useState({}); // ✅ Track expanded messages
+
+  // ✅ Toggle Read More
+  const toggleMessage = (id) => {
+    setExpandedMessages((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
+
+  // ✅ Fetch Data
+  useEffect(() => {
+    const fetchPaid = async () => {
+      try {
+        const res = await fetch(`${API_URL}/uru/fetch-paid-uru`);
+        const data = await res.json();
+        const lastFive = data.slice(-5).reverse();
+        setRecentAchievements(lastFive);
+      } catch (error) {
+        console.error("Error fetching paid URUs:", error);
+      }
+    };
+
+    const fetchExpenses = async () => {
+      try {
+        const res = await fetch(`${API_URL}/uru/get-all-uru`);
+        const data = await res.json();
+
+        let totalMoney = 0,
+          paid = 0,
+          pending = 0;
+
+        data.forEach((uru) => {
+          totalMoney += uru.price || 0;
+          if (uru.paymentStatus === "Success") {
+            paid += uru.price || 0;
+          } else if (uru.paymentStatus === "Pending") {
+            pending += uru.price || 0;
+          }
+        });
+
+        setExpenseData([
+          { name: "Total Money Updated", value: totalMoney, color: "#3498db" },
+          { name: "Paid", value: paid, color: "#2ecc71" },
+          { name: "Pending", value: pending, color: "#f1c40f" },
+          { name: "Total Form Filled", value: data.length, color: "#e74c3c" },
+        ]);
+      } catch (error) {
+        console.error("Error fetching expenses:", error);
+      }
+    };
+
+    const fetchNotifications = async () => {
+      try {
+        const res = await fetch(`${API_URL}/freequotes`);
+        const result = await res.json();
+        if (result.success) {
+          const lastFive = result.data.slice(-5).reverse();
+          setNotifications(lastFive);
+        }
+      } catch (error) {
+        console.error("Error fetching notifications:", error);
+      }
+    };
+
+    fetchPaid();
+    fetchExpenses();
+    fetchNotifications();
+  }, []);
 
   return (
-    <div className="Admin-Notification-Container">
-      {/* Recent Invoice */}
-      <div className="Admin-Notification-Invoice-Card">
-        <h3 className="Admin-Notification-Card-Title">Recent Achivment</h3>
-        <ul className="Admin-Notification-Invoice-List">
-          <li>
-            <img src="https://i.pravatar.cc/40?img=1" alt="avatar" />
-            <div>
-              <p><strong>David Jones</strong> - #790841</p>
-              <span className="Admin-Notification-Price">₹329.20</span>
-            </div>
-            <span className="Admin-Notification-Time">5 min ago</span>
-          </li>
-          <li>
-            <img src="https://i.pravatar.cc/40?img=2" alt="avatar" />
-            <div>
-              <p><strong>Jenny Jones</strong> - #790841</p>
-              <span className="Admin-Notification-Price">₹329.20</span>
-            </div>
-            <span className="Admin-Notification-Time">1 day ago</span>
-          </li>
-          <li>
-            <img src="https://i.pravatar.cc/40?img=3" alt="avatar" />
-            <div>
-              <p><strong>Harry Ben</strong> - #790841</p>
-              <span className="Admin-Notification-Price">₹329.20</span>
-            </div>
-            <span className="Admin-Notification-Time">3 week ago</span>
-          </li>
-          <li>
-            <img src="https://i.pravatar.cc/40?img=4" alt="avatar" />
-            <div>
-              <p><strong>Jenifer Vintage</strong> - #790841</p>
-              <span className="Admin-Notification-Price">₹329.20</span>
-            </div>
-            <span className="Admin-Notification-Time">3 week ago</span>
-          </li>
-          <li>
-            <img src="https://i.pravatar.cc/40?img=5" alt="avatar" />
-            <div>
-              <p><strong>Stebin Ben</strong> - #790841</p>
-              <span className="Admin-Notification-Price">₹329.20</span>
-            </div>
-            <span className="Admin-Notification-Time">1 month ago</span>
-          </li>
+    <div className="admin-notification-container">
+      {/* ✅ Recent Achievements */}
+      <div className="admin-card gradient-blue">
+        <h3 className="admin-card-title">Recent Achievements</h3>
+        <ul className="admin-list">
+          {recentAchievements.length > 0 ? (
+            recentAchievements.map((uru, index) => (
+              <li key={uru._id} className="admin-list-item">
+                <span className="admin-serial">{index + 1}.</span>
+                <div className="admin-item-details">
+                  <p className="admin-item-text">
+                    <strong>{uru.applicantName}</strong> - #{uru.applicationNumber}
+                  </p>
+                  <span className="admin-price">
+                    ₹{uru.price?.toLocaleString()}
+                  </span>
+                </div>
+                <span className="admin-time">
+                  {new Date(uru.updatedAt).toLocaleDateString()}
+                </span>
+              </li>
+            ))
+          ) : (
+            <p className="admin-empty-text">No recent achievements found</p>
+          )}
         </ul>
-        <button className="Admin-Notification-View-Button">View All</button>
       </div>
 
-      {/* Total Expenses */}
-      <div className="Admin-Notification-Expense-Card">
-        <h3 className="Admin-Notification-Card-Title">Total Expenses</h3>
-        <div className="Admin-Notification-Chart-Container">
-          <ResponsiveContainer width="100%" height={250}>
-            <PieChart>
-              <Pie
-                data={expenseData}
-                dataKey="value"
-                nameKey="name"
-                innerRadius={70}
-                outerRadius={100}
-                paddingAngle={2}
-              >
-                {expenseData.map((entry, index) => (
-                  <Cell key={`cell-₹{index}`} fill={entry.color} />
-                ))}
-              </Pie>
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-        <ul className="Admin-Notification-Legend">
-          {expenseData.map((item, index) => (
-            <li key={index}>
-              <span className="Admin-Notification-Dot" style={{ background: item.color }}></span>
-              {item.name} <span className="Admin-Notification-Amount">₹{item.value.toLocaleString()}</span>
-            </li>
+{/* ✅ Total Expenses */}
+<div className="admin-card gradient-green">
+  <div className="admin-card-header">
+    <h3 className="total-ex admin-card-title">Total Expenses</h3>
+  </div>
+  <div className="admin-chart-container">
+    <ResponsiveContainer width="100%" height={500}>
+      <PieChart>
+        <defs>
+          {/* Shadow Effect */}
+          <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+            <feDropShadow dx="0" dy="4" stdDeviation="6" floodColor="#000" floodOpacity="0.25"/>
+          </filter>
+        </defs>
+
+        <Pie
+          data={expenseData}
+          dataKey="value"
+          nameKey="name"
+          innerRadius={90}
+          outerRadius={140}
+          paddingAngle={4}
+          labelLine={{ stroke: "#ccc", strokeWidth: 1 }}
+          label={({ name, value }) => `${name}: ₹${value.toLocaleString()}`}
+          cx="50%"
+          cy="50%"
+          style={{ filter: "url(#shadow)" }}
+        >
+          {expenseData.map((entry, index) => (
+            <Cell
+              key={`cell-${index}`}
+              fill={entry.color}
+              stroke="#fff"
+              strokeWidth={2}
+              cursor="pointer"
+            />
           ))}
-        </ul>
-      </div>
+        </Pie>
 
-      {/* Notifications */}
-      <div className="Admin-Notification-Notification-Card">
-        <h3 className="Admin-Notification-Card-Title">Notifications</h3>
-        <ul className="Admin-Notification-Notification-List">
-          <li>
-            <span className="Admin-Notification-Icon green">📥</span>
-            <div>
-              <p>Johnny sent you an invoice billed <span className="Admin-Notification-Highlight">₹1,000.</span></p>
-              <span className="Admin-Notification-Time">2 August</span>
-            </div>
-          </li>
-          <li>
-            <span className="Admin-Notification-Icon blue">📄</span>
-            <div>
-              <p>Sent an invoice to Aida Bugg amount of <span className="Admin-Notification-Highlight">₹200.</span></p>
-              <span className="Admin-Notification-Time">7 hours ago</span>
-            </div>
-          </li>
-          <li>
-            <span className="Admin-Notification-Icon red">⚙️</span>
-            <div>
-              <p>There was a failure to your setup</p>
-              <span className="Admin-Notification-Time">7 hours ago</span>
-            </div>
-          </li>
-          <li>
-            <span className="Admin-Notification-Icon gray">C</span>
-            <div>
-              <p>Cristina danny invited you to join Meeting</p>
-              <span className="Admin-Notification-Time">7 hours ago</span>
-            </div>
-          </li>
-          <li>
-            <span className="Admin-Notification-Icon gray">C</span>
-            <div>
-              <p>Cristina danny invited you to join Meeting</p>
-              <span className="Admin-Notification-Time">7 hours ago</span>
-            </div>
-          </li>
+        {/* Tooltip */}
+        <Tooltip
+          contentStyle={{
+            backgroundColor: "#1e293b",
+            borderRadius: "10px",
+            border: "none",
+            color: "#fff",
+            fontSize: "14px",
+            padding: "10px 14px",
+            boxShadow: "0px 4px 12px rgba(0,0,0,0.2)",
+          }}
+          formatter={(value) => `₹${value.toLocaleString()}`}
+        />
+
+        {/* Legend */}
+        <Legend
+          verticalAlign="bottom"
+          align="center"
+          iconType="circle"
+          wrapperStyle={{
+            fontSize: "14px",
+            marginTop: "40px",
+            paddingTop: "10px",
+          }}
+        />
+      </PieChart>
+    </ResponsiveContainer>
+  </div>
+</div>
+
+
+
+      {/* ✅ Notifications */}
+      <div className="admin-card gradient-purple">
+        <h3 className="admin-card-title">Notifications</h3>
+        <ul className="admin-list">
+          {notifications.length > 0 ? (
+            notifications.map((quote, index) => (
+              <li key={quote._id} className="admin-list-item">
+                <span className="admin-serial">{index + 1}.</span>
+                <span className="admin-icon">📥</span>
+                <div className="admin-item-details">
+                  <p className="admin-item-text">
+                    <strong>{quote.name}</strong> ({quote.phone}) <br />
+                    {expandedMessages[quote._id] ? (
+                      <>
+                        {quote.message}
+                        <span
+                          className="admin-read-toggle"
+                          onClick={() => toggleMessage(quote._id)}
+                        >
+                          {" "}Show Less
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        {quote.message.length > 50
+                          ? `${quote.message.slice(0, 50)}...`
+                          : quote.message}
+                        {quote.message.length > 50 && (
+                          <span
+                            className="admin-read-toggle"
+                            onClick={() => toggleMessage(quote._id)}
+                          >
+                            {" "}Read More
+                          </span>
+                        )}
+                      </>
+                    )}
+                  </p>
+                  <span className="admin-time">
+                    {new Date(quote.createdAt).toLocaleDateString()}
+                  </span>
+                </div>
+              </li>
+            ))
+          ) : (
+            <p className="admin-empty-text">No new notifications</p>
+          )}
         </ul>
-        <button className="Admin-Notification-View-Button">View All</button>
       </div>
     </div>
   );

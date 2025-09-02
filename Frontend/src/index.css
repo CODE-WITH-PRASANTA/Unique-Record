@@ -5,12 +5,12 @@
 }
 
 body {
-  zoom: 0.9; /* Works in most browsers except Firefox */
+  zoom: 0.95; /* Works in most browsers except Firefox */
 }
 
-@supports not (zoom: 0.9) {
+@supports not (zoom: 0.95) {
   body {
-    transform: scale(0.9); /* For browsers that don't support zoom (like Firefox) */
+    transform: scale(0.95); /* For browsers that don't support zoom (like Firefox) */
     transform-origin: 0 0; /* Ensures scaling happens from the top-left corner */
   }
 }

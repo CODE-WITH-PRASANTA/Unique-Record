@@ -1,54 +1,23 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./AdminTranstionHistroy.css";
+import { API_URL } from "../../Api";
 
 const AdminTranstionHistroy = () => {
-  const transactions = [
-    {
-      id: 1,
-      user: "Airi Satou",
-      avatar: "https://i.ibb.co/xChL9Ls/avatar1.png",
-      category: "Salary Payment",
-      datetime: "2023/02/07 09:05 PM",
-      amount: "₹950.54",
-      status: "Completed",
-    },
-    {
-      id: 2,
-      user: "Ashton Cox",
-      avatar: "https://i.ibb.co/xChL9Ls/avatar1.png",
-      category: "Project Payment",
-      datetime: "2023/02/01 02:14 PM",
-      amount: "₹520.30",
-      status: "Completed",
-    },
-    {
-      id: 3,
-      user: "Bradley Greer",
-      avatar: "https://i.ibb.co/xChL9Ls/avatar1.png",
-      category: "You Tube Subscribe",
-      datetime: "2023/01/22 10:32 AM",
-      amount: "₹100.00",
-      status: "Pending",
-    },
-    {
-      id: 4,
-      user: "Brielle Williamson",
-      avatar: "https://i.ibb.co/xChL9Ls/avatar1.png",
-      category: "Salary Payment",
-      datetime: "2023/02/07 09:05 PM",
-      amount: "₹760.25",
-      status: "In Progress",
-    },
-    {
-      id: 5,
-      user: "Airi Satou",
-      avatar: "https://i.ibb.co/xChL9Ls/avatar1.png",
-      category: "Spotify Subscribe",
-      datetime: "2023/02/07 09:05 PM",
-      amount: "₹60.05",
-      status: "Canceled",
-    },
-  ];
+  const [transactions, setTransactions] = useState([]);
+
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      try {
+        const res = await fetch(`${API_URL}/uru/fetch-paid-uru`);
+        const data = await res.json();
+        setTransactions(data);
+      } catch (error) {
+        console.error("Error fetching transactions:", error);
+      }
+    };
+
+    fetchTransactions();
+  }, []);
 
   return (
     <div className="Admin-Transition-Container">
@@ -71,32 +40,43 @@ const AdminTranstionHistroy = () => {
             </tr>
           </thead>
           <tbody>
-            {transactions.map((tx) => (
-              <tr key={tx.id}>
-                <td>
-                  <div className="Admin-Transition-User-Info">
-                    <img
-                      src={tx.avatar}
-                      alt={tx.user}
-                      className="Admin-Transition-Avatar"
-                    />
-                    {tx.user}
-                  </div>
-                </td>
-                <td>{tx.category}</td>
-                <td>{tx.datetime}</td>
-                <td>{tx.amount}</td>
-                <td>
-                  <span
-                    className={`Admin-Transition-Status ${tx.status
-                      .replace(" ", "")
-                      .toLowerCase()}`}
-                  >
-                    {tx.status}
-                  </span>
+            {transactions.length > 0 ? (
+              transactions.map((tx) => (
+                <tr key={tx._id}>
+                  <td>
+                    <div className="Admin-Transition-User-Info">
+                      <img
+                        src="https://i.ibb.co/xChL9Ls/avatar1.png"
+                        alt={tx.applicantName}
+                        className="Admin-Transition-Avatar"
+                      />
+                      {tx.applicantName}
+                    </div>
+                  </td>
+                  <td>{tx.formCategory}</td>
+                  <td>
+                    {new Date(tx.updatedAt).toLocaleString("en-IN", {
+                      dateStyle: "medium",
+                      timeStyle: "short",
+                    })}
+                  </td>
+                  <td>₹{tx.price?.toLocaleString("en-IN")}</td>
+                  <td>
+                    <span
+                      className={`Admin-Transition-Status ${tx.paymentStatus.toLowerCase()}`}
+                    >
+                      {tx.paymentStatus}
+                    </span>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="5" style={{ textAlign: "center", padding: "20px" }}>
+                  No recent transactions found
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>

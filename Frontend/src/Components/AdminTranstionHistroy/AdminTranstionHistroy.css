@@ -1,144 +1,184 @@
+/* ===============================
+   Container
+================================= */
 .Admin-Transition-Container {
   width: 100%;
-  padding: 20px;
-  background-color: #f0f0f0;
+  padding: 24px;
+  background: linear-gradient(135deg, #f5f7fa, #e8ecf3);
+  font-family: "Inter", sans-serif;
 }
 
+/* ===============================
+   Header Section
+================================= */
 .Admin-Transition-Header-Section {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  margin-bottom: 20px;
+  padding: 20px 24px;
+  background: linear-gradient(135deg, #4facfe, #00f2fe);
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  color: #fff;
 }
 
 .Admin-Transition-Title {
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
 }
 
 .Admin-Transition-View-All {
   font-size: 14px;
-  color: #3498db;
+  font-weight: 500;
+  padding: 8px 14px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
   text-decoration: none;
+  transition: background 0.2s ease;
 }
 
 .Admin-Transition-View-All:hover {
-  text-decoration: underline;
+  background: rgba(255, 255, 255, 0.25);
 }
 
+/* ===============================
+   Table Section
+================================= */
 .Admin-Transition-Table-Section {
   padding: 20px;
-  background-color: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  overflow-x: auto;
 }
 
 .Admin-Transition-Table {
   width: 100%;
   border-collapse: collapse;
+  font-size: 14px;
 }
 
 .Admin-Transition-Table th,
 .Admin-Transition-Table td {
   text-align: left;
-  padding: 12px 16px;
-  font-size: 14px;
+  padding: 14px 18px;
 }
 
 .Admin-Transition-Table th {
-  color: #555;
+  background: #f3f6fb;
+  color: #4a4a4a;
   font-weight: 600;
-  background: #f9fbfd;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .Admin-Transition-Table tbody tr {
   border-top: 1px solid #eee;
-  transition: background 0.2s;
+  transition: background 0.25s ease;
 }
 
 .Admin-Transition-Table tbody tr:hover {
-  background: #f9fbfd;
+  background: #f9fbff;
+  transform: scale(1.01);
+  transition: 0.2s;
 }
 
+/* ===============================
+   User Info
+================================= */
 .Admin-Transition-User-Info {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
+  font-weight: 500;
+  color: #333;
 }
 
 .Admin-Transition-Avatar {
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   object-fit: cover;
+  border: 2px solid #e0e6ed;
 }
 
+/* ===============================
+   Status Pills
+================================= */
 .Admin-Transition-Status {
-  padding: 5px 12px;
+  padding: 6px 14px;
   border-radius: 20px;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   text-transform: capitalize;
+  display: inline-block;
+  min-width: 80px;
+  text-align: center;
 }
 
+/* Gradient Status Styles */
+.Admin-Transition-Status.success,
 .Admin-Transition-Status.completed {
-  background: #e6f9f0;
-  color: #2ecc71;
+  background: linear-gradient(135deg, #a8e063, #56ab2f);
+  color: #fff;
 }
 
 .Admin-Transition-Status.pending {
-  background: #fff5e6;
-  color: #f39c12;
+  background: linear-gradient(135deg, #f7971e, #ffd200);
+  color: #fff;
 }
 
 .Admin-Transition-Status.inprogress {
-  background: #e6f0ff;
-  color: #3498db;
+  background: linear-gradient(135deg, #4facfe, #00f2fe);
+  color: #fff;
 }
 
 .Admin-Transition-Status.canceled {
-  background: #ffe6e6;
-  color: #e74c3c;
+  background: linear-gradient(135deg, #ff416c, #ff4b2b);
+  color: #fff;
 }
 
+/* ===============================
+   Actions
+================================= */
 .Admin-Transition-Actions {
   display: flex;
-  gap: 12px;
+  gap: 14px;
 }
 
 .Admin-Transition-Icon {
-  font-size: 16px;
-  color: #555;
+  font-size: 18px;
+  color: #666;
   cursor: pointer;
-  transition: color 0.2s;
+  transition: transform 0.2s ease, color 0.2s ease;
 }
 
 .Admin-Transition-Icon:hover {
+  transform: scale(1.2);
   color: #3498db;
 }
 
-
+/* ===============================
+   Responsive
+================================= */
 @media (max-width: 768px) {
   .Admin-Transition-Container {
-    padding: 10px;
+    padding: 14px;
   }
 
   .Admin-Transition-Header-Section {
-    padding: 10px;
-  }
-
-  .Admin-Transition-Table-Section {
-    padding: 10px;
-    overflow-x: auto;
+    padding: 14px 18px;
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
   }
 
   .Admin-Transition-Table {
-    width: 100%;
-    min-width: 600px;
+    min-width: 700px;
   }
 }
 
@@ -149,16 +189,17 @@
 
   .Admin-Transition-View-All {
     font-size: 12px;
+    padding: 6px 12px;
   }
 
   .Admin-Transition-Table th,
   .Admin-Transition-Table td {
-    padding: 8px 10px;
+    padding: 10px 12px;
     font-size: 12px;
   }
 
   .Admin-Transition-Avatar {
-    width: 24px;
-    height: 24px;
+    width: 28px;
+    height: 28px;
   }
 }

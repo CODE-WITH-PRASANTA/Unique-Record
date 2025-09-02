@@ -1128,35 +1128,32 @@ module.exports = {
       res.status(500).json({ message: error.message });
     }
   },
-  // controllers/uruController.js
-fetchPublishedUruById: async (req, res) => {
-  try {
-    const { id } = req.params;
+  fetchPublishedUruById: async (req, res) => {
+    try {
+      const { id } = req.params;
 
-    const uru = await URU.findOne({ _id: id, isPublished: true })
-      .select("-razorpayOrderId -razorpayPaymentId -razorpaySignature -price -paymentStatus"); // hide payment fields
+      const uru = await URU.findOne({ _id: id, isPublished: true })
+        .select("-razorpayOrderId -razorpayPaymentId -razorpaySignature -price -paymentStatus"); // hide payment fields
 
-    if (!uru) {
-      return res.status(404).json({ message: "Published URU not found" });
+      if (!uru) {
+        return res.status(404).json({ message: "Published URU not found" });
+      }
+
+      res.status(200).json(uru);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
     }
+  },
+  fetchPublishedUru: async (req, res) => {
+    try {
+      const urus = await URU.find({ isPublished: true })
+        .select("-razorpayOrderId -razorpayPaymentId -razorpaySignature -price -paymentStatus");
 
-    res.status(200).json(uru);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-},
-
-fetchPublishedUru: async (req, res) => {
-  try {
-    const urus = await URU.find({ isPublished: true })
-      .select("-razorpayOrderId -razorpayPaymentId -razorpaySignature -price -paymentStatus");
-
-    res.status(200).json(urus);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-},
-
+      res.status(200).json(urus);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
   downloadApplicationForm: async (req, res) => {
   try {
     const { applicationNumber } = req.params;

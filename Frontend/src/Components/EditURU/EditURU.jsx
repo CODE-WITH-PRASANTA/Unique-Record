@@ -137,7 +137,7 @@ const EditURU = ({ editingData, setEditingData, setShowModal, categories, refres
           <h3>1. Applicant Details</h3>
           <div className="manage-uru-form-row">
             <Input label="Application Number:" name="applicationNumber" value={editingData.applicationNumber} onChange={handleChange} readOnly />
-            <Input label="Applicant Name:" name="applicantName" value={editingData.applicantName} onChange={handleChange} readOnly />
+            <Input label="Applicant Name:" name="applicantName" value={editingData.applicantName} onChange={handleChange}  />
             <Select label="Sex:" name="sex" value={editingData.sex || ""} options={["male","female","transgender"]} />
           </div>
           <div className="manage-uru-form-row">
@@ -146,8 +146,8 @@ const EditURU = ({ editingData, setEditingData, setShowModal, categories, refres
             <Input label="District:" name="district" value={editingData.district} onChange={handleChange} />
           </div>
           <div className="manage-uru-form-row">
-            <Input label="Country:" name="country" value={editingData.country} onChange={handleChange} />
             <Input label="State:" name="state" value={editingData.state} onChange={handleChange} />
+            <Input label="Country:" name="country" value={editingData.country} onChange={handleChange} />
             <Input label="Pin Code:" name="pinCode" value={editingData.pinCode} onChange={handleChange} />
           </div>
           <div className="manage-uru-form-row">
@@ -244,16 +244,8 @@ const EditURU = ({ editingData, setEditingData, setShowModal, categories, refres
             <input type="file" accept=".pdf,.doc,.docx,.txt" multiple onChange={(e)=>handleFileUpload("documents", e.target.files)} />
           </div>
 
-          {/* Payment Details */}
-          <h3>4. Payment Details</h3>
-          <div className="manage-uru-form-row">
-            <Input label="Razorpay Order ID:" name="razorpayOrderId" value={editingData.razorpayOrderId} readOnly />
-            <Input label="Razorpay Payment ID:" name="razorpayPaymentId" value={editingData.razorpayPaymentId} readOnly />
-            <Input label="Razorpay Signature:" name="razorpaySignature" value={editingData.razorpaySignature} readOnly />
-          </div>
-
           {/* Witness Details */}
-          <h3>5. Witness Details</h3>
+          <h3>4. Witness Details</h3>
           {["witness1","witness2"].map((w) => (
             <div key={w}>
               <div className="manage-uru-form-row">
@@ -267,6 +259,14 @@ const EditURU = ({ editingData, setEditingData, setShowModal, categories, refres
               </div>
             </div>
           ))}
+
+           {/* Payment Details */}
+          <h3>5. Payment Details</h3>
+          <div className="manage-uru-form-row">
+            <Input label="Razorpay Order ID:" name="razorpayOrderId" value={editingData.razorpayOrderId} readOnly />
+            <Input label="Razorpay Payment ID:" name="razorpayPaymentId" value={editingData.razorpayPaymentId} readOnly />
+            <Input label="Razorpay Signature:" name="razorpaySignature" value={editingData.razorpaySignature} readOnly />
+          </div>
 
           {/* Buttons */}
           <div className="manage-uru-form-row" style={{ justifyContent:"flex-end" }}>

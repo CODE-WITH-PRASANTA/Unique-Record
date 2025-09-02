@@ -1,187 +1,217 @@
 .Admin-dashboard-container {
   display: flex;
-  gap: 20px;
+  flex-direction: column;
+  gap: 30px;
   padding: 20px;
   flex-wrap: wrap;
+  background: linear-gradient(135deg, #eef2f7, #d9e4f5);
+  font-family: "Poppins", sans-serif;
 }
 
+/* ===== Total Earnings Section ===== */
+.Admin-Total-Details-earning {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  padding: 30px;
+  margin-top: 10px;
+  background: #ffffff;
+  border-radius: 22px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+/* ===== Cards ===== */
 .Admin-card {
   flex: 1;
   min-width: 300px;
-  background: #fff;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  border-radius: 18px;
+  padding: 26px;
   position: relative;
   overflow: hidden;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: all 0.35s ease;
+  background-size: 200% 200%;
+  animation: gradientShift 6s ease infinite;
 }
 
+.Admin-card:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.2);
+}
+
+/* ===== Gradient Animations ===== */
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ===== Card Header ===== */
 .Admin-card-header {
   font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 12px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  opacity: 0.95;
 }
 
+/* ===== Card Amount ===== */
 .Admin-card-amount {
-  font-size: 28px;
-  font-weight: bold;
+  font-size: 32px;
+  font-weight: 800;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
+/* ===== Percentage Label ===== */
 .percent {
   font-size: 14px;
-  font-weight: 500;
-  padding: 3px 8px;
-  border-radius: 6px;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.25);
+  color: #fff;
+  backdrop-filter: blur(4px);
 }
 
-.green {
-  background: #e6f9f0;
-  color: #2ecc71;
-}
-
-.blue {
-  background: #e6f2ff;
-  color: #3498db;
-}
-
+/* ===== Card Text ===== */
 .Admin-card-text {
-  margin: 10px 0;
-  color: #555;
+  margin: 4px 0 10px 0;
   font-size: 14px;
+  opacity: 0.9;
 }
 
+/* ===== Progress Bar ===== */
 .progress-bar {
-  height: 8px;
-  background: #eaeaea;
+  height: 10px;
   border-radius: 6px;
   overflow: hidden;
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(3px);
 }
 
 .progress-fill {
   height: 100%;
   border-radius: 6px;
+  transition: width 0.4s ease-in-out;
 }
 
-.green-fill {
-  background: #2ecc71;
+/* ===== Card Variants with Distinct Gradient Backgrounds ===== */
+.daily-Admin-card {
+  background: linear-gradient(135deg, #00c6ff, #0072ff);
 }
 
-.blue-fill {
-  background: #3498db;
-}
-
-.white-fill {
-  background: #fff;
-}
-
-/* Special background styling */
-.daily-Admin-card::after,
-.monthly-Admin-card::after,
-.yearly-Admin-card::after {
-  content: "";
-  position: absolute;
-  top: -20px;
-  right: -20px;
-  width: 160px;
-  height: 160px;
-  border-radius: 50%;
-  opacity: 0.1;
-}
-
-.daily-Admin-card::after {
-  background: linear-gradient(135deg, #2ecc71, #27ae60);
-}
-
-.monthly-Admin-card::after {
-  background: linear-gradient(135deg, #3498db, #2980b9);
+.monthly-Admin-card {
+  background: linear-gradient(135deg, #ff6a00, #ee0979);
 }
 
 .yearly-Admin-card {
-  background: linear-gradient(135deg, #3498db, #0066cc);
-  color: #fff;
+  background: linear-gradient(135deg, #8e2de2, #4a00e0);
 }
 
-.yearly-Admin-card .Admin-card-text {
-  color: #f0f0f0;
+.total-forms-Admin-card {
+  background: linear-gradient(135deg, #2ecc71, #27ae60);
 }
 
-/* Existing CSS above remains same */
+.total-pricing-Admin-card {
+  background: linear-gradient(135deg, #f7971e, #ffd200);
+}
 
-/* Responsive Design */
+.total-collected-Admin-card {
+  background: linear-gradient(135deg, #ff416c, #ff4b2b);
+}
+
+/* ===== Fill Colors for Progress ===== */
+.green-fill {
+  background: #b3ffcb;
+}
+
+.blue-fill {
+  background: #b5d9ff;
+}
+
+.orange-fill {
+  background: #ffe2b0;
+}
+
+.purple-fill {
+  background: #e1b8ff;
+}
+
+.pink-fill {
+  background: #ffc4d0;
+}
+
+.white-fill {
+  background: #f0f0f0;
+}
+
+/* ===== Decorative Circle Backgrounds ===== */
+.Admin-card::after {
+  content: "";
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  opacity: 0.15;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+/* ===== Responsive Design ===== */
 @media (max-width: 1024px) {
-  .Admin-dashboard-container {
-    gap: 15px;
-    padding: 15px;
+  .Admin-Total-Details-earning {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 20px;
   }
-
   .Admin-card {
-    min-width: 250px;
-    padding: 16px;
+    min-width: 260px;
+    padding: 20px;
   }
-
-  .Admin-card-header {
-    font-size: 16px;
-  }
-
   .Admin-card-amount {
-    font-size: 24px;
-  }
-
-  .Admin-card-text {
-    font-size: 13px;
+    font-size: 26px;
   }
 }
 
 @media (max-width: 768px) {
-  .Admin-dashboard-container {
-    flex-direction: column;
-    align-items: stretch;
+  .Admin-Total-Details-earning {
+    grid-template-columns: 1fr;
+    gap: 20px;
   }
-
   .Admin-card {
     width: 100%;
-    min-width: unset;
-  }
-
-  .Admin-card-amount {
-    font-size: 22px;
   }
 }
 
 @media (max-width: 480px) {
   .Admin-dashboard-container {
-    padding: 10px;
-    gap: 12px;
+    padding: 12px;
+    gap: 18px;
   }
-
   .Admin-card {
-    padding: 14px;
-    border-radius: 10px;
+    padding: 18px;
+    border-radius: 12px;
   }
-
   .Admin-card-header {
     font-size: 15px;
   }
-
   .Admin-card-amount {
-    font-size: 20px;
+    font-size: 22px;
     flex-direction: column;
     align-items: flex-start;
-    gap: 4px;
+    gap: 6px;
   }
-
   .percent {
     font-size: 12px;
-    padding: 2px 6px;
+    padding: 3px 7px;
   }
-
-  .Admin-card-text {
-    font-size: 12px;
-  }
-
   .progress-bar {
     height: 6px;
   }

@@ -76,7 +76,7 @@
 }
 
 .login-page-title {
-  font-size: 56px;
+  font-size: 40px;
   font-weight: 800;
   text-transform: uppercase;
   margin-bottom: 25px;
@@ -314,10 +314,6 @@
     text-align: center;
   }
 
-  .login-page-title {
-    font-size: 42px;
-  }
-
   .login-page-welcome-text {
     font-size: 36px;
   }
@@ -355,7 +351,8 @@
   }
 
   .login-page-title {
-    font-size: 32px;
+    font-weight: 600;
+    font-size: 23px;
   }
 
   .login-page-brand {

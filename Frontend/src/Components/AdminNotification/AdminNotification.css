@@ -1,162 +1,201 @@
-.Admin-Notification-Container {
+/* ===============================
+   Container
+================================= */
+.admin-notification-container {
   display: flex;
-  gap: 20px;
-  padding: 20px;
+  gap: 24px;
+  padding: 24px;
   flex-wrap: wrap;
   justify-content: center;
   width: 100%;
   margin: 40px auto;
-  background-color: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  font-family: "Inter", sans-serif;
 }
 
-/* Rest of your CSS remains the same */
-
-.Admin-Notification-Invoice-Card,
-.Admin-Notification-Expense-Card,
-.Admin-Notification-Notification-Card {
+/* ===============================
+   Card (Glassmorphism Style)
+================================= */
+.admin-card {
   flex: 1;
-  min-width: 320px;
-  background: #fff;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  min-width: 340px;
+  padding: 20px 24px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  border: 2px solid transparent;
+  position: relative;
+}
+.admin-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.12);
 }
 
-.Admin-Notification-Card-Title {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 15px;
-  color: #333;
+/* ===============================
+   Gradient Accent Borders
+================================= */
+.gradient-blue {
+  border-image: linear-gradient(135deg, #3a8ef6, #6cdcff) 1;
+}
+.gradient-green {
+  border-image: linear-gradient(135deg, #4ad991, #38f9d7) 1;
+}
+.gradient-purple {
+  border-image: linear-gradient(135deg, #a78bfa, #f472b6) 1;
 }
 
-.Admin-Notification-Invoice-List {
+/* ===============================
+   Titles
+================================= */
+.admin-card-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 16px;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+.total-ex{
+  margin-bottom: 100px;
+}
+
+/* ===============================
+   Lists
+================================= */
+.admin-list {
   list-style: none;
   margin: 0;
   padding: 0;
 }
-
-.Admin-Notification-Invoice-List li {
+.admin-list-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 15px;
-  padding-bottom: 15px;
-  border-bottom: 1px solid #f0f0f0;
+  background: rgba(240, 244, 248, 0.8);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+  transition: background 0.25s ease;
+}
+.admin-list-item:hover {
+  background: rgba(226, 232, 240, 1);
 }
 
-.Admin-Notification-Invoice-List img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  margin-right: 10px;
+.admin-serial {
+  font-weight: 700;
+  margin-right: 12px;
+  color: #3a8ef6;
 }
-
-.Admin-Notification-Invoice-List div {
+.admin-item-details {
   flex: 1;
 }
-
-.Admin-Notification-Price {
-  color: #3498db;
+.admin-item-text {
+  margin: 0;
+  font-size: 14px;
+  color: #34495e;
+  line-height: 1.4;
+}
+.admin-price {
+  color: #27ae60;
   font-weight: 600;
   font-size: 14px;
 }
-
-.Admin-Notification-Time {
+.admin-time {
   font-size: 12px;
-  color: #777;
+  color: #7f8c8d;
 }
-
-.Admin-Notification-View-Button {
-  margin-top: auto;
-  padding: 10px;
-  border: 1px solid #333;
-  border-radius: 8px;
-  background: transparent;
-  cursor: pointer;
-  font-weight: 500;
-  transition: all 0.3s ease;
+.admin-empty-text {
+  text-align: center;
+  opacity: 0.7;
+  font-style: italic;
+  font-size: 14px;
 }
-
-.Admin-Notification-View-Button:hover {
-  background: #333;
-  color: #fff;
-}
-
-.Admin-Notification-Chart-Container {
+  
+/* ===============================
+   Chart
+================================= */
+.admin-chart-container {
   width: 100%;
   height: 250px;
-}
-
-.Admin-Notification-Legend {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.Admin-Notification-Legend li {
   display: flex;
   align-items: center;
-  margin-top: 8px;
-  font-size: 14px;
-  justify-content: space-between;
+  justify-content: center;
 }
 
-.Admin-Notification-Dot {
+/* Legend */
+.recharts-legend-wrapper {
+  margin-top: 12px;
+}
+
+.recharts-legend-item-text {
+  font-size: 13px !important;
+  color: #374151 !important;
+  font-weight: 500;
+}
+
+/* Tooltip */
+.recharts-tooltip-wrapper {
+  border-radius: 8px;
+}
+
+/* ===============================
+   Legend (Custom List)
+================================= */
+.admin-legend {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 0;
+}
+.admin-legend-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+  font-size: 14px;
+  color: #2c3e50;
+}
+.admin-dot {
   width: 12px;
   height: 12px;
   border-radius: 50%;
   display: inline-block;
   margin-right: 8px;
 }
-
-.Admin-Notification-Amount {
+.admin-amount {
   font-weight: 600;
+  color: #34495e;
 }
 
-.Admin-Notification-Notification-List {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.Admin-Notification-Notification-List li {
-  display: flex;
-  align-items: flex-start;
-  margin-bottom: 15px;
-  padding-bottom: 15px;
-  border-bottom: 1px solid #f0f0f0;
-}
-
-.Admin-Notification-Icon {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* ===============================
+   Notifications
+================================= */
+.admin-icon {
   margin-right: 10px;
-  font-size: 16px;
+  font-size: 18px;
+  color: #6c63ff;
 }
-
-.Admin-Notification-Icon.green { background: #e6f9f0; color: #2ecc71; }
-.Admin-Notification-Icon.blue { background: #e6f2ff; color: #3498db; }
-.Admin-Notification-Icon.red { background: #fdecea; color: #e74c3c; }
-.Admin-Notification-Icon.gray { background: #f0f0f0; color: #555; }
-
-.Admin-Notification-Highlight {
-  color: #3498db;
+.admin-read-toggle {
+  color: #3a8ef6;
   font-weight: 600;
+  cursor: pointer;
+  margin-left: 6px;
+  transition: color 0.2s ease;
+}
+.admin-read-toggle:hover {
+  color: #0056d2;
 }
 
-/* Responsive */
+/* ===============================
+   Responsive
+================================= */
 @media (max-width: 992px) {
-  .Admin-Notification-Container {
+  .admin-notification-container {
     flex-direction: column;
     margin: 20px auto;
+    padding: 0px;
   }
 }

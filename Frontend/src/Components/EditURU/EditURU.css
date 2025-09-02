@@ -153,8 +153,6 @@
   font-size: 15px;
   border: 1px solid #dce3ea;
 }
-
-/* === uru-remove button === */
 .uru-remove-btn {
   margin-left: 12px;
   cursor: pointer;
@@ -164,19 +162,20 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
+  font-size: 18px;   /* little bigger for clarity */
   font-weight: bold;
-  color: #fff;
-  background: linear-gradient(135deg, #ff416c, #ff4b2b);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.25);
-  transition: all 0.3s ease;
+  color: #fff;       /* makes the ❌ white */
+  background: linear-gradient(135deg, #4facfe, #6a11cb, #ff6a88);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  transition: all 0.35s ease;
 }
 
 .uru-remove-btn:hover {
   transform: scale(1.2) rotate(10deg);
-  background: linear-gradient(135deg, #7b2ff7, #f107a3);
-  box-shadow: 0 6px 14px rgba(0,0,0,0.35);
+  background: linear-gradient(135deg, #00c6ff, #14b866, #43e97b);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
 }
+
 
 /* === Media Preview === */
 .media-preview {

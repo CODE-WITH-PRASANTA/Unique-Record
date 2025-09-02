@@ -25,9 +25,12 @@ const UserDashboard = () => {
   const progressStep = Math.min(Math.max(step - 1, 0), 5);
   const progressPercent = (progressStep / 5) * 100;
   const [photoSizeError, setPhotoSizeError] = useState(false);
-const [videoSizeError, setVideoSizeError] = useState(false);
-const [docSizeError, setDocSizeError] = useState(false);
+  const [videoSizeError, setVideoSizeError] = useState(false);
+  const [docSizeError, setDocSizeError] = useState(false);
+  const [showOverlay, setShowOverlay] = useState(false);
 
+  const handleOpen = () => setShowOverlay(true);
+  const handleClose = () => setShowOverlay(false);
 
 
   const [formData, setFormData] = useState({
@@ -335,33 +338,165 @@ const handleFinalSubmit = async (e) => {
   return (
     <>
       <div className="achivment-container">
-       <div className="achievement-form-left-panel">
-          {/* Company Logo */}
-          <div className="achievement-form-logo">
-            <img src={Companylogo} alt="Company Logo" />
-          </div>
-
-          {/* Social Icons */}
-          <div className="achievement-form-social-icons">
-            <a href="#"><FontAwesomeIcon icon={faFacebookF} /></a>
-            <a href="#"><FontAwesomeIcon icon={faXTwitter} /></a>
-            <a href="#"><FontAwesomeIcon icon={faInstagram} /></a>
-            <a href="#"><FontAwesomeIcon icon={faTiktok} /></a>
-          </div>
-
-          {/* Illustration */}
-          <div className="achievement-form-illustration">
-            <img src={img1} alt="Hiring Illustration" />
-          </div>
-
-          {/* Heading */}
-          <h1 className="achievement-form-heading">Unique Record Of Universe</h1>
-
-          {/* Description */}
-          <p className="achievement-form-description">
-            Unique Records Universe (URU) aims to provide a global platform and recognition to extraordinary, inspiring, verifiable human achievements, natural phenomena and innovations from around the world by digitally cataloguing them. Our aim is to preserve unique records or activities for positive inspiration to future generations with inclusive, transparent and ethical standards.
-          </p>
+        <div className="achievement-form-left-panel">
+      {/* Company Logo */}
+      <div className="achievement-form-logo">
+        <img src={Companylogo} alt="Company Logo" />
       </div>
+
+      {/* Instructions Button */}
+      <div className="achievement-form-social-icons">
+        <button className="instructions-btn" onClick={handleOpen}>
+          Instructions
+        </button>
+      </div>
+
+      {/* Illustration */}
+      <div className="achievement-form-illustration">
+        <img src={img1} alt="Hiring Illustration" />
+      </div>
+
+      {/* Heading */}
+      <h1 className="achievement-form-heading">Unique Records Of Universe</h1>
+
+      {/* Description */}
+      <p className="achievement-form-description">
+        Unique Records Universe (URU) aims to provide a global platform and recognition to extraordinary, inspiring, verifiable human achievements, natural phenomena and innovations from around the world by digitally cataloguing them. Our aim is to preserve unique records or activities for positive inspiration to future generations with inclusive, transparent and ethical standards.
+      </p>
+
+        {/* Overlay */}
+        {showOverlay && (
+          <div className="overlay">
+            <div className="overlay-content">
+              <h2 className="left-uru-heading">
+                Important Guidelines for Filling Online Application Form
+              </h2>
+
+              <div className="left-uru-text">
+                <div className="left-uru-section">
+                  <span className="left-uru-number">1.</span>
+                  <p>
+                    <b>Start Application:</b> Login with the login ID created while
+                    registering your account in the login section on the website and
+                    click on the <b>"Apply for URU Holder"</b> tab and open the form.
+                  </p>
+                </div>
+
+                <div className="left-uru-section">
+                  <span className="left-uru-number">2.</span>
+                  <p>
+                    <b>Fill Personal Information:</b> Enter your full name, email,
+                    address, educational qualification details and contact number
+                    accurately.
+                  </p>
+                </div>
+
+                <div className="left-uru-section">
+                  <span className="left-uru-number">3.</span>
+                  <p>
+                    <b>Provide Record Details:</b> Provide a brief description of your
+                    unique activity or record and upload the relevant documents.
+                  </p>
+                </div>
+
+                <div className="left-uru-section">
+                  <span className="left-uru-number">4.</span>
+                  <p>
+                    <b>Complete All Sections:</b> Fill all the 5 steps of the form
+                    carefully, ensure that no mandatory field is left blank and fill in
+                    the details carefully and correctly. Because once the final form is
+                    submitted, you will not be able to edit, update that form.
+                  </p>
+                </div>
+
+                <div className="left-uru-section">
+                  <span className="left-uru-number">5.</span>
+                  <p>
+                    <b>Read Terms and Conditions:</b> Read and accept the terms and
+                    conditions carefully before submitting the form.
+                  </p>
+                </div>
+
+                <div className="left-uru-section">
+                  <span className="left-uru-number">6.</span>
+                  <p>
+                    <b>Review:</b> Recheck the details entered by you using the
+                    <b> "Previous"</b> button and make changes as required.
+                  </p>
+                </div>
+
+                <div className="left-uru-section">
+                  <span className="left-uru-number">7.</span>
+                  <p>
+                    <b>Submit:</b> After verifying all the information, click on the
+                    <b> "Submit"</b> button. After submission, you will receive a
+                    confirmation email.
+                  </p>
+                </div>
+
+                <div className="left-uru-section">
+                  <span className="left-uru-number">8.</span>
+                  <p>
+                    <b>Help:</b> For any issues, email our admin team at{" "}
+                    <b>uruonline2025@gmail.com</b> or contact us on mobile number{" "}
+                    <b>+91 9472351693</b>.
+                  </p>
+                </div>
+
+                <div className="left-uru-section">
+                  <span className="left-uru-number">9.</span>
+                  <p>
+                    After successful submission of the form, URU JURI team will
+                    thoroughly check the unique records/unique activities mentioned in
+                    your application. Recognition will be granted only if it is
+                    approved, otherwise your application may be rejected.
+                  </p>
+                </div>
+
+                <div className="left-uru-section">
+                  <span className="left-uru-number">10.</span>
+                  <p>
+                    If your application is verified by the scrutiny committee and jury
+                    committee, then in the next step you can see the updated status by
+                    opening the Application Status tab. After paying the prescribed fee
+                    mentioned there, your unique record/unique activity will be duly
+                    published on the URU's worldwide website along with all the details
+                    and information provided by you and a digital certificate will also
+                    be issued.
+                  </p>
+                </div>
+
+                <div className="left-uru-section">
+                  <span className="left-uru-number">11.</span>
+                  <p>
+                    The application, certification fee in URU is ₹9,639/-. But as per
+                    the decision of the committee, after the application is accepted
+                    till further notice, you will have to pay only ₹3,693/-. Concession
+                    will also be given from this revised fee for people from specially
+                    economically weaker meritorious class who have really done some
+                    unique work.
+                  </p>
+                </div>
+
+                <div className="left-uru-note">
+                  <b>Note:</b> All the information filled by you in the application
+                  should be accurate and true. Submission of incomplete or wrong
+                  information may result in cancellation of application. If your unique
+                  record/unique activity is registered on the URU website and in future
+                  that information is proved to be false, then your published details
+                  will be removed from the website. In this regard, you will also be
+                  informed separately and your side will also be taken.
+                </div>
+              </div>
+
+              <button className="close-btn" onClick={handleClose}>
+                Close
+              </button>
+            </div>
+          </div>
+        )}
+
+        </div>
 
         <div className="right-panel">
           <div className="form-achivment-container">
@@ -1156,7 +1291,7 @@ const handleFinalSubmit = async (e) => {
                   </div>
                   <h2 className="thank-heading">The application process was successful!</h2>
                   <p className="thank-text">
-                    Your application for <strong>'Unique Record of Universe'</strong> Holder has been successfully received by URU Admin Section. 
+                    Your application for <strong>'Unique Records Of Universe'</strong> Holder has been successfully received by URU Admin Section. 
                     After application approval, go to the Application Status page and pay the prescribed fee.
                   </p>
                 </div>

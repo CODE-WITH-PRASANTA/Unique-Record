@@ -212,12 +212,25 @@
 .achiver-about-details {
   flex: 2;
 }
-
 /* Applicant photo styling */
 .achiver-about-photo-section {
   flex: 1;
   text-align: right;
 }
+
+/* Hide only on desktop view */
+@media screen and (min-width: 1024px) {
+  .achiver-about-photo-section {
+    display: none;
+  }
+}
+/* Applicant photo styling */
+.new-achiver-about-photo-section {
+  flex: 1;
+  text-align: right;
+}
+
+
 
 .achiver-applicant-photo {
   width: 100%;               /* take full swiper width */
@@ -447,7 +460,12 @@
   font-size: 1.3rem;
   color: #e94e77;
   margin-bottom: 12px;
+
+  /* Border bottom */
+  border-bottom: 2px solid #e94e77;
+  padding-bottom: 6px;
 }
+
 
 .achiver-summary-description {
   font-size: 1rem;
