@@ -37,10 +37,11 @@ const achievementSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  tags: {
-    type: String,
-    required: true,
-  },
+ tags: {
+  type: [String],   // array of strings
+  required: false,  // not required
+  default: []       // fallback if not provided
+},
   image: {
     type: String,
     required: true,

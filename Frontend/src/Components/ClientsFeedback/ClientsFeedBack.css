@@ -1,115 +1,169 @@
-/* Feedback Section Styling */
+/* ================================
+   Feedback Section Styling
+================================ */
 .full-feedback-sec {
-    background: url('../../assets/Client-feedback-bg.jpg') no-repeat center center/cover;
-    padding: 40px 20px;
-    position: relative;
-    overflow: hidden;
+  background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+  padding: 60px 20px;
+  position: relative;
+  overflow: hidden;
 }
 
 .client-feedback {
-    text-align: center;
-    max-width: 1200px;
-    margin: auto;
-    padding: 20px;
+  text-align: center;
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
 }
 
 .client-section-title {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: #333;
-    text-transform: capitalize;
-    position: relative;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #222;
+  text-transform: capitalize;
+  position: relative;
+  margin-bottom: 40px;
 }
 
 .client-section-title::after {
-    content: "";
-    width: 80px;
-    height: 3px;
-    background-color: #e94e77;
-    display: block;
-    margin: 10px auto;
-    border-radius: 2px;
+  content: "";
+  width: 100px;
+  height: 4px;
+  background: linear-gradient(90deg, #e94e77, #ff6f61);
+  display: block;
+  margin: 12px auto;
+  border-radius: 3px;
 }
 
-/* Swiper Styling */
+/* ================================
+   Swiper Styling
+================================ */
 .feedback-swiper {
-    width: 100%;
-    padding: 20px 0;
+  width: 100%;
+  padding: 30px 0;
 }
 
+/* ================================
+   Feedback Card
+================================ */
 .feedback-card {
-    background: #ffffff;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    padding: 30px 20px;
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-    text-align: left;
-    max-width: 350px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    margin: auto;
+  background: #ffffff;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  border-radius: 15px;
+  padding: 30px 22px;
+  transition: all 0.3s ease-in-out;
+  text-align: left;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: auto;
+  border-top: 5px solid transparent;
+  border-image: linear-gradient(90deg, #e94e77, #ff6f61) 1;
 }
 
+.feedback-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 10px 25px rgba(233, 78, 119, 0.25);
+}
 
-/* Feedback Text */
+/* ================================
+   Feedback Text
+================================ */
 .feedback-text {
-    font-size: 1.1rem;
-    color: #555;
-    font-style: italic;
-    margin-bottom: 20px;
+  font-size: 1.05rem;
+  color: #444;
+  font-style: italic;
+  margin-bottom: 18px;
+  line-height: 1.6;
+  position: relative;
 }
 
+/* ================================
+   Read More Button
+================================ */
+.feedback-readmore-btn {
+  align-self: flex-start;
+  background: linear-gradient(45deg, #e94e77, #ff6f61);
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  margin: 6px 0 16px;
+  padding: 8px 18px;
+  font-size: 0.85rem;
+  border-radius: 30px;
+  transition: all 0.3s ease;
+  letter-spacing: 0.5px;
+}
+
+.feedback-readmore-btn:hover {
+  background: linear-gradient(45deg, #c23356, #ff3d67);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(233, 78, 119, 0.35);
+}
+
+/* ================================
+   Client Info
+================================ */
 .client-info {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-top: auto;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-top: auto;
 }
 
 .client-image {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid #e94e77;
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid transparent;
+  background: linear-gradient(45deg, #e94e77, #ff6f61);
+  padding: 3px; /* gradient border effect */
 }
 
 .client-name {
-    font-size: 1rem;
-    font-weight: 600;
-    margin: 0;
-    color: #333;
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0;
+  color: #222;
 }
 
 .client-role {
-    font-size: 0.85rem;
-    color: #888;
-    margin: 0;
+  font-size: 0.85rem;
+  color: #777;
+  margin: 0;
+  font-style: italic;
 }
 
-/* Swiper Pagination */
+/* ================================
+   Swiper Pagination
+================================ */
 .swiper-pagination-bullet {
-    background-color: #e94e77;
-    opacity: 0.7;
+  background: #e94e77;
+  opacity: 0.5;
+  transition: all 0.3s ease;
 }
 
 .swiper-pagination-bullet-active {
-    background-color: #e94e77;
-    opacity: 1;
+  background: linear-gradient(45deg, #e94e77, #ff6f61);
+  opacity: 1;
+  transform: scale(1.2);
 }
 
-/* Responsive Adjustments */
+/* ================================
+   Responsive
+================================ */
 @media (max-width: 768px) {
-    .feedback-card {
-        max-width: 300px;
-        padding: 30px;
-    }
+  .feedback-card {
+    max-width: 320px;
+    padding: 28px;
+  }
 }
 
 @media (max-width: 480px) {
-    .feedback-card {
-        max-width: 100%;
-        padding: 30px;
-    }
+  .feedback-card {
+    max-width: 100%;
+    padding: 26px;
+  }
 }

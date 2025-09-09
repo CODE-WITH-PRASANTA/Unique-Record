@@ -3,7 +3,7 @@ import { Editor } from '@tinymce/tinymce-react';
 import { TagsInput } from 'react-tag-input-component';
 import axios from 'axios';
 import './AdminPostAchievement.css';
-import { API_URL } from '../../Api'; 
+import { API_URL } from '../../Api';
 
 const AdminPostAchievement = () => {
   const [formData, setFormData] = useState({
@@ -22,7 +22,9 @@ const AdminPostAchievement = () => {
 
   const [successMsg, setSuccessMsg] = useState('');
   const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(false); // 🔹 New state for loading
+  const [achievements, setAchievements] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [editingId, setEditingId] = useState(null); // 🔹 Track editing
 
   // Fetch categories
   useEffect(() => {
@@ -39,6 +41,22 @@ const AdminPostAchievement = () => {
       });
   }, []);
 
+  // Fetch achievements
+  const fetchAchievements = () => {
+    axios
+      .get(`${API_URL}/achievements/get-all-achievements`)
+      .then((response) => {
+        setAchievements(response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching achievements:', error);
+      });
+  };
+
+  useEffect(() => {
+    fetchAchievements();
+  }, []);
+
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -51,28 +69,63 @@ const AdminPostAchievement = () => {
     setFormData({ ...formData, content });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setLoading(true); // 🔹 Set loading when submitting
+    const handleSubmit = (e) => {
+  e.preventDefault();
+  setLoading(true);
 
+  if (editingId) {
+    // 🔹 Update (send JSON, not FormData)
+    const updateData = {
+      title: formData.title,
+      shortDescription: formData.shortDescription,
+      content: formData.content,
+      providerName: formData.providerName,
+      achieverName: formData.achieverName,
+      uruHolderLink: formData.uruHolderLink,
+      category: formData.category,
+      tags: formData.tags,
+      address: formData.address,
+      effortType: formData.effortType,
+    };
+
+    axios
+      .put(`${API_URL}/achievements/update-achievement/${editingId}`, updateData)
+      .then((response) => {
+        setSuccessMsg('✅ Achievement updated successfully!');
+        fetchAchievements();
+        resetForm();
+      })
+      .catch((error) => {
+        console.error('Error updating achievement:', error);
+      })
+      .finally(() => setLoading(false));
+  } else {
+    // 🔹 Create (send FormData because image is included)
     const data = new FormData();
-    data.append('title', formData.title);
-    data.append('shortDescription', formData.shortDescription);
-    data.append('content', formData.content);
-    data.append('providerName', formData.providerName);
-    data.append('achieverName', formData.achieverName);
-    data.append('category', formData.category);
-    data.append('tags', formData.tags.join(','));
-    data.append('image', formData.image);
-    data.append('uruHolderLink', formData.uruHolderLink);
-    data.append('address', formData.address);
-    data.append('effortType', formData.effortType);
+    Object.keys(formData).forEach((key) => {
+      if (key === 'tags') {
+        data.append('tags', formData.tags.join(','));
+      } else {
+        data.append(key, formData[key]);
+      }
+    });
 
     axios
       .post(`${API_URL}/achievements/post-achievement`, data)
       .then((response) => {
-        console.log(response.data);
         setSuccessMsg('🎉 Achievement posted successfully!');
+        fetchAchievements();
+        resetForm();
+      })
+      .catch((error) => {
+        console.error('Error posting achievement:', error);
+      })
+      .finally(() => setLoading(false));
+        }
+      };
+
+      // 🔹 Helper function to reset form
+      const resetForm = () => {
         setFormData({
           title: '',
           shortDescription: '',
@@ -86,25 +139,47 @@ const AdminPostAchievement = () => {
           address: '',
           effortType: '',
         });
+        setEditingId(null);
         setTimeout(() => setSuccessMsg(''), 4000);
-      })
-      .catch((error) => {
-        console.error(error);
-      })
-      .finally(() => {
-        setLoading(false); // 🔹 Reset loading after success or error
-      });
-  };
+      };
+
+
+      const handleEdit = (achievement) => {
+        setEditingId(achievement._id);
+        setFormData({
+          title: achievement.title,
+          shortDescription: achievement.shortDescription,
+          content: achievement.content,
+          providerName: achievement.providerName,
+          achieverName: achievement.achieverName,
+          category: achievement.category,
+          tags: Array.isArray(achievement.tags)
+            ? achievement.tags
+            : achievement.tags
+            ? achievement.tags.split(',').map(tag => tag.trim())
+            : [],
+          image: null,
+          uruHolderLink: achievement.uruHolderLink,
+          address: achievement.address,
+          effortType: achievement.effortType,
+        });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      };
 
 
   return (
-    <div className="achivement-post-container">
-      <h2 className="achivement-post-heading">Post Achievement</h2>
+    <div className="achievement-admin-container">
+      <h2 className="achievement-admin-heading">
+        {editingId ? 'Edit Achievement' : 'Post Achievement'}
+      </h2>
 
-      {successMsg && <div className="achivement-post-success-alert">{successMsg}</div>}
+      {successMsg && (
+        <div className="achievement-admin-success">{successMsg}</div>
+      )}
 
-      <form onSubmit={handleSubmit} className="achivement-post-form">
-      
+      {/* 🔹 Form Section */}
+      <form onSubmit={handleSubmit} className="achievement-admin-form">
+ 
         {/* 🔹 Rest of your fields */}
         <div className="achivement-post-form-group">
           <label className="achivement-post-label">Achievement Title*</label>
@@ -177,9 +252,7 @@ const AdminPostAchievement = () => {
               className="achivement-post-input"
             />
           </div>
-        </div>
-
-          
+        </div>       
         {/* 🔹 Address Field */}
         <div className="achivement-post-form-group">
           <label className="achivement-post-label">Address*</label>
@@ -192,7 +265,6 @@ const AdminPostAchievement = () => {
             className="achivement-post-input" 
           />
         </div>
-
         {/* 🔹 Effort Type Field */}
         <div className="achivement-post-form-group">
           <label className="achivement-post-label">Effort Type*</label>
@@ -221,35 +293,91 @@ const AdminPostAchievement = () => {
             ))}
           </select>
         </div>
-
         <div className="achivement-post-form-group">
           <label className="achivement-post-label">Tags*</label>
           <TagsInput
-            value={formData.tags}
+            value={Array.isArray(formData.tags) ? formData.tags : []}
             onChange={(newTags) => setFormData({ ...formData, tags: newTags })}
             name="tags"
             placeHolder="Enter tags"
             classNames={{
+              root: "achivement-post-tags-root",
               input: "achivement-post-tags-input",
               tag: "achivement-post-tag",
             }}
           />
         </div>
 
-        <div className="achivement-post-form-group">
-          <label className="achivement-post-label">Upload Achievement Image*</label>
-          <input type="file" name="image" onChange={handleFileChange} required className="achivement-post-file" />
+       <div className="achivement-post-form-group">
+  <label className="achivement-post-label">Upload Achievement Image{!editingId && '*'}</label>
+  <input
+    type="file"
+    name="image"
+    onChange={handleFileChange}
+    required={!editingId}   // 🔹 required only when creating
+    className="achivement-post-file"
+  />
         </div>
 
-         <button 
-          type="submit" 
-          className="achivement-post-button" 
-          disabled={loading}  // 🔹 Disable while loading
-        >
-          {loading ? "Posting..." : "Post Achievement"} {/* 🔹 Dynamic text */}
-        </button>
 
+        <button
+          type="submit"
+          className="achievement-admin-button"
+          disabled={loading}
+        >
+          {loading
+            ? editingId
+              ? 'Updating...'
+              : 'Posting...'
+            : editingId
+            ? 'Update Achievement'
+            : 'Post Achievement'}
+        </button>
       </form>
+
+      {/* 🔹 Table Section */}
+      <h3 className="achievement-admin-table-heading">All Achievements</h3>
+      <table className="achievement-admin-table">
+        <thead>
+          <tr>
+            <th>Serial No</th>
+            <th>Title</th>
+            <th>Achiever</th>
+            <th>Effort Type</th>
+            <th>Category</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+       <tbody>
+        {achievements.length > 0 ? (
+          [...achievements].reverse().map((ach, index) => (
+            <tr key={ach._id}>
+              <td>{index + 1}</td> {/* Serial stays in correct order */}
+              <td>{ach.title}</td>
+              <td>{ach.achieverName}</td>
+              <td>{ach.effortType}</td>
+              <td>{ach.category}</td>
+              <td>
+                <button
+                  className="achievement-admin-edit-btn"
+                  onClick={() => handleEdit(ach)}
+                >
+                  Edit
+                </button>
+              </td>
+            </tr>
+          ))
+        ) : (
+          <tr>
+            <td colSpan="6" className="achievement-admin-empty">
+              No achievements found.
+            </td>
+          </tr>
+        )}
+      </tbody>
+
+      </table>
+
     </div>
   );
 };

@@ -24,7 +24,6 @@ const AdminTranstionHistroy = () => {
       {/* Header */}
       <div className="Admin-Transition-Header-Section">
         <h3 className="Admin-Transition-Title">Transaction History</h3>
-        <a href="/" className="Admin-Transition-View-All">View All</a>
       </div>
 
       {/* Table Section */}

@@ -167,3 +167,52 @@ exports.getPublishedAchievements = async (req, res) => {
     res.status(500).json({ message: 'Error fetching published achievements' });
   }
 };
+
+// Update Achievement (All fields except image)
+exports.updateAchievement = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const {
+      title,
+      shortDescription,
+      content,
+      providerName,
+      achieverName,
+      uruHolderLink,
+      category,
+      tags,
+      address,
+      effortType,
+      isPublished
+    } = req.body;
+
+    const achievement = await Achievement.findById(id);
+    if (!achievement) {
+      return res.status(404).json({ message: "Achievement not found" });
+    }
+
+    // Update fields
+    achievement.title = title || achievement.title;
+    achievement.shortDescription = shortDescription || achievement.shortDescription;
+    achievement.content = content || achievement.content;
+    achievement.providerName = providerName || achievement.providerName;
+    achievement.achieverName = achieverName || achievement.achieverName;
+    achievement.uruHolderLink = uruHolderLink || achievement.uruHolderLink;
+    achievement.category = category || achievement.category;
+    achievement.tags = tags || achievement.tags;
+    achievement.address = address || achievement.address;
+    achievement.effortType = effortType || achievement.effortType;
+
+    // Optional: update publish status if sent
+    if (typeof isPublished !== "undefined") {
+      achievement.isPublished = isPublished;
+    }
+
+    await achievement.save();
+
+    res.status(200).json({ message: "Achievement updated successfully", achievement });
+  } catch (error) {
+    console.error("Error updating achievement:", error);
+    res.status(500).json({ message: "Error updating achievement" });
+  }
+};

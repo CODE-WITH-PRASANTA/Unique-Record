@@ -54,15 +54,14 @@ const ManageURU = () => {
       console.error(error);
     }
   };
-
-  const handleEdit = (data) => {
+const handleEdit = (data) => {
   setEditingData({
     ...data,
     witness1: data.witness1 || {},
     witness2: data.witness2 || {},
-    photos: data.photos || [],         // ✅ keep same key
-    videos: data.videos || [],         // ✅ keep same key
-    documents: data.documents || [],   // ✅ keep same key
+    photos: data.photos || [],
+    videos: data.videos || [],
+    documents: data.documents || [],
     googleDriveLink: data.googleDriveLink || [],
     youtubeLink: data.youtubeLink || [],
     instagramLink: data.instagramLink || [],
@@ -74,6 +73,8 @@ const ManageURU = () => {
   });
   setShowModal(true);
 };
+
+
 
   const handleDelete = async (id) => {
     Swal.fire({

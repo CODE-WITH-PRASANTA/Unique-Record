@@ -27,4 +27,8 @@ router.put('/unpublish-achievement/:id', achievementController.unpublishAchievem
 // Get All Published Achievements
 router.get('/get-published-achievements', achievementController.getPublishedAchievements);
 
+// Update Achievement (all data except image)
+router.put('/update-achievement/:id', achievementController.updateAchievement);
+
+
 module.exports = router;

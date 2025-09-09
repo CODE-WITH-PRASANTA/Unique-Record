@@ -123,7 +123,7 @@ const Login = () => {
             className={isRegister ? "active login-page-button" : "login-page-button"}
             onClick={() => setIsRegister(true)}
           >
-            Register
+            Sign Up
           </button>
         </div>
 

@@ -1,29 +1,52 @@
-import React from 'react';
-import { extendTheme } from '@mui/material/styles';
+import * as React from 'react';
+import PropTypes from 'prop-types';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Stack from '@mui/material/Stack';
+import Chip from '@mui/material/Chip';
+import TextField from '@mui/material/TextField';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
+import { createTheme } from '@mui/material/styles';
+import CloudCircleIcon from '@mui/icons-material/CloudCircle';
 import DashboardIcon from '@mui/icons-material/Dashboard';
+import SearchIcon from '@mui/icons-material/Search';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ArticleIcon from '@mui/icons-material/Article';
-import MessageIcon from '@mui/icons-material/Message';
 import CreateIcon from '@mui/icons-material/Create';
-import AnnouncementIcon from '@mui/icons-material/Announcement';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import ListIcon from '@mui/icons-material/List';
-import EventIcon from '@mui/icons-material/Event';
 import EditIcon from '@mui/icons-material/Edit';
-import PhotoLibraryIcon from '@mui/icons-material/PhotoLibrary'; // Gallery Icon
+import AnnouncementIcon from '@mui/icons-material/Announcement';
+import EventIcon from '@mui/icons-material/Event';
+import GroupAddIcon from '@mui/icons-material/GroupAdd';
+import GroupIcon from '@mui/icons-material/Group';
+import PeopleIcon from '@mui/icons-material/People';
+import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
+import PhotoLibraryIcon from '@mui/icons-material/PhotoLibrary';
+import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
+import CategoryIcon from '@mui/icons-material/Category';
+import CommentIcon from '@mui/icons-material/Comment';
+import ForumIcon from '@mui/icons-material/Forum';
+import EmailIcon from '@mui/icons-material/Email';
+import './AdminNavbar.css'
+
 import { AppProvider } from '@toolpad/core/AppProvider';
-import { DashboardLayout } from '@toolpad/core/DashboardLayout';
-import { PageContainer } from '@toolpad/core/PageContainer';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle'; // Import a nice 'approval' icon
+import { DashboardLayout, ThemeSwitcher } from '@toolpad/core/DashboardLayout';
+import { Account } from '@toolpad/core/Account';
+import { useDemoRouter } from '@toolpad/core/internal';
+
+
+// ✅ Import all your admin components
 import AdminDashboard from '../AdminDashboard/AdminDashboard';
 import AdminManageNotice from '../../Components/AdminManageNotice/AdminManageNotice';
 import AdminAddNotice from '../../Components/AdminAddNotice/AdminAddNotice';
 import AdminAddEvent from '../../Components/AdminAddEvent/AdminAddEvent';
 import AdminEditEvent from '../../Components/AdminEditEvent/AdminEditEvent';
-import EventGallery from '../../Components/EventGallery/EventGallery'; // New Component
-import HomeGallery from '../../Components/HomeGallery/HomeGallery'; // New Component
+import EventGallery from '../../Components/EventGallery/EventGallery';
+import HomeGallery from '../../Components/HomeGallery/HomeGallery';
 import AdminAddTeamMember from '../../Components/AdminAddTeamMember/AdminAddTeamMember';
 import AdminManageRegisteredPeople from '../../Components/AdminManageRegisteredPeople/AdminManageRegisteredPeople';
-import './AdminNavbar.css';
 import AdminManageDonations from '../../Components/AdminManageDonations/AdminManageDonations';
 import AdminManageHomeMedia from '../../Components/AdminManageHomeMedia/AdminManageHomeMedia';
 import YoutubeManage from '../../Components/YoutubeManage/YoutubeManage';
@@ -43,69 +66,120 @@ import AdminAchivmentComment from '../../Components/AdminAchivmentComment/AdminA
 import UserOpinion from '../../Components/UserOpinion/UserOpinion';
 import SubscribedNewsletter from '../../Components/SubscribedNewsletter/SubscribedNewsletter';
 
+// ✅ Your NAVIGATION config (directly included here, not imported)
 const NAVIGATION = [
   {
     kind: 'header',
-    title: 'Main items',
+    title: 'Main',
   },
   {
     segment: 'dashboard',
     title: 'Dashboard',
-    icon: <DashboardIcon style={{ color: '#1976d2' }} />,
+    icon: <DashboardIcon />,
   },
-  {
-    kind: 'divider',
-  },
+  { kind: 'divider' },
   {
     kind: 'header',
     title: 'Blog Section',
   },
   {
     segment: 'blog',
-    title: 'URU Post',
-    icon: <ArticleIcon style={{ color: '#ff5722' }} />,
+    title: 'Blogs',
+    icon: <ArticleIcon />,
     children: [
-      {
-        segment: 'create',
-        title: 'Create Blog Post',
-        icon: <CreateIcon style={{ color: '#4caf50' }} />,
-      },
-      {
-        segment: 'edit',
-        title: 'Delete Blog Post',  // <-- Added this
-        icon: <EditIcon style={{ color: '#ff9800' }} />,
-      },
+      { segment: 'create', title: 'Create Blog', icon: <CreateIcon /> },
+      { segment: 'edit', title: 'Manage Blogs', icon: <EditIcon /> },
     ],
   },
   {
-  kind: 'header',
-  title: 'URU Management',
-},
-{
-  segment: 'uru',
-  title: 'URU',
-  icon: <DashboardIcon style={{ color: '#009688' }} />, 
-  children: [
-    {
-      segment: 'manage-uru',
-      title: 'Manage URU',
-      icon: <ListIcon style={{ color: '#2196f3' }} />,
-    },
-    {
-      segment: 'approve-uru',
-      title: 'Approve URU',
-      icon: <CheckCircleIcon style={{ color: '#4caf50' }} />,
-    },
-     {
-        segment: 'final-uru',
-        title: 'Final URU',
-        icon: <CheckCircleIcon style={{ color: '#8bc34a' }} />, // You can use a different icon
-      },
-  ],
-},
-
- {
-    kind: 'divider',
+    kind: 'header',
+    title: 'Notice Section',
+  },
+  {
+    segment: 'notice',
+    title: 'Notices',
+    icon: <AnnouncementIcon />,
+    children: [
+      { segment: 'add', title: 'Add Notice', icon: <CreateIcon /> },
+      { segment: 'manage', title: 'Manage Notices', icon: <EditIcon /> },
+    ],
+  },
+  {
+    kind: 'header',
+    title: 'Event Section',
+  },
+  {
+    segment: 'event',
+    title: 'Events',
+    icon: <EventIcon />,
+    children: [
+      { segment: 'add', title: 'Add Event', icon: <CreateIcon /> },
+      { segment: 'edit', title: 'Edit Event', icon: <EditIcon /> },
+      { segment: 'manage-registered', title: 'Manage Registered', icon: <PeopleIcon /> },
+    ],
+  },
+  {
+    kind: 'header',
+    title: 'Team Section',
+  },
+  {
+    segment: 'team',
+    title: 'Team',
+    icon: <GroupIcon />,
+    children: [
+      { segment: 'add', title: 'Add Member', icon: <GroupAddIcon /> },
+      { segment: 'manage', title: 'Manage Members', icon: <EditIcon /> },
+    ],
+  },
+  {
+    kind: 'header',
+    title: 'Donations',
+  },
+  {
+    segment: 'donation/manage',
+    title: 'Manage Donations',
+    icon: <VolunteerActivismIcon />,
+  },
+  {
+    kind: 'header',
+    title: 'Media',
+  },
+  {
+    segment: 'gallery',
+    title: 'Gallery',
+    icon: <PhotoLibraryIcon />,
+    children: [
+      { segment: 'event-gallery', title: 'Event Gallery', icon: <PhotoLibraryIcon /> },
+      { segment: 'home-gallery', title: 'Home Gallery', icon: <PhotoLibraryIcon /> },
+    ],
+  },
+  {
+    segment: 'media',
+    title: 'Media Manage',
+    icon: <VideoLibraryIcon />,
+    children: [
+      { segment: 'youtube', title: 'YouTube Videos', icon: <VideoLibraryIcon /> },
+      { segment: 'photos', title: 'Photos', icon: <PhotoLibraryIcon /> },
+    ],
+  },
+  {
+    kind: 'header',
+    title: 'URU Section',
+  },
+  {
+    segment: 'uru/manage-uru',
+    title: 'Manage URU',
+    icon: <ThumbUpIcon />,
+  },
+  {
+    segment: 'uru/approve-uru',
+    title: 'Approve URU',
+    icon: <CheckCircleIcon />,
+  },
+  {
+    segment: 'uru/final-uru',
+    title: 'Final URU',
+    icon: <CheckCircleIcon />,
   },
   {
     kind: 'header',
@@ -114,324 +188,161 @@ const NAVIGATION = [
   {
     segment: 'achievements',
     title: 'Achievements',
-    icon: <DashboardIcon style={{ color: '#8bc34a' }} />, 
+    icon: <WorkspacePremiumIcon />,
     children: [
-      {
-        segment: 'post',
-        title: 'Post Achievement',
-        icon: <AddCircleIcon style={{ color: '#4caf50' }} />,
-      },
-      {
-        segment: 'manage',
-        title: 'Manage Achievements',
-        icon: <ListIcon style={{ color: '#2196f3' }} />,
-      },
-    ],
-  },
-
-  {
-    kind: 'divider',
-  },
-  {
-    kind: 'header',
-    title: 'Manage Notice',
-  },
-  {
-    segment: 'notice',
-    title: 'Notices',
-    icon: <AnnouncementIcon style={{ color: '#ff9800' }} />,
-    children: [
-      {
-        segment: 'add',
-        title: 'Add Notice',
-        icon: <AddCircleIcon style={{ color: '#4caf50' }} />,
-      },
-      {
-        segment: 'manage',
-        title: 'Manage Notice',
-        icon: <ListIcon style={{ color: '#2196f3' }} />,
-      },
+      { segment: 'post', title: 'Post Achievement', icon: <CreateIcon /> },
+      { segment: 'manage', title: 'Manage Achievements', icon: <EditIcon /> },
     ],
   },
   {
-    kind: 'divider',
-  },
-  {
     kind: 'header',
-    title: 'Manage Event',
-  },
-  {
-    segment: 'event',
-    title: 'Events',
-    icon: <EventIcon style={{ color: '#673ab7' }} />, 
-    children: [
-      {
-        segment: 'add',
-        title: 'Add Event',
-        icon: <AddCircleIcon style={{ color: '#4caf50' }} />,
-      },
-      {
-        segment: 'edit',
-        title: 'Edit Event',
-        icon: <EditIcon style={{ color: '#ff9800' }} />,
-      },
-      {
-        segment: 'manage-registered',
-        title: 'Manage Registered People',
-        icon: <ListIcon style={{ color: '#3f51b5' }} />, // Icon for managing registered users
-      },
-    ],
-  },
-  
-  {
-    kind: 'divider',
-  },
-  {
-    kind: 'header',
-    title: 'Gallery Manage',
-  },
-  {
-    segment: 'gallery',
-    title: 'Gallery',
-    icon: <PhotoLibraryIcon style={{ color: '#9c27b0' }} />, 
-    children: [
-      {
-        segment: 'event-gallery',
-        title: "Event's Gallery",
-        icon: <PhotoLibraryIcon style={{ color: '#3f51b5' }} />,
-      },
-      {
-        segment: 'home-gallery',
-        title: 'Home Gallery',
-        icon: <PhotoLibraryIcon style={{ color: '#e91e63' }} />,
-      },
-    ],
-  },
-  {
-    kind: 'divider',
-  },
-  {
-    kind: 'header',
-    title: 'Manage Team',
-  },
-  {
-    segment: 'team',
-    title: 'Team Members',
-    icon: <DashboardIcon style={{ color: '#009688' }} />, 
-    children: [
-      {
-        segment: 'add',
-        title: 'Add Team Member',
-        icon: <AddCircleIcon style={{ color: '#4caf50' }} />,
-      },
-      {
-        segment: 'manage',
-        title: 'Manage Team Members',
-        icon: <ListIcon style={{ color: '#2196f3' }} />,
-      },
-    ],
-  },
-  {
-    kind: 'divider',
-  },
-  {
-    kind: 'header',
-    title: 'Category Manage',
+    title: 'Categories',
   },
   {
     segment: 'category',
     title: 'Manage Categories',
-    icon: <ListIcon style={{ color: '#2196f3' }} />, 
-  },
-  {
-    kind: 'divider',
+    icon: <CategoryIcon />,
   },
   {
     kind: 'header',
-    title: 'Donation Manage',
+    title: 'Comments',
   },
   {
-    segment: 'donation',
-    title: 'Donations',
-    icon: <AddCircleIcon style={{ color: '#f44336' }} />, // You can use a different icon if you like
+    segment: 'comments',
+    title: 'Comments',
+    icon: <CommentIcon />,
     children: [
-      {
-        segment: 'manage',
-        title: 'Manage Donations',
-        icon: <ListIcon style={{ color: '#2196f3' }} />,
-      },
+      { segment: 'blog-comments', title: 'Blog Comments', icon: <ForumIcon /> },
+      { segment: 'achievement-comments', title: 'Achievement Comments', icon: <ForumIcon /> },
     ],
   },
-
-  {
-    kind: 'divider',
-  },
   {
     kind: 'header',
-    title: 'Home Media',
+    title: 'Users',
   },
   {
-    segment: 'homemedia',
-    title: 'Manage Home Media',
-    icon: <PhotoLibraryIcon style={{ color: '#ff5722' }} />, // or another relevant icon
+    segment: 'user-opinion',
+    title: 'User Opinions',
+    icon: <ForumIcon />,
   },
   {
-    kind: 'header',
-    title: 'Manage Media',
+    segment: 'newsletter',
+    title: 'Subscribed Newsletter',
+    icon: <EmailIcon />,
   },
-  {
-    segment: 'media',
-    title: 'Media',
-    icon: <PhotoLibraryIcon style={{ color: '#00bcd4' }} />,
-    children: [
-      {
-        segment: 'youtube',
-        title: 'YouTube Manage',
-        icon: <PhotoLibraryIcon style={{ color: '#f44336' }} />,
-      },
-      {
-        segment: 'photos',
-        title: 'Photo Manage',
-        icon: <PhotoLibraryIcon style={{ color: '#3f51b5' }} />,
-      },
-    ],
-  },
-
-  {
-  kind: 'header',
-  title: 'Comments Management',
-},
-{
-  segment: 'comments',
-  title: 'Manage Comments',
-  icon: <MessageIcon style={{ color: '#2196f3' }} />, // Import MessageIcon from '@mui/icons-material/Message';
-  children: [
-    {
-      segment: 'blog-comments',
-      title: 'Blog Comments',
-      icon: <ArticleIcon style={{ color: '#ff5722' }} />,
-    },
-    {
-      segment: 'achievement-comments',
-      title: 'Achievement Comments',
-      icon: <DashboardIcon style={{ color: '#8bc34a' }} />,
-    },
-  ],
-},
-
-{
-  kind: 'divider',
-},
-{
-  kind: 'header',
-  title: 'User Management',
-},
-{
-  segment: 'user-opinion',
-  title: "User's Opinion",
-  icon: <MessageIcon style={{ color: '#9c27b0' }} />,
-},
-{
-  segment: 'newsletter',
-  title: 'Subscribed Newsletter',
-  icon: <ArticleIcon style={{ color: '#3f51b5' }} />,
-},
-
-  
-
 ];
 
-const demoTheme = extendTheme({
+// ✅ Theme
+const demoTheme = createTheme({
+  cssVariables: { colorSchemeSelector: 'data-toolpad-color-scheme' },
   colorSchemes: { light: true, dark: true },
-  colorSchemeSelector: 'class',
-  breakpoints: {
-    values: {
-      xs: 0,
-      sm: 600,
-      md: 600,
-      lg: 1200,
-      xl: 1536,
-    },
-  },
-  components: {
-    MuiContainer: {
-      styleOverrides: {
-        root: {
-          maxWidth: '100% !important',
-        },
-      },
-    },
-    MuiCssBaseline: {
-      styleOverrides: `
-        .css-t3xolk {
-          width: auto !important;
-        }
-      `,
-    },
-  },
+  breakpoints: { values: { xs: 0, sm: 600, md: 600, lg: 1200, xl: 1536 } },
 });
 
-function useDemoRouter(initialPath) {
-  const [pathname, setPathname] = React.useState(initialPath);
-
-  const router = React.useMemo(
-    () => ({
-      pathname,
-      searchParams: new URLSearchParams(),
-      navigate: (path) => setPathname(String(path)),
-      matches: (path) => pathname.startsWith(path),
-    }),
-    [pathname]
+// ✅ Toolbar actions (Search + ThemeSwitcher + Account)
+function ToolbarActionsSearch() {
+  return (
+    <Stack direction="row">
+      <Tooltip title="Search" enterDelay={1000}>
+        <div>
+          <IconButton
+            type="button"
+            aria-label="search"
+            sx={{ display: { xs: 'inline', md: 'none' } }}
+          >
+            <SearchIcon />
+          </IconButton>
+        </div>
+      </Tooltip>
+      <TextField
+        label="Search"
+        variant="outlined"
+        size="small"
+        slotProps={{
+          input: {
+            endAdornment: (
+              <IconButton type="button" aria-label="search" size="small">
+                <SearchIcon />
+              </IconButton>
+            ),
+            sx: { pr: 0.5 },
+          },
+        }}
+        sx={{ display: { xs: 'none', md: 'inline-block' }, mr: 1 }}
+      />
+      <ThemeSwitcher />
+      <Account />
+    </Stack>
   );
-
-  return router;
 }
 
-export default function DashboardLayoutBasic({ window }) {
+// ✅ Sidebar footer
+function SidebarFooter({ mini }) {
+  return (
+    <Typography variant="caption" sx={{ m: 1, whiteSpace: 'nowrap', overflow: 'hidden' }}>
+      {mini ? '© MUI' : `© ${new Date().getFullYear()} Made with ❤️ by Admin Panel`}
+    </Typography>
+  );
+}
+SidebarFooter.propTypes = { mini: PropTypes.bool.isRequired };
+
+// ✅ Custom Title
+function CustomAppTitle() {
+  return (
+    <Stack direction="row" alignItems="center" spacing={2}>
+      <CloudCircleIcon fontSize="large" color="primary" />
+      <Typography variant="h6">Admin Panel</Typography>
+      <Chip size="small" label="BETA" color="info" />
+      <Tooltip title="Connected to production">
+        <CheckCircleIcon color="success" fontSize="small" />
+      </Tooltip>
+    </Stack>
+  );
+}
+
+export default function AdminNavbar({ window }) {
   const router = useDemoRouter('/dashboard');
-  const demoWindow = window ? window() : undefined;
 
   return (
-    <div className="dashboard-wrapper">
-      <AppProvider
-        navigation={NAVIGATION}
-        router={router}
-        theme={demoTheme}
-        window={demoWindow}
+    <AppProvider navigation={NAVIGATION} router={router} theme={demoTheme}>
+      <DashboardLayout
+        slots={{
+          appTitle: CustomAppTitle,
+          toolbarActions: ToolbarActionsSearch,
+          sidebarFooter: SidebarFooter,
+        }}
       >
-        <DashboardLayout >
-          <PageContainer>
-            {router.pathname === '/dashboard' && <AdminDashboard />}
-            {router.pathname === '/blog/create' && <CreateBlogs />}
-            {router.pathname === '/blog/edit' && <AdminEditBlogs />}
-            {router.pathname === '/notice/add' && <AdminAddNotice />} 
-            {router.pathname === '/notice/manage' && <AdminManageNotice />}
-            {router.pathname === '/event/add' && <AdminAddEvent />}
-            {router.pathname === '/event/edit' && <AdminEditEvent />}
-            {router.pathname === '/gallery/event-gallery' && <EventGallery />}
-            {router.pathname === '/gallery/home-gallery' && <HomeGallery />}
-            {router.pathname === '/team/add' && <AdminAddTeamMember />}
-            {router.pathname === '/team/manage' && <AdminManageTeamMembers />}
-            {router.pathname === '/event/manage-registered' && <AdminManageRegisteredPeople />}
-            {router.pathname === '/donation/manage' && <AdminManageDonations />}
-            {router.pathname === '/homemedia' && <AdminManageHomeMedia />}
-            {router.pathname === '/media/youtube' && <YoutubeManage />}
-            {router.pathname === '/media/photos' && <PhotoManage />}
-            {router.pathname === '/approve-blogs' && <AproveBlogs />}
-            {router.pathname === '/uru/manage-uru' && <ManageURU />}
-            {router.pathname === '/uru/approve-uru' && <ApproveURU />}
-            {router.pathname === '/uru/final-uru' && <FinalURU />} 
-            {router.pathname === '/achievements/post' && <AdminPostAchievement />}
-            {router.pathname === '/achievements/manage' && <AdminManageAchievements />}
-            {router.pathname === '/category' && <AdminManageCategories />}
-            {router.pathname === '/comments/blog-comments' && <AdminManageBlogComment />}
-            {router.pathname === '/comments/achievement-comments' && <AdminAchivmentComment />} 
-            {router.pathname === '/user-opinion' && <UserOpinion />} 
-            {router.pathname === '/newsletter' && <SubscribedNewsletter />}
-
-          </PageContainer>
-        </DashboardLayout>
-      </AppProvider>
-    </div>
+        <Box sx={{ p: 3 }}>
+          {router.pathname === '/dashboard' && <AdminDashboard />}
+          {router.pathname === '/blog/create' && <CreateBlogs />}
+          {router.pathname === '/blog/edit' && <AdminEditBlogs />}
+          {router.pathname === '/notice/add' && <AdminAddNotice />}
+          {router.pathname === '/notice/manage' && <AdminManageNotice />}
+          {router.pathname === '/event/add' && <AdminAddEvent />}
+          {router.pathname === '/event/edit' && <AdminEditEvent />}
+          {router.pathname === '/gallery/event-gallery' && <EventGallery />}
+          {router.pathname === '/gallery/home-gallery' && <HomeGallery />}
+          {router.pathname === '/team/add' && <AdminAddTeamMember />}
+          {router.pathname === '/team/manage' && <AdminManageTeamMembers />}
+          {router.pathname === '/event/manage-registered' && <AdminManageRegisteredPeople />}
+          {router.pathname === '/donation/manage' && <AdminManageDonations />}
+          {router.pathname === '/media/homemedia' && <AdminManageHomeMedia />}
+          {router.pathname === '/media/youtube' && <YoutubeManage />}
+          {router.pathname === '/media/photos' && <PhotoManage />}
+          {router.pathname === '/approve-blogs' && <AproveBlogs />}
+          {router.pathname === '/uru/manage-uru' && <ManageURU />}
+          {router.pathname === '/uru/approve-uru' && <ApproveURU />}
+          {router.pathname === '/uru/final-uru' && <FinalURU />}
+          {router.pathname === '/achievements/post' && <AdminPostAchievement />}
+          {router.pathname === '/achievements/manage' && <AdminManageAchievements />}
+          {router.pathname === '/category' && <AdminManageCategories />}
+          {router.pathname === '/comments/blog-comments' && <AdminManageBlogComment />}
+          {router.pathname === '/comments/achievement-comments' && <AdminAchivmentComment />}
+          {router.pathname === '/user-opinion' && <UserOpinion />}
+          {router.pathname === '/newsletter' && <SubscribedNewsletter />}
+        </Box>
+      </DashboardLayout>
+    </AppProvider>
   );
 }
+

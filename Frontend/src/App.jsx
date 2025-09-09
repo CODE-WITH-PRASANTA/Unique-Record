@@ -60,7 +60,7 @@ function Layout() {
         </div>
       ) : (
         // Main Website Layout
-        <div className="main-content">
+       
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/learnmore" element={<LearnMore />} />
@@ -86,7 +86,6 @@ function Layout() {
             <Route path="/your-post" element={<MakeUserPost />}/>
               <Route path="/admin/*" element={<AdminLogin />} />
           </Routes>
-        </div>
       )}
 
       {/* Show Footer only if not in Admin or User Dashboard */}

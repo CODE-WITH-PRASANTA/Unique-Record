@@ -362,20 +362,29 @@ const AchiversAbout = () => {
       {/* Tab Content */}
       <div className="achiver-tab-content">
         {/* ================= Summary ================= */}
-        {activeTab === "summary" && (
-          <div className="achiver-summary-section">
-            <h3 className="achiver-summary-title">{uru.recordTitle}</h3>
-            <p className="achiver-summary-description">
-              {uru.recordDescription || "No description available."}
-            </p>
-            <div className="achiver-summary-purpose">
-              <h4 className="purpose-heading">Purpose of Records/Activity Attempt</h4>
-              <p className="purpose-text">
-                {uru.purposeOfRecordAttempt || "No purpose provided."}
-              </p>
-            </div>
-          </div>
-        )}
+       {activeTab === "summary" && (
+  <div className="achiver-summary-section">
+    <h3 className="achiver-summary-title">{uru.recordTitle}</h3>
+    <p className="achiver-summary-description">
+      {uru.recordDescription || "No description available."}
+    </p>
+    <div className="achiver-summary-purpose">
+      <h4 className="purpose-heading">Purpose of Records/Activity Attempt</h4>
+      <p className="purpose-text">
+        {uru.purposeOfRecordAttempt || "No purpose provided."}
+      </p>
+    </div>
+
+    {/* Disclaimer Section */}
+    <div className="achiver-disclaimer">
+      <span className="disclaimer-icon">Note :- </span>
+      <p className="disclaimer-text">
+        This information is given by the applicant.
+      </p>
+    </div>
+  </div>
+)}
+
 
         {/* ================= Description ================= */}
         {activeTab === "description" && (

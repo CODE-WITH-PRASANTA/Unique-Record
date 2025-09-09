@@ -1,207 +1,282 @@
-/* Container */
-.achivement-post-container {
-  max-width: 1500px;
-  padding: 30px;
-  background: linear-gradient(135deg, #f9fafd, #e6f0ff);
-  border: 1px solid #d0e1ff;
-  border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+/* 🌟 Container */
+.achievement-admin-container {
+  margin: 0 auto;
+  padding: 40px;
+  background: linear-gradient(135deg, #eef2ff, #fdfbfb);
+  border-radius: 16px;
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.08);
+  animation: fadeIn 0.6s ease-in-out;
 }
 
-/* Heading */
-.achivement-post-heading {
+/* 🌟 Heading */
+.achievement-admin-heading {
+  font-size: 30px;
   text-align: center;
-  font-size: 26px;
-  font-weight: 600;
+  font-weight: 700;
   margin-bottom: 30px;
-  color: #2e6da4;
-  letter-spacing: 1px;
+  background: linear-gradient(90deg, #6a11cb, #2575fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 1.5px;
 }
 
-/* Form */
-.achivement-post-form {
+/* 🌟 Success Message */
+.achievement-admin-success {
+  background: linear-gradient(135deg, #d4edda, #c3f7c3);
+  color: #155724;
+  padding: 14px 18px;
+  border-radius: 10px;
+  margin-bottom: 25px;
+  font-weight: 600;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* 🌟 Form */
+.achievement-admin-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 22px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  padding: 30px;
+  border-radius: 14px;
+  box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.06);
+  transition: transform 0.3s ease;
 }
 
-/* Form group */
+.achievement-admin-form:hover {
+  transform: translateY(-4px);
+}
+
+/* 🌟 Form Group */
 .achivement-post-form-group {
   display: flex;
   flex-direction: column;
 }
 
-/* Label */
 .achivement-post-label {
   margin-bottom: 8px;
-  font-weight: 500;
+  font-weight: 600;
   color: #333;
-  font-size: 14px;
+  font-size: 15px;
+  letter-spacing: 0.5px;
 }
 
-/* Input, Select, Textarea */
+/* 🌟 Inputs */
 .achivement-post-input,
 .achivement-post-select,
 .achivement-post-textarea {
-  padding: 12px;
+  padding: 12px 14px;
   font-size: 15px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-  background-color: #fff;
+  border: 1px solid #d0d7ff;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  background: linear-gradient(135deg, #ffffff, #f7faff);
 }
 
 .achivement-post-input:focus,
 .achivement-post-select:focus,
 .achivement-post-textarea:focus {
-  border-color: #5b9bd5;
+  border-color: #6a11cb;
+  box-shadow: 0 0 8px rgba(106, 17, 203, 0.25);
   outline: none;
-  box-shadow: 0 0 5px rgba(91, 155, 213, 0.3);
 }
 
-/* Textarea */
 .achivement-post-textarea {
   resize: vertical;
-  min-height: 100px;
+  min-height: 120px;
 }
 
-/* File Upload */
+/* 🌟 File Upload */
 .achivement-post-file {
-  padding: 10px 0;
-  font-size: 14px;
-}
-
-/* Button */
-.achivement-post-button {
-  padding: 12px;
-  font-size: 16px;
-  background-color: #2e6da4;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
+  padding: 8px;
+  background: #f0f4ff;
+  border-radius: 10px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.achivement-post-button:hover {
-  background-color: #245a8d;
-}
-.achivement-post-success-alert {
-  background-color: #d4edda;
-  color: #155724;
-  padding: 12px 16px;
-  border-radius: 6px;
-  margin-bottom: 20px;
-  font-weight: bold;
-  border: 1px solid #c3e6cb;
-}
-
-.achivement-post-tag {
-  background: #6c63ff;
-  color: #000000;
-  border-radius: 4px;
-  padding: 5px 10px;
-  margin-right: 5px;
-}
-
-.achivement-post-tags-input input {
-  padding: 6px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-}
-
-
-/* Media Queries */
-@media (max-width: 1200px) {
-  .achivement-post-container {
-    max-width: 1000px;
-  }
-}
-
-@media (max-width: 992px) {
-  .achivement-post-container {
-    max-width: 800px;
-  }
-  .achivement-post-form {
-    gap: 15px;
-  }
-}
-
-@media (max-width: 768px) {
-  .achivement-post-container {
-    max-width: 600px;
-  }
-  .achivement-post-form {
-    gap: 10px;
-  }
-  .achivement-post-input,
-  .achivement-post-select,
-  .achivement-post-textarea {
-    padding: 10px;
-  }
-}
-
-@media (max-width: 576px) {
-  .achivement-post-container {
-    max-width: 100%;
-    padding: 20px;
-  }
-  .achivement-post-form {
-    gap: 10px;
-  }
-  .achivement-post-input,
-  .achivement-post-select,
-  .achivement-post-textarea {
-    padding: 8px;
-  }
-  .achivement-post-button {
-    padding: 10px;
-  }
-}
-
-
-/* Form group wrapper */
-.achivement-post-form-group {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 20px;
-}
-
-/* Label styling */
-.achivement-post-label {
-  font-size: 14px;
-  font-weight: 600;
-  color: #444;
-  margin-bottom: 8px;
-}
-
-/* Wrapper to control input width */
-.uru-holder-input-wrapper {
-  position: relative;
-  width: 100%;
-  max-width: 500px; /* keep input neat */
-}
-
-/* Input styling */
-.achivement-post-input {
-  width: 100%;
-  padding: 12px 15px;
-  font-size: 15px;
-  border: 2px solid #ddd;
-  border-radius: 8px;
-  outline: none;
+  border: 1px dashed #6a11cb;
   transition: all 0.3s ease;
 }
 
-/* On focus */
-.achivement-post-input:focus {
-  border-color: #e94e77; /* your theme color */
-  box-shadow: 0 0 6px rgba(233, 78, 119, 0.3);
+.achivement-post-file:hover {
+  background: #e8edff;
+  border-color: #2575fc;
 }
 
-/* Placeholder style */
-.achivement-post-input::placeholder {
-  color: #aaa;
-  font-size: 14px;
+/* 🌟 Tags */
+.achivement-post-tag {
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  color: #fff;
+  border-radius: 20px;
+  padding: 6px 12px;
+  margin: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.achivement-post-tag:hover {
+  transform: scale(1.05);
+}
+
+.achivement-post-tags-input input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+/* 🌟 Button */
+.achievement-admin-button {
+  background: linear-gradient(90deg, #2575fc, #6a11cb);
+  color: #fff;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.achievement-admin-button:hover {
+  background: linear-gradient(90deg, #6a11cb, #2575fc);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.achievement-admin-button:disabled {
+  background: #bbb;
+  cursor: not-allowed;
+}
+
+/* 🌟 Table Section */
+.achievement-admin-table-heading {
+  font-size: 24px;
+  margin: 25px 0 15px;
+  font-weight: 600;
+  color: #444;
+  text-align: center;
+}
+
+/* 🌟 Table */
+.achievement-admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+.achievement-admin-table th,
+.achievement-admin-table td {
+  padding: 14px 18px;
+  border: 1px solid #eee;
+  text-align: left;
+  font-size: 15px;
+}
+
+.achievement-admin-table th {
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  color: white;
+  font-weight: 600;
+}
+
+.achievement-admin-table tr:hover {
+  background: rgba(99, 132, 255, 0.08);
+  transition: background 0.3s ease;
+}
+
+/* 🌟 Action Button */
+.achievement-admin-edit-btn {
+  background: linear-gradient(135deg, #ffc107, #ff8c00);
+  color: #fff;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.achievement-admin-edit-btn:hover {
+  background: linear-gradient(135deg, #ff8c00, #ffc107);
+  transform: scale(1.05);
+}
+
+/* 🌟 Empty Table */
+.achievement-admin-empty {
+  text-align: center;
+  padding: 25px;
+  font-size: 16px;
+  color: #666;
+}
+
+/* 🌟 Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.rti--tag{
+  background: #bc1313 !important;
+}
+
+/* 🌟 Responsive Design */
+@media (max-width: 768px) {
+  .achievement-admin-container {
+    padding: 0px;
+  }
+
+  .achievement-admin-heading {
+    margin-bottom: 20px;
+  }
+
+  .achievement-admin-form {
+    padding: 20px;
+    gap: 16px;
+  }
+
+  .achivement-post-label {
+    font-size: 14px;
+  }
+
+  .achivement-post-input,
+  .achivement-post-select,
+  .achivement-post-textarea {
+      padding: 12px 14px;
+  }
+
+  .achievement-admin-button {
+    width: 100%;
+    padding: 12px;
+  }
+
+  /* 🌟 Make table scrollable on smaller screens */
+  .achievement-admin-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .achievement-admin-table th,
+  .achievement-admin-table td {
+    padding: 10px 12px;
+  }
+
+  /* Action buttons fit better */
+  .achievement-admin-edit-btn {
+    padding: 6px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+
+  .achievement-admin-form {
+    padding: 15px;
+  }
+
+  .achievement-admin-button {
+    padding: 10px;
+  }
 }

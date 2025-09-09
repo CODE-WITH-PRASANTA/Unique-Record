@@ -98,9 +98,7 @@ const AchiverSection = () => {
               <strong>URU Holder's Name:</strong> {achiever.applicantName}
             </p>
 
-            <p className="Achiver-Details-Address">
-              <strong>Address:</strong> {achiever.address}
-            </p>
+          
 
             <p className="Achiver-Details-Type">
               <strong>Effort Type:</strong> {achiever.recordCategory}
@@ -110,8 +108,16 @@ const AchiverSection = () => {
               <strong>Category:</strong> {achiever.position}
             </p>
 
+          <p className="Achiver-Details-Address">
+                    <strong>Address:</strong> 
+                    <br />
+                    <span>{achiever.address}</span>
+                  </p>
+                  
             <p className="Achiver-Section-Title">
-              <strong>Title:</strong> {achiever.recordTitle}
+              <strong>Title:</strong> 
+              <br />
+              <span>{achiever.recordTitle}</span>
             </p>
 
           <p className="Achiver-Details-Date">

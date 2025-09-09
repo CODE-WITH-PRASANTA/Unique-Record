@@ -1,0 +1,6 @@
+.css-t3xolk {
+  position: static !important;   /* removes the absolute/fixed positioning */
+  width: auto !important;        /* allows it to expand naturally */
+  min-height: 120vh;             /* optional: ensures at least full viewport height */
+  overflow: visible !important;  /* allows scrolling if content overflows */
+}

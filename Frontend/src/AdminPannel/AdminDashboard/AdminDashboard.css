@@ -216,3 +216,26 @@
     height: 6px;
   }
 }
+
+
+/* ✅ Dashboard Heading */
+.admin-dashboard-header {
+  text-align: center;
+  padding: 20px 10px;
+  background: linear-gradient(135deg, #4a90e2, #9013fe);
+  color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.admin-dashboard-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.admin-dashboard-subtitle {
+  font-size: 1rem;
+  font-weight: 400;
+  opacity: 0.9;
+}

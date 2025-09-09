@@ -5,13 +5,14 @@
 }
 
 body {
-  zoom: 0.95; /* Works in most browsers except Firefox */
+  zoom: 0.8; /* Chrome, Edge, Safari */
 }
 
-@supports not (zoom: 0.95) {
+@supports not (zoom: 1) {
   body {
-    transform: scale(0.95); /* For browsers that don't support zoom (like Firefox) */
-    transform-origin: 0 0; /* Ensures scaling happens from the top-left corner */
+    transform: scale(0.8);
+    transform-origin: 0 0;
+    width: 125%; /* prevent horizontal scroll after scaling */
   }
 }
 

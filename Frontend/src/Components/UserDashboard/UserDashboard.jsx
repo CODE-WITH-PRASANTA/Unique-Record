@@ -159,11 +159,12 @@ const handleFileChange = (e, type) => {
   }
 
   if (type === "videos") {
-    const totalSize = [...formData.videos, ...files].reduce(
-      (acc, file) => acc + file.size,
-      0
-    );
-    if (totalSize > 100 * 1024 * 1024) {
+    // ✅ Calculate total size (existing + new)
+    const currentTotalSize = formData.videos.reduce((acc, file) => acc + file.size, 0);
+    const newFilesTotalSize = files.reduce((acc, file) => acc + file.size, 0);
+    const totalSize = currentTotalSize + newFilesTotalSize;
+
+    if (totalSize > 100 * 1024 * 1024) { // 100MB
       setVideoSizeError(true);
       return; // ❌ Block adding
     } else {
@@ -173,8 +174,11 @@ const handleFileChange = (e, type) => {
   }
 
   if (type === "documents") {
-    const invalidDoc = files.find((file) => file.size > 10 * 1024 * 1024);
-    if (invalidDoc) {
+    const currentTotalSize = formData.documents.reduce((acc, file) => acc + file.size, 0);
+    const newFilesTotalSize = files.reduce((acc, file) => acc + file.size, 0);
+    const totalSize = currentTotalSize + newFilesTotalSize;
+
+    if (totalSize > 10 * 1024 * 1024) {
       setDocSizeError(true);
       return; // ❌ Block adding
     } else {
@@ -183,6 +187,7 @@ const handleFileChange = (e, type) => {
     }
   }
 };
+
 
 
 
@@ -372,7 +377,7 @@ const handleFinalSubmit = async (e) => {
                 Important Guidelines for Filling Online Application Form
               </h2>
 
-              <div className="left-uru-text">
+             <div className="left-uru-text">
                 <div className="left-uru-section">
                   <span className="left-uru-number">1.</span>
                   <p>
@@ -475,6 +480,39 @@ const handleFinalSubmit = async (e) => {
                     will also be given from this revised fee for people from specially
                     economically weaker meritorious class who have really done some
                     unique work.
+                  </p>
+                </div>
+
+                {/* New Instructions */}
+                <div className="left-uru-section">
+                  <span className="left-uru-number">12.</span>
+                  <p>
+                    If you want to add some additional information in future to your
+                    successfully published <b>'Unique Record/Activity'</b> details, then
+                    this can be done. For this, you have to send information from the
+                    pre-registered email ID to URU's official email{" "}
+                    <b>uruonline2025@gmail.com</b> for update.
+                  </p>
+                </div>
+
+                <div className="left-uru-section">
+                  <span className="left-uru-number">13.</span>
+                  <p>
+                    If you have applied for a <b>'Unique Record'</b> and the jury
+                    committee feels that your application is of the type of{" "}
+                    <b>'Unique Activity'</b>, then you will be registered in the{" "}
+                    <b>'Unique Activity'</b> category.
+                  </p>
+                </div>
+
+                <div className="left-uru-section">
+                  <span className="left-uru-number">14.</span>
+                  <p>
+                    If your application has been received for a{" "}
+                    <b>'Unique Activity'</b> and the jury committee feels that your
+                    application is worthy of a <b>'Unique Record'</b>, then your
+                    application will be registered in the <b>'Unique Record'</b>{" "}
+                    category.
                   </p>
                 </div>
 
@@ -1019,8 +1057,8 @@ const handleFinalSubmit = async (e) => {
 
                     {/* 📄 Documents */}
                     <div className="achivment-form-group">
-                      <label>
-                        Upload Documents (PDF) <small>(Each max 10MB)</small>
+                     <label>
+                        Upload Documents (PDF) <small>(Total max 10MB)</small>
                       </label>
                       <input
                         type="file"
@@ -1042,10 +1080,9 @@ const handleFinalSubmit = async (e) => {
                           </li>
                         ))}
                       </ul>
-                      {/* Warning for Documents */}
                       {docSizeError && (
-                        <p className="error-text">⚠️ Each document must be under 10MB</p>
-                      )}
+                          <p className="error-text">⚠️ Total documents size must be under 10MB</p>
+                        )}
                     </div>
 
 
@@ -1095,7 +1132,11 @@ const handleFinalSubmit = async (e) => {
                       <label>Witness Designation</label>
                       <input type="text" name="witness2Designation" value={formData.witness2Designation} onChange={handleInputChange} />
                     </div>
-                                        <div className="achivment-form-group">
+                     <div className="achivment-form-group">
+                      <label>Witness Address</label>
+                      <input type="text" name="witness2Address" value={formData.witness2Address} onChange={handleInputChange} />
+                    </div>
+                    <div className="achivment-form-group">
                       <label>Witness Mobile Number</label>
                       <input type="tel" name="witness2MobileNumber" value={formData.witness2MobileNumber} onChange={handleInputChange} />
                     </div>
@@ -1103,6 +1144,7 @@ const handleFinalSubmit = async (e) => {
                       <label>Witness Email ID</label>
                       <input type="email" name="witness2EmailId" value={formData.witness2EmailId} onChange={handleInputChange} />
                     </div>
+
                   </div>
                   <div className="form-footer">
                     <button type="button" className="prev-button" onClick={handlePrevious}>← Previous</button>

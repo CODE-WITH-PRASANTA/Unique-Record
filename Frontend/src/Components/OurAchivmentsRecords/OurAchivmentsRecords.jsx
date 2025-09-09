@@ -21,6 +21,19 @@ const OurAchievementsRecords = () => {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
+  
+  // NEW: for image preview
+  const [previewImage, setPreviewImage] = useState(null);
+
+  const handleImageClick = (imageUrl) => {
+    setPreviewImage(imageUrl);
+  };
+
+  const closePreview = () => {
+    setPreviewImage(null);
+  };
+
+
   const handleSubscribe = async (e) => {
     e.preventDefault();
     setMessage("");
@@ -116,7 +129,26 @@ const OurAchievementsRecords = () => {
         <div className="our-achievements-record-posts">
           {getFilteredAchievements().map((achievement, index) => (
             <div key={index} className="our-achievements-record-post">
-              <img src={achievement.image} alt={achievement.title} />
+             {/* Post image */}
+              <img 
+              src={achievement.image} 
+              alt={achievement.title} 
+              className="clickable-image"
+              onClick={() => handleImageClick(achievement.image)} 
+            />
+
+
+             {previewImage && (
+                  <div className="image-preview-overlay show" onClick={closePreview}>
+                    <div className="image-preview-content" onClick={(e) => e.stopPropagation()}>
+                      <img src={previewImage} alt="Preview" />
+                      <button className="close-preview" onClick={closePreview}>×</button>
+                    </div>
+                  </div>
+                )}
+
+
+
               <div className="our-achievements-record-post-details">
                 <div className="our-achievements-record-post-category">
                   <strong>🏆 {achievement.category}</strong>

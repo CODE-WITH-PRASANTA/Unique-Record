@@ -42,7 +42,7 @@ const AchivmentDetails = () => {
         setLatestAchievements(response.data);
         const achievementCategories = [...new Set(response.data.map((achievement) => achievement.category))];
         setCategories(achievementCategories);
-        const achievementTags = [...new Set(response.data.flatMap((achievement) => achievement.tags.split(',')))];
+        const achievementTags = [...new Set(response.data.flatMap((achievement) => achievement.tags))];
         setTags(achievementTags);
       } catch (error) {
         console.error(error);
@@ -185,7 +185,7 @@ useEffect(() => {
                 {/* Provider */}
                 <div className="achievement-detail provider">
                   <span className="emoji">🤝</span>
-                  <span className="text">Provider: {achivmentDetails.providerName}</span>
+                  <span className="text">Presented by: {achivmentDetails.providerName}</span>
                 </div>
           </div>
           </div>
@@ -227,9 +227,10 @@ useEffect(() => {
             <div className="Achivments-details-tags-row">
               <div className="tags">
                 <strong>Tags:</strong> 
-                {achivmentDetails.tags?.split(',').map((tag) => (
+               {achivmentDetails.tags?.map((tag) => (
                   <span key={tag} className="Achivments-details-tag">{tag}</span>
                 ))}
+
               </div>
            <div className="social-share">
               <strong>Share:</strong>
