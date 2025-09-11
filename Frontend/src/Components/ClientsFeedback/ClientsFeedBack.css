@@ -167,3 +167,17 @@
     padding: 26px;
   }
 }
+
+.client-address {
+  font-size: 0.82rem;
+  color: #555;
+  margin: 3px 0 0;
+  line-height: 1.4;
+}
+
+.client-address strong {
+  color: #222; /* Darker label for "Address:" */
+  font-weight: 600;
+  margin-right: 4px;
+}
+

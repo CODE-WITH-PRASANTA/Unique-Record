@@ -883,3 +883,8 @@
 }
 
 
+
+.uru-highlight.block {
+  display: block; /* forces name to next line */
+  margin-top: 5px; /* optional spacing */
+}

@@ -413,3 +413,26 @@
     font-size: 20px;
   }
 }
+
+.password-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.password-wrapper .login-page-input {
+  width: 100%;  /* 🔥 Ensure full width inside wrapper */
+  padding-right: 40px; /* 🔥 Space for eye icon */
+  box-sizing: border-box;
+}
+.password-toggle-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 22px;
+  background: linear-gradient(135deg, #ff7eb3, #ff758c, #ffb199, #08a88a);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: all 0.3s ease;
+}

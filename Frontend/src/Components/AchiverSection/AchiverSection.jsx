@@ -101,8 +101,12 @@ const AchiverSection = () => {
           
 
             <p className="Achiver-Details-Type">
-              <strong>Effort Type:</strong> {achiever.recordCategory}
-            </p>
+  <strong>Effort Type:</strong>{" "}
+  {achiever.recordCategory
+    ? achiever.recordCategory.charAt(0).toUpperCase() + achiever.recordCategory.slice(1)
+    : ""}
+</p>
+
 
             <p className="Achiver-Details-Category">
               <strong>Category:</strong> {achiever.position}

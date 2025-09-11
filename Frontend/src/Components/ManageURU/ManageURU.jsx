@@ -241,7 +241,8 @@ const handleEdit = (data) => {
                 <td>{data.applicationNumber}</td>
                 <td>{data.position}</td>
                 <td>{data.applicantName}</td>
-                <td>{data.sex}</td>
+               <td>{data.sex.charAt(0).toUpperCase() + data.sex.slice(1)}</td>
+
                 <td>{data.whatsappMobileNumber}</td>
                 <td>{data.emailId}</td>
                 <td>{data.country}</td>  

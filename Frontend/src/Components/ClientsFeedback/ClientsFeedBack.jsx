@@ -87,7 +87,7 @@ const ClientFeedBack = () => {
                         {isExpanded ? "Read Less" : "Read More"}
                       </button>
                     )}
-                    <div className="client-info">
+                  <div className="client-info">
                       <img
                         src={DefaultUser}
                         alt={client.name}
@@ -96,12 +96,18 @@ const ClientFeedBack = () => {
                       <div>
                         <h3 className="client-name">{client.name}</h3>
                         <p className="client-role">
-                          {client.designation ||
-                            client.address ||
-                            "Valued User"}
+                          {client.designation || "Valued User"}
                         </p>
+                       
+                      {client.address && (
+                        <p className="client-address">
+                          <strong>Address:</strong> {client.address}
+                        </p>
+                      )}
+
                       </div>
                     </div>
+
                   </div>
                 </SwiperSlide>
               );

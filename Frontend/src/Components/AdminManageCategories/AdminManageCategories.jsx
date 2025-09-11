@@ -16,13 +16,18 @@ const AdminManageCategories = () => {
   }, []);
 
   const fetchCategories = async () => {
-    try {
-      const res = await axios.get(CATEGORY_API);
-      setCategories(res.data);
-    } catch (err) {
-      console.error('Failed to fetch categories:', err);
-    }
-  };
+  try {
+    const res = await axios.get(CATEGORY_API);
+    // Sort alphabetically A-Z
+    const sortedCategories = res.data.sort((a, b) =>
+      a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+    );
+    setCategories(sortedCategories);
+  } catch (err) {
+    console.error('Failed to fetch categories:', err);
+  }
+};
+
 
   const handleAddCategory = async () => {
     if (inputValue.trim() === '') return;

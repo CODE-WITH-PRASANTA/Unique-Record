@@ -422,6 +422,12 @@
   box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.05);
 }
 
+.achivment-form-group textarea {
+ 
+  resize: vertical;          /* Prevent manual resizing */
+
+}
+
 .achivment-form-group input::placeholder,
 .achivment-form-group textarea::placeholder {
   color: #999;

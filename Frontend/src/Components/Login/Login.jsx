@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 import axios from "axios";
 import { API_URL } from "../../Api";
 import {
@@ -19,6 +20,10 @@ const Login = () => {
   const navigate = useNavigate();
   const phoneNumber = "+919472351693";
   const [isRegister, setIsRegister] = useState(false);
+
+  // show/hide password states
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -174,24 +179,44 @@ const Login = () => {
             />
           )}
 
-          <input
-            type="password"
-            name="password"
-            placeholder={isRegister ? "Create Password" : "Password"}
-            required
-            className="login-page-input"
-            onChange={handleChange}
-          />
-
-          {isRegister && (
+          {/* Password Field */}
+          <div className="password-wrapper">
             <input
-              type="password"
-              name="confirmPassword"
-              placeholder="Confirm Password"
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder={isRegister ? "Create Password" : "Password"}
               required
               className="login-page-input"
               onChange={handleChange}
             />
+            <span
+              className="password-toggle-icon"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <FiEyeOff /> : <FiEye />}
+            </span>
+          </div>
+
+          {/* Confirm Password only in Register */}
+          {isRegister && (
+            <div className="password-wrapper">
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                name="confirmPassword"
+                placeholder="Confirm Password"
+                required
+                className="login-page-input"
+                onChange={handleChange}
+              />
+              <span
+                className="password-toggle-icon"
+                onClick={() =>
+                  setShowConfirmPassword(!showConfirmPassword)
+                }
+              >
+                {showConfirmPassword ? <FiEyeOff /> : <FiEye />}
+              </span>
+            </div>
           )}
 
           <div className="login-page-forgot-password">

@@ -148,8 +148,7 @@ const AdminNotification = () => {
               ))}
             </Pie>
 
-            {/* Tooltip */}
-            <Tooltip
+           <Tooltip
               contentStyle={{
                 backgroundColor: "#1e293b",
                 borderRadius: "10px",
@@ -159,8 +158,15 @@ const AdminNotification = () => {
                 padding: "10px 14px",
                 boxShadow: "0px 4px 12px rgba(0,0,0,0.2)",
               }}
+              itemStyle={{
+                color: "#fff",   // Ensures values always stay white
+              }}
+              labelStyle={{
+                color: "#fff",   // Ensures label (like "Total Expenses") stays white
+              }}
               formatter={(value) => `₹${value.toLocaleString()}`}
             />
+
 
             {/* Legend */}
             <Legend

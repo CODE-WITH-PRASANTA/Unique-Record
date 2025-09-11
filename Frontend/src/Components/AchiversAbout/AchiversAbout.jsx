@@ -182,10 +182,11 @@ const AchiversAbout = () => {
       {/* Wrap details + photo in flex */}
       <div className="achiver-right-top">
       <div className="uru-details-card">
-      <h2 className="uru-title">
-        Unique Records of Universe Holder's Name:{" "}
-        <span className="uru-highlight">{uru.applicantName}</span>
-      </h2>
+    <h2 className="uru-title">
+  Unique Records of Universe Holder's Name:
+  <span className="uru-highlight block">{uru.applicantName}</span>
+</h2>
+
 
       <div className="uru-info-grid">
         <p className="uru-info"><strong>District:</strong> {uru.district || "N/A"}</p>
@@ -199,7 +200,13 @@ const AchiversAbout = () => {
           <strong>Reg. Date:</strong> {uru.createdAt ? formatDate(uru.createdAt) : "N/A"}
         </p>
         <p className="uru-detail"><strong>Category:</strong> {uru.formCategory}</p>
-        <p className="uru-detail"><strong>Effort Type:</strong> {uru.recordCategory}</p>
+        <p className="uru-detail">
+  <strong>Effort Type:</strong>{" "}
+  {uru.recordCategory
+    ? uru.recordCategory.charAt(0).toUpperCase() + uru.recordCategory.slice(1)
+    : ""}
+</p>
+
         <p className="uru-detail">
           <strong>Date of Digitization in the Universe:</strong>{" "}
           {uru.createdAt
