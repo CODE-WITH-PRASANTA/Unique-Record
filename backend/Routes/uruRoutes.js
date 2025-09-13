@@ -21,10 +21,10 @@ const {
   fetchPublishedUru,
   fetchPublishedUruById,
   downloadApplicationForm,
+  sendPaymentReminder
 } = require("../Controllers/uruController");
 const authenticate = require("../Middleware/authMiddleware");
 const upload = require("../Middleware/multer");
-
 
 router.post(
   "/create-uru",
@@ -36,7 +36,6 @@ router.post(
   ]),
   createUru
 );
-
 router.get("/get-all-uru", getAllUru);
 router.get("/get-uru-by-id/:id", authenticate, getUruById);
 router.put(
@@ -66,13 +65,14 @@ router.get("/fetch-applied-uru-by-user", authenticate, fetchAppliedUruByUser);
 router.put("/publish-uru/:id", updatePublishStatus);
 router.get("/fetch-published-uru", fetchPublishedUru);
 router.get("/fetch-published-uru/:id", fetchPublishedUruById);
-
-
 router.get(
   "/download-application-form/:applicationNumber",
   authenticate,
   downloadApplicationForm
 );
+router.post('/send-reminders',sendPaymentReminder );
+
+
 
 
 module.exports = router;

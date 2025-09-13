@@ -141,20 +141,25 @@ useEffect(() => {
         </div>
 
       <div className="gallery-grid" key={photoPage}>
-  {paginatedPhotos.map((photo) => (
-    <div key={photo._id} className="gallery-item">
-      <img
-        src={photo.imageUrl}
-        alt="Gallery Item"
-        className="gallery-image"
-      />
-      <div className="gallery-info">
-        <h4 className="gallery-category">{photo.category}</h4>
-        <p>Link: <a href={photo.link}>{photo.link}</a></p>
+        {paginatedPhotos.map((photo) => (
+          <div key={photo._id} className="gallery-item">
+            <div className="gallery-image-wrapper">
+              <img
+                src={photo.imageUrl}
+                alt="Gallery Item"
+                className="gallery-image"
+              />
+            </div>
+            <div className="gallery-info">
+              <h4 className="gallery-category">{photo.category}</h4>
+              <p>
+                Link: <a href={photo.link}>{photo.link}</a>
+              </p>
+            </div>
+          </div>
+        ))}
       </div>
-    </div>
-  ))}
-</div>
+
 
 
 <ReactPaginate

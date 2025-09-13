@@ -5,14 +5,12 @@ const dotenv = require('dotenv');
 dotenv.config();
 const { createHmac } = require('crypto');
 const nodemailer = require("nodemailer");
-  const PDFDocument = require("pdfkit");
+const PDFDocument = require("pdfkit");
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
   key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
-
-
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
@@ -20,7 +18,6 @@ const transporter = nodemailer.createTransport({
     pass: process.env.EMAIL_PASS, // Gmail App Password
   },
 });
-
 const generateRegNo = () => {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"; // Uppercase alphanumeric
   let regNo = "369"; // First three digits fixed
@@ -284,7 +281,6 @@ module.exports = {
     res.status(500).json({ message: error.message });
   }
   },
-
   getAllUru: async (req, res) => {
   try {
     const urus = await URU.find()
@@ -305,7 +301,6 @@ module.exports = {
     res.status(500).json({ message: error.message });
   }
   },
-
   getUruById: async (req, res) => {
     try {
       const uru = await URU.findById(req.params.id)
@@ -330,7 +325,6 @@ module.exports = {
       res.status(500).json({ message: error.message });
     }
   },
-
   updateUru: async (req, res) => {
   try {
     let uru = await URU.findById(req.params.id);
@@ -573,7 +567,6 @@ module.exports = {
       res.status(500).json({ message: error.message });
     }
   },
-    
   approveUru: async (req, res) => {
     try {
       const uru = await URU.findById(req.params.id);
@@ -664,7 +657,6 @@ module.exports = {
       res.status(500).json({ message: error.message });
     }
   },
-
   fetchApprovedUru: async (req, res) => {
     try {
       const approvedUrus = await URU.find({ status: "Approved" });
@@ -676,7 +668,6 @@ module.exports = {
       res.status(500).json({ message: error.message });
     }
   },
-
   updatePrice: async (req, res) => {
     try {
       const { applicationNumber, price } = req.body;
@@ -806,7 +797,6 @@ module.exports = {
       res.status(500).json({ message: error.message });
     }
   },
-
   getUruByApplicationNumber: async (req, res) => {  
   try {
     const applicationNumber = req.params.applicationNumber;
@@ -819,7 +809,6 @@ module.exports = {
     res.status(500).json({ message: error.message });
   }
   },
-
   createRazorpayOrder: async (req, res) => {
       try {
         const { applicationNumber } = req.body;
@@ -844,7 +833,6 @@ module.exports = {
         res.status(500).json({ message: error.message });
       }
   },
-
   verifyRazorpayPayment: async (req, res) => {
     try {
       const { applicationNumber, razorpayOrderId, razorpayPaymentId, razorpaySignature } = req.body;
@@ -959,7 +947,6 @@ module.exports = {
       res.status(500).json({ success: false, message: error.message });
     }
   },
-
   fetchPaidUru: async (req, res) => {
     try {
       const paidUrus = await URU.find({ paymentStatus: "Success" });
@@ -968,7 +955,6 @@ module.exports = {
       res.status(500).json({ message: error.message });
     }
   },
-
   uploadCertificate: async (req, res) => {
     try {
       const applicationNumber = req.params.applicationNumber;
@@ -992,7 +978,6 @@ module.exports = {
       res.status(500).json({ message: error.message });
     }
   },
-
   downloadCertificate: async (req, res) => {
     try {
       const applicationNumber = req.params.applicationNumber;
@@ -1007,7 +992,6 @@ module.exports = {
       res.status(500).json({ message: error.message });
     }
   },
-  
   fetchAppliedUruByUser: async (req, res) => {
     try {
       const userId = req.user.id;
@@ -1389,4 +1373,112 @@ if (socialRows.length > 0) {
     res.status(500).json({ message: "Error generating application PDF" });
   }
   },
+
+  sendPaymentReminder: async (req, res) => {
+  try {
+    // Find all users who have price updated but not yet paid
+    const pendingPayments = await URU.find({
+      priceUpdated: true,
+      paymentStatus: { $ne: "Success" }, // exclude those who already paid
+    });
+
+    if (!pendingPayments.length) {
+      return res.status(200).json({ message: "No pending payments found." });
+    }
+
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "uruonline2025@gmail.com", // Admin URU email
+        pass: process.env.EMAIL_PASS, // Gmail App Password
+      },
+    });
+
+    // Send email to each pending user
+    for (let user of pendingPayments) {
+      const mailOptions = {
+        from: '"Unique Records of Universe Admin Team" <uruonline2025@gmail.com>',
+        to: user.emailId,
+        subject: "⏳ Reminder – Complete Your URU Application Payment",
+        html: `
+        <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:#f0f2f5; padding:20px 0;">
+          <table align="center" cellpadding="0" cellspacing="0" width="600"
+            style="background:#ffffff; border-radius:12px; overflow:hidden; box-shadow:0 6px 18px rgba(0,0,0,0.1);">
+            
+            <!-- Header -->
+            <tr style="background: linear-gradient(90deg, #ff416c, #ff4b2b);">
+              <td style="padding:25px; text-align:center; color:#fff;">
+                <h1 style="margin:0; font-size:24px; font-weight:700;">Unique Records of Universe</h1>
+                <p style="margin:5px 0 0 0; font-size:14px; color:#ffe0e6;">Recognizing Achievements Worldwide</p>
+              </td>
+            </tr>
+            
+            <!-- Body -->
+            <tr>
+              <td style="padding:35px 30px; color:#333;">
+                <h2 style="margin-top:0; color:#ff416c; font-size:20px;">Hello ${user.applicantName},</h2>
+                <p style="font-size:16px; line-height:1.7; color:#555;">
+                  This is a friendly reminder that your URU application (<strong>${user.applicationNumber}</strong>) has been <strong>approved with price ₹${user.price}</strong>, but payment is still pending.
+                </p>
+
+                <table cellpadding="0" cellspacing="0" width="100%" style="margin:20px 0; border-radius:8px; overflow:hidden; border:1px solid #ddd;">
+                  <tr style="background:#f7f8fa;">
+                    <td style="padding:15px; font-size:15px; font-weight:600; color:#444;">
+                      📌 Application Number:
+                    </td>
+                    <td style="padding:15px; font-size:15px; font-weight:600; color:#e67e22;">
+                      ${user.applicationNumber}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding:15px; font-size:15px; font-weight:600; color:#444;">
+                      💰 Price Due:
+                    </td>
+                    <td style="padding:15px; font-size:15px; font-weight:600; color:#27ae60;">
+                      ₹${user.price}
+                    </td>
+                  </tr>
+                </table>
+
+                <p style="font-size:16px; line-height:1.7; color:#555;">
+                  To continue processing your record, please complete your payment at the earliest.  
+                  If you’ve already initiated your payment, kindly ignore this email.
+                </p>
+
+                <!-- CTA Button -->
+                <div style="text-align:center; margin:30px 0;">
+                  <a href="https://ouruniverse.in/login" target="_blank"
+                    style="display:inline-block; padding:14px 32px; background:linear-gradient(90deg, #ff416c, #ff4b2b); color:#fff; text-decoration:none; font-size:17px; font-weight:700; border-radius:10px; box-shadow:0 4px 15px rgba(255,65,108,0.3);">
+                    💳 Complete Payment Now
+                  </a>
+                </div>
+
+                <p style="font-size:14px; color:#999; text-align:center; margin-top:40px;">
+                  You are receiving this email because you submitted an application to <strong>Unique Records of Universe</strong>.
+                </p>
+              </td>
+            </tr>
+
+            <!-- Footer -->
+            <tr style="background:#f7f8fa;">
+              <td style="padding:20px; text-align:center; font-size:12px; color:#888;">
+                © ${new Date().getFullYear()} Unique Records of Universe. All Rights Reserved.<br>
+                Admin • <a href="mailto:uruonline2025@gmail.com" style="color:#ff416c; text-decoration:none;">uruonline2025@gmail.com</a>
+              </td>
+            </tr>
+          </table>
+        </div>
+        `,
+      };
+
+      await transporter.sendMail(mailOptions);
+    }
+
+    res.status(200).json({ message: `Reminder emails sent to ${pendingPayments.length} users.` });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  }
+},
+
 };

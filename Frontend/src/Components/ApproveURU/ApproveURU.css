@@ -130,3 +130,40 @@ span[style*="green"] {
   color: #2e7d32 !important;
 }
 
+
+.action-buttons {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.download-excel-btn,
+.send-reminder-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.download-excel-btn {
+  background: linear-gradient(90deg, #4caf50, #43a047);
+  color: white;
+  box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+}
+
+.download-excel-btn:hover {
+  background: linear-gradient(90deg, #45a049, #388e3c);
+}
+
+.send-reminder-btn {
+  background: linear-gradient(90deg, #ff416c, #ff4b2b);
+  color: white;
+  box-shadow: 0 4px 10px rgba(255, 65, 108, 0.3);
+}
+
+.send-reminder-btn:hover {
+  background: linear-gradient(90deg, #e63656, #e63024);
+}
