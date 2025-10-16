@@ -25,13 +25,13 @@
 .Blog-Section-Post {
   display: flex;
   flex-direction: row;
-  align-items: stretch;
   gap: 20px;
   padding: 20px;
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.3s ease;
+  align-items: center;
 }
 
 
@@ -45,7 +45,6 @@
 
 .Blog-Section-Post-Image img {
   width: 100%;
-  height: 180px;
   object-fit: cover;
   border-radius: 8px;
   transition: transform 0.3s ease;
@@ -304,21 +303,11 @@
 }
 
 
-/* Existing CSS code remains the same */
 
-/* Media Queries */
-
-/* Large Desktops and Laptops */
-@media (max-width: 1600px) {
-  .Blog-Section-Container {
-    max-width: 1400px;
-  }
-}
 
 /* Small Desktops and Large Tablets */
 @media (max-width: 1200px) {
   .Blog-Section-Container {
-    max-width: 1000px;
     flex-direction: column;
   }
   .Blog-Section-Main-Content {
@@ -336,6 +325,8 @@
     padding: 20px;
   }
   .Blog-Section-Post {
+  align-items: stretch;
+
     flex-direction: column;
   }
   .Blog-Section-Post-Image {
@@ -409,7 +400,7 @@
 
 .Blog-Section-Post-Index {
   position: absolute;
-  top: 10px;
+  top: 20px;
   left: 10px;
   background-color: #d4af37;
   color: #fff;
