@@ -105,7 +105,7 @@
     left: 12px;
     background: #ff6f61;
     color: white;
-    font-size: 12px;
+    font-size: 15px;
     padding: 6px 12px;
     border-radius: 20px;
     font-weight: bold;
@@ -117,7 +117,7 @@
 }
 
 .expair-event-author {
-    font-size: 14px;
+    font-size: 20px;
     color: #777;
     margin-bottom: 10px;
 }
@@ -184,7 +184,7 @@
 }
 
 .expair-event-description {
-    font-size: 16px;
+    font-size: 20px;
     line-height: 1.6;
     color: #555;
     text-align: justify;

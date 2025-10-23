@@ -71,7 +71,7 @@
 
 .Achivments-details-paragraph {
   margin-bottom: 1.25rem;
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   color: #555;
 }
 
@@ -958,4 +958,23 @@
 .AchivmentCmt-readmore:hover {
   color: #0d47a1;
   text-decoration: underline;
+}
+
+
+
+.read-more-btn {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 10px 16px;
+  background-color: #00b386;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s ease;
+}
+
+.read-more-btn:hover {
+  background-color: #007b66;
 }

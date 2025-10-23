@@ -11,14 +11,14 @@
 .all-event-subtitle {
   color: #E94E77;
   font-weight: bold;
-  font-size: 18px;
+  font-size: 24px;
   text-transform: uppercase;
   margin-bottom: 10px;
 }
 
 /* Title */
 .all-event-title {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: auto;
   font-size: 36px;
   font-weight: bold;
@@ -31,7 +31,7 @@
   display: flex;
   flex-direction: column;
   gap: 30px;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
 }
 
@@ -43,7 +43,7 @@
   border-radius: 12px;
   box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.08);
   overflow: hidden;
-  max-width: 1200px;
+  max-width: 1700px;
   margin: auto;
 }
 
@@ -56,7 +56,7 @@
 
 .all-event-content p {
   text-align: justify;
-  font-size: 20px;
+  font-size: 24px;
   margin-bottom: 8px;
   line-height: 1.6;
 }
@@ -90,7 +90,7 @@
 }
 
 .all-event-img {
-  width: 400px;
+  width: 500px;
   height: auto;
   border-radius: 10px;
   object-fit: cover;
@@ -124,12 +124,16 @@
 }
 
 .event-date-box p {
+  display: inline-flex;    
+  align-items: center;       
   background: #f4b500;
   padding: 8px 12px;
   border-radius: 5px;
   font-weight: bold;
   color: #222;
+  white-space: nowrap;       
 }
+
 
 /* Buttons */
 .event-buttons {
