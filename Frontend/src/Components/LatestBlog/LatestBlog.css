@@ -11,7 +11,7 @@
 /* Section Titles */
 .latest-blog-subtitle {
   color: #ff6f61;
-  font-size: 15px;
+  font-size: 24px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1.5px;
@@ -107,7 +107,7 @@
 }
 
 .latest-blog-author {
-  font-size: 14px;
+  font-size: 20px;
   font-weight: 600;
   color: #444;
   margin-bottom: 10px;

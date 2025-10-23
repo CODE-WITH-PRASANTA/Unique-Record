@@ -5,7 +5,7 @@ import {
   FaBuilding,
   FaGlobe,
   FaRoad,
-  FaQuoteLeft,
+  FaQuoteLeft, 
   FaQuoteRight,
   FaShieldAlt, // Security icon
   FaClock, // Durability icon
@@ -19,6 +19,7 @@ import { Pagination } from "swiper/modules";
 
 const LearnMoreBenifit = () => {
   const missionItems = [
+    
     {
       icon: <FaShieldAlt className="LearnMore-Benifit-icon" />, // Security
       title: "Security",

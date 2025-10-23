@@ -38,7 +38,7 @@
   /* Wrapper styles */
   .who-wrapper {
     display: flex;
-    max-width: 1500px;
+    max-width: 1800px;
     align-items: center;
     gap: 50px;
     flex-wrap: wrap;
@@ -69,7 +69,7 @@
   
   /* Text headings and descriptions */
   .who-subheading {
-    font-size: 14px;
+    font-size: 24px;
     font-weight: bold;
     color: #e94e77; /* Pink text */
     text-transform: uppercase;
@@ -85,7 +85,7 @@
   }
   
   .who-description {
-    font-size: 16px;
+    font-size: 24px;
     color: #e0e0e0;
     line-height: 1.8;
     margin-bottom: 20px;
@@ -108,7 +108,7 @@
     margin-bottom: 10px;
   }
   .who-info-title-content {
-    font-size: 16px;
+    font-size: 22px;
     color: #f2f2f2;
     line-height: 1.6;
   }

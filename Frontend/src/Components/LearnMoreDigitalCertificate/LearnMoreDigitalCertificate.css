@@ -36,7 +36,7 @@
 }
 
 .LearnMore-DigitalCertificate-header h4 {
-    font-size: 16px;
+    font-size: 25px;
     text-transform: uppercase;
     color: #FFD700;
     letter-spacing: 1.5px;
@@ -128,7 +128,7 @@
 
 /* LearnMore-DigitalCertificate Card Text */
 .LearnMore-DigitalCertificate-card p {
-    font-size: 13px;
+    font-size: 22px;
     text-align: center;
     color: #666;
     line-height: 1.6;

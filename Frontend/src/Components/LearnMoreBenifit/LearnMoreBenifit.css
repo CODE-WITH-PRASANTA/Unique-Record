@@ -1,7 +1,7 @@
 /* Background and Layout */
 .LearnMore-Benifit-section {
     position: relative;
-    padding: 100px 0;
+    padding: 100px 20px;
     color: #fff;
     text-align: center;
     overflow: hidden;
@@ -35,7 +35,7 @@
 }
 
 .LearnMore-Benifit-header h4 {
-    font-size: 16px;
+    font-size: 30px;
     text-transform: uppercase;
     color: #FFD700;
     letter-spacing: 1.5px;
@@ -119,7 +119,7 @@
 
 /* LearnMore-Benifit Card Heading */
 .LearnMore-Benifit-card h3 {
-    font-size: 20px;
+    font-size: 22px;
     font-weight: 700;
     margin-bottom: 12px;
     color: #333;
@@ -127,42 +127,115 @@
 
 /* LearnMore-Benifit Card Text */
 .LearnMore-Benifit-card p {
-    font-size: 13px;
+    font-size: 24px;
     text-align: center;
     color: #666;
     line-height: 1.6;
 }
 
-
-/* General Styling remains the same */
-
-/* Hide the Swiper for Desktop and Grid for Mobile */
-.LearnMore-Benifit-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 25px;
-    justify-content: center;
-  }
-  
-  .LearnMore-Benifit-swiper {
+/* Swiper grid fallback */
+.LearnMore-Benifit-swiper {
     display: none;
-  }
-  
-  /* Mobile-specific styles */
-  @media (max-width: 768px) {
-    .LearnMore-Benifit-grid {
-      display: none; /* Hide grid on mobile */
-    }
-  
-    .LearnMore-Benifit-swiper {
-      display: block; /* Enable swiper for mobile */
-    }
-    .LearnMore-Benifit-section{
-        padding: 30px 0px;
-    }
-    
-.LearnMore-Benifit-card:hover {
-    transform: none;
 }
-  }
-  
+
+/* Mobile-specific styles */
+@media (max-width: 1024px) {
+    .LearnMore-Benifit-section {
+        padding: 70px 20px;
+    }
+
+    .LearnMore-Benifit-header h4 {
+        font-size: 28px;
+    }
+
+    .LearnMore-Benifit-header h2 {
+        font-size: 32px;
+    }
+
+    .LearnMore-Benifit-card {
+        padding: 28px 25px;
+    }
+
+    .LearnMore-Benifit-card h3 {
+        font-size: 20px;
+    }
+
+    .LearnMore-Benifit-card p {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 768px) {
+    .LearnMore-Benifit-section {
+        padding: 50px 15px;
+    }
+
+    .LearnMore-Benifit-grid {
+        display: none; /* Hide grid on mobile */
+    }
+
+    .LearnMore-Benifit-swiper {
+        display: block; /* Show swiper on mobile */
+    }
+
+    .LearnMore-Benifit-card {
+        padding: 20px 15px;
+    }
+
+    .LearnMore-Benifit-card:hover {
+        transform: none; /* Disable hover translate on mobile */
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .LearnMore-Benifit-card h3 {
+        font-size: 18px;
+    }
+
+    .LearnMore-Benifit-card p {
+        font-size: 15px;
+    }
+
+    .icon-wrapper {
+        width: 60px;
+        height: 60px;
+    }
+
+    .LearnMore-Benifit-icon {
+        font-size: 28px;
+    }
+}
+
+@media (max-width: 480px) {
+    .LearnMore-Benifit-section {
+        padding: 40px 10px;
+    }
+
+    .LearnMore-Benifit-header h4 {
+        font-size: 24px;
+    }
+
+    .LearnMore-Benifit-header h2 {
+        font-size: 28px;
+    }
+
+    .LearnMore-Benifit-card {
+        padding: 18px 12px;
+    }
+
+    .LearnMore-Benifit-card h3 {
+        font-size: 16px;
+    }
+
+    .LearnMore-Benifit-card p {
+        font-size: 14px;
+    }
+
+    .icon-wrapper {
+        width: 50px;
+        height: 50px;
+    }
+
+    .LearnMore-Benifit-icon {
+        font-size: 24px;
+    }
+}
