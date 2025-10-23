@@ -66,7 +66,7 @@
   
   .card p {
     text-align: justify;
-    font-size: 15px;
+    font-size: 20px;
     color: #555;
     line-height: 1.6;
   }
@@ -112,3 +112,29 @@
     }
   }
   
+
+  .about-why-choose-us-readmore {
+  margin-top: 10px;
+  background: linear-gradient(90deg, #0066ff, #00ccff);
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.about-why-choose-us-readmore:hover {
+  background: linear-gradient(90deg, #0055cc, #00aaff);
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .about-why-choose-us-readmore {
+    width: 100%;
+    font-size: 13px;
+    padding: 10px;
+  }
+}
