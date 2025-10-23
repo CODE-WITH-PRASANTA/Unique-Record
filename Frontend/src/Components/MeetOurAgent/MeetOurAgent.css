@@ -17,7 +17,7 @@
   
   .meet-our-agent h3 {
     color: #3b82f6;
-    font-size: 14px;
+    font-size: 40px;
     text-transform: uppercase;
     letter-spacing: 1px;
     font-weight: 600;
@@ -25,7 +25,7 @@
   }
   
   .meet-our-agent h2 {
-    font-size: 28px;
+    font-size: 30px;
     font-weight: bold;
     color: #222;
     margin-bottom: 30px;
@@ -108,7 +108,7 @@
   
   .meet-social-icons a {
     color: #fff;
-    font-size: 16px;
+    font-size: 10px;
     transition: color 0.3s;
   }
   
@@ -123,14 +123,14 @@
   }
   
   .agent-info h4 {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: bold;
     color: #111;
     margin-bottom: 5px;
   }
   
   .agent-info p {
-    font-size: 14px;
+    font-size: 20px;
     color: #666;
     margin-bottom: 10px;
   }
@@ -144,7 +144,7 @@
   
   .contact-icons a {
     color: #3b82f6;
-    font-size: 18px;
+    font-size: 30px;
     transition: color 0.3s;
   }
   

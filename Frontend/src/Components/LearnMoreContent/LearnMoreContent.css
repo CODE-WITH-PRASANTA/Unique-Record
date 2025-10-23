@@ -1,61 +1,65 @@
 /* Section Wrapper */
 .LearnMore-Content-section {
     padding: 80px 20px;
-    
     display: flex;
     justify-content: center;
     align-items: center;
     background: #04171a;
     border-top: 6px solid #f4b500;
-  }
-  
-  /* Container */
-  .LearnMore-Content-container {
+}
+
+/* Container */
+.LearnMore-Content-container {
     max-width: 1600px;
     display: flex;
     align-items: center;
     gap: 50px;
     flex-wrap: wrap;
-  }
-  
-  /* Left Content */
-  .LearnMore-Content-left {
+}
+
+/* Left Content */
+.LearnMore-Content-left {
     flex: 1;
-  }
-  
-  .LearnMore-Content-subtitle {
+}
+
+/* Subtitle */
+.LearnMore-Content-subtitle {
     color: #007b5e;
-    font-size: 16px;
+    font-size: 28px;
     font-weight: bold;
     margin-bottom: 12px;
     text-transform: uppercase;
     letter-spacing: 1px;
-  }
-  
-  .LearnMore-Content-title {
-    font-size: 30px;
+}
+
+/* Title */
+.LearnMore-Content-title {
+    font-size: 36px;
     font-weight: 700;
     color: #ffffff;
     margin-bottom: 24px;
     line-height: 1.5;
-  }
-  
-  .LearnMore-Content-paragraph {
-    font-size: 17px;
+}
+
+/* Paragraph */
+.LearnMore-Content-paragraph {
+    font-size: 24px;
     line-height: 1.8;
     color: #ffffff;
     margin-bottom: 24px;
-  }
-  
-  /* Buttons */
-  .LearnMore-Content-buttons {
+}
+
+/* Buttons */
+.LearnMore-Content-buttons {
     display: flex;
     gap: 20px;
     margin-top: 20px;
-  }
-  
-  .LearnMore-Content-btn-donate {
-    padding: 12px 24px;
+    flex-wrap: wrap;
+}
+
+/* Donate Button */
+.LearnMore-Content-btn-donate {
+    padding: 14px 28px;
     background-color: #007b5e;
     color: #fff;
     border: none;
@@ -65,15 +69,16 @@
     cursor: pointer;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
-  }
-  
-  .LearnMore-Content-btn-donate:hover {
+}
+
+.LearnMore-Content-btn-donate:hover {
     background-color: #005f47;
     transform: translateY(-2px);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  }
-  
-  .LearnMore-Content-btn-vdo {
+}
+
+/* Video Button */
+.LearnMore-Content-btn-vdo {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -84,70 +89,116 @@
     text-decoration: none;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .LearnMore-Content-btn-vdo:hover {
+}
+
+.LearnMore-Content-btn-vdo:hover {
     transform: scale(1.1);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  }
-  
-  .LearnMore-Content-icon {
-    font-size: 24px;
+}
+
+/* Video Icon */
+.LearnMore-Content-icon {
+    font-size: 26px;
     color: #007b5e;
-  }
-  
-  /* Right Image */
-  .LearnMore-Content-right {
+}
+
+/* Right Image */
+.LearnMore-Content-right {
     flex: 1;
     max-width: 600px;
-  }
-  
-  .LearnMore-Content-image {
+}
+
+.LearnMore-Content-image {
     width: 100%;
     border-radius: 20px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-  /* Responsive Design */
-  @media (max-width: 768px) {
+}
+
+/* Media Queries */
+
+/* Tablets */
+@media (max-width: 1024px) {
     .LearnMore-Content-container {
-      flex-direction: column;
-      gap: 30px;
+        gap: 35px;
     }
-  
+
     .LearnMore-Content-title {
-      font-size: 32px;
+        font-size: 32px;
     }
-  
+
     .LearnMore-Content-paragraph {
-      font-size: 16px;
+        font-size: 20px;
     }
-  
+
     .LearnMore-Content-btn-donate {
-      font-size: 16px;
+        font-size: 16px;
+        padding: 12px 24px;
     }
-  }
-  
-  @media (max-width: 480px) {
-    .LearnMore-Content-title {
-      font-size: 28px;
-    }
-  
-    .LearnMore-Content-paragraph {
-      font-size: 14px;
-    }
-  
-    .LearnMore-Content-btn-donate {
-      font-size: 14px;
-      padding: 10px 20px;
-    }
-  
-    .LearnMore-Content-btn-vdo {
-      width: 50px;
-      height: 50px;
-    }
-  
+
     .LearnMore-Content-icon {
-      font-size: 20px;
+        font-size: 24px;
     }
-  }
-  
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .LearnMore-Content-section {
+        padding: 50px 15px;
+    }
+
+    .LearnMore-Content-container {
+        flex-direction: column;
+        gap: 25px;
+    }
+
+    .LearnMore-Content-title {
+        font-size: 28px;
+    }
+
+    .LearnMore-Content-paragraph {
+        font-size: 18px;
+    }
+
+    .LearnMore-Content-btn-donate {
+        font-size: 15px;
+        padding: 10px 22px;
+    }
+
+    .LearnMore-Content-btn-vdo {
+        width: 55px;
+        height: 55px;
+    }
+
+    .LearnMore-Content-icon {
+        font-size: 22px;
+    }
+}
+
+/* Small Mobile Devices */
+@media (max-width: 480px) {
+    .LearnMore-Content-section {
+        padding: 40px 10px;
+    }
+
+    .LearnMore-Content-title {
+        font-size: 24px;
+    }
+
+    .LearnMore-Content-paragraph {
+        font-size: 16px;
+    }
+
+    .LearnMore-Content-btn-donate {
+        font-size: 14px;
+        padding: 10px 20px;
+    }
+
+    .LearnMore-Content-btn-vdo {
+        width: 50px;
+        height: 50px;
+    }
+
+    .LearnMore-Content-icon {
+        font-size: 20px;
+    }
+}

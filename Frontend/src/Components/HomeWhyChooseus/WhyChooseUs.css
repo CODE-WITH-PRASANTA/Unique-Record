@@ -80,7 +80,7 @@
   }
   
   .text p {
-    font-size: 15px;
+    font-size: 20px;
     color: #b0b0b0;
   }
   
@@ -110,7 +110,7 @@
     left: -140px;
     z-index: 2;
     text-align: center;
-    font-size: 18px;
+    font-size: 20px;
     font-weight: bold;
     color: #04171a;
     display: flex;

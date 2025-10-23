@@ -1,99 +1,94 @@
-
-
-/* about-owner section */
+/* ===================== ABOUT OWNER SECTION ===================== */
 .about-owner-section {
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   background-color: #04171a;
   border-top: 4px solid #e8c177;
   border-bottom: 6px solid #e8c177;
+  padding: 60px 20px;
 }
 
 .about-owner-container {
   max-width: 1500px;
-  padding: 50px 20px;
-  border-radius: 15px;
+  padding: 40px 20px;
   margin: auto;
 }
 
 .about-owner-container h2 {
-    color: #e8c177;
+  color: #e8c177;
   font-size: 2.5em;
+  text-align: center;
+  margin-bottom: 15px;
 }
 
 .about-owner-title {
   font-size: 32px;
-  margin-bottom: 10px;
-  color: #333;
+  color: #fff;
   text-align: center;
+  margin-bottom: 10px;
 }
 
 .about-owner-mission {
-  color: #6c757d;
-  margin-bottom: 30px;
+  color: #f9be17;
   text-align: center;
-  font-size: 16px;
+  font-size: 22px;
+  margin-bottom: 40px;
 }
 
 .about-owner-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 0;
+  gap: 40px;
+  flex-wrap: wrap;
 }
 
 .about-owner-text {
-
   flex: 1;
-  line-height: 1.6;
-  margin-right: 20px;
+  max-width: 800px;
+  color: #fff;
+  line-height: 1.8;
+}
+
+.about-owner-text h3 {
+  font-size: 1.6rem;
+  margin-bottom: 20px;
 }
 
 .about-owner-text p {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
   text-align: justify;
-    font-size: 17px;
+}
+
+/* Contact button */
+.discover-btn {
+  background-color: #e94e77;
   color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 16px 40px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  margin-top: 15px;
 }
 
-.about-owner-text h3{
-  text-align: justify;
-    color: #fff;
+.discover-btn:hover {
+  background-color: #c73a61;
 }
 
-.skills-section {
-  margin-top: 30px;
-}
-
-
-.box span {
-  font-size: 16px;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 60px;
-  height: 60px;
-  background-color: #fff;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-}
-
+/* Image Section */
 .about-owner-image {
   flex: 1;
-  max-width: 350px;
-  align-items: center;
-  justify-content: center;
+  max-width: 400px;
   position: relative;
   text-align: center;
+  margin-top: 20px;
   animation: float3D 6s ease-in-out infinite;
 }
 
 .about-owner-image img {
-    align-items: center;
-    justify-content: center;
   border-radius: 50%;
   width: 100%;
   height: auto;
@@ -110,6 +105,7 @@
   }
 }
 
+/* Floating Info Box over image */
 .fl-about-owner-img-content {
   width: 100%;
   background-color: #fff;
@@ -117,120 +113,172 @@
   border-radius: 0px 100px 100px 0;
   padding: 20px;
   position: absolute;
-  bottom: 11px;
-  left: -5px;
+  bottom: 10px;
+  left: -10px;
   text-align: center;
 }
 
 .fl-about-owner-img-content h4 {
-  font-size: 18px;
+  font-size: 24px;
   font-weight: 700;
   margin-bottom: 5px;
 }
 
 .fl-about-owner-img-content p {
-  font-size: 14px;
+  font-size: 24px;
   color: #777;
 }
 
-@media (max-width: 768px) {
+/* ===================== SKILLS SECTION (if any) ===================== */
+.skills-section {
+  margin-top: 30px;
+}
+
+.skills-section h4 {
+  color: #fff;
+}
+
+/* ===================== RESPONSIVE STYLES ===================== */
+@media (max-width: 1200px) {
   .about-owner-content {
     flex-direction: column;
     align-items: center;
     text-align: center;
-    border-radius: 0px 0px 100px 0px;
   }
-
   .about-owner-text {
     max-width: 100%;
-    margin-right: 0;
   }
-
-  .skills {
-    justify-content: center;
-  }
-
   .about-owner-image {
-    max-width: 100%;
-    margin-left: 0;
-    margin-top: 20px;
+    max-width: 80%;
+    margin-top: 30px;
   }
-
   .fl-about-owner-img-content {
-    position: relative;
     left: 0;
-    bottom: 0;
+    bottom: -20px;
     border-radius: 20px;
+    padding: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .about-owner-container h2 {
+    font-size: 2em;
+  }
+  .about-owner-title {
+    font-size: 28px;
+  }
+  .about-owner-mission {
+    font-size: 18px;
+    margin-bottom: 30px;
+  }
+  .about-owner-text h3 {
+    font-size: 1.4rem;
+  }
+  .about-owner-text p {
+    font-size: 1.1rem;
+  }
+  .fl-about-owner-img-content h4 {
+    font-size: 18px;
+  }
+  .fl-about-owner-img-content p {
+    font-size: 14px;
   }
 }
 
 @media (max-width: 480px) {
-
-  .about-owner-container {
-    max-width: 100%;
-  }
-
   .about-owner-content {
-    flex-direction: column;
-    align-items: center;
+    flex-direction: column-reverse;
     text-align: center;
   }
-
   .about-owner-image {
-    order: -1; /* Move the image to the top */
-    max-width: 100%;
-    margin-left: 0;
-    margin-top: 5px;
-    width: 250px;
+    max-width: 250px;
+    margin: 0 auto 20px auto;
   }
-
-  .skills-section {
-    margin-top: 20px; /* Add spacing between the image and skills section */
-  }
-
   .fl-about-owner-img-content {
-    
     width: 100%;
+    position: relative;
+    left: 0;
+    bottom: 0;
+    border-radius: 20px;
     padding: 10px;
-    top: -60px;
-    margin-right: 50px;
-    border-radius: 0px 100px 100px 0;
   }
-
   .about-owner-container h2 {
-    margin: 0;
-    font-size: 2em;
+    font-size: 1.8em;
   }
-
   .about-owner-title {
-    font-size: 28px;
+    font-size: 24px;
   }
-
   .about-owner-mission {
-    font-size: 14px;
-  }
-.about-owner-text h3{
-    text-align: justify;
-  margin-top: 10px;
-}
-  .about-owner-text p {
-    text-align: justify;
-    margin-top: 10px;
-  }
-
-  .box span {
-    font-size: 14px;
-  }
-
-  .fl-about-owner-img-content h4 {
     font-size: 16px;
+    margin-bottom: 20px;
   }
-
-  .fl-about-owner-img-content p {
-    font-size: 12px;
+  .about-owner-text h3 {
+    font-size: 1.2rem;
+  }
+  .about-owner-text p {
+    font-size: 1rem;
+  }
+  .discover-btn {
+    width: 100%;
+    padding: 14px;
+    font-size: 1rem;
   }
 }
 
-.skills-section h4 {
-    color: #fff;
+/* Smooth expandable text */
+.about-extra-content {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.6s ease-in-out;
+}
+
+.about-extra-content.show {
+  max-height: 1000px;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Modern Read More / Read Less button */
+.btn-read-toggle {
+  display: inline-block;
+  background: linear-gradient(135deg, #e94e77, #ff758c);
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 50px;
+  margin-top: 15px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(233, 78, 119, 0.4);
+  transition: all 0.3s ease;
+}
+
+.btn-read-toggle:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(233, 78, 119, 0.5);
+  background: linear-gradient(135deg, #ff6f91, #ff9a9e);
+}
+
+/* Contact button */
+.btn-contact {
+  display: inline-block;
+  background: #333;
+  color: #fff;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 8px;
+  margin-top: 15px;
+  margin-left: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 15px;
+  transition: all 0.3s ease;
+}
+
+.btn-contact:hover {
+  background: #555;
+  transform: translateY(-2px);
 }
