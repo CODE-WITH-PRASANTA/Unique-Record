@@ -20,7 +20,7 @@
   }
   
   .contact-title {
-    font-size: 30px;
+    font-size: 28px;
     font-weight: 900;
     color: #1a073a;
     margin-bottom: 15px;
@@ -30,11 +30,11 @@
   }
   
   .contact-description {
-    font-size: 22px;
+    font-size: 18px;
     color: #666;
     margin-bottom: 25px;
     line-height: 1.8;
-    text-align: start;
+    text-align: justify;
   }
   
   .contact-form .form-row {
@@ -170,7 +170,8 @@
     }
   
     .contact-description {
-      font-size: 14px;
+      font-size: 18px;
+      text-align: justify;
     }
   
     .contact-form .form-button {
@@ -194,7 +195,6 @@
       padding: 15px;
     }
     .contact-description {
-      font-size: 12px;
       margin-bottom: 20px;
     }
     .contact-form .form-button {
@@ -203,7 +203,7 @@
     }
   
     .detail-item span {
-      font-size: 14px;
+      font-size: 17px;
     }
   
     .contact-social-icon {

@@ -49,7 +49,7 @@ const NoticeSection = () => {
             <div className="notice-image">
               <img src={notice.photo || "https://via.placeholder.com/150"} alt="Notice" />
               {notice.postingDate && (
-                <div className="notice-date">
+                <div className="notice-content-date">
                   <span>{new Date(notice.postingDate).getDate()}</span>
                   <span>{new Date(notice.postingDate).toLocaleString("default", { month: "short" })}</span>
                   <span>{new Date(notice.postingDate).getFullYear()}</span>

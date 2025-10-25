@@ -3,8 +3,8 @@ import "swiper/css";
 import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
-import { API_URL } from '../../Api'; // e.g., "http://localhost:5007/api"
-import profileDefault from "../../assets/default-profile.png"; // default profile image
+import { API_URL } from "../../Api";
+import profileDefault from "../../assets/default-profile.png";
 import "./Testimonials.css";
 
 const Testimonials = () => {
@@ -12,19 +12,18 @@ const Testimonials = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Fetch published quotes from backend
   const fetchReviews = async () => {
     setLoading(true);
     try {
       const res = await fetch(`${API_URL}/freequotes/published`);
       const data = await res.json();
       if (data.success) {
-        // Map backend data to review format
         const formattedReviews = data.data.map((item) => ({
           name: item.name,
           role: item.designation || "Participant",
           image: profileDefault,
           feedback: item.message,
+          expanded: false,
         }));
         setReviews(formattedReviews);
       } else {
@@ -42,54 +41,69 @@ const Testimonials = () => {
     fetchReviews();
   }, []);
 
-  if (loading) return <p style={{ textAlign: "center" }}>Loading testimonials...</p>;
-  if (error) return <p style={{ textAlign: "center", color: "red" }}>{error}</p>;
+  const toggleReadMore = (index) => {
+    setReviews((prev) =>
+      prev.map((item, i) =>
+        i === index ? { ...item, expanded: !item.expanded } : item
+      )
+    );
+  };
+
+  if (loading)
+    return <p className="vision-testimonial-loading">Loading testimonials...</p>;
+  if (error)
+    return <p className="vision-testimonial-error">{error}</p>;
 
   return (
-    <section className="Testimonials-section">
-      <div className="Testimonials-header">
-        <h2>What people say about us</h2>
+    <section className="vision-testimonial-section">
+      <div className="vision-testimonial-header">
+        <h2 className="vision-testimonial-title">What People Say About Us</h2>
+        <p className="vision-testimonial-subtitle">
+          Hear from our participants and clients about their experience
+        </p>
       </div>
 
-      <div className="Testimonials-desktop">
+      <div className="vision-testimonial-swiper">
         <Swiper
           modules={[Pagination]}
           pagination={{ clickable: true }}
           slidesPerView={2}
-          spaceBetween={20}
+          spaceBetween={30}
+          breakpoints={{
+            0: { slidesPerView: 1, spaceBetween: 15 },
+            768: { slidesPerView: 2, spaceBetween: 30 },
+          }}
         >
           {reviews.map((review, index) => (
-            <SwiperSlide key={index} className="Testimonials-card">
-              <div className="Testimonials-cardHeader">
-                <img src={review.image} alt={review.name} className="Testimonials-avatar" />
-                <div>
-                  <h4>{review.name}</h4>
-                  <p>{review.role}</p>
+            <SwiperSlide key={index}>
+              <div className="vision-testimonial-card">
+                <div className="vision-testimonial-card-header">
+                  <img
+                    src={review.image}
+                    alt={review.name}
+                    className="vision-testimonial-avatar"
+                  />
+                  <div className="vision-testimonial-info">
+                    <h4 className="vision-testimonial-name">{review.name}</h4>
+                    <p className="vision-testimonial-role">{review.role}</p>
+                  </div>
                 </div>
+                <p className="vision-testimonial-text">
+                  {review.expanded
+                    ? review.feedback
+                    : review.feedback.length > 150
+                    ? `${review.feedback.slice(0, 150)}...`
+                    : review.feedback}
+                </p>
+                {review.feedback.length > 150 && (
+                  <button
+                    className="vision-testimonial-readmore"
+                    onClick={() => toggleReadMore(index)}
+                  >
+                    {review.expanded ? "Show Less" : "Read More"}
+                  </button>
+                )}
               </div>
-              <p className="Testimonials-text">{review.feedback}</p>
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </div>
-
-      <div className="Testimonials-mobile">
-        <Swiper
-          modules={[Pagination]}
-          pagination={{ clickable: true }}
-          slidesPerView={1}
-          spaceBetween={10}
-        >
-          {reviews.map((review, index) => (
-            <SwiperSlide key={index} className="Testimonials-card">
-              <div className="Testimonials-cardHeader">
-                <img src={review.image} alt={review.name} className="Testimonials-avatar" />
-                <div>
-                  <h4>{review.name}</h4>
-                  <p>{review.role}</p>
-                </div>
-              </div>
-              <p className="Testimonials-text">{review.feedback}</p>
             </SwiperSlide>
           ))}
         </Swiper>

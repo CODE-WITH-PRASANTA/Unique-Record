@@ -54,7 +54,7 @@ const EventInformation = () => {
   return (
     <div className="event-information-container">
       <h2 className="event-information-heading">
-        Current Openings{" "}
+        Current Openings : {" "}
         <span className="event-information-bold">
           Online Registration for Participation in Events Organized/Conducted by URU & DPKHRC Trust is Currently Ongoing
         </span>

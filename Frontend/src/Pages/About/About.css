@@ -1,106 +1,157 @@
-/* Main Section Styling */
+/* ==============================
+   MAIN SECTION
+============================== */
 .section-about-heading-section {
   width: 100%;
-  height: 60vh;
-  background: url('../../assets/AboutUsBgImg.webp') no-repeat center center/cover;
+  height: 90vh;
+  background: linear-gradient(
+      rgba(0, 0, 0, 0.65),
+      rgba(0, 0, 0, 0.55)
+    ),
+    url("../../assets/AboutUsBgImg.webp") no-repeat center center / cover;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 6%;
+  position: relative;
+  overflow: hidden;
+  font-family: "Poppins", sans-serif;
+  box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.4);
+}
+
+/* Overlay shimmer effect */
+.section-about-heading-section::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0.15) 0%,
+    rgba(255, 255, 255, 0) 80%
+  );
+  transform: skewX(-20deg);
+  animation: shimmer 8s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  50% {
+    left: 120%;
+  }
+  100% {
+    left: 120%;
+  }
+}
+
+/* ==============================
+   CONTENT SECTION
+============================== */
+.section-about-content {
+  color: #fff;
+  max-width: 700px;
+  z-index: 2;
+  animation: fade-in 1.5s ease-in-out forwards;
+}
+
+/* ==============================
+   BADGE
+============================== */
+.badge {
+  background: linear-gradient(135deg, #ff9b00, #ff4e00);
+  color: #fff;
+  display: inline-block;
+  padding: 10px 25px;
+  border-radius: 30px;
+  font-size: 1rem;
+  font-weight: 600;
+  box-shadow: 0 5px 15px rgba(255, 140, 0, 0.3);
+  opacity: 0;
+  transform: translateY(-20px);
+  animation: slide-down 1s ease-out 0.4s forwards;
+}
+
+/* ==============================
+   HEADING
+============================== */
+.about-heading {
+  margin-top: 25px;
+  font-size: 3.2rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #f8f8f8;
+  text-shadow: 0 0 10px rgba(0, 150, 255, 0.6);
+  letter-spacing: 0.5px;
+  transform: translateY(30px);
+  opacity: 0;
+  animation: slide-up 1s ease-out 0.7s forwards;
+}
+
+/* ==============================
+   DESCRIPTION
+============================== */
+.main-about-description {
+  margin: 20px 0 35px;
+  font-size: 1.1rem;
+  color: #dcdcdc;
+  line-height: 1.8;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fade-in 1.2s ease-out 1s forwards;
+}
+
+/* ==============================
+   BUTTON
+============================== */
+.start-btn {
+  background: linear-gradient(135deg, #007bff, #00bfff);
+  color: #fff;
+  padding: 14px 35px;
+  border: none;
+  border-radius: 35px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  box-shadow: 0 6px 15px rgba(0, 123, 255, 0.4);
+  transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
 }
 
-.section-about-content {
-  margin-top: 100px;
-  margin-left: 50px;
-  text-align: left;
-  color: #ffffff;
-  z-index: 2;
-  opacity: 0; /* Hidden initially for fade-in */
-  animation: fade-in 1.5s ease-in-out forwards;
+.start-btn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.25);
+  transform: skewX(-25deg);
+  transition: left 0.5s;
 }
 
-/* Badge Styling */
-.badge {
-  background-color: #ff8c00;
-  color: #ffffff;
-  display: inline-block;
-  padding: 8px 20px;
-  border-radius: 25px;
-  font-size: 1rem;
-  font-weight: bold;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transform: translateX(-50px); /* Start slightly off-screen */
-  opacity: 0; /* Hidden initially */
-  animation: slide-in 1s ease-out 0.5s forwards; /* Slide in effect */
-}
-
-/* Heading Styling */
-.about-heading {
-  max-width: 800px;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-  font-style: italic;
-  font-size: 3rem;
-  font-weight: 700;
-  margin: 20px 0;
-  color: #f5f5f5;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
-  transform: translateY(30px); /* Start below */
-  opacity: 0; /* Hidden initially */
-  animation: slide-up 1s ease-out 0.8s forwards;
-}
-
-/* Description Styling */
-.main-about-description {
-  font-weight: normal;
-  font-size: 1.2rem;
-  margin: 15px 0 25px;
-  line-height: 1.6;
-  color: #dcdcdc;
-  transform: translateY(30px); /* Start below */
-  opacity: 0; /* Hidden initially */
-  animation: slide-up 1s ease-out 1s forwards;
-}
-
-/* Button Styling */
-.start-btn {
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-  font-style: italic;
-  background-color: #0066ff;
-  color: #ffffff;
-  padding: 12px 25px;
-  font-size: 1rem;
-  font-weight: bold;
-  border: none;
-  border-radius: 25px;
-  cursor: pointer;
-  transition: all 0.3s ease, transform 0.3s ease; /* Smooth hover effect */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  animation: bounce 2s infinite; /* Add bounce effect */
+.start-btn:hover::after {
+  left: 130%;
 }
 
 .start-btn:hover {
-  background-color: #0052cc;
-  transform: translateY(-2px) scale(1.05); /* Lift and enlarge slightly */
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(0, 123, 255, 0.6);
 }
 
-/* Animations */
+/* ==============================
+   ANIMATIONS
+============================== */
 @keyframes fade-in {
   from {
     opacity: 0;
   }
   to {
-    opacity: 1;
-  }
-}
-
-@keyframes slide-in {
-  from {
-    transform: translateX(-50px);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
     opacity: 1;
   }
 }
@@ -116,100 +167,48 @@
   }
 }
 
-@keyframes bounce {
-  0%, 100% {
-    transform: translateY(0);
+@keyframes slide-down {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
   }
-  50% {
-    transform: translateY(-10px);
+  to {
+    transform: translateY(0);
+    opacity: 1;
   }
 }
 
-/* Responsive Design */
-
-/* Medium Screens (Tablets & Small Laptops) */
-@media (max-width: 1024px) {
+/* ==============================
+   RESPONSIVE DESIGN
+============================== */
+@media (max-width: 992px) {
   .section-about-heading-section {
-    height: 50vh; /* Reduce height for smaller screens */
-  }
-
-  .section-about-content {
-    margin-top: 80px;
-    margin-left: 30px;
+    height: auto;
+    padding: 80px 5%;
+    align-items: center;
   }
 
   .about-heading {
-    font-size: 2.5rem; /* Decrease heading size */
-    max-width: 700px;
+    font-size: 2.5rem;
   }
 
   .main-about-description {
-    font-size: 1.1rem;
-  }
-
-  .start-btn {
-    padding: 10px 22px;
-    font-size: 0.95rem;
+    font-size: 1.2rem;
   }
 }
 
-/* Small Screens (Phones) */
-@media (max-width: 768px) {
-  .section-about-heading-section {
-    height: 45vh;
-    align-items: center; /* Center content vertically */
-    text-align: start;
-    padding: 20px;
-  }
-
-  .section-about-content {
-    margin: 0;
-    text-align: start;
-  }
-
+@media (max-width: 600px) {
   .badge {
     font-size: 0.9rem;
-    padding: 6px 15px;
-    border-radius: 20px;
+    padding: 8px 18px;
   }
 
   .about-heading {
     font-size: 2rem;
-    max-width: 90%;
-    margin: 15px auto;
   }
 
-  .main-about-description {
+  .start-btn {
     font-size: 1rem;
-    line-height: 1.5;
-    margin: 10px 0 20px;
-  }
-
-  .start-btn {
-    padding: 10px 20px;
-    font-size: 0.9rem;
-    border-radius: 20px;
-  }
-}
-
-/* Extra Small Screens (Mobile Phones - Portrait Mode) */
-@media (max-width: 480px) {
-  .section-about-heading-section {
-    height: 40vh;
-    padding: 15px;
-  }
-
-  .about-heading {
-    font-size: 1.8rem;
-    max-width: 100%;
-  }
-
-  .main-about-description {
-    font-size: 0.95rem;
-  }
-
-  .start-btn {
-    padding: 8px 18px;
-    font-size: 0.85rem;
+    padding: 12px 28px;
   }
 }

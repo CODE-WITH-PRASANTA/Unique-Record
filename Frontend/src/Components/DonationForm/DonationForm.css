@@ -64,7 +64,7 @@
     font-weight: 600;
     text-align: left;
     color: #444;
-    font-size: 16px;
+    font-size: 21px;
 }
 
 .Donate-form-field label span {
@@ -141,16 +141,12 @@
         font-size: 20px;
     }
     
-    .Donate-form-field label {
-        font-size: 14px;
-    }
-    
     .Donate-form-input, 
     .Donate-form-field input, 
     .Donate-form-field select, 
     .Donate-form-field textarea {
-        padding: 12px;
-        font-size: 16px;
+        padding: 15px;
+        font-size: 18px;
     }
     
     .Donate-form-button {
@@ -170,20 +166,14 @@
         font-size: 18px;
     }
     
-    .Donate-form-field label {
-        font-size: 12px;
-    }
-    
     .Donate-form-input, 
     .Donate-form-field input, 
     .Donate-form-field select, 
     .Donate-form-field textarea {
         padding: 10px;
-        font-size: 14px;
     }
     
     .Donate-form-button {
-        font-size: 14px;
         padding: 8px;
     }
 }

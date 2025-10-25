@@ -86,8 +86,9 @@ const BlogPost = ({ post, index, totalPosts }) => {
          
         </div>
         <Link to={`/blog/${post._id}`} className="Blog-Section-ReadMore">
-          Read More →
-        </Link>
+  Read More <span>→</span>
+</Link>
+
       </div>
     </div>
   );

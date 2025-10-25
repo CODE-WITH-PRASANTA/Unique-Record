@@ -92,11 +92,6 @@
     .faq-questions-category h2 {
       font-size: 1.5rem;
     }
-  
-    .faq-questions-question {
-      font-size: 0.95rem;
-    }
-  
     .faq-questions-answer {
       font-size: 0.9rem;
     }
@@ -104,15 +99,8 @@
   
   @media (max-width: 480px) {
     .faq-questions-category h2 {
-      font-size: 1.2rem;
       margin-bottom: 15px;
     }
-  
-    .faq-questions-question {
-      font-size: 0.9rem;
-      padding: 12px 15px;
-    }
-  
     .faq-questions-answer {
       font-size: 0.85rem;
       padding: 10px 15px;

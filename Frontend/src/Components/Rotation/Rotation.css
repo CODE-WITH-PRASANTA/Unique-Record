@@ -102,7 +102,7 @@
     }
 
     .rotation-item img {
-        width: 150px; /* Smaller image size for mobile */
+        width: 200px; /* Smaller image size for mobile */
     }
 
     .rotation-item {
@@ -125,9 +125,6 @@
         padding: 10px 0; /* Less padding for smaller screens */
     }
 
-    .rotation-item img {
-        width: 120px; /* Further reduce image size */
-    }
 
     .rotation-wrapper {
         animation-duration: 25s; /* Further slow animation */

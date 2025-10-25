@@ -12,7 +12,7 @@
   align-items: center;
   justify-content: space-between;
   max-width: 2000px;
-  margin: auto;
+  mrgin: auto;
   padding: 20px 50px;
   gap: 60px;
   flex-wrap: wrap;
@@ -301,7 +301,7 @@
   .home-about-container {
     flex-direction: column;
     text-align: center;
-    padding: 30px;
+    padding: 15px;
   }
   .about-images { order: 1; }
   .about-content { order: 2; max-width: 700px; }
@@ -310,12 +310,12 @@
 }
 
 @media (max-width: 900px) {
-  .home-about { padding: 60px 20px; }
+  .home-about { padding: 0px; }
   .about-main-img { width: 400px; }
   .about-secondary-img { display: none; }
   .certified-badge { left: -10px; width: 190px; padding: 25px; }
   .about-description { font-size: 1.2rem; }
-  .feature-item p, .extra-paragraph { font-size: 1.1rem; }
+  .feature-item p, .extra-paragraph { font-size: 1.2rem; }
   .feature-item strong { font-size: 1.4rem; }
   .readmore-btn { font-size: 1.1rem; padding: 12px 24px; }
 }
@@ -325,18 +325,16 @@
   .about-highlight { font-size: 18px; }
   .about-description { font-size: 1.1rem; }
   .discover-btn { width: 100%; padding: 15px; font-size: 1rem; }
-  .extra-paragraph { font-size: 1rem; }
   .feature-item strong { font-size: 1.3rem; }
   .readmore-btn { font-size: 1rem; padding: 12px 22px; }
 }
 
 @media (max-width: 400px) {
-  .home-about { padding: 40px 15px; }
+  .home-about { padding: 0px; }
   .about-main-img { width: 100%; }
   .certified-badge { display: none; }
   .about-description { font-size: 1rem; line-height: 1.6; }
   .extra-title { font-size: 22px; }
-  .extra-paragraph { font-size: 0.95rem; }
   .feature-item strong { font-size: 1.2rem; }
   .readmore-btn { font-size: 0.95rem; padding: 10px 20px; }
 }

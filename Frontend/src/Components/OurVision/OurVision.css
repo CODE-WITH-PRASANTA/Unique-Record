@@ -188,13 +188,13 @@
     }
   
     .vision-description {
-        text-align: start;
-      font-size: 16px;
+        text-align: justify;
+      font-size: 20px;
     }
   
     .vision-item, .mission-item {
-      font-size: 15px;
       padding: 10px;
+      text-align: start;
     }
   
     .vision-image {

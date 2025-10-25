@@ -1,45 +1,46 @@
 /* ================================
-   Feedback Section Styling
+   Client Feedback Section
 ================================ */
 .full-feedback-sec {
   background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
-  padding: 60px 20px;
+  padding: 0px 20px;
   position: relative;
   overflow: hidden;
 }
 
 .client-feedback {
   text-align: center;
-  max-width: 1200px;
+  max-width: 1250px;
   margin: auto;
   padding: 20px;
 }
 
 .client-section-title {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #222;
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: #1c1c1c;
   text-transform: capitalize;
-  position: relative;
   margin-bottom: 40px;
+  letter-spacing: 0.5px;
+  position: relative;
 }
 
 .client-section-title::after {
   content: "";
-  width: 100px;
-  height: 4px;
+  width: 120px;
+  height: 5px;
   background: linear-gradient(90deg, #e94e77, #ff6f61);
   display: block;
-  margin: 12px auto;
+  margin: 14px auto;
   border-radius: 3px;
 }
 
 /* ================================
-   Swiper Styling
+   Swiper
 ================================ */
 .feedback-swiper {
   width: 100%;
-  padding: 30px 0;
+  padding: 40px 0;
 }
 
 /* ================================
@@ -47,35 +48,49 @@
 ================================ */
 .feedback-card {
   background: #ffffff;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-  border-radius: 15px;
-  padding: 30px 22px;
-  transition: all 0.3s ease-in-out;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  padding: 35px 28px;
+  transition: all 0.4s ease-in-out;
   text-align: left;
-  max-width: 360px;
+  max-width: 370px;
+  margin: auto;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  margin: auto;
-  border-top: 5px solid transparent;
+  border-top: 6px solid transparent;
   border-image: linear-gradient(90deg, #e94e77, #ff6f61) 1;
+  position: relative;
+  cursor: pointer;
 }
 
 .feedback-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 10px 25px rgba(233, 78, 119, 0.25);
+  transform: translateY(-10px);
+  box-shadow: 0 12px 35px rgba(233, 78, 119, 0.25);
 }
 
 /* ================================
    Feedback Text
 ================================ */
 .feedback-text {
-  font-size: 1.05rem;
-  color: #444;
+  font-size: 1.15rem;
+  color: #333;
   font-style: italic;
-  margin-bottom: 18px;
-  line-height: 1.6;
+  margin-bottom: 22px;
+  line-height: 1.8;
+  letter-spacing: 0.2px;
   position: relative;
+  padding-left: 8px;
+}
+
+.feedback-text::before {
+  content: "“";
+  font-size: 2rem;
+  color: #e94e77;
+  position: absolute;
+  left: -10px;
+  top: -5px;
+  opacity: 0.5;
 }
 
 /* ================================
@@ -88,17 +103,17 @@
   color: #fff;
   font-weight: 600;
   cursor: pointer;
-  margin: 6px 0 16px;
-  padding: 8px 18px;
-  font-size: 0.85rem;
-  border-radius: 30px;
+  margin: 6px 0 18px;
+  padding: 10px 22px;
+  font-size: 0.9rem;
+  border-radius: 40px;
   transition: all 0.3s ease;
   letter-spacing: 0.5px;
 }
 
 .feedback-readmore-btn:hover {
   background: linear-gradient(45deg, #c23356, #ff3d67);
-  transform: translateY(-2px);
+  transform: translateY(-3px);
   box-shadow: 0 6px 15px rgba(233, 78, 119, 0.35);
 }
 
@@ -108,32 +123,49 @@
 .client-info {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 18px;
   margin-top: auto;
 }
 
 .client-image {
-  width: 65px;
-  height: 65px;
+  width: 75px;
+  height: 75px;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid transparent;
   background: linear-gradient(45deg, #e94e77, #ff6f61);
-  padding: 3px; /* gradient border effect */
+  padding: 3px;
+  transition: all 0.3s ease;
+}
+
+.feedback-card:hover .client-image {
+  transform: scale(1.05);
 }
 
 .client-name {
-  font-size: 1rem;
+  font-size: 1.15rem;
   font-weight: 700;
   margin: 0;
-  color: #222;
+  color: #1a1a1a;
 }
 
 .client-role {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   color: #777;
-  margin: 0;
+  margin: 2px 0;
   font-style: italic;
+}
+
+.client-address {
+  font-size: 0.88rem;
+  color: #555;
+  margin: 3px 0 0;
+  line-height: 1.5;
+}
+
+.client-address strong {
+  color: #222;
+  font-weight: 600;
+  margin-right: 4px;
 }
 
 /* ================================
@@ -148,36 +180,72 @@
 .swiper-pagination-bullet-active {
   background: linear-gradient(45deg, #e94e77, #ff6f61);
   opacity: 1;
-  transform: scale(1.2);
+  transform: scale(1.25);
 }
 
 /* ================================
-   Responsive
+   Responsive Design
 ================================ */
-@media (max-width: 768px) {
+
+/* Tablets */
+@media (max-width: 992px) {
+  .client-section-title {
+    font-size: 2.3rem;
+  }
+
   .feedback-card {
-    max-width: 320px;
-    padding: 28px;
+    max-width: 90%;
+    padding: 30px 24px;
+  }
+
+  .feedback-text {
+    font-size: 1.05rem;
+  }
+
+  .client-name {
+    font-size: 1.05rem;
+  }
+
+  .client-image {
+    width: 65px;
+    height: 65px;
   }
 }
 
-@media (max-width: 480px) {
+/* Mobile Devices */
+@media (max-width: 600px) {
+  .full-feedback-sec {
+    padding: 60px 15px;
+  }
+
+  .client-section-title {
+    font-size: 1.9rem;
+  }
+
+  .feedback-text {
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  .feedback-readmore-btn {
+    font-size: 0.8rem;
+    padding: 8px 18px;
+  }
+
+  .client-image {
+    width: 60px;
+    height: 60px;
+  }
+
+  .client-name {
+    font-size: 1rem;
+  }
+
+  .client-role {
+    font-size: 0.85rem;
+  }
+
   .feedback-card {
-    max-width: 100%;
-    padding: 26px;
+    padding: 25px 18px;
   }
 }
-
-.client-address {
-  font-size: 0.82rem;
-  color: #555;
-  margin: 3px 0 0;
-  line-height: 1.4;
-}
-
-.client-address strong {
-  color: #222; /* Darker label for "Address:" */
-  font-weight: 600;
-  margin-right: 4px;
-}
-

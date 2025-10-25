@@ -101,64 +101,96 @@
     border-radius: 12px;
   }
   
-  /* Responsive Design */
-  @media (max-width: 1024px) {
-    .mission-org-container {
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      padding: 50px 40px;
-    }
-  
-    .mission-org-content {
-      max-width: 100%;
-    }
-  
-    .mission-org-items {
-      align-items: center;
-    }
-  
-    .mission-org-item {
-      max-width: 90%;
-    }
-  
-    .mission-org-image {
-      margin-top: 30px;
-    }
-  
-    .mission-org-image img {
-      max-width: 100%;
-    }
+  /* ========================= RESPONSIVE MEDIA QUERIES ========================= */
+
+/* For laptops and smaller desktops (1024px and below) */
+@media (max-width: 1200px) {
+  .mission-org-container {
+    padding: 30px 40px;
+    gap: 40px;
   }
-  
-  @media (max-width: 768px) {
-    .mission-org-title {
-      font-size: 28px;
-    }
-  
-    .mission-org-subtitle {
-      font-size: 16px;
-    }
-  
-    .mission-org-item {
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      padding: 20px;
-    }
-  
-    .mission-org-icon-wrapper {
-      width: 50px;
-      height: 50px;
-      padding: 10px;
-    }
-  
-    .mission-org-heading {
-      font-size: 18px;
-    }
-  
-    .mission-org-text {
-      font-size: 14px;
-    }
+
+  .mission-org-content {
+    max-width: 65%;
   }
-  
+
+  .mission-org-image img {
+    max-width: 100%;
+  }
+}
+
+/* For tablets (768px and below) */
+@media (max-width: 992px) {
+  .mission-org-container {
+    flex-direction: column;
+    text-align: center;
+    padding: 40px 30px;
+    gap: 40px;
+  }
+
+  .mission-org-content {
+    max-width: 100%;
+  }
+
+  .mission-org-items {
+    align-items: center;
+  }
+
+  .mission-org-item {
+    width: 100%;
+    max-width: 750px;
+    text-align: left;
+  }
+
+  .mission-org-icon-wrapper {
+    margin: 0 auto 15px auto;
+  }
+
+  .mission-org-image img {
+    max-width: 80%;
+    margin: 0 auto;
+  }
+}
+
+/* For large mobile devices (600px and below) */
+@media (max-width: 768px) {
+  .mission-org-container {
+    padding: 30px 20px;
+  }
+
+  .mission-org-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .mission-org-icon-wrapper {
+    margin-bottom: 10px;
+  }
+
+  .mission-org-image img {
+    max-width: 90%;
+  }
+}
+
+/* For small mobile devices (480px and below) */
+@media (max-width: 480px) {
+  .mission-org-container {
+    padding: 25px 15px;
+    gap: 30px;
+  }
+
+  .mission-org-item {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: justify;
+  }
+
+  .mission-org-icon-wrapper {
+    width: 50px;
+    height: 50px;
+  }
+
+  .mission-org-image img {
+    max-width: 100%;
+  }
+}

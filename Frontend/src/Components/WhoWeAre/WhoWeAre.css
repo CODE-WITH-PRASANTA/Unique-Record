@@ -176,81 +176,126 @@
   }
   
 
-  /* Media Queries for responsiveness */
+  /* ===============================
+   RESPONSIVE DESIGN SECTION
+   =============================== */
 
-/* For tablets (768px and above) */
-@media (max-width: 1024px) {
-    .who-wrapper {
-      flex-direction: column;
-      text-align: center;
-      gap: 30px;
-    }
-  
-    .who-image-wrapper {
-      flex: unset;
-    }
-  
-    .who-image {
-      max-width: 90%;
-      margin: 0 auto;
-    }
-  
-    .who-text-content {
-      padding: 20px;
-      margin: 0 auto;
-      text-align: center;
-    }
-  
-    .who-heading {
-      font-size: 28px;
-    }
-  
-    .who-description {
-      font-size: 14px;
-    }
-  
-    .who-info-box {
-      margin-top: 15px;
-    }
-  
-    .who-stats-container {
-      flex-direction: column;
-      gap: 15px;
-    }
-  
-    .who-stat-box {
-      min-width: unset;
-      padding: 20px 15px;
-    }
-  
-   
+/* For Large Tablets (max-width: 1200px) */
+@media (max-width: 1200px) {
+  .who-wrapper {
+    gap: 40px;
+    padding: 0 0px;
   }
-  
-  /* For mobile phones (max-width: 768px) */
-  @media (max-width: 768px) {
-    .about-agency {
-      padding: 30px 10px;
-    }
-  
-    .who-image {
-      width: 100%;
-    }
-  
-    .who-text-content {
-    text-align: start;
-      padding: 15px;
-    }
-  
-    .who-stats-container {
-      margin-top: 20px;
-      gap: 10px;
-    }
-  
+
+  .who-image {
+    width: 100%;
   }
-  
-  /* For very small mobile devices (max-width: 480px) */
-  @media (max-width: 480px) {
-    .who-stat-box {
-      padding: 10px 8px;
-    }
+
+  .who-heading {
+    font-size: 32px;
   }
+
+  .who-description {
+    font-size: 22px;
+  }
+
+  .who-info-title-content {
+    font-size: 20px;
+  }
+}
+
+/* For Tablets (max-width: 992px) */
+@media (max-width: 992px) {
+  .who-wrapper {
+    flex-direction: column;
+    text-align: justify;
+  }
+
+  .who-image-wrapper {
+    order: 1;
+  }
+
+  .who-text-content {
+    order: 2;
+    width: 100%;
+    margin-top: 25px;
+  }
+
+  .who-heading {
+    font-size: 30px;
+    line-height: 1.3;
+  }
+
+  .who-description {
+    font-size: 20px;
+    text-align: justify;
+  }
+
+  .who-info-box {
+    padding: 20px;
+  }
+
+  .who-info-title-content {
+    font-size: 18px;
+  }
+}
+
+/* For Mobile Devices (max-width: 768px) */
+@media (max-width: 768px) {
+  .about-agency {
+    padding: 40px 15px;
+  }
+
+
+  .who-description {
+    font-size: 18px;
+    line-height: 1.7;
+  }
+
+  .who-info-box {
+    padding: 18px;
+    border-left: 4px solid #e94e77;
+  }
+
+  .who-info-title {
+    font-size: 18px;
+  }
+
+  .who-info-title-content {
+    font-size: 17px;
+  }
+
+  .who-image {
+    width: 100%;
+    border-radius: 12px;
+  }
+}
+
+/* For Small Mobile (max-width: 480px) */
+@media (max-width: 480px) {
+  .about-agency {
+    padding: 30px 10px;
+  }
+
+  .who-info-box {
+    padding: 15px;
+    border-left: 3px solid #e94e77;
+  }
+
+  .who-info-title {
+    font-size: 17px;
+  }
+
+  .who-stat-box {
+    min-width: 100%;
+    padding: 20px;
+  }
+
+  .who-stat-number {
+    font-size: 28px;
+  }
+
+  .who-stat-text {
+    font-size: 14px;
+  }
+}

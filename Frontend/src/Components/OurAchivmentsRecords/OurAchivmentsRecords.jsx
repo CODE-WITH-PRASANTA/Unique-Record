@@ -110,13 +110,31 @@ const OurAchievementsRecords = () => {
                   <span className="achievement-provider">🏢 Provider: {achievement.providerName}</span>
                 </div>
 
-                {/* TITLE & DESCRIPTION */}
+        {/* TITLE & DESCRIPTION */}
                 <h2>{achievement.title}</h2>
-                <p>{truncateDescription(achievement.shortDescription, selectedCategory ? 20 : 90)}</p>
+                <p className="our-achievements-record-post-description">
+                  {achievement.expanded
+                    ? achievement.shortDescription
+                    : truncateDescription(achievement.shortDescription, selectedCategory ? 20 : 40)}
+                </p>
 
+                {achievement.shortDescription.split(' ').length > (selectedCategory ? 20 : 40) && (
+                  <button
+                    className="our-achievements-record-readmore-btn"
+                    onClick={() =>
+                      setAchievements((prev) =>
+                        prev.map((a, i) =>
+                          i === idx ? { ...a, expanded: !a.expanded } : a
+                        )
+                      )
+                    }
+                  >
+                    {achievement.expanded ? "Show Less" : "Read More"}
+                  </button>
+                )}
                 {/* READ POST BUTTON */}
                 <Link to={`/achivment-details/${achievement._id}`} className="our-achievements-record-read-post">
-                  READ POST <FontAwesomeIcon icon={faArrowRight} />
+                  Enroll Now <FontAwesomeIcon icon={faArrowRight} />
                 </Link>
               </div>
             </div>

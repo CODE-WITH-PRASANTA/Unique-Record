@@ -85,7 +85,7 @@
 }
 
 .Blog-Section-Post-Meta {
-  font-size: 0.85rem;
+  font-size: 1rem;
   color: #888;
   display: flex;
   flex-wrap: wrap;
@@ -102,7 +102,7 @@
 
 @media (max-width: 768px) {
   .Blog-Section-Post-Meta {
-    flex-direction: column;
+    flex-direction: row;
     align-items: flex-start;
   }
   .Blog-Section-Post-Dot {
@@ -116,23 +116,45 @@
   background-color: #888;
   border-radius: 50%;
 }
-
 .Blog-Section-ReadMore {
-  color: #d4af37;
+  display: inline-block;
+  color: #d4af37; /* gold */
   font-weight: 600;
-  transition: color 0.3s ease;
   text-decoration: none;
-  border-bottom: 2px solid #d4af37;
-  padding-bottom: 2px;
-  width: 100px;
-  margin-top: 5px;
+  position: relative;
+  padding: 5px 0;
+  font-size: 18px;
+  transition: all 0.3s ease;
+}
+
+.Blog-Section-ReadMore::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 0%;
+  background-color: #d4af37;
+  transition: width 0.3s ease;
 }
 
 .Blog-Section-ReadMore:hover {
   color: #b39700;
-  border-bottom: 2px solid #b39700;
-  text-decoration: none;
 }
+
+.Blog-Section-ReadMore:hover::after {
+  width: 100%;
+}
+
+.Blog-Section-ReadMore span {
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.Blog-Section-ReadMore:hover span {
+  transform: translateX(5px);
+}
+
 
 
 
@@ -348,10 +370,12 @@
     padding: 10px;
   }
   .Blog-Section-Post-Title {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
+    line-height: 1.5;
   }
   .Blog-Section-Post-Excerpt {
-    font-size: 0.9rem;
+    font-size: 1.2rem;
+    text-align: justify;
   }
   .Blog-Section-Search-Box input {
     padding: 10px 12px;
@@ -370,9 +394,6 @@
     width: 60px;
     height: 60px;
   }
-  .Blog-Section-Recent-Post-Info h3 {
-    font-size: 0.9rem;
-  }
 }
 
 /* Extra Small Mobile Devices */
@@ -383,12 +404,7 @@
   .Blog-Section-Post {
     padding: 5px;
   }
-  .Blog-Section-Post-Title {
-    font-size: 1rem;
-  }
-  .Blog-Section-Post-Excerpt {
-    font-size: 0.8rem;
-  }
+
 }
 
 .author-designation {

@@ -229,10 +229,6 @@
       font-size: 1.8rem;
     }
   
-    .mission-intro,
-    .mission-text {
-      font-size: 0.95rem;
-    }
   
     .mission-stats {
       gap: 1.5rem;
@@ -251,17 +247,12 @@
   /* For mobile devices (480px and below) */
   @media (max-width: 480px) {
     .about-mission-container {
-      padding: 15px;
+      padding: 5px;
     }
   
     .mission-title {
       font-size: 1.5rem;
       line-height: 1.3;
-    }
-  
-    .mission-intro,
-    .mission-text {
-      font-size: 0.85rem;
     }
   
     .mission-stats {

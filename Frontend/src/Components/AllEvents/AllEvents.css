@@ -31,7 +31,6 @@
   display: flex;
   flex-direction: column;
   gap: 30px;
-  max-width: 1400px;
   margin: 0 auto;
 }
 
@@ -43,7 +42,7 @@
   border-radius: 12px;
   box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.08);
   overflow: hidden;
-  max-width: 1700px;
+  max-width: 1900px;
   margin: auto;
 }
 
@@ -55,7 +54,7 @@
 }
 
 .all-event-content p {
-  text-align: justify;
+  text-align: start;
   font-size: 24px;
   margin-bottom: 8px;
   line-height: 1.6;
@@ -90,7 +89,7 @@
 }
 
 .all-event-img {
-  width: 500px;
+  width: 600px;
   height: auto;
   border-radius: 10px;
   object-fit: cover;
@@ -156,108 +155,6 @@
   background-color: #D8325E;
 }
 
-
-/* Responsive Design for Tablets and Small Desktops */
-@media (max-width: 1024px) {
-  .all-event-container {
-    padding: 50px 15px;
-  }
-
-  .all-event-title {
-    font-size: 32px;
-  }
-
-  .all-event-card {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .all-event-content {
-    padding: 15px;
-  }
-
-  .all-event-img {
-    width: 100%;
-    max-width: 350px;
-    height: auto;
-  }
-
-  .event-info-overlay {
-    position: relative;
-    left: unset;
-    top: unset;
-    gap: 10px;
-    padding: 8px;
-    font-size: 13px;
-    width: auto;
-    display: inline-block;
-  }
-
-}
-
-/* Responsive Design for Mobile Screens */
-@media (max-width: 768px) {
-  .all-event-container {
-    padding: 40px 10px;
-  }
-
-  .all-event-title {
-    font-size: 28px;
-  }
-
-  .all-event-card {
-    gap: 20px;
-  }
-
-  .all-event-content {
-    text-align: center;
-  }
-
-  .event-info-overlay {
-    width: 100%;
-    text-align: center;
-    font-size: 12px;
-    padding: 6px;
-  }
-
-  
-
-  .register-btn {
-    width: 100%;
-    max-width: 250px;
-  }
-}
-
-/* Extra Small Screens (Phones) */
-@media (max-width: 480px) {
-  .all-event-title {
-    font-size: 24px;
-  }
-
-  .all-event-card {
-    padding: 10px;
-  }
-
-  .event-info-overlay {
-    font-size: 11px;
-    padding: 5px;
-  }
-
-  .event-date-box p {
-    font-size: 13px;
-    padding: 10px 5px;
-  }
-
-  .register-btn {
-    font-size: 14px;
-    padding: 10px 20px;
-    max-width: 200px;
-  }
-  .event-date-box{
-    justify-content: center;
-  }
-}
-
 .All-Events-Organizer {
   color: #e91e63; /* Pink */
   font-weight: 500;
@@ -284,7 +181,7 @@
 }
 
 .event-description-html {
-  text-align: justify;
+  text-align: start;
   color: #333;
 }
 
@@ -301,7 +198,7 @@
   color: #0056b3;
 }
 
-.share-btn {
+.Allevent-share-btn {
   margin-left: 10px;
   padding: 8px 16px;
   background-color: #5a67d8;
@@ -312,6 +209,125 @@
   transition: 0.3s ease;
 }
 
-.share-btn:hover {
+.Allevent-share-btn:hover {
   background-color: #434190;
+}
+
+
+/* ================== RESPONSIVE MEDIA QUERIES ================== */
+
+/* Large Tablets / Small Laptops */
+@media (max-width: 1199px) and (min-width: 992px) {
+  .all-event-title {
+    font-size: 30px;
+  }
+  .all-event-subtitle {
+    font-size: 20px;
+  }
+  .all-event-content p,
+  .event-name {
+    font-size: 20px;
+  }
+  .all-event-img {
+    width: 500px;
+  }
+  .event-date-box p {
+    font-size: 14px;
+  }
+  .register-btn,
+  .Allevent-share-btn {
+    font-size: 14px;
+    padding: 10px 20px;
+  }
+}
+
+/* Tablets */
+@media (max-width: 991px) and (min-width: 768px) {
+  .all-event-title {
+    font-size: 28px;
+  }
+  .all-event-subtitle {
+    font-size: 18px;
+  }
+  .all-event-card {
+    flex-direction: column;
+  }
+  .all-event-img {
+    width: 100%;
+    max-width: 450px;
+    margin: 0 auto;
+  }
+  .event-date-box {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .register-btn,
+  .Allevent-share-btn {
+    width: 48%;
+    font-size: 14px;
+    padding: 10px;
+  }
+}
+
+/* Large Phones / Small Tablets */
+@media (max-width: 767px) and (min-width: 576px) {
+  
+  .all-event-title {
+    font-size: 24px;
+  }
+  .all-event-subtitle {
+    font-size: 16px;
+  }
+  .all-event-card {
+    flex-direction: column;
+    padding: 15px;
+  }
+  .all-event-img {
+    width: 100%;
+    max-width: 400px;
+  }
+  .event-date-box {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .register-btn,
+  .Allevent-share-btn {
+    width: 100%;
+    margin-top: 8px;
+    font-size: 14px;
+    padding: 10px 0;
+  }
+}
+
+/* Mobile Phones */
+@media (max-width: 575px) {
+  .all-event-title {
+    font-size: 20px;
+  }
+  .all-event-card {
+    flex-direction: column;
+    padding: 12px;
+  }
+  .all-event-img {
+    width: 100%;
+    max-width: 100%;
+  }
+  .event-date-box {
+    flex-direction: column;
+    gap: 6px;
+  }
+  .register-btn,
+  .Allevent-share-btn {
+    width: 100%;
+    font-size: 13px;
+    padding: 8px 0;
+    margin-left: 0px;
+    margin-top: 10px;
+  }
+  .all-read-more-btn {
+    font-size: 13px;
+  }
+  .all-event-content p{
+    font-size: 16px;
+  }
 }

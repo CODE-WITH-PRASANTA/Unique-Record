@@ -172,63 +172,122 @@
     padding-top: 10px;
 }
 
-/* Responsive Design */
-@media (max-width: 1024px) {
-    .faq-container {
-        flex-direction: column;
-        padding: 20px;
-    }
+/* ✅ Responsive Design Enhancements (Font sizes + layout balance) */
+@media screen and (max-width: 1200px) {
+  .faq-title {
+    font-size: 42px;
+  }
 
-    .faq-left {
-        max-width: 100%;
-        padding-right: 0;
-        text-align: center;
-    }
+  .faq-description {
+    font-size: 22px;
+  }
 
-    .faq-right {
-        max-width: 100%;
-        margin-top: 30px;
-    }
+  .faq-question {
+    font-size: 22px;
+  }
+
+  .home-faq-answer {
+    font-size: 19px;
+  }
+
+  .faq-list li {
+    font-size: 22px;
+  }
 }
 
-@media (max-width: 768px) {
-    .full-faq-sec {
-        padding: 40px 20px;
-    }
+@media screen and (max-width: 992px) {
+  .faq-container {
+    flex-direction: column;
+    align-items: center;
+    padding: 40px;
+  }
 
-    .faq-subtitle{
-        font-size: 11px;
-        text-align: center;
-    }
-    .faq-title {
+  .faq-left {
+    max-width: 100%;
+    padding-right: 0;
+    text-align: center;
+  }
 
-        text-align: start;
-        font-size: 36px;
-    }
-   
-    .faq-question {
-        font-size: 18px;
-    }
+  .faq-title {
+    font-size: 38px;
+  }
 
-    .home-faq-answer {
-        font-size: 16px;
-    }
+  .faq-description {
+    font-size: 20px;
+  }
+
+  .faq-list li {
+    font-size: 20px;
+    text-align: start;
+  }
+
+  .faq-right {
+    max-width: 100%;
+    margin-top: 30px;
+  }
+
+  .faq-question {
+    font-size: 21px;
+  }
+
+  .home-faq-answer {
+    font-size: 18px;
+  }
 }
 
-@media (max-width: 480px) {
-    .faq-title {
-        font-size: 30px;
-    }
+@media screen and (max-width: 768px) {
+  .full-faq-sec {
+    padding: 40px 20px;
+  }
 
-    .faq-question {
-        font-size: 16px;
-    }
+  .faq-container {
+    padding: 30px 20px;
+  }
 
-    .home-faq-answer {
-        font-size: 14px;
-    }
+  .faq-title {
+    font-size: 32px;
+  }
 
-    .faq-item {
-        padding: 15px;
-    }
+  .faq-subtitle {
+    font-size: 17px;
+  }
+
+  .faq-description {
+    font-size: 18px;
+  }
+
+  .faq-list li {
+    font-size: 18px;
+  }
+
+  .faq-question {
+    font-size: 20px;
+  }
+
+  .home-faq-answer {
+    font-size: 17px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .faq-title {
+    font-size: 28px;
+  }
+
+  .faq-subtitle {
+    font-size: 15px;
+  }
+
+  .faq-description {
+    font-size: 16px;
+  }
+
+
+  .faq-question {
+    font-size: 18px;
+  }
+
+  .home-faq-answer {
+    font-size: 16px;
+  }
 }

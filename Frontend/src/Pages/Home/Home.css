@@ -25,6 +25,7 @@
   box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
   position: relative;
   z-index: 2;
+  min-height: 80vh;
 }
 
 /* ======================= SOCIAL MEDIA AREA ======================= */
@@ -54,8 +55,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 45px;
-  height: 45px;
+  width: 50px;
+  height: 50px;
   border: 2px solid #ffffff;
   border-radius: 50%;
 }
@@ -71,7 +72,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 1300px;
+  max-width: 1500px;
   margin: 0 auto;
   gap: 3rem;
   width: 100%;
@@ -79,17 +80,25 @@
   box-sizing: border-box;
   flex-wrap: wrap;
 }
-
 .banner-content {
   flex: 1 1 500px;
   max-width: 600px;
   text-align: left;
   min-width: 280px;
+  padding-right: 0;   /* Keep right padding zero if needed */
 }
+
+/* ======================= MEDIA QUERIES FOR BANNER-CONTENT PADDING ======================= */
+@media (max-width: 1200px) {
+  .banner-content {
+    padding-left: 35px;
+  }
+}
+
 
 /* Sub Title */
 .sub-title {
-  font-size: clamp(1rem, 2vw, 1.6rem);
+  font-size: clamp(1.1rem, 2.2vw, 1.8rem);
   color: #e8c177;
   margin-bottom: 1rem;
   font-weight: 800;
@@ -103,7 +112,7 @@
 
 /* Main Title */
 .main-title {
-  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 800;
   margin-bottom: 2rem;
   line-height: 1.2;
@@ -114,7 +123,7 @@
 /* Description */
 .description {
   text-align: justify;
-  font-size: clamp(0.9rem, 1.6vw, 1.5rem);
+  font-size: clamp(1rem, 1.6vw, 1.5rem);
   margin-bottom: 2.5rem;
   line-height: 1.8;
   color: #d1d1d1;
@@ -136,7 +145,7 @@
   text-decoration: none;
   text-align: center;
   display: inline-block;
-  font-size: clamp(0.9rem, 1.2vw, 1.1rem);
+  font-size: clamp(0.95rem, 1.2vw, 1.2rem);
   position: relative;
   overflow: hidden;
   transition: all 0.4s ease-in-out;
@@ -193,7 +202,7 @@
 
 /* ======================= IMAGE & ANIMATIONS ======================= */
 .banner-image {
-  flex: 1 1 400px;
+  flex: 1 1;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -201,7 +210,7 @@
 }
 
 .banner-image img {
-  max-width: 100%;
+  max-width: 500px;
   height: auto;
   animation: flyIn 4s ease-out forwards, hoverEffect 3s infinite ease-in-out 7s;
   filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.3));
@@ -229,83 +238,6 @@
   }
 }
 
-/* ======================= RESPONSIVE BREAKPOINTS ======================= */
-
-/* 1200px ↓ (Large tablets, small laptops) */
-@media (max-width: 1200px) {
-  .home-container {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-  .banner-content {
-    max-width: 90%;
-  }
-  .banner-image img {
-    max-width: 80%;
-  }
-}
-
-/* 900px ↓ (Tablets) */
-@media (max-width: 900px) {
-  .banner-social-area {
-    left: 10px;
-  }
-  .banner-content {
-    text-align: center;
-  }
-  .description {
-    text-align: center;
-  }
-  .banner-buttons {
-    justify-content: center;
-  }
-}
-
-/* 768px ↓ (Mobile Landscape) */
-@media (max-width: 768px) {
-  .banner-social-area {
-    display: none;
-  }
-  .main-title {
-    font-size: clamp(1.6rem, 5vw, 2.4rem);
-  }
-  .description {
-    font-size: clamp(0.9rem, 1.4vw, 1.2rem);
-  }
-  .banner-buttons {
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-  }
-}
-
-/* 480px ↓ (Small Mobile) */
-@media (max-width: 480px) {
-  .home-home-container {
-    padding: 20px 10px;
-    background-size: cover;
-  }
-  .main-title {
-    font-size: 1.5rem;
-  }
-  .sub-title {
-    font-size: 1.1rem;
-  }
-  .description {
-    font-size: 0.95rem;
-    text-align: left;
-  }
-  .banner-buttons {
-    width: 100%;
-  }
-  .btn {
-    width: 100%;
-    padding: 12px 0;
-    font-size: 1rem;
-  }
-}
-
 /* ======================= SLIDE-IN ANIMATION ======================= */
 @keyframes slideInFromLeft {
   0% {
@@ -325,3 +257,19 @@
 .banner-buttons {
   animation: slideInFromLeft 2.5s ease-out forwards;
 }
+
+/* ======================= MEDIA QUERIES FOR IMAGE RESPONSIVENESS ======================= */
+@media (max-width: 1200px) {
+  .banner-image img {
+    max-width: 420px;
+  }
+}
+
+@media (max-width: 992px) {
+  .banner-image img {
+    max-width: 380px;
+  }
+}
+
+
+

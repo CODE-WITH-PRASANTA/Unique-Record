@@ -250,7 +250,6 @@
 
 /* Swiper wrapper adjustment to maintain ratio */
 .swiper-slide {
-  display: flex;
   justify-content: center;
   align-items: center;
   background: #fff;           /* clean background */

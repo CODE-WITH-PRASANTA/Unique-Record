@@ -30,7 +30,7 @@ const WhyChooseUs = () => {
         </div>
 
         {/* Right Side Content */}
-        <div className="right-content">
+        <div className="whychoose-right-content">
           <div className="experience-box">
             <div className="experience-text">
               <div className="people-why-icon"><FaUsers /></div>

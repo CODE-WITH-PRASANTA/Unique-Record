@@ -151,7 +151,7 @@ const formatDate = (dateString) => {
                     Register & Apply
                   </button>
                   <button
-                    className="share-btn"
+                    className="Allevent-share-btn"
                     onClick={() => handleShare(event)}
                   >
                     🔗 Share

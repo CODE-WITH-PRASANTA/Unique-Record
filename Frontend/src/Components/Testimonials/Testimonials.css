@@ -1,157 +1,248 @@
-/* Testimonials section background and padding */
-.Testimonials-section {
-    background-color: #04171a;
-    padding: 40px 20px;
-    text-align: center;
-    color: #fff;
-    border-top: 5px solid #f4b500;
-    border-bottom: 5px solid #f4b500;
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2); /* Soft outer shadow for depth */
+/* ======================= Testimonials Section ======================= */
+
+.vision-testimonial-section {
+  padding: 20px 20px;
+  background: linear-gradient(to right, #fdf6f9, #f9f9f9);
+  font-family: 'Poppins', sans-serif;
+  border: 2px solid #e94e77; /* matching border color */
+  border-radius: 16px;        /* rounded corners */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08); /* subtle shadow for depth */
+}
+
+
+.vision-testimonial-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.vision-testimonial-title {
+  font-size: 2.5rem; /* increased font size */
+  color: #e94e77;
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+.vision-testimonial-subtitle {
+  font-size: 1.25rem; /* increased subtitle size */
+  color: #555;
+  font-weight: 500;
+}
+
+.vision-testimonial-swiper {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.vision-testimonial-card {
+  background-color: #fff;
+  border-radius: 16px;
+  padding: 30px 25px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.vision-testimonial-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 16px 50px rgba(0,0,0,0.15);
+}
+
+.vision-testimonial-card-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.vision-testimonial-avatar {
+  width: 70px; /* slightly larger */
+  height: 70px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 20px;
+  border: 2px solid #e94e77;
+}
+
+.vision-testimonial-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.vision-testimonial-name {
+  font-size: 1.25rem; /* increased */
+  font-weight: 700;
+  color: #333;
+}
+
+.vision-testimonial-role {
+  font-size: 1rem; /* increased */
+  color: #888;
+}
+
+.vision-testimonial-text {
+  font-size: 1.05rem; /* increased */
+  color: #555;
+  margin-bottom: 12px;
+  line-height: 1.8;
+}
+
+.vision-testimonial-readmore {
+  font-size: 0.95rem; /* slightly larger */
+  color: #e94e77;
+  font-weight: 600;
+  background: none;
+  border: none;
+  cursor: pointer;
+  align-self: flex-start;
+  padding: 0;
+  transition: color 0.3s ease;
+}
+
+.vision-testimonial-readmore:hover {
+  color: #d43c6f;
+  text-decoration: underline;
+}
+
+.vision-testimonial-loading,
+.vision-testimonial-error {
+  text-align: center;
+  font-size: 1.2rem;
+  padding: 25px;
+  color: #e94e77;
+  font-weight: 600;
+}
+
+/* ======================= Responsive Testimonials ======================= */
+
+/* Large desktops */
+@media (min-width: 1200px) {
+  .vision-testimonial-section {
+    padding: 100px 60px;
   }
-  
-  /* Header style */
-  .Testimonials-header h2 {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #E94e77;  /* Vibrant color for attention */
-    margin-bottom: 10px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* Adding text shadow for extra pop */
-    animation: fadeIn 1s ease-in-out; /* Fade-in animation for header */
+  .vision-testimonial-title {
+    font-size: 3rem;
   }
-  
-  /* Animation for fade-in effect */
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
+  .vision-testimonial-subtitle {
+    font-size: 1.5rem;
   }
-  
-  /* Desktop and Mobile Swiper sections */
-  .Testimonials-desktop, .Testimonials-mobile {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 10px;
+  .vision-testimonial-card {
+    padding: 35px 30px;
   }
-  
-  /* Individual testimonial cards */
-  .Testimonials-card {
-    background: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.15); /* Deeper shadow for 3D effect */
-    padding: 30px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    position: relative;
-    overflow: hidden;
-    margin-bottom: 25px;
-    opacity: 0;
-    animation: fadeInCard 0.5s ease-in-out forwards; /* Fade-in animation for cards */
-  }
-  
-  @keyframes fadeInCard {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-  
-  /* Header within the testimonial card */
-  .Testimonials-cardHeader {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    margin-bottom: 20px;
-    position: relative;
-  }
-  
-  /* Avatar style */
-  .Testimonials-avatar {
+  .vision-testimonial-avatar {
     width: 80px;
     height: 80px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 4px solid #4a90e2;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow to make avatar pop */
-    transition: box-shadow 0.3s ease, transform 0.3s ease;
   }
-  
-  .Testimonials-avatar:hover {
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);  /* Hover effect for the avatar */
-    transform: scale(1.1);  /* Slight zoom effect on hover */
+  .vision-testimonial-name {
+    font-size: 1.4rem;
   }
-  
-  /* Name and Role Text */
-  .Testimonials-card h4 {
-    font-size: 1.3rem;
-    font-weight: bold;
-    color: #333;
-    margin: 0;
-    text-transform: capitalize;
-  }
-  
-  .Testimonials-card p {
-    font-size: 1rem;
-    color: #777;
-    margin: 5px 0 0;
-    font-style: italic;
-    text-align: start;
-  }
-  
-  /* Testimonial text */
-  .Testimonials-text {
+  .vision-testimonial-role {
     font-size: 1.1rem;
-    color: #444;
-    line-height: 1.8;
-    margin-top: 20px;
-    font-family: 'Roboto', sans-serif;
-    text-align: justify;
-    letter-spacing: 0.5px;  /* Letter-spacing for readability */
   }
-  
-  /* Swiper pagination bullets */
-  .swiper-pagination-bullet {
-    background: #4a90e2 !important;
-    transition: background 0.3s ease;
+  .vision-testimonial-text {
+    font-size: 1.15rem;
   }
-  
-  .swiper-pagination-bullet:hover {
-    background: #E94e77 !important;  /* Color change on hover */
+  .vision-testimonial-readmore {
+    font-size: 1rem;
   }
-  
-  /* Media Queries for responsive layout */
-  @media (max-width: 768px) {
-    .Testimonials-header h2 {
-      font-size: 2rem;
-      margin-bottom: 30px;
-    }
-  
-    .Testimonials-desktop {
-      display: none;
-    }
-  
-    .Testimonials-mobile {
-      display: block;
-    }
-  
-    .Testimonials-card {
-      margin-bottom: 20px;
-      padding: 25px;
-    }
+}
+
+/* Medium screens (tablets) */
+@media (max-width: 1024px) {
+  .vision-testimonial-section {
+    padding: 70px 40px;
   }
-  
-  @media (min-width: 769px) {
-    .Testimonials-desktop {
-      display: block;
-    }
-  
-    .Testimonials-mobile {
-      display: none;
-    }
+  .vision-testimonial-title {
+    font-size: 2.5rem;
   }
-  
+  .vision-testimonial-subtitle {
+    font-size: 1.3rem;
+  }
+  .vision-testimonial-card {
+    padding: 30px 25px;
+  }
+  .vision-testimonial-avatar {
+    width: 70px;
+    height: 70px;
+  }
+  .vision-testimonial-name {
+    font-size: 1.25rem;
+  }
+  .vision-testimonial-role {
+    font-size: 1rem;
+  }
+  .vision-testimonial-text {
+    font-size: 1.05rem;
+  }
+  .vision-testimonial-readmore {
+    font-size: 0.95rem;
+  }
+}
+
+/* Small screens (mobile) */
+@media (max-width: 768px) {
+  .vision-testimonial-section {
+    padding: 50px 20px;
+  }
+  .vision-testimonial-title {
+    font-size: 2.2rem;
+  }
+  .vision-testimonial-subtitle {
+    font-size: 1.1rem;
+  }
+  .vision-testimonial-card {
+    padding: 25px 20px;
+  }
+  .vision-testimonial-avatar {
+    width: 65px;
+    height: 65px;
+    margin-right: 15px;
+  }
+  .vision-testimonial-name {
+    font-size: 1.15rem;
+  }
+  .vision-testimonial-role {
+    font-size: 0.95rem;
+  }
+  .vision-testimonial-text {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+  .vision-testimonial-readmore {
+    font-size: 0.9rem;
+  }
+}
+
+/* Extra small devices (small phones) */
+@media (max-width: 480px) {
+  .vision-testimonial-section {
+    padding: 40px 15px;
+  }
+  .vision-testimonial-title {
+    font-size: 1.9rem;
+  }
+  .vision-testimonial-subtitle {
+    font-size: 1rem;
+  }
+  .vision-testimonial-card {
+    padding: 20px 15px;
+  }
+  .vision-testimonial-avatar {
+    width: 55px;
+    height: 55px;
+    margin-right: 12px;
+  }
+  .vision-testimonial-name {
+    font-size: 1.05rem;
+  }
+  .vision-testimonial-role {
+    font-size: 0.9rem;
+  }
+  .vision-testimonial-text {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+  .vision-testimonial-readmore {
+    font-size: 0.85rem;
+  }
+}
