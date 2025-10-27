@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
+
 import Navbar from "./Components/Navbar/Navbar";
 import Footer from "./Components/Footer/Footer";
 import Home from "./Pages/Home/Home";
@@ -11,7 +17,6 @@ import Blog from "./Pages/Blog/Blog";
 import BlogDetails from "./Components/BlogDetails/BlogDetails";
 import Vision from "./Pages/Vision/Vision";
 import OurAchivments from "./Pages/OurAchivments/OurAchivments";
-import "./App.css";
 import LearnMore from "./Pages/LearnMore/LearnMore";
 import TermandCondition from "./Pages/TermandCondition/TermandCondition";
 import Notice from "./Pages/Notice/Notice";
@@ -20,7 +25,6 @@ import Event from "./Pages/Event/Event";
 import ForgotPassword from "./Components/ForgotPassword/ForgotPassword";
 import UserDashboard from "./Components/UserDashboard/UserDashboard";
 import Sidebar from "./Components/Sidebar/Sidebar";
-import RegisterForEvent from "./Components/RegisterForEvent/RegisterForEvent";
 import ProtectedRoute from "./Components/ProtectedRoute";
 import Donate from "./Pages/Donate/Donate";
 import PaymentSuccess from "./Components/PaymentSuccess/PaymentSuccess";
@@ -32,7 +36,10 @@ import AchivmentDetails from "./Components/AchivmentDetails/AchivmentDetails";
 import AdminLogin from "./Components/AdminLogin/AdminLogin";
 import AchiverDetails from "./Pages/AchiverDetails/AchiverDetails";
 import AchiversAbout from "./Components/AchiversAbout/AchiversAbout";
-import Loader from "./Loader"; // ✅ import Loader
+import Loader from "./Loader";
+import "./App.css";
+import RegisterForEvent from "./Components/RegisterForEvent/RegisterForEvent";
+import EventStatus from "./Components/EventStatus/EventStatus";
 
 function Layout() {
   const location = useLocation();
@@ -41,15 +48,17 @@ function Layout() {
   const isAdminPage = location.pathname.startsWith("/admin");
   const isDashboardPage = location.pathname.startsWith("/dashboard");
 
+  // 🌀 Show loader on every route change
   useEffect(() => {
     setLoading(true);
-    const timer = setTimeout(() => setLoading(false), 500);
+    const timer = setTimeout(() => setLoading(false), 1000); // loader duration
     return () => clearTimeout(timer);
-  }, [location]);
+  }, [location.pathname]);
 
   return (
     <>
       <Loader loading={loading} />
+
       {!isAdminPage && !isDashboardPage && <Navbar />}
 
       {isDashboardPage ? (
@@ -59,9 +68,22 @@ function Layout() {
             <Routes>
               <Route element={<ProtectedRoute />}>
                 <Route path="/dashboard" element={<UserDashboard />} />
-                <Route path="/dashboard/event-registration" element={<RegisterForEvent />} />
-                <Route path="/dashboard/application-status" element={<ApplicationStatus />} />
-                <Route path="/dashboard/down-certificate" element={<DownCertificate />} />
+                <Route
+                  path="/dashboard/event-registration"
+                  element={<RegisterForEvent />}
+                />
+                <Route
+                  path="/dashboard/application-status"
+                  element={<ApplicationStatus />}
+                />
+                <Route
+                  path="/dashboard/down-certificate"
+                  element={<DownCertificate />}
+                />
+                <Route
+                  path="/dashboard/event-status"
+                  element={<EventStatus />}
+                />
               </Route>
             </Routes>
           </div>
@@ -99,13 +121,20 @@ function Layout() {
   );
 }
 
-// ✅ Add this App component and export it as default
 function App() {
+  const [initialLoad, setInitialLoad] = useState(true);
+
+  // 🕓 Loader shows only once on very first app load
+  useEffect(() => {
+    const timer = setTimeout(() => setInitialLoad(false), 1500);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <Router>
-      <Layout />
+      {initialLoad ? <Loader loading={true} /> : <Layout />}
     </Router>
   );
 }
 
-export default App; // ✅ Fix: This makes App available to main.jsx
+export default App;

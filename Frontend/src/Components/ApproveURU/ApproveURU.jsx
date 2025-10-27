@@ -3,6 +3,8 @@ import axios from "axios";
 import "./ApproveURU.css";
 import { API_URL } from "../../Api";
 import * as XLSX from "xlsx";
+import Swal from "sweetalert2";
+
 
 const ApproveURU = () => {
   const [urus, setUrus] = useState([]);
@@ -90,6 +92,58 @@ const ApproveURU = () => {
   const handleFilterChange = (e) => {
     setFilterStatus(e.target.value);
   };
+
+const handleGivePaidApprove = async (id) => {
+  const token = localStorage.getItem("token");
+
+  // ✅ Confirm before marking as paid
+  const confirm = await Swal.fire({
+    title: "Are you sure?",
+    text: "You’re marking this applicant as 'Paid'. This will mark their payment as successful even if no payment was made.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#27ae60",
+    cancelButtonColor: "#e74c3c",
+    confirmButtonText: "Yes, mark as Paid",
+    cancelButtonText: "Cancel",
+  });
+
+  if (!confirm.isConfirmed) return;
+
+  try {
+    const response = await axios.put(
+      `${API_URL}/uru/give-paid-approve/${id}`,
+      {},
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    // ✅ Sweet success message
+    Swal.fire({
+      icon: "success",
+      title: "Marked as Paid!",
+      text: response.data?.message || "Payment status updated successfully.",
+      confirmButtonColor: "#27ae60",
+    });
+
+    // ✅ Update local state
+    setUrus((prev) =>
+      prev.map((u) =>
+        u._id === id ? { ...u, status: "Paid", paymentStatus: "Success" } : u
+      )
+    );
+  } catch (err) {
+    console.error(err);
+
+    Swal.fire({
+      icon: "error",
+      title: "Failed to Update",
+      text: "Could not mark as Paid. Please try again later.",
+      confirmButtonColor: "#e74c3c",
+    });
+  }
+};
+
+
 
   const handleDownloadExcel = () => {
     const worksheet = XLSX.utils.json_to_sheet(filteredUrus);
@@ -236,18 +290,26 @@ const ApproveURU = () => {
                   <td className="Approve-URU-table-data">
                     {uru.paymentStatus}
                   </td>
-                  <td className="Approve-URU-table-data">
-                    {uru.priceUpdated ? (
-                      <span style={{ color: "green" }}>Price Updated</span>
-                    ) : (
-                      <button
-                        className="Approve-URU-submit-btn"
-                        onClick={() => handleSubmit(uru.applicationNumber)}
-                      >
-                        Submit
-                      </button>
-                    )}
-                  </td>
+                <td className="Approve-URU-table-data">
+                  {uru.priceUpdated ? (
+                    <span style={{ color: "green" }}>Price Updated</span>
+                  ) : (
+                    <button
+                      className="Approve-URU-submit-btn"
+                      onClick={() => handleSubmit(uru.applicationNumber)}
+                    >
+                      Submit
+                    </button>
+                  )}
+
+                  {/* ✅ New Give Paid Approve Button */}
+                  <button
+                    className="Approve-URU-paid-btn"
+                    onClick={() => handleGivePaidApprove(uru._id)}
+                  >
+                    Paid Approve
+                  </button>
+                </td>
                 </tr>
               ))}
           </tbody>

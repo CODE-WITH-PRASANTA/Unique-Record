@@ -163,14 +163,14 @@
     border-radius: 2px;
 }
 
-.read-more-btn {
+.ExpairEvent-readmore {
     font-size: 14px;
     font-weight: bold;
     color: #E94e77;
     cursor: pointer;
 }
 
-.expair-event-read-more-btn {
+.expair-event-ExpairEvent-readmore {
     display: inline-block;
     font-size: 14px;
     font-weight: 600;
@@ -179,27 +179,29 @@
     transition: color 0.3s ease-in-out;
 }
 
-.expair-event-read-more-btn:hover {
+.expair-event-ExpairEvent-readmore:hover {
     color: #e64a45;
 }
-
 .expair-event-description {
     font-size: 20px;
-    line-height: 1.6;
+    line-height: 1.8;
     color: #555;
     text-align: justify;
     margin-bottom: 15px;
     transition: all 0.3s ease-in-out;
+    word-spacing: 2px;   /* ✅ Adds space between words */
+    letter-spacing: 0.3px; /* (optional) adds slight space between letters for readability */
 }
 
-.expair-event-description .read-more-btn {
+
+.expair-event-description .ExpairEvent-readmore {
     color: #E94e77;
     font-weight: 600;
     cursor: pointer;
     transition: color 0.3s ease-in-out;
 }
 
-.expair-event-description .read-more-btn:hover {
+.expair-event-description .ExpairEvent-readmore:hover {
     color: #c92e5b;
     text-decoration: underline;
 }
@@ -246,3 +248,19 @@
   
 
 
+.ExpairEvent-readmore {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #e94e77;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.ExpairEvent-readmore:hover {
+  color: #c7385e;
+  text-decoration: underline;
+}

@@ -1373,7 +1373,6 @@ if (socialRows.length > 0) {
     res.status(500).json({ message: "Error generating application PDF" });
   }
   },
-
   sendPaymentReminder: async (req, res) => {
   try {
     // Find all users who have price updated but not yet paid
@@ -1477,6 +1476,87 @@ if (socialRows.length > 0) {
     res.status(200).json({ message: `Reminder emails sent to ${pendingPayments.length} users.` });
   } catch (error) {
     console.error(error);
+    res.status(500).json({ message: error.message });
+  }
+},
+// ✅ Give Paid Approve (Mark as Paid)
+givePaidApprove: async (req, res) => {
+  try {
+    const uru = await URU.findById(req.params.id);
+    if (!uru) {
+      return res.status(404).json({ message: "URU application not found" });
+    }
+
+    // Update as Paid
+    uru.status = "Paid";
+    uru.paymentStatus = "Success";
+    uru.paidDate = new Date();
+    await uru.save({ validateBeforeSave: false });
+
+    // Send a professional "Payment Approved" email
+    const emailId = uru.emailId;
+    const applicantName = uru.name || "Applicant";
+    const applicationNumber = uru.applicationNumber;
+
+    const mailOptions = {
+      from: '"Unique Records of Universe Admin Team" <uruonline2025@gmail.com>',
+      to: emailId,
+      subject: "💰 Payment Confirmed – Unique Records of Universe",
+      html: `
+        <div style="font-family: Arial, sans-serif; background-color:#f4f6f8; padding:0; margin:0;">
+          <table align="center" cellpadding="0" cellspacing="0" width="600"
+            style="margin:20px auto; background:#ffffff; border-radius:8px; overflow:hidden; box-shadow:0 4px 10px rgba(0,0,0,0.1);">
+
+            <!-- Header -->
+            <tr style="background:linear-gradient(90deg, #2980b9, #3498db);">
+              <td style="padding:20px; text-align:center; color:#ffffff;">
+                <h1 style="margin:0; font-size:22px;">Unique Records of Universe</h1>
+                <p style="margin:0; font-size:14px;">Payment Confirmation</p>
+              </td>
+            </tr>
+
+            <!-- Body -->
+            <tr>
+              <td style="padding:30px; color:#333333;">
+                <h2 style="color:#2980b9;">Dear ${applicantName},</h2>
+                <p style="font-size:15px; line-height:1.6;">
+                  Your payment for the Unique Records of Universe application has been <b>manually approved</b> and marked as <b>Paid</b>.
+                </p>
+                <div style="background:#f9f9f9; border-left:4px solid #2980b9; padding:15px; margin:20px 0; border-radius:4px;">
+                  <p style="margin:0; font-size:15px;">
+                    <b>📌 Application Number:</b> <span style="color:#2980b9;">${applicationNumber}</span><br/>
+                    <b>💰 Payment Status:</b> Success<br/>
+                    <b>🗓 Date:</b> ${new Date().toLocaleDateString("en-GB")}
+                  </p>
+                </div>
+                <p style="font-size:15px;">You can now access your certificate and record details on your dashboard.</p>
+                <div style="text-align:center; margin:20px 0;">
+                  <a href="https://ouruniverse.in/login" 
+                    style="background:#2980b9; color:#ffffff; padding:12px 25px; text-decoration:none; border-radius:4px; font-size:14px;">
+                    🔗 Go to Dashboard
+                  </a>
+                </div>
+              </td>
+            </tr>
+
+            <!-- Footer -->
+            <tr style="background:#ecf0f1;">
+              <td style="padding:15px; text-align:center; font-size:12px; color:#7f8c8d;">
+                <p style="margin:5px 0;">© ${new Date().getFullYear()} Unique Records of Universe</p>
+              </td>
+            </tr>
+
+          </table>
+        </div>
+      `,
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    res.status(200).json({ message: "URU marked as Paid and email sent successfully" });
+
+  } catch (error) {
+    console.error("Paid Approve Error:", error);
     res.status(500).json({ message: error.message });
   }
 },

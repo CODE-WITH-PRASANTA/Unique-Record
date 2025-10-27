@@ -5,8 +5,8 @@ import { Swiper as AgentSwiper, SwiperSlide as AgentSwiperSlide } from "swiper/r
 import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination } from "swiper/modules";
-import { API_URL } from "../../Api"; // Import API_URL
-
+import { API_URL } from "../../Api";
+import DOMPurify from "dompurify"; // ✅ Sanitize HTML safely
 
 const ExpairEventPage = () => {
   const [expiredEvents, setExpiredEvents] = useState([]);
@@ -24,61 +24,95 @@ const ExpairEventPage = () => {
     fetchExpiredEvents();
   }, []);
 
-
   const toggleReadMore = (index) => {
     setExpanded((prev) => ({ ...prev, [index]: !prev[index] }));
+  };
+
+  const renderDescription = (desc, index) => {
+    if (!desc) return "";
+
+    const sanitizedDesc = DOMPurify.sanitize(desc);
+    const plainText = sanitizedDesc.replace(/<[^>]+>/g, "");
+
+    if (expanded[index]) {
+      return (
+        <div className="expair-event-description">
+          <div dangerouslySetInnerHTML={{ __html: sanitizedDesc }} />
+          <button className="ExpairEvent-readmore" onClick={() => toggleReadMore(index)}>
+            Read Less
+          </button>
+        </div>
+      );
+    } else {
+      const truncated = plainText.length > 120 ? plainText.substring(0, 120) + "..." : plainText;
+      return (
+        <div className="expair-event-description">
+          {truncated}
+          {plainText.length > 120 && (
+            <button className="ExpairEvent-readmore" onClick={() => toggleReadMore(index)}>
+              Read More
+            </button>
+          )}
+        </div>
+      );
+    }
   };
 
   return (
     <div className="expair-event-full-sec">
       <section className="expair-event-section">
         <h5 className="expair-event-subtitle">Archives</h5>
-        <h2 className="expair-event-main-title">Previously Announced Events for which Online Appliction Date has Expired</h2>
+        <h2 className="expair-event-main-title">
+          Previously Announced Events for which Online Application Date has Expired
+        </h2>
 
-        {/* Mobile View: Swiper */}
+        {/* ✅ Mobile Swiper View */}
         <div className="expair-event-swiper-container">
-          <AgentSwiper slidesPerView={1} spaceBetween={10} pagination={{ clickable: true }} modules={[Pagination]} className="expair-event-mobile-swiper">
+          <AgentSwiper
+            slidesPerView={1}
+            spaceBetween={10}
+            pagination={{ clickable: true }}
+            modules={[Pagination]}
+            className="expair-event-mobile-swiper"
+          >
             {expiredEvents.map((event, index) => (
               <AgentSwiperSlide key={index} className="expair-event-card">
                 <div className="expair-event-thumbnail">
                   <img src={event.eventImage} alt={event.eventName} />
-                  <span className="expair-event-date-badge">{new Date(event.eventDate).toDateString()}</span>
+                  <span className="expair-event-date-badge">
+                    {new Date(event.eventDate).toDateString()}
+                  </span>
                 </div>
                 <div className="expair-event-details">
                   <p className="expair-event-author">
-                    <strong>#{index + 1}</strong> | By {event.eventOrganizer} | {event.eventLocation}
+                    <strong>#{index + 1}</strong> | By {event.eventOrganizer} |{" "}
+                    {event.eventLocation}
                   </p>
                   <h3 className="expair-event-title">{event.eventName}</h3>
-                  <p className="expair-event-description">
-                        {expanded[index] ? event.eventDescription : `${event.eventDescription.substring(0, 100)}...`}
-                        <span className="read-more-btn" onClick={() => toggleReadMore(index)}>
-                            {expanded[index] ? " Read Less" : " Read More"}
-                        </span>
-                        </p>
+                  {renderDescription(event.eventDescription, index)}
                 </div>
               </AgentSwiperSlide>
             ))}
           </AgentSwiper>
         </div>
 
-        {/* Desktop & Tablet View: Grid */}
+        {/* ✅ Desktop Grid View */}
         <div className="expair-event-grid">
           {expiredEvents.map((event, index) => (
             <article key={index} className="expair-event-card">
               <div className="expair-event-thumbnail">
                 <img src={event.eventImage} alt={event.eventName} />
-                <span className="expair-event-date-badge">{new Date(event.eventDate).toDateString()}</span>
+                <span className="expair-event-date-badge">
+                  {new Date(event.eventDate).toDateString()}
+                </span>
               </div>
               <div className="expair-event-details">
-                <p className="expair-event-author"><strong>Sl No. : {index + 1}</strong>  | By {event.eventOrganizer} | {event.eventLocation}</p>
+                <p className="expair-event-author">
+                  <strong>Sl No. : {index + 1}</strong> | By {event.eventOrganizer} |{" "}
+                  {event.eventLocation}
+                </p>
                 <h3 className="expair-event-title">{event.eventName}</h3>
-                <p className="expair-event-description">
-                        {expanded[index] ? event.eventDescription : `${event.eventDescription.substring(0, 100)}...`}
-                        <span className="read-more-btn" onClick={() => toggleReadMore(index)}>
-                            {expanded[index] ? " Read Less" : " Read More"}
-                        </span>
-                        </p>
-
+                {renderDescription(event.eventDescription, index)}
               </div>
             </article>
           ))}

@@ -167,3 +167,70 @@ span[style*="green"] {
 .send-reminder-btn:hover {
   background: linear-gradient(90deg, #e63656, #e63024);
 }
+
+/* 🌟 Main Paid Approve Button Styling */
+.Approve-URU-paid-btn {
+  background: linear-gradient(135deg, #007bff, #00c6ff);
+  color: #ffffff;
+  padding: 6px 14px;
+  margin-left: 8px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+/* 🌟 Hover Effect */
+.Approve-URU-paid-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+}
+
+/* 🌟 Active Click Effect */
+.Approve-URU-paid-btn:active {
+  transform: scale(0.98);
+}
+
+/* ✅ For Better Accessibility */
+.Approve-URU-paid-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.4);
+}
+
+/* 💎 Optional Animation for Better User Feedback */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(0, 123, 255, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 123, 255, 0);
+  }
+}
+.Approve-URU-paid-btn:hover {
+  animation: pulse 1.5s infinite;
+}
+
+/* 📱 Responsive Design */
+@media (max-width: 768px) {
+  .Approve-URU-paid-btn {
+    width: 100%;
+    margin-top: 6px;
+    margin-left: 0;
+    font-size: 13px;
+    padding: 8px 12px;
+    border-radius: 5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .Approve-URU-paid-btn {
+    font-size: 12px;
+    padding: 7px 10px;
+  }
+}

@@ -166,9 +166,9 @@ const Sidebar = () => {
                 <Link to="/dashboard/event-status" className={location.pathname === "/dashboard/event-status" ? "sidebar-active" : ""}>
                   <FaClipboardList /> Registration Status
                 </Link>
-                <Link to="/dashboard/edit-event" className={location.pathname === "/dashboard/edit-event" ? "sidebar-active" : ""}>
+                {/* <Link to="/dashboard/edit-event" className={location.pathname === "/dashboard/edit-event" ? "sidebar-active" : ""}>
                   <FaUserEdit /> Download Your Ticket
-                </Link>
+                </Link> */}
                 {/* <Link to="/download-event" className={location.pathname === "/download-event" ? "sidebar-active" : ""}>
                   <FaDownload /> Download Event Form
                 </Link> */}

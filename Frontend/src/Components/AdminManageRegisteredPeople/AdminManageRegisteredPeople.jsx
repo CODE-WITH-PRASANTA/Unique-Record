@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaBell, FaDownload } from "react-icons/fa";
+import { FaBell, FaDownload, FaTrash } from "react-icons/fa";
 import axios from "axios";
 import "./AdminManageRegisteredPeople.css";
 import { API_URL } from '../../Api';
@@ -89,6 +89,29 @@ const AdminManageRegisteredPeople = () => {
   if (loading) return <p>Loading...</p>;
   if (error) return <p className="error-message">{error}</p>;
 
+
+  const deleteApplicant = async (id, name) => {
+  if (window.confirm(`Are you sure you want to permanently delete ${name}'s record? This action cannot be undone.`)) {
+    try {
+      const response = await axios.delete(`${API_URL}/registerevent/registrations/${id}`);
+
+      if (response.status === 200) {
+        setApplicants(prev => prev.filter(app => app._id !== id));
+        setFilteredApplicants(prev => prev.filter(app => app._id !== id));
+        setNotifications(prev => [
+          ...prev,
+          `🗑️ Deleted ${name}'s registration successfully.`,
+        ]);
+      }
+    } catch (error) {
+      console.error("Error deleting applicant:", error);
+      setNotifications(prev => [
+        ...prev,
+        `❌ Failed to delete ${name}'s record.`,
+      ]);
+    }
+  }
+};
 
   const downloadExcel = () => {
     const worksheet = XLSX.utils.json_to_sheet(filteredApplicants.map((applicant, index) => ({
@@ -214,14 +237,22 @@ const AdminManageRegisteredPeople = () => {
                   {applicant.status}
                 </td>
                 <td>{new Date(applicant.date).toLocaleDateString()}</td>
-                <td>
-                  <button
-                    className="AdminManage-Registered-People-notification-btn"
-                    onClick={() => sendNotification(applicant)}
-                  >
-                    <FaBell />
-                  </button>
-                </td>
+               <td>
+                    <button
+                      className="AdminManage-Registered-People-notification-btn"
+                      onClick={() => sendNotification(applicant)}
+                    >
+                      <FaBell />
+                    </button>
+                    <button
+                      className="AdminManage-Registered-People-delete-btn"
+                      onClick={() => deleteApplicant(applicant._id, applicant.applicantName)}
+                      title="Delete Registration"
+                    >
+                      <FaTrash />
+                    </button>
+                  </td>
+
               </tr>
             ))}
           </tbody>

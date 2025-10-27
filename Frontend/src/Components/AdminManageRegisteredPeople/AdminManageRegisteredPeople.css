@@ -239,3 +239,19 @@ tr:hover {
   font-size: 14px;
   margin-bottom: 5px;
 }
+
+
+.AdminManage-Registered-People-delete-btn {
+  background-color: #e74c3c;
+  border: none;
+  color: white;
+  padding: 6px 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 8px;
+  transition: 0.3s;
+}
+
+.AdminManage-Registered-People-delete-btn:hover {
+  background-color: #c0392b;
+}

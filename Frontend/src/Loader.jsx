@@ -5,18 +5,14 @@ const Loader = ({ loading }) => {
   const [showLoader, setShowLoader] = useState(false);
 
   useEffect(() => {
-    let timer;
     if (loading) {
       setShowLoader(true);
       window.scrollTo({ top: 0, behavior: "smooth" });
       document.body.style.overflow = "hidden";
     } else {
-      timer = setTimeout(() => {
-        setShowLoader(false);
-        document.body.style.overflow = "auto";
-      }, 800); // slightly longer for smoothness
+      setShowLoader(false);
+      document.body.style.overflow = "auto";
     }
-    return () => clearTimeout(timer);
   }, [loading]);
 
   return (
@@ -37,7 +33,7 @@ const Loader = ({ loading }) => {
         zIndex: 9999,
         opacity: showLoader ? 1 : 0,
         visibility: showLoader ? "visible" : "hidden",
-        transition: "opacity 1s ease, visibility 1s ease",
+        transition: "opacity 0.5s ease, visibility 0.5s ease",
         animation: showLoader ? "gradientShift 6s ease infinite" : "none",
       }}
     >

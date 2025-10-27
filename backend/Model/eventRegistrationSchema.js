@@ -1,13 +1,11 @@
 const mongoose = require("mongoose");
 
 const eventRegistrationSchema = new mongoose.Schema({
+  userId: { type: String, required: true }, // Unique ID from User
   eventName: { type: String, required: true },
   applicantName: { type: String, required: true },
   sex: { type: String, required: true },
-  dateOfBirth: {
-    type: Date,
-    required: false, // Allow null values
-},
+  dateOfBirth: { type: Date, required: false },
   phone: { type: String, required: true },
   pinCode: { type: String, required: true },
   district: { type: String, required: true },
@@ -23,7 +21,8 @@ const eventRegistrationSchema = new mongoose.Schema({
   amount: { type: Number, required: true },
   currency: { type: String, default: "INR" },
   method: { type: String, required: true },
-  status: { type: String, default: "PENDING" },
+  status: { type: String, default: "PENDING" }, // PENDING, COMPLETED, FAILED
+  applicationNumber: { type: String, required: true, unique: true },
   date: { type: Date, default: Date.now },
 });
 

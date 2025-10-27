@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { registerForEvent, getAllRegistrations, getRegistrationById , sendRegistrationEmail } = require("../Controllers/registerForEventController");
+const { registerForEvent, getAllRegistrations, getRegistrationById , sendRegistrationEmail , trackEventStatus , deleteRegistration } = require("../Controllers/registerForEventController");
 
 // Route to register for an event
 router.post("/register", registerForEvent);
@@ -12,6 +12,14 @@ router.get("/registrations", getAllRegistrations);
 router.get("/registrations/:id", getRegistrationById);
 
 router.post("/registrations/:id/send-email", sendRegistrationEmail);
+
+
+// Track event status by application number (public)
+router.get("/track/:applicationNumber", trackEventStatus);
+
+// Route to delete a registration completely (Admin only)
+router.delete("/registrations/:id", deleteRegistration);
+
 
 
 module.exports = router;
