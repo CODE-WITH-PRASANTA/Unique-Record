@@ -1,21 +1,46 @@
 import React, { useState } from "react";
 import { FaCheckCircle } from "react-icons/fa";
+import Swal from "sweetalert2"; // ✅ Import SweetAlert2
 import "./EventStatus.css";
-import { API_URL } from "../../Api"; // e.g., "http://localhost:5000/api"
+import { API_URL } from "../../Api";
 
 const EventStatus = () => {
   const [trackNumber, setTrackNumber] = useState("");
-  const [trackedEvent, setTrackedEvent] = useState(null); // Event found
+  const [trackedEvent, setTrackedEvent] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   const handleTrack = async () => {
     if (!trackNumber) return;
+
     setLoading(true);
     setError("");
     setTrackedEvent(null);
 
+    // ✅ Show SweetAlert2 Timer Popup
+    let timerInterval;
+    Swal.fire({
+      title: "Tracking your event...",
+      html: "Please wait <b></b> milliseconds.",
+      timer: 2000,
+      timerProgressBar: true,
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+        const timer = Swal.getPopup().querySelector("b");
+        timerInterval = setInterval(() => {
+          timer.textContent = `${Swal.getTimerLeft()}`;
+        }, 100);
+      },
+      willClose: () => {
+        clearInterval(timerInterval);
+      },
+    });
+
     try {
+      // Wait for timer before fetching (optional)
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
       const response = await fetch(`${API_URL}/registerevent/track/${trackNumber}`);
       if (!response.ok) {
         if (response.status === 404) {
@@ -37,9 +62,12 @@ const EventStatus = () => {
         createdAt: data.date,
         status: data.status,
       });
+
+      Swal.close(); // ✅ Close popup after success
       setLoading(false);
     } catch (err) {
       console.error(err);
+      Swal.close();
       setError("Unable to fetch data. Check your connection.");
       setLoading(false);
     }
@@ -47,7 +75,6 @@ const EventStatus = () => {
 
   return (
     <div className="EventStatus-wrapper">
-      {/* Track Application Box */}
       {!trackedEvent && (
         <div className="EventStatus-trackBox">
           <h2>Track Your Event Application</h2>
@@ -67,7 +94,6 @@ const EventStatus = () => {
         </div>
       )}
 
-      {/* Event Details */}
       {trackedEvent && (
         <div className="EventStatus-card">
           <div className="EventStatus-header">
@@ -115,9 +141,7 @@ const EventStatus = () => {
 
             <div className="EventStatus-info-item">
               <span className="EventStatus-label">Event Verification:</span>
-              <span className="EventStatus-badge success">
-                Approved & Confirmed
-              </span>
+              <span className="EventStatus-badge success">Approved & Confirmed</span>
             </div>
           </div>
 
