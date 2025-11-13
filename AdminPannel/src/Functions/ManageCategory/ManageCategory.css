@@ -1,0 +1,252 @@
+/* 🌟 Container */
+.ManageCategory-container {
+  background: #f7faff;
+  min-height: 100vh;
+  font-family: "Poppins", sans-serif;
+}
+
+/* 🌟 Heading */
+.ManageCategory-heading {
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: #1c3faa;
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+/* 🌟 Content Layout (two columns) */
+.ManageCategory-content {
+  display: flex;
+  justify-content: space-between;
+  gap: 28px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+/* 🌟 Left - Form Section */
+.ManageCategory-formSection {
+  flex: 0 1 320px;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 6px 18px rgba(28, 63, 170, 0.06);
+}
+
+.ManageCategory-subHeading {
+  font-size: 1.15rem;
+  color: #1c3faa;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.ManageCategory-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ManageCategory-label {
+  font-weight: 600;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.ManageCategory-input {
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #e6eefc;
+  font-size: 1rem;
+  outline: none;
+  transition: box-shadow .18s ease, border-color .18s ease;
+}
+
+.ManageCategory-input:focus {
+  box-shadow: 0 4px 14px rgba(28, 63, 170, 0.08);
+  border-color: #1c3faa;
+}
+
+/* form buttons row */
+.ManageCategory-formButtons {
+  display: flex;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.ManageCategory-submitBtn {
+  background: linear-gradient(135deg, #1c3faa, #234bdc);
+  color: #fff;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+
+.ManageCategory-submitBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(35, 75, 220, 0.12);
+}
+
+.ManageCategory-clearBtn {
+  background: transparent;
+  border: 1px solid #d9e4ff;
+  color: #1c3faa;
+  padding: 10px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+/* 🌟 Right - Table Section (scrollable after height) */
+.ManageCategory-tableSection {
+  flex: 1 1 620px;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: 0 6px 18px rgba(28, 63, 170, 0.06);
+}
+
+/* make table area scrollable while keeping header visible */
+.ManageCategory-tableWrapper {
+  margin-top: 8px;
+  max-height: 420px; /* adjust height (10-15 items) */
+  overflow-y: auto;
+  border-radius: 8px;
+  border: 1px solid #f0f4ff;
+}
+
+/* thin custom scrollbar (webkit) */
+.ManageCategory-tableWrapper::-webkit-scrollbar {
+  width: 9px;
+}
+.ManageCategory-tableWrapper::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #dfe9ff, #bcd1ff);
+  border-radius: 8px;
+}
+.ManageCategory-tableWrapper::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* table */
+.ManageCategory-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 540px;
+}
+
+.ManageCategory-table th {
+  position: sticky;
+  top: 0;
+  background: linear-gradient(90deg, #1c3faa, #2a55d6);
+  color: #fff;
+  padding: 12px 14px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 0.95rem;
+  z-index: 2;
+}
+
+.ManageCategory-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid #f4f8ff;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 0.97rem;
+  color: #333;
+}
+
+.ManageCategory-table tr:nth-child(even) td {
+  background: #fbfdff;
+}
+
+/* name cell and edit input */
+.ManageCategory-nameCell {
+  text-align: left;
+  padding-left: 18px;
+}
+.ManageCategory-nameText {
+  display: inline-block;
+  font-weight: 600;
+  color: #0b2447;
+}
+.ManageCategory-editInput {
+  width: 100%;
+  max-width: 360px;
+  padding: 8px 10px;
+  border: 1px solid #e6eefc;
+  border-radius: 8px;
+  font-size: 0.98rem;
+}
+
+/* 🌟 Actions (icons/buttons) */
+.ManageCategory-actions {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  align-items: center;
+}
+
+.ManageCategory-actionBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  transition: transform .14s ease, box-shadow .14s ease;
+  background: transparent;
+}
+
+.ManageCategory-actionBtn.edit {
+  color: #ffb703;
+}
+.ManageCategory-actionBtn.publish {
+  color: #0f9d58;
+}
+.ManageCategory-actionBtn.delete {
+  color: #e63946;
+}
+.ManageCategory-actionBtn.save {
+  color: #0f9d58;
+}
+.ManageCategory-actionBtn.cancel {
+  color: #6e6e6e;
+}
+
+.ManageCategory-actionBtn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.06);
+}
+
+/* empty row */
+.ManageCategory-empty {
+  padding: 28px;
+  color: #6b7280;
+  font-style: italic;
+  text-align: center;
+}
+
+
+/* 📱 Simple Mobile Optimization */
+@media (max-width: 600px) {
+  .ManageCategory-content {
+    flex-direction: column;
+    gap: 20px !important;
+  }
+
+  .ManageCategory-formSection,
+  .ManageCategory-tableSection {
+    width: 100% !important;
+  }
+
+  .ManageCategory-tableWrapper {
+    overflow-x: auto;
+  }
+
+  .ManageCategory-table {
+    min-width: 500px;
+  }
+}

@@ -1,0 +1,252 @@
+.AddEventSystem-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  padding: 20px;
+  background: linear-gradient(120deg, #f0f9ff, #ffffff);
+  min-height: 90vh;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+/* 🧭 Left section scroll fix */
+.AddEventSystem-left {
+    flex: 1;
+  min-width: 440px;
+  max-height: 85vh;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+/* Optional: smooth scrollbar for Chrome, Edge, Safari */
+.AddEventSystem-left::-webkit-scrollbar {
+  width: 8px;
+}
+
+.AddEventSystem-left::-webkit-scrollbar-track {
+  background: #f0f9ff;
+}
+ 
+.AddEventSystem-heading {
+  color: #1a237e;
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.AddEventSystem-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.AddEventSystem-row {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.AddEventSystem-input,
+.AddEventSystem-select,
+.AddEventSystem-textarea {
+  width: 100%;
+  padding: 12px 15px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+  background-color: #f9f9f9;
+  transition: all 0.3s ease;
+}
+
+.AddEventSystem-input-file {
+  padding: 10px;
+  border: 1px dashed #2196f3;
+  border-radius: 10px;
+  background: #f0f9ff;
+  cursor: pointer;
+}
+
+.AddEventSystem-input:focus,
+.AddEventSystem-select:focus,
+.AddEventSystem-textarea:focus {
+  border-color: #2196f3;
+  background: #ffffff;
+  box-shadow: 0 0 8px rgba(33, 150, 243, 0.2);
+  outline: none;
+}
+
+.AddEventSystem-textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.AddEventSystem-btn {
+  padding: 14px;
+  background: linear-gradient(45deg, #2196f3, #21cbf3);
+  border: none;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.AddEventSystem-btn:hover {
+  background: linear-gradient(45deg, #1976d2, #0dcaf0);
+  transform: scale(1.03);
+}
+
+/* Right Section */
+.AddEventSystem-right {
+  flex: 1;
+  min-width: 340px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  overflow-x: auto;
+}
+
+.AddEventSystem-tableWrapper {
+  overflow-x: auto;
+}
+
+.AddEventSystem-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 700px;
+}
+
+.AddEventSystem-table th,
+.AddEventSystem-table td {
+  border: 1px solid #ddd;
+  padding: 10px 12px;
+  text-align: center;
+  font-size: 15px;
+}
+
+.AddEventSystem-table th {
+  background-color: #2196f3;
+  color: white;
+  text-transform: uppercase;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-weight: 500;
+  color: white;
+}
+
+.status-badge.ongoing {
+  background: #4caf50;
+}
+
+.status-badge.closed {
+  background: #f44336;
+}
+
+.AddEventSystem-actions button {
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  margin: 0 5px;
+  transition: transform 0.2s ease;
+}
+
+.AddEventSystem-actions button:hover {
+  transform: scale(1.2);
+}
+
+.AddEventSystem-empty {
+  text-align: center;
+  padding: 15px;
+  color: #888;
+  font-style: italic;
+}
+
+/* 📱 Responsive Design */
+@media (max-width: 1024px) {
+  .AddEventSystem-container {
+    flex-direction: column;
+    padding: 0px;
+  }
+
+  .AddEventSystem-left,
+  .AddEventSystem-right {
+    padding: 25px;
+  }
+
+  .AddEventSystem-heading {
+    font-size: 22px;
+  }
+
+  .AddEventSystem-input,
+  .AddEventSystem-select,
+  .AddEventSystem-textarea {
+    font-size: 16px;
+    padding: 14px;
+  }
+
+  .AddEventSystem-btn {
+    font-size: 17px;
+    padding: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .AddEventSystem-row {
+    flex-direction: column;
+  }
+
+  .AddEventSystem-left,
+  .AddEventSystem-right {
+    width: 100%;
+    padding: 20px;
+  }
+
+  .AddEventSystem-input,
+  .AddEventSystem-select,
+  .AddEventSystem-textarea {
+    font-size: 16px;
+    padding: 14px;
+  }
+
+  .AddEventSystem-btn {
+    font-size: 17px;
+    padding: 16px;
+  }
+
+  .AddEventSystem-table th,
+  .AddEventSystem-table td {
+    font-size: 14px;
+    padding: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .AddEventSystem-heading {
+    font-size: 20px;
+  }
+
+  .AddEventSystem-input,
+  .AddEventSystem-select,
+  .AddEventSystem-textarea {
+    font-size: 15px;
+    padding: 13px;
+  }
+
+  .AddEventSystem-btn {
+    width: 100%;
+    font-size: 16px;
+    padding: 14px;
+  }
+
+  .AddEventSystem-actions button {
+    font-size: 24px;
+  }
+}

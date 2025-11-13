@@ -1,0 +1,282 @@
+.PostingNotice-container {
+  display: flex;
+  flex-direction: column;
+  padding: 25px;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.PostingNotice-title {
+  text-align: center;
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 30px;
+  color: #1e1e2f;
+  letter-spacing: 1px;
+}
+
+.PostingNotice-main {
+  display: flex;
+  gap: 35px;
+}
+
+.PostingNotice-left, .PostingNotice-right {
+  flex: 1;
+  background: #f9f9fb;
+  padding: 25px;
+  border-radius: 12px;
+  overflow: auto;
+}
+
+.PostingNotice-left {
+  max-height: 85vh;
+}
+
+.PostingNotice-form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 18px;
+}
+
+.PostingNotice-form-group label {
+  font-weight: 600;
+  margin-bottom: 8px;
+  font-size: 1rem;
+  color: #444;
+}
+
+.PostingNotice-form-group input,
+.PostingNotice-form-group textarea,
+.PostingNotice-form-group select {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 1rem;
+  outline: none;
+}
+
+.PostingNotice-title-input {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.PostingNotice-form-group input:focus,
+.PostingNotice-form-group textarea:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 5px rgba(79,70,229,0.2);
+}
+.PostingNotice-submit-btn {
+  background: linear-gradient(90deg, #6a11cb, #2575fc); /* Gradient purple to blue */
+  color: #fff;
+  border: none;
+  padding: 14px 22px;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+
+.PostingNotice-submit-btn:hover {
+  background: linear-gradient(90deg, #2575fc, #6a11cb); /* Reverse gradient on hover */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.PostingNotice-submit-btn:active {
+  transform: translateY(0px) scale(0.98);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+
+.PostingNotice-img-preview {
+  width: 140px;
+  height: 90px;
+  margin-top: 8px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.PostingNotice-table-wrapper {
+  overflow-x: auto;
+}
+
+.PostingNotice-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  min-width: 750px;
+}
+
+.PostingNotice-table th,
+.PostingNotice-table td {
+  padding: 12px;
+  text-align: center;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.PostingNotice-table th {
+  background: #eef2ff;
+  color: #3730a3;
+  font-weight: 600;
+}
+
+.PostingNotice-table-img {
+  width: 55px;
+  height: 55px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.PostingNotice-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.PostingNotice-action-btn {
+  cursor: pointer;
+  font-size: 1.1rem;
+  background: transparent;
+  border: none;
+  transition: 0.2s;
+  color: #333;
+}
+
+.PostingNotice-action-btn:hover {
+  transform: scale(1.2);
+}
+
+.PostingNotice-empty {
+  text-align: center;
+  color: #888;
+  padding: 15px;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+
+/* Responsive for tablets and small screens */
+@media (max-width: 1200px) {
+  .PostingNotice-main {
+    flex-direction: column;
+    gap: 25px;
+  }
+
+  .PostingNotice-left,
+  .PostingNotice-right {
+    padding: 0px;
+  }
+
+  .PostingNotice-title {
+    font-size: 2rem;
+  }
+
+  .PostingNotice-form-group input,
+  .PostingNotice-form-group textarea {
+    font-size: 1rem;
+    padding: 12px;
+  }
+
+  .PostingNotice-submit-btn {
+    font-size: 1rem;
+    padding: 12px 16px;
+  }
+
+  .PostingNotice-table th,
+  .PostingNotice-table td {
+    padding: 10px;
+  }
+
+  .PostingNotice-table-img {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+/* Responsive for mobile devices */
+@media (max-width: 768px) {
+  .PostingNotice-container {
+    padding: 15px;
+  }
+
+  .PostingNotice-title {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+  }
+
+  .PostingNotice-form-group input,
+  .PostingNotice-form-group textarea {
+    font-size: 1rem;
+    padding: 10px;
+  }
+
+  .PostingNotice-submit-btn {
+    font-size: 1rem;
+    padding: 12px;
+  }
+
+  .PostingNotice-table {
+    min-width: 100%;
+  }
+
+  .PostingNotice-table th,
+  .PostingNotice-table td {
+    padding: 8px;
+    font-size: 0.95rem;
+  }
+
+  .PostingNotice-table-img {
+    width: 45px;
+    height: 45px;
+  }
+
+  .PostingNotice-actions {
+    gap: 6px;
+  }
+}
+
+/* Responsive for very small mobile devices */
+@media (max-width: 480px) {
+  .PostingNotice-title {
+    font-size: 1.6rem;
+  }
+
+  .PostingNotice-form-group input,
+  .PostingNotice-form-group textarea {
+    font-size: 0.95rem;
+    padding: 8px;
+  }
+
+  .PostingNotice-submit-btn {
+    font-size: 0.95rem;
+    padding: 10px;
+  }
+
+  .PostingNotice-table th,
+  .PostingNotice-table td {
+    padding: 6px;
+    font-size: 0.9rem;
+  }
+
+  .PostingNotice-table-img {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* Centered popup for normal alerts */
+.swal-center-popup {
+  top: 20% !important; /* Move down from top if needed */
+}
+
+/* Top-center for toast notifications */
+.swal-top-center-toast {
+  top: 80px !important; /* adjust based on your navbar height */
+  right: 50% !important;
+  transform: translateX(50%) !important;
+}

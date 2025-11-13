@@ -1,0 +1,284 @@
+/* 🌟 Main Wrapper */
+.ManageTeamMember-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  padding: 0px;
+  background: #f3f6fc;
+  font-family: "Poppins", sans-serif;
+}
+
+/* 🌟 Section Container */
+.ManageTeamMember-section {
+  flex: 1;
+  min-width: 400px;
+  background: #fff;
+  border-radius: 14px;
+  padding: 28px 30px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.ManageTeamMember-section:hover {
+  transform: translateY(-4px);
+}
+
+/* 🌟 Headings */
+.ManageTeamMember-title {
+  font-size: 1.7rem;
+  font-weight: 600;
+  color: #0b2447;
+  margin-bottom: 22px;
+  border-left: 5px solid #1c8ef9;
+  padding-left: 10px;
+}
+
+.ManageTeamMember-subtitle {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #1c8ef9;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+/* 🌟 Form Styles */
+.ManageTeamMember-formBox {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.ManageTeamMember-uploadBox {
+  display: flex;
+  flex-direction: column;
+}
+
+.ManageTeamMember-label {
+  font-weight: 500;
+  color: #222;
+}
+
+.ManageTeamMember-uploadBox input {
+  margin-top: 10px;
+  border: 1px solid #d1d7e0;
+  padding: 10px;
+  border-radius: 8px;
+  background: #fafbff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.ManageTeamMember-uploadBox input:hover {
+  border-color: #1c8ef9;
+}
+
+.ManageTeamMember-uploadIcon {
+  color: #1c8ef9;
+  margin-right: 6px;
+  font-size: 1.2rem;
+  vertical-align: middle;
+}
+
+/* 🌟 Input Rows */
+.ManageTeamMember-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.ManageTeamMember-inputGroup {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.ManageTeamMember-inputGroup label {
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 6px;
+}
+
+.ManageTeamMember-inputGroup input {
+  padding: 11px 13px;
+  border-radius: 8px;
+  border: 1px solid #d3d8e4;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  background: #fdfdfd;
+}
+
+.ManageTeamMember-inputGroup input:focus {
+  border-color: #1c8ef9;
+  box-shadow: 0 0 5px rgba(28, 142, 249, 0.3);
+  outline: none;
+}
+
+/* 🌟 Add Button */
+.ManageTeamMember-btnAdd {
+  background: linear-gradient(135deg, #1c8ef9, #0d6efd);
+  color: #fff;
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  padding: 13px;
+  border-radius: 10px;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  margin-top: 10px;
+  transition: all 0.3s ease;
+}
+
+.ManageTeamMember-btnAdd:hover {
+  background: linear-gradient(135deg, #0d6efd, #1c8ef9);
+  transform: scale(1.03);
+}
+
+/* 🌟 Table Section */
+.ManageTeamMember-tableContainer {
+  overflow-x: auto;
+  border-radius: 12px;
+  border: 1px solid #e3e8f0;
+  scrollbar-width: thin;
+}
+
+.ManageTeamMember-table {
+  width: 100%;
+  min-width: 980px;
+  border-collapse: collapse;
+  background: #fff;
+}
+
+.ManageTeamMember-table th {
+  background: #eef5ff;
+  color: #0b2447;
+  font-weight: 600;
+  padding: 14px 16px;
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+.ManageTeamMember-table td {
+  padding: 12px 14px;
+  text-align: center;
+  border-bottom: 1px solid #ececec;
+  font-size: 0.93rem;
+}
+
+.ManageTeamMember-table tr:nth-child(even) {
+  background: #f9fbff;
+}
+
+/* 🌟 Avatar Style */
+.ManageTeamMember-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #1c8ef9;
+  box-shadow: 0 0 6px rgba(28, 142, 249, 0.2);
+}
+/* 🌟 Social Media Icons */
+.ManageTeamMember-socialIcons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px; /* Space between icons */
+}
+
+.ManageTeamMember-socialIcons a {
+  color: #1c8ef9;
+  font-size: 1.1rem;
+  transition: color 0.3s, transform 0.3s;
+}
+
+.ManageTeamMember-socialIcons a:hover {
+  color: #0d6efd;
+  transform: scale(1.2);
+}
+
+/* 🌟 Action Icons */
+.ManageTeamMember-icon {
+  cursor: pointer;
+  font-size: 18px;
+  margin: 0 7px;
+  transition: transform 0.3s, color 0.3s;
+}
+
+.ManageTeamMember-icon.edit {
+  color: #1c8ef9;
+}
+
+.ManageTeamMember-icon.delete {
+  color: #e94e77;
+}
+
+.ManageTeamMember-icon.save {
+  color: #22c55e;
+}
+
+.ManageTeamMember-icon.cancel {
+  color: #ffb020;
+}
+
+.ManageTeamMember-icon:hover {
+  transform: scale(1.25);
+}
+
+/* 🌟 Empty Message */
+.ManageTeamMember-emptyMsg {
+  text-align: center;
+  color: #777;
+  font-style: italic;
+  padding: 25px;
+}
+
+/* 🌟 Responsive Design */
+@media (max-width: 1200px) {
+  .ManageTeamMember-wrapper {
+    flex-direction: column;
+    gap: 25px;
+  }
+
+  .ManageTeamMember-section {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .ManageTeamMember-row {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .ManageTeamMember-btnAdd {
+    width: 100%;
+  }
+
+  .ManageTeamMember-tableContainer {
+    overflow-x: auto;
+  }
+
+  .ManageTeamMember-title {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 500px) {
+  .ManageTeamMember-section {
+    padding: 20px;
+  }
+
+  .ManageTeamMember-inputGroup input {
+    width: 100%;
+  }
+
+  .ManageTeamMember-table th,
+  .ManageTeamMember-table td {
+    padding: 10px 8px;
+  }
+
+  .ManageTeamMember-avatar {
+    width: 40px;
+    height: 40px;
+  }
+}

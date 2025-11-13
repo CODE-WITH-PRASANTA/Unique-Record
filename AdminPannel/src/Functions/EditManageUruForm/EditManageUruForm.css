@@ -1,0 +1,411 @@
+/* ============ General Layout ============ */
+.EditManageUru-root {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px 20px;
+  background: #f7f8fa;
+  min-height: 100vh;
+}
+
+.EditManageUru-card {
+  width: 100%;
+  max-width: 1100px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  padding: 30px 40px;
+  transition: all 0.3s ease;
+
+  /* ✅ Scroll system */
+  max-height: 70vh; /* Adjust height as per layout */
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  /* Optional smooth scrolling */
+  scroll-behavior: smooth;
+}
+
+/* ✅ Optional: Customize scrollbar for better UI */
+.EditManageUru-card::-webkit-scrollbar {
+  width: 8px;
+}
+
+.EditManageUru-card::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 8px;
+}
+
+.EditManageUru-card::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
+
+
+/* ============ Header & Steps ============ */
+.EditManageUru-header {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  border-bottom: 1px solid #e2e6ea;
+  padding-bottom: 20px;
+  margin-bottom: 30px;
+}
+
+.EditManageUru-title {
+  font-size: 1.8rem;
+  color: #2a2f3b;
+  font-weight: 700;
+  text-align: center;
+}
+
+.EditManageUru-steps {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 6px 0;
+}
+
+.EditManageUru-step {
+  flex: 1;
+  min-width: 110px;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+  padding: 8px 6px;
+  border-radius: 10px;
+  transition: 0.3s;
+  background: #f3f3f3;
+}
+
+.EditManageUru-step.active {
+  background: #e94e77;
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(233, 78, 119, 0.3);
+}
+
+.EditManageUru-step.done {
+  background: #a7e0ba;
+  color: #1f5132;
+}
+
+.EditManageUru-stepNumber {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.EditManageUru-stepLabel {
+  display: block;
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+/* ============ Section Styling ============ */
+.EditManageUru-stepSection {
+  margin-bottom: 40px;
+}
+
+.EditManageUru-sectionTitle {
+  font-size: 1.4rem;
+  color: #e94e77;
+  margin-bottom: 25px;
+  border-left: 5px solid #e94e77;
+  padding-left: 10px;
+  font-weight: 600;
+}
+
+/* ============ Form Layouts ============ */
+.EditManageUru-grid2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 20px;
+}
+
+.EditManageUru-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.EditManageUru-label {
+  font-size: 0.9rem;
+  color: #444;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.EditManageUru-field input,
+.EditManageUru-field select,
+.EditManageUru-field textarea {
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 0.95rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  background: #fafafa;
+}
+
+.EditManageUru-field input:focus,
+.EditManageUru-field select:focus,
+.EditManageUru-field textarea:focus {
+  border-color: #e94e77;
+  box-shadow: 0 0 6px rgba(233, 78, 119, 0.3);
+  background: #fff;
+  outline: none;
+}
+
+.EditManageUru-field.full {
+  grid-column: 1 / -1;
+}
+
+/* ============ Checkbox & Hint ============ */
+.EditManageUru-checkboxGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: center;
+}
+
+.EditManageUru-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.EditManageUru-checkbox input {
+  transform: scale(1.2);
+}
+
+.EditManageUru-hint {
+  font-size: 0.85rem;
+  color: #666;
+  margin-top: 10px;
+}
+
+/* ============ Social Links ============ */
+.EditManageUru-platform {
+  margin-bottom: 25px;
+  background: #f9f9fb;
+  border: 1px solid #ececec;
+  border-radius: 12px;
+  padding: 15px 20px;
+}
+
+.EditManageUru-platformHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.EditManageUru-addBtn {
+  background: #e94e77;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 5px 12px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.EditManageUru-addBtn:hover {
+  background: #d93c69;
+}
+
+.EditManageUru-linkRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.EditManageUru-linkRow input {
+  flex: 1;
+  padding: 8px 10px;
+  border-radius: 8px;
+}
+
+.EditManageUru-removeBtn {
+  background: #ff6767;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.EditManageUru-removeBtn:hover {
+  background: #e24a4a;
+}
+
+/* ============ Witness ============ */
+.EditManageUru-fieldset {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 15px 20px;
+  background: #fefefe;
+}
+
+.EditManageUru-fieldset legend {
+  color: #e94e77;
+  font-weight: 600;
+  padding: 0 6px;
+}
+
+/* ============ Payment ============ */
+.EditManageUru-previewBlock {
+  background: #1f1f1f;
+  color: #dcdcdc;
+  font-size: 0.85rem;
+  border-radius: 10px;
+  padding: 15px;
+  overflow-x: auto;
+}
+
+/* ============ Buttons ============ */
+.EditManageUru-submitRow {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.EditManageUru-btn {
+  padding: 10px 20px;
+  font-size: 0.95rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.EditManageUru-primary {
+  background: #e94e77;
+  color: #fff;
+}
+
+.EditManageUru-primary:hover {
+  background: #d13e68;
+}
+
+.EditManageUru-cancel {
+  background: #ccc;
+  color: #222;
+}
+
+.EditManageUru-cancel:hover {
+  background: #bbb;
+}
+
+/* ============ Navigation Buttons ============ */
+.EditManageUru-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.EditManageUru-navBtn {
+  background: #e94e77;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 20px;
+  font-size: 0.9rem;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.EditManageUru-navBtn:hover {
+  background: #d13e68;
+}
+
+.EditManageUru-navBtn:disabled {
+  background: #e0e0e0;
+  color: #888;
+  cursor: not-allowed;
+}
+
+
+
+/* ============ Responsive Design ============ */
+
+/* 📱 For tablets and medium screens */
+@media (max-width: 1024px) {
+  .EditManageUru-root {
+    padding: 30px 15px;
+  }
+
+  .EditManageUru-card {
+    padding: 25px 30px;
+    max-height: 75vh;
+  }
+
+  .EditManageUru-steps {
+    gap: 8px;
+  }
+
+  .EditManageUru-sectionTitle {
+    font-size: 1.3rem;
+  }
+}
+
+/* 📱 For mobile devices (portrait) */
+@media (max-width: 768px) {
+  .EditManageUru-root {
+    padding: 25px 10px;
+  }
+
+  .EditManageUru-card {
+    padding: 20px;
+    border-radius: 12px;
+    max-height: 80vh;
+  }
+
+  .EditManageUru-title {
+    font-size: 1.5rem;
+  }
+
+  .EditManageUru-steps {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none; /* Hide default scrollbar in Firefox */
+  }
+
+  .EditManageUru-steps::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for mobile */
+  }
+
+  .EditManageUru-nav {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .EditManageUru-submitRow {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+/* 📱 For very small screens (≤ 480px) */
+@media (max-width: 480px) {
+  .EditManageUru-card {
+    padding: 16px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+  }
+
+  .EditManageUru-sectionTitle {
+    font-size: 1.2rem;
+  }
+
+  .EditManageUru-steps {
+    gap: 6px;
+  }
+
+  .EditManageUru-btn,
+  .EditManageUru-navBtn {
+    width: 100%;
+  }
+}

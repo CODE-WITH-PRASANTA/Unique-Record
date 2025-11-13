@@ -98,7 +98,7 @@
 
 /* Sub Title */
 .sub-title {
-  font-size: clamp(1.1rem, 2.2vw, 1.8rem);
+  font-size: clamp(2.1rem, 2.2vw, 1.8rem);
   color: #e8c177;
   margin-bottom: 1rem;
   font-weight: 800;
@@ -112,7 +112,7 @@
 
 /* Main Title */
 .main-title {
-  font-size: clamp(2rem, 4vw, 3rem);
+  font-size: clamp(2rem, 4vw, 1rem);
   font-weight: 800;
   margin-bottom: 2rem;
   line-height: 1.2;
@@ -132,7 +132,7 @@
 
 .banner-buttons {
   display: flex;
-  gap: 1.2rem;
+  gap: 1.2rem; 
   flex-wrap: wrap;
 }
 
@@ -154,10 +154,29 @@
   letter-spacing: 0.5px;
   cursor: pointer;
 }
+.banner-buttons {
+  display: flex;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+}
 
+/* Base button styles */
+.btn {
+  position: relative;
+  display: inline-block;
+  font-weight: 600;
+  border-radius: 8px;
+  text-decoration: none;
+  padding: 0.8rem 1.8rem;
+  transition: all 0.3s ease;
+}
+
+/* Apply Now button */
 .btn-primary {
   background: linear-gradient(135deg, #b9936c, #8b6c42);
   color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: 700; /* bolder */
 }
 
 .btn-primary:hover {
@@ -167,10 +186,13 @@
   box-shadow: 0 12px 25px rgba(0, 0, 0, 0.6);
 }
 
+/* See The Records button */
 .btn-secondary {
   background: transparent;
   color: #b9936c;
   border: 2px solid #b9936c;
+  font-size: 1rem;
+  font-weight: 600;
 }
 
 .btn-secondary:hover {
@@ -180,6 +202,7 @@
   box-shadow: 0 12px 25px rgba(0, 0, 0, 0.6);
 }
 
+/* Hover ripple effect */
 .btn::before {
   content: '';
   position: absolute;
@@ -199,6 +222,21 @@
   height: 200%;
   opacity: 0.1;
 }
+
+/* Responsive styling */
+@media (max-width: 768px) {
+  .btn-primary {
+    font-size: 1.2rem; /* Slightly larger on mobile */
+    padding: 1rem 2rem;
+  }
+
+  .btn-secondary {
+    font-size: 0.9rem; /* Slightly smaller on mobile */
+    padding: 0.7rem 1.4rem;
+    font-weight: 700; /* Keep bold look */
+  }
+}
+
 
 /* ======================= IMAGE & ANIMATIONS ======================= */
 .banner-image {
@@ -252,12 +290,15 @@
 
 .banner-content,
 .sub-title,
-.main-title,
+
 .description,
 .banner-buttons {
   animation: slideInFromLeft 2.5s ease-out forwards;
 }
 
+.main-title{
+  font-size: 1.5rem;
+}
 /* ======================= MEDIA QUERIES FOR IMAGE RESPONSIVENESS ======================= */
 @media (max-width: 1200px) {
   .banner-image img {

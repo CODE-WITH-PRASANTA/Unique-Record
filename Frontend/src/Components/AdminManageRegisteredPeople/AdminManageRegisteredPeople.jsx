@@ -124,6 +124,7 @@ const AdminManageRegisteredPeople = () => {
       "Pincode": applicant.pinCode,
       "District": applicant.district,
       "State": applicant.state,
+      "Country": applicant.country,
       "Email": applicant.email,
       "Website": applicant.website || "N/A",
       "Education": applicant.education,
@@ -180,6 +181,7 @@ const AdminManageRegisteredPeople = () => {
               <th>Pincode</th>
               <th>District</th>
               <th>State</th>
+              <th>Country</th>
               <th>Email</th>
               <th>Website</th>
               <th>Education</th>
@@ -207,6 +209,7 @@ const AdminManageRegisteredPeople = () => {
                 <td>{applicant.pinCode}</td>
                 <td>{applicant.district}</td>
                 <td>{applicant.state}</td>
+                <td>{applicant.country}</td>
                 <td>{applicant.email}</td>
                 <td>
                   {applicant.website ? (
