@@ -1,0 +1,188 @@
+/* FinalUru.css - all classes prefixed finaluru- */
+
+/* Variables */
+:root{
+  --bg: #f6f8fb;
+  --card: #ffffff;
+  --muted: #6b7280;
+  --text: #0f172a;
+  --accent: #2563eb;
+  --success: #059669;
+  --danger: #dc2626;
+  --shadow: rgba(12,18,42,0.08);
+  --radius: 12px;
+  --transition: 220ms cubic-bezier(.2,.9,.3,1);
+}
+
+/* Page */
+.finaluru-page{
+  background: linear-gradient(180deg, var(--bg), #f4f7fb);
+  min-height:100vh;
+  padding:26px;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  color:var(--text);
+  box-sizing:border-box;
+}
+
+/* Header */
+.finaluru-header{
+  max-width:1200px;
+  margin:0 auto 16px;
+  display:flex;
+  gap:12px;
+  align-items:center;
+  justify-content:space-between;
+}
+.finaluru-title{ margin:0; font-size:20px; font-weight:800; }
+.finaluru-sub{ margin:6px 0 0; color:var(--muted); font-size:13px; }
+
+/* Controls */
+.finaluru-controls{ display:flex; gap:12px; align-items:center; }
+.finaluru-search{
+  display:flex; align-items:center; gap:8px;
+  background:var(--card); padding:8px 12px; border-radius:10px;
+  box-shadow: 0 8px 24px var(--shadow);
+  border: 1px solid rgba(2,6,23,0.03);
+}
+.finaluru-search input{
+  border:0; outline:none; background:transparent; min-width:200px; font-weight:600;
+}
+
+/* filter select */
+.finaluru-filter{
+  display:flex; align-items:center; gap:6px; background:transparent;
+  padding:6px 10px; border-radius:10px;
+  border:1px solid rgba(2,6,23,0.04);
+}
+.finaluru-filter select{ border:0; background:transparent; font-weight:700; padding:0 6px; outline:none; }
+
+/* Grid */
+.finaluru-grid{
+  max-width:1200px;
+  margin:12px auto;
+  display:grid;
+  grid-template-columns: 1fr;
+  gap:16px;
+  padding: 0 8px;
+}
+@media(min-width:720px){
+  .finaluru-grid{ grid-template-columns: repeat(2,1fr); gap:18px; }
+}
+@media(min-width:1100px){
+  .finaluru-grid{ grid-template-columns: repeat(3,1fr); gap:20px; }
+}
+
+/* Card */
+.finaluru-card{
+  background:var(--card);
+  border-radius:var(--radius);
+  padding:14px;
+  box-shadow: 0 12px 30px var(--shadow);
+  border:1px solid rgba(2,6,23,0.04);
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  transition: transform var(--transition), box-shadow var(--transition);
+  animation: finaluru-fadeUp .36s ease both;
+}
+.finaluru-card:hover{ transform: translateY(-8px); box-shadow: 0 30px 60px rgba(12,18,42,0.12); }
+
+/* Top row */
+.finaluru-top{ display:flex; align-items:flex-start; gap:12px; }
+.finaluru-sl{
+  width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center;
+  font-weight:900; background:linear-gradient(180deg,#eef7ff,#f8fbff); color:var(--text); box-shadow: inset 0 -2px 0 rgba(0,0,0,0.02);
+}
+.finaluru-head{ min-width:0; flex:1; display:flex; flex-direction:column; gap:6px; }
+
+/* Title - clamp to 2 lines (lint-safe approach) */
+.finaluru-name{
+  font-weight:800; font-size:15px; line-height:1.25; color:var(--text);
+  max-height: calc(1.25em * 2); /* 2 lines */
+  overflow: hidden;
+  position: relative;
+}
+
+/* if you want a fade rather than hard cut, uncomment the ::after block below and adjust background to match card */
+.finaluru-name::after{
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: calc(1.25em * 0.6);
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, #ffffff 90%);
+  opacity: 0.95;
+}
+
+/* Meta row */
+.finaluru-meta{ display:flex; gap:10px; color:var(--muted); font-size:13px; align-items:center; flex-wrap:wrap; }
+.finaluru-meta-item{ display:flex; gap:8px; align-items:center; }
+
+/* Menu */
+.finaluru-menu{ position:relative; }
+.finaluru-3dot{
+  background:transparent; border:0; padding:8px; border-radius:8px; cursor:pointer; color:#374151;
+}
+.finaluru-3dot:hover{ background: rgba(15,23,42,0.04); }
+
+/* Dropdown */
+.finaluru-dropdown{
+  position:absolute; right:0; top:44px; width:220px; background:var(--card);
+  border-radius:10px; box-shadow: 0 18px 48px rgba(2,6,23,0.12); padding:8px; z-index:80; border:1px solid rgba(2,6,23,0.04);
+}
+.finaluru-dropdown-item{
+  display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:8px; background:transparent;
+  border:none; cursor:pointer; font-weight:700; color:var(--text); width:100%; text-align:left;
+}
+.finaluru-dropdown-item:hover{ background: rgba(37,99,235,0.06); color:var(--accent); }
+.finaluru-dropdown-item.danger{ color:var(--danger); }
+
+/* Tiles grid */
+.finaluru-tiles{
+  display:grid; grid-template-columns: repeat(2,1fr); gap:10px;
+}
+.finaluru-tile{
+  background: linear-gradient(180deg,#fbfeff,#f7fbff); padding:10px; border-radius:10px; border:1px solid rgba(15,23,42,0.03);
+  display:flex; flex-direction:column; gap:6px;
+}
+.finaluru-tile.full{ grid-column: 1 / -1; }
+.finaluru-label{ color:var(--muted); font-size:12px; }
+.finaluru-value{ font-weight:800; color:var(--text); font-size:14px; }
+
+/* Badge for payment status */
+.finaluru-badge{
+  display:inline-flex; gap:8px; align-items:center; padding:6px 10px; border-radius:999px; font-weight:800; font-size:13px;
+}
+.finaluru-badge.paid{ background: linear-gradient(90deg,#ecfdf5,#f0fdf4); color:#065f46; border:1px solid rgba(6,95,70,0.06); }
+.finaluru-badge.pending{ background: linear-gradient(90deg,#fff8e6,#fffbf0); color:#92400e; border:1px solid rgba(146,64,14,0.06); }
+.finaluru-badge.failed{ background: linear-gradient(90deg,#fff1f2,#fff6f7); color:#7f1d1d; border:1px solid rgba(127,29,29,0.06); }
+
+/* Actions */
+.finaluru-actions{ display:flex; gap:8px; justify-content:flex-end; align-items:center; }
+.finaluru-btn{
+  display:inline-flex; gap:8px; align-items:center; padding:8px 12px; border-radius:10px; border:0; cursor:pointer; font-weight:800;
+  background: linear-gradient(90deg,#eef2ff,#eef6ff); color:#1e3a8a;
+}
+.finaluru-btn.danger{ background:#fff0f0; color:#ad1f1f; }
+
+/* Empty state */
+.finaluru-empty{ padding:28px; text-align:center; color:var(--muted); font-weight:800; }
+
+/* Responsive tweaks */
+@media(max-width:520px){
+  .finaluru-grid{ grid-template-columns: 1fr; }
+  .finaluru-top{ align-items:center; }
+  .finaluru-sl{ width:36px; height:36px; font-size:14px; }
+  .finaluru-tiles{ grid-template-columns: repeat(2,1fr); gap:8px; }
+  .finaluru-tile.full{ grid-column: auto; }
+  .finaluru-actions{ justify-content:flex-start; flex-wrap:wrap; }
+}
+
+/* Simple entrance animation */
+@keyframes finaluru-fadeUp { from { opacity:0; transform: translateY(8px) } to { opacity:1; transform:none } }
+
+/* focus styles for accessibility */
+.finaluru-card:focus { outline: 3px solid rgba(37,99,235,0.12); transform: translateY(-4px); }
+.finaluru-3dot:focus, .finaluru-btn:focus { outline: 3px solid rgba(37,99,235,0.12); border-radius:8px; }

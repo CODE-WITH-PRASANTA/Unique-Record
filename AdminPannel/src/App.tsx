@@ -21,6 +21,12 @@ import DonationManage from "./Functions/DonationManage/DonationManage";
 import SubScribeLetter from "./Functions/SubScribeLetter/SubScribeLetter";
 import ManageUru from "./Functions/ManageUru/ManageUru";
 import EditManageUruForm from "./Functions/EditManageUruForm/EditManageUruForm";
+import BlogPreview from "./Functions/BlogPreview/BlogPreview";
+import PostNoticePreview from "./Functions/PostNoticePreview/PostNoticePreview";
+import TeamMembersPreview from "./Functions/TeamMembersPreview/TeamMembersPreview";
+import AddEventPreview from "./Functions/AddEventPreview/AddEventPreview";
+import ApproveUru from "./Functions/Approveuru/Approveuru";
+import FinalUru from "./components/FinalUru/FinalUru";
 
 
 export default function App() {
@@ -48,16 +54,32 @@ export default function App() {
             <Route path="bar-chart" element={<BarChart />} /> */}
 
               {/* Page Path Manage */}
-          <Route path="/blogs/add" element={<CreateBlog />} /> 
-          <Route path="/notice/add" element={<PostNotice />} /> 
+          <Route path="/blogs/add" element={<CreateBlog />} />
+          <Route path="/blogs/preview" element={<BlogPreview />} />
+
+          <Route path="/notice/add" element={<PostNotice />} />
+          <Route path="/notice/preview" element={<PostNoticePreview />} />
+
+        
           <Route path="/event/add" element={<AddEventSystem />} /> 
-          <Route path="/event/add" element={<AddEventSystem />} /> 
+          <Route path="/event/preview" element={<AddEventPreview />} /> 
+
+
           <Route path="/team/members" element={<ManageteamMember />} /> 
+          <Route path="/team/preview" element={<TeamMembersPreview />} /> 
+
+
+          
           <Route path="/event/register" element={<EventRegisterPeople />} /> 
           <Route path="/category/manage" element={<ManageCategory />} /> 
           <Route path="/donation/manage" element={<DonationManage />} /> 
           <Route path="/subscribe-letter" element={<SubScribeLetter />} /> 
+
           <Route path="/uru/manage" element={<ManageUru />} /> 
+          <Route path="/uru/approve" element={<ApproveUru />} /> 
+          <Route path="/uru/final" element={<FinalUru />} /> 
+          
+          
           <Route path="/uru/manage/edit/:id" element={<EditManageUruForm />} />
 
           

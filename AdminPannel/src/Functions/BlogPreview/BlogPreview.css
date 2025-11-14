@@ -1,0 +1,353 @@
+/* ============================================================
+   🌟 MAIN LAYOUT
+============================================================ */
+
+/* Page */
+.blogpreview-page {
+  background: #f4f6fb;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 32px;
+}
+
+/* Grid Layout */
+.blogpreview-grid {
+  width: 100%;
+  max-width: 1250px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 22px;
+}
+
+/* >>> FORCE DESKTOP: 3 CARDS IN A ROW <<< */
+@media (min-width: 1024px) {
+  .blogpreview-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+}
+
+/* ============================================================
+   🌟 CARD DESIGN
+============================================================ */
+
+.blogpreview-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: all 0.25s ease;
+  cursor: pointer;
+  max-height: 400px; /* Smaller height */
+}
+
+.blogpreview-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 26px rgba(15, 23, 42, 0.12);
+}
+
+/* ============================================================
+   🌟 TOP SECTION
+============================================================ */
+
+.blogpreview-card-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.blogpreview-card-left {
+  display: flex;
+  gap: 10px;
+}
+
+.blogpreview-thumb {
+  width: 58px;
+  height: 58px;
+  border-radius: 10px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.blogpreview-title-container {
+  min-width: 0;
+}
+
+.blogpreview-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.3;
+  max-height: 2.6em; /* 2 lines */
+  overflow: hidden;
+}
+
+.blogpreview-subtitle {
+  font-size: 12px;
+  color: #6b7280;
+  margin-top: 4px;
+}
+
+/* ============================================================
+   🌟 MENU BUTTON (3 DOTS)
+============================================================ */
+
+.blogpreview-menu-wrapper {
+  position: relative;
+}
+
+.blogpreview-3dots {
+  padding: 6px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 6px;
+
+  /* Always visible on all screens */
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+.blogpreview-3dots:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+/* Dropdown */
+.blogpreview-dropdown {
+  position: absolute;
+  right: 0;
+  top: 34px;
+  background: #fff;
+  border-radius: 10px;
+  width: 150px;
+  padding: 8px 0;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  animation: fadeSlide 0.2s ease-in-out;
+}
+
+@keyframes fadeSlide {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.blogpreview-dropdown-item {
+  width: 100%;
+  padding: 10px 14px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.blogpreview-dropdown-item:hover {
+  background: rgba(37, 99, 235, 0.08);
+}
+
+.blogpreview-dropdown-item.danger {
+  color: #b91c1c;
+}
+
+.blogpreview-dropdown-item.danger:hover {
+  background: rgba(220, 38, 38, 0.1);
+}
+
+/* ============================================================
+   🌟 STATUS
+============================================================ */
+
+.blogpreview-status {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 13px;
+  color: #475569;
+}
+
+.blogpreview-status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.blogpreview-status-dot.published {
+  background: #10b981;
+}
+
+.blogpreview-status-dot.draft {
+  background: #f59e0b;
+}
+
+/* ============================================================
+   🌟 TILES (READ TIME, VIEWS, DATE, AUTHOR)
+============================================================ */
+
+.blogpreview-tiles {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.blogpreview-tile {
+  background: #f7fbff;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(15, 23, 42, 0.05);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* ============================================================
+   🌟 CATEGORY + TAGS (BOTTOM SECTION)
+============================================================ */
+
+.blogpreview-bottom {
+  margin-top: 4px;
+}
+
+.blogpreview-bottom-title {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  font-weight: 700;
+  color: #2563eb;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.blogpreview-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.blogpreview-tag {
+  background: rgba(37, 99, 235, 0.08);
+  padding: 4px 8px;
+  border-radius: 50px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #1e40af;
+  font-weight: 600;
+}
+
+/* ============================================================
+   🌟 RESPONSIVE FIXES FOR ALL DEVICES
+============================================================ */
+
+/* ----- Small Phones (max 360px) ----- */
+@media (max-width: 360px) {
+  .blogpreview-page {
+    padding: 10px;
+  }
+
+  .blogpreview-card {
+    padding: 12px;
+    max-height: none;
+  }
+
+  .blogpreview-thumb {
+    width: 45px;
+    height: 45px;
+  }
+
+  .blogpreview-title {
+    font-size: 13px;
+  }
+
+  .blogpreview-tile {
+    padding: 8px;
+    font-size: 12px;
+  }
+
+  .blogpreview-tag {
+    font-size: 10px;
+    padding: 3px 6px;
+  }
+}
+
+/* ----- Phones (361–480px) ----- */
+@media (max-width: 480px) {
+  .blogpreview-page {
+    padding: 16px;
+  }
+
+  .blogpreview-thumb {
+    width: 50px;
+    height: 50px;
+  }
+
+  .blogpreview-dropdown {
+    right: 0;
+    width: 150px;
+  }
+}
+
+/* ----- Large Phones (481–600px) ----- */
+@media (min-width: 481px) and (max-width: 600px) {
+  .blogpreview-card {
+    padding: 14px;
+    max-height: 420px;
+  }
+}
+
+/* ----- Tablets (600–768px) → 2 Cards ----- */
+@media (min-width: 600px) and (max-width: 768px) {
+  .blogpreview-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ----- Medium Tablets (769–900px) ----- */
+@media (min-width: 769px) and (max-width: 900px) {
+  .blogpreview-card {
+    max-height: 430px;
+  }
+}
+
+/* ----- Large Tablets (900–1150px) → 2 Cards ----- */
+@media (min-width: 900px) and (max-width: 1150px) {
+  .blogpreview-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ----- Desktop (1150–1400px) → 3 Cards (reinforced) ----- */
+@media (min-width: 1150px) and (max-width: 1400px) {
+  .blogpreview-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+}
+
+/* ----- Extra Large Screens (1400px+) ----- */
+@media (min-width: 1400px) {
+  .blogpreview-page {
+    padding: 40px;
+  }
+
+  .blogpreview-card {
+    max-width: 350px;
+    padding: 20px;
+  }
+
+  .blogpreview-title {
+    font-size: 16px;
+  }
+}
