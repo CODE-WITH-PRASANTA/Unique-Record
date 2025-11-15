@@ -1,0 +1,268 @@
+/**************************************************
+    GLOBAL PAGE LOOK
+**************************************************/
+.AddAchivment-container {
+  display: flex;
+  gap: 25px;
+  padding: 25px;
+  background: #eef1ff;
+  min-height: 100vh;
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/**************************************************
+    LEFT FORM CARD
+**************************************************/
+.AddAchivment-left {
+  flex: 1.35;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0px 6px 25px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  height: 92vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/******** HEADER FIXED ********/
+.AddAchivment-leftHeader {
+  padding: 20px 25px;
+  background: #f7f8ff;
+  border-bottom: 1px solid #e5e5f8;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.AddAchivment-title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 800;
+  color: #35365c;
+  letter-spacing: 0.4px;
+}
+
+/******** SCROLLING CONTENT ********/
+.AddAchivment-leftScroll {
+  padding: 25px;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+
+.AddAchivment-leftScroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.AddAchivment-leftScroll::-webkit-scrollbar-thumb {
+  background: #b3b6ff;
+  border-radius: 10px;
+}
+
+.AddAchivment-leftScroll::-webkit-scrollbar-track {
+  background: #e8e9ff;
+}
+
+/**************************************************
+    FORM GRID
+**************************************************/
+.AddAchivment-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+
+/* Full width fields */
+.AddAchivment-field.full {
+  grid-column: span 2;
+}
+
+/**************************************************
+    LABELS
+**************************************************/
+.AddAchivment-field label {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #3a3b5e;
+}
+
+/**************************************************
+    INPUTS
+**************************************************/
+.AddAchivment-input,
+.AddAchivment-select,
+.AddAchivment-textarea,
+.AddAchivment-file {
+  width: 100%;
+  padding: 11px 13px;
+  border: 1.6px solid #d8d9f1;
+  border-radius: 10px;
+  background: #fafbff;
+  font-size: 14px;
+  outline: none;
+  transition: 0.25s ease;
+  color: #3e4070;
+}
+
+.AddAchivment-input:focus,
+.AddAchivment-select:focus,
+.AddAchivment-textarea:focus {
+  border-color: #6b63ff;
+  box-shadow: 0 0 0 3px rgba(107, 99, 255, 0.2);
+  background: #ffffff;
+}
+
+/**************************************************
+    TEXTAREA
+**************************************************/
+.AddAchivment-textarea {
+  min-height: 90px;
+  resize: none;
+  border-radius: 12px;
+}
+
+/**************************************************
+    SUBMIT BUTTON
+**************************************************/
+.AddAchivment-submit {
+  width: 100%;
+  margin-top: 25px;
+  padding: 13px;
+  font-size: 17px;
+  font-weight: 700;
+  background: #6b63ff;
+  border: none;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.25s ease;
+  box-shadow: 0px 4px 10px rgba(107, 99, 255, 0.3);
+}
+
+.AddAchivment-submit:hover {
+  background: #574ff2;
+  transform: translateY(-2px);
+}
+
+/**************************************************
+    RIGHT SIDE TABLE CARD
+**************************************************/
+.AddAchivment-right {
+  flex: 1;
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 25px;
+  box-shadow: 0px 6px 25px rgba(0, 0, 0, 0.1);
+  height: fit-content;
+}
+
+/**************************************************
+    TABLE WRAPPER (SCROLL)
+**************************************************/
+.AddAchivment-tableWrapper {
+  width: 100%;
+  overflow-x: auto;
+  margin-top: 15px;
+}
+
+.AddAchivment-tableWrapper::-webkit-scrollbar {
+  height: 7px;
+}
+
+.AddAchivment-tableWrapper::-webkit-scrollbar-thumb {
+  background: #bbbdfa;
+  border-radius: 8px;
+}
+
+/**************************************************
+    TABLE DESIGN
+**************************************************/
+.AddAchivment-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  min-width: 750px;
+}
+
+.AddAchivment-table th {
+  background: #f0f1ff;
+  padding: 14px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #393a63;
+  text-transform: uppercase;
+}
+
+.AddAchivment-table td {
+  padding: 12px;
+  border-bottom: 1px solid #ececff;
+  font-size: 14px;
+  color: #44456f;
+}
+
+.AddAchivment-table tr:hover td {
+  background: #f8f9ff;
+}
+
+/**************************************************
+    ACTION BUTTONS
+**************************************************/
+.AddAchivment-actionColumn {
+  display: flex;
+  gap: 10px;
+}
+
+.AddAchivment-btn {
+  border: none;
+  padding: 9px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 18px;
+  background: #f2f3ff;
+  transition: 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.AddAchivment-btn:hover {
+  transform: scale(1.18);
+  background: #e1e3ff;
+}
+
+/* Colors */
+.AddAchivment-btn.view {
+  color: #3182ce;
+}
+
+.AddAchivment-btn.publish {
+  color: #2ecc71;
+}
+
+.AddAchivment-btn.edit {
+  color: #f39c12;
+}
+
+.AddAchivment-btn.delete {
+  color: #e74c3c;
+}
+
+/**************************************************
+    RESPONSIVE UI
+**************************************************/
+@media (max-width: 1024px) {
+  .AddAchivment-container {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 600px) {
+  .AddAchivment-grid {
+    grid-template-columns: 1fr;
+  }
+}

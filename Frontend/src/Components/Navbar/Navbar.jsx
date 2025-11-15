@@ -82,56 +82,56 @@ const menuItems = [
     <>
       {/* ===== Top Bar ===== */}
       {/* ===== Top Bar ===== */}
-<div className="topbar">
-  <div className="topbar-container">
-    <div className="topbar-content">
-      <div className="topbar-left">
-        <a href="tel:9472351693" className="topbar-item">
-          📞 <span>+91 - 94723 51693</span>
-        </a>
-        <a href="mailto:uruonline2025@gmail.com" className="topbar-item">
-          ✉  <span> uruonline2025@gmail.com</span>
-        </a>
-      </div>
-      <div className="topbar-right">
-        <Link to="/login" className="topbar-login">🔑 Login / Register</Link>
-        <Link to="/donate" className="topbar-cta">💖 Donate</Link>
+    <div className="topbar">
+      <div className="topbar-container">
+        <div className="topbar-content">
+          <div className="topbar-left">
+            <a href="tel:9472351693" className="topbar-item">
+              📞 <span>+91 - 94723 51693</span>
+            </a>
+            <a href="mailto:uruonline2025@gmail.com" className="topbar-item">
+              ✉  <span> uruonline2025@gmail.com</span>
+            </a>
+          </div>
+          <div className="topbar-right">
+            <Link to="/login" className="topbar-login">🔑 Login / Register</Link>
+            <Link to="/donate" className="topbar-cta">💖 Donate</Link>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
       {/* ===== Navbar ===== */}
       <header className={`Nav-navbar-wrapper ${showNavbar ? "show" : "hide"}`}>
-        <nav className="Nav-navbar">
-          <div className="Nav-container Nav-navbar-inner">
-            <div className="Nav-logo-wrapper">
-              <Link to="/" className="Nav-logo"><img src={logo} alt="EduBlink" /></Link>
-            </div>
-            <button className="Nav-toggler" onClick={() => setMobileMenuOpen(true)}>☰</button>
+          <nav className="Nav-navbar">
+            <div className="Nav-container Nav-navbar-inner">
+              <div className="Nav-logo-wrapper">
+                <Link to="/" className="Nav-logo"><img src={logo} alt="EduBlink" /></Link>
+              </div>
+              <button className="Nav-toggler" onClick={() => setMobileMenuOpen(true)}>☰</button>
 
-            <ul className="Nav-menu">
-              {menuItems.map((item, i) => (
-                <li className="Nav-item dropdown" key={i}>
-                  {item.name === "Get a Quote" ? (
-                    <Link className="Nav-donate-btn" to={item.path}>{item.name}</Link>
-                  ) : (
-                    <>
-                      <Link className="Nav-link" to={item.path}>{item.name}</Link>
-                      {item.sub && (
-                        <ul className="Nav-dropdown">
-                          {item.sub.map((sub, idx) => (
-                            <li key={idx}><Link to={sub.path}>{sub.name}</Link></li>
-                          ))}
-                        </ul>
-                      )}
-                    </>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </nav>
+              <ul className="Nav-menu">
+                {menuItems.map((item, i) => (
+                  <li className="Nav-item dropdown" key={i}>
+                    {item.name === "Get a Quote" ? (
+                      <Link className="Nav-donate-btn" to={item.path}>{item.name}</Link>
+                    ) : (
+                      <>
+                        <Link className="Nav-link" to={item.path}>{item.name}</Link>
+                        {item.sub && (
+                          <ul className="Nav-dropdown">
+                            {item.sub.map((sub, idx) => (
+                              <li key={idx}><Link to={sub.path}>{sub.name}</Link></li>
+                            ))}
+                          </ul>
+                        )}
+                      </>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </nav>
 
         {/* ===== Mobile Menu ===== */}
         <div className={`Nav-mobile-menu ${mobileMenuOpen ? "open" : ""}`} ref={menuRef}>
@@ -195,6 +195,7 @@ const menuItems = [
 
           </div>
         </div>
+        
       </header>
     </>
   );

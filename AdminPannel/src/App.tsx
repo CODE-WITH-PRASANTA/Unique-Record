@@ -21,6 +21,7 @@ import DonationManage from "./Functions/DonationManage/DonationManage";
 import SubScribeLetter from "./Functions/SubScribeLetter/SubScribeLetter";
 import ManageUru from "./Functions/ManageUru/ManageUru";
 import EditManageUruForm from "./Functions/EditManageUruForm/EditManageUruForm";
+import AddAchivment from "./Functions/AddAchivment/AddAchivment";
 
 
 export default function App() {
@@ -59,6 +60,7 @@ export default function App() {
           <Route path="/subscribe-letter" element={<SubScribeLetter />} /> 
           <Route path="/uru/manage" element={<ManageUru />} /> 
           <Route path="/uru/manage/edit/:id" element={<EditManageUruForm />} />
+          <Route path="/achievements/add" element={<AddAchivment />} />
 
           
           </Route>
