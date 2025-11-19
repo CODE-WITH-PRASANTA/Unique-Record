@@ -1,0 +1,762 @@
+/* ---------------------------------------------------------
+   Page Wrapper
+--------------------------------------------------------- */
+.noticepreview-page {
+  background: #f4f6fb;
+  padding: 28px 20px;
+  justify-content: center;
+  animation: fadePage 0.5s ease;
+}
+
+@keyframes fadePage {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------------------------------------------------------
+   Responsive Grid (base)
+--------------------------------------------------------- */
+.noticepreview-grid {
+  width: 100%;
+  max-width: 1280px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  animation: gridFade 0.45s ease;
+}
+
+@keyframes gridFade {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------------------------------------------------------
+   Card Base
+--------------------------------------------------------- */
+.noticepreview-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: auto;
+  position: relative;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
+  transition: transform 0.28s ease, box-shadow 0.28s ease;
+  will-change: transform;
+  overflow: hidden;
+  animation: cardIn 0.38s ease;
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.noticepreview-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 28px rgba(15, 23, 42, 0.16);
+}
+
+/* ---------------------------------------------------------
+   Top Section
+--------------------------------------------------------- */
+.noticepreview-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.noticepreview-left {
+  display: flex;
+  gap: 12px;
+  min-width: 0;
+  align-items: flex-start;
+}
+
+.noticepreview-thumb {
+  width: 58px;
+  height: 58px;
+  border-radius: 12px;
+  object-fit: cover;
+  flex-shrink: 0;
+  transition: transform 0.25s ease;
+}
+
+.noticepreview-card:hover .noticepreview-thumb {
+  transform: scale(1.03);
+}
+
+/* Title + Author */
+.noticepreview-title-wrap {
+  min-width: 0;
+}
+
+.noticepreview-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.35;
+  max-height: calc(1.35em * 2); /* clamp to ~2 lines */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.noticepreview-sub {
+  font-size: 13px;
+  color: #6b7280;
+  margin-top: 4px;
+}
+
+/* ---------------------------------------------------------
+   Three Dots Menu
+--------------------------------------------------------- */
+.noticepreview-menu-wrapper {
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.noticepreview-3dots {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 8px;
+  transition: background 0.18s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.noticepreview-3dots:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+/* Dropdown */
+.noticepreview-dropdown {
+  position: absolute;
+  top: 36px;
+  right: 0;
+  width: 170px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 8px 0;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.14);
+  z-index: 60;
+  animation: dropdownFade 0.22s ease;
+}
+
+@keyframes dropdownFade {
+  from { opacity: 0; transform: translateY(6px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.noticepreview-dropdown-item {
+  width: 100%;
+  padding: 10px 14px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 14px;
+  color: #0f172a;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+.noticepreview-dropdown-item:hover {
+  background: rgba(37, 99, 235, 0.08);
+  color: #0b57d0;
+}
+
+.noticepreview-dropdown-item.danger {
+  color: #d11a2a;
+}
+.noticepreview-dropdown-item.danger:hover {
+  background: rgba(209, 26, 42, 0.08);
+}
+
+/* ---------------------------------------------------------
+   Status
+--------------------------------------------------------- */
+.noticepreview-status {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 13px;
+  color: #475569;
+}
+
+.noticepreview-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+}
+.noticepreview-dot.green { background: #10b981; }
+.noticepreview-dot.yellow { background: #f59e0b; }
+
+/* ---------------------------------------------------------
+   Tiles (read/posted etc)
+--------------------------------------------------------- */
+.noticepreview-tiles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.noticepreview-tile {
+  background: #f7fbff;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13.5px;
+  color: #334155;
+  transition: transform 0.18s ease;
+}
+
+.noticepreview-card:hover .noticepreview-tile {
+  transform: translateY(-1px);
+}
+
+/* ---------------------------------------------------------
+   Bottom Section
+--------------------------------------------------------- */
+.noticepreview-bottom {
+  margin-top: 6px;
+}
+
+.noticepreview-bottom-title {
+  font-weight: 700;
+  font-size: 14.5px;
+  color: #2563eb;
+  margin-bottom: 6px;
+}
+
+.noticepreview-desc {
+  font-size: 13.5px;
+  color: #475569;
+  line-height: 1.45;
+  max-height: 44px;
+  overflow: hidden;
+}
+
+.noticepreview-link {
+  margin-top: 6px;
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 13px;
+  color: #2563eb;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.14s ease;
+}
+
+.noticepreview-link:hover {
+  color: #1e40af;
+  text-decoration: underline;
+}
+
+/* ---------------------------------------------------------
+   Visual accessibility tweaks
+--------------------------------------------------------- */
+.noticepreview-dropdown-item svg,
+.noticepreview-tile svg,
+.noticepreview-3dots svg {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 6px;
+}
+
+/* ---------------------------------------------------------
+   Responsive overrides (place at end - comprehensive)
+   — mobile first then larger breakpoints
+--------------------------------------------------------- */
+
+/* ===== Tiny phones (<= 360px) ===== */
+@media (max-width: 360px) {
+  .noticepreview-page { padding: 12px 12px; }
+  .noticepreview-grid { gap: 14px; }
+
+  .noticepreview-card { padding: 12px; gap: 10px; min-height: 220px; }
+  .noticepreview-thumb { width: 46px; height: 46px; border-radius: 10px; }
+  .noticepreview-title { font-size: 14px; max-height: calc(1.35em * 2); }
+  .noticepreview-sub { font-size: 12px; }
+  .noticepreview-tile { padding: 8px 10px; font-size: 12px; }
+  .noticepreview-bottom-title { font-size: 13px; }
+  .noticepreview-desc { font-size: 13px; max-height: 40px; }
+  .noticepreview-dropdown { right: -6px; width: 150px; }
+}
+
+/* ===== Small phones (361px - 480px) ===== */
+@media (min-width: 361px) and (max-width: 480px) {
+  .noticepreview-page { padding: 14px; }
+  .noticepreview-grid { gap: 16px; }
+
+  .noticepreview-card { padding: 13px; min-height: 240px; }
+  .noticepreview-thumb { width: 50px; height: 50px; }
+  .noticepreview-title { font-size: 14.5px; }
+  .noticepreview-dropdown { width: 150px; }
+}
+
+/* ===== Medium phones (481px - 599px) ===== */
+@media (min-width: 481px) and (max-width: 599px) {
+  .noticepreview-card { padding: 14px; min-height: 250px; }
+  .noticepreview-thumb { width: 52px; height: 52px; }
+  .noticepreview-title { font-size: 15px; }
+  .noticepreview-tile { font-size: 13px; }
+}
+
+/* ===== Small tablets (600px - 767px) ===== */
+@media (min-width: 600px) and (max-width: 767px) {
+  .noticepreview-grid { grid-template-columns: repeat(2, 1fr); gap: 18px; }
+  .noticepreview-card { padding: 14px; min-height: 270px; }
+  .noticepreview-thumb { width: 54px; height: 54px; }
+  .noticepreview-title { font-size: 15px; }
+  .noticepreview-desc { max-height: 52px; }
+}
+
+/* ===== Tablets / small desktops (768px - 1023px) ===== */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .noticepreview-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .noticepreview-card { padding: 15px; min-height: 280px; }
+  .noticepreview-thumb { width: 56px; height: 56px; }
+  .noticepreview-title { font-size: 15.25px; }
+}
+
+/* ===== Desktop (1024px - 1279px) ===== */
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .noticepreview-grid { grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .noticepreview-card { padding: 16px; min-height: 280px; }
+  .noticepreview-thumb { width: 58px; height: 58px; }
+  .noticepreview-title { font-size: 15.5px; }
+}
+
+/* ===== Large Desktop (1280px - 1599px) ===== */
+@media (min-width: 1280px) and (max-width: 1599px) {
+  .noticepreview-grid { grid-template-columns: repeat(3, 1fr); gap: 26px; }
+  .noticepreview-card { padding: 18px; min-height: 290px; }
+  .noticepreview-title { font-size: 15.75px; }
+}
+
+/* ===== Extra large (1600px+) ===== */
+@media (min-width: 1600px) {
+  .noticepreview-grid { grid-template-columns: repeat(3, 1fr); gap: 30px; }
+  .noticepreview-card { padding: 20px; min-height: 300px; }
+  .noticepreview-thumb { width: 64px; height: 64px; }
+  .noticepreview-title { font-size: 16px; }
+}
+
+/* Final micro-adjust: ensure dropdown never overflows right edge */
+@media (max-width: 420px) {
+  .noticepreview-dropdown { right: 4px; left: auto; }
+}
+
+
+
+/* Top Bar */
+.noticepreview-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.noticepreview-title-main {
+  font-size: 21px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.noticepreview-toggle-wrapper {
+  display: flex;
+  gap: 10px;
+}
+
+.toggle-icon-btn {
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  background-color: #e2e8f0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #475569;
+  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.toggle-icon-btn.active {
+  background-color: #2563eb;
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+}
+
+.toggle-icon-btn:hover {
+  background-color: #dbeafe;
+  color: #0f172a;
+}
+
+.toggle-icon-btn svg {
+  display: block;
+}
+
+/* View Toggle Buttons */
+.noticepreview-view-toggle {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.view-btn {
+  padding: 6px 12px;
+  border-radius: 8px;
+  background-color: #e2e8f0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid #cbd5e1;
+  cursor: pointer;
+  color: #334155;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.view-btn.active {
+  background-color: #2563eb;
+  color: #fff;
+  border-color: #1d4ed8;
+}
+
+.view-btn:hover {
+  background-color: #dbeafe;
+}
+
+/* List View */
+.noticepreview-list-wrapper {
+  margin-top: 12px;
+  overflow-x: auto;
+}
+
+.noticepreview-table {
+  width: 100%;
+  min-width: 900px;
+  border-collapse: collapse;
+  background-color: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.noticepreview-table th,
+.noticepreview-table td {
+  padding: 12px 14px;
+  font-size: 14px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.noticepreview-table th {
+  background-color: #f1f5f9;
+  font-size: 13px;
+  text-transform: uppercase;
+  color: #475569;
+}
+
+.noticepreview-table tr:hover td {
+  background-color: #f9fafb;
+}
+
+.status-tag {
+  padding: 4px 8px;
+  font-size: 12px;
+  border-radius: 6px;
+  font-weight: 500;
+  color: #fff;
+}
+
+.status-tag.active {
+  background-color: #16a34a;
+}
+
+.status-tag.draft {
+  background-color: #f59e0b;
+}
+
+.noticepreview-table-link {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 600;
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.noticepreview-table-link:hover {
+  text-decoration: underline;
+}
+
+
+/* Filter Bar */
+.noticepreview-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 18px;
+  align-items: center;
+  justify-content: center;
+}
+
+.noticepreview-search {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 8px 12px;
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  flex: 1;
+  min-width: 220px;
+}
+
+.noticepreview-search-input {
+  border: none;
+  outline: none;
+  font-size: 14px;
+  width: 100%;
+}
+
+.noticepreview-date-filter {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 14px;
+}
+
+.noticepreview-date-filter input {
+  padding: 6px;
+  font-size: 13px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: #f8fafc;
+}
+
+/* Table Actions */
+.noticepreview-table-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.action-btn {
+  border: none;
+  outline: none;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  transition: background 0.2s ease;
+}
+
+.publish-btn {
+  background-color: #e0f2fe;
+  color: #0369a1;
+}
+
+.publish-btn:hover {
+  background-color: #bae6fd;
+}
+
+.delete-btn {
+  background-color: #fee2e2;
+  color: #b91c1c;
+}
+
+.delete-btn:hover {
+  background-color: #fecaca;
+}
+
+/* Responsive Table Scroll */
+.noticepreview-list-wrapper {
+  overflow-x: auto;
+  padding-bottom: 10px;
+}
+
+/* Empty Result Message */
+.noticepreview-empty {
+  text-align: center;
+  font-size: 15px;
+  padding: 16px;
+  color: #475569;
+}
+
+/* Base adjustments for smaller screens */
+@media (max-width: 480px) {
+  .noticepreview-title-main {
+    font-size: 18px;
+    text-align: center;
+  }
+
+  .noticepreview-topbar {
+    gap: 12px;
+  }
+
+  .noticepreview-toggle-wrapper {
+    justify-content: center;
+  }
+
+  .toggle-icon-btn {
+    padding: 6px;
+    border-radius: 6px;
+  }
+
+  .noticepreview-filter-bar {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .noticepreview-search {
+    width: 100%;
+  }
+
+  .noticepreview-date-filter {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .noticepreview-date-filter input {
+    width: 46%;
+  }
+
+  .noticepreview-list-wrapper {
+    padding-bottom: 12px;
+  }
+
+  .noticepreview-table {
+    font-size: 12px;
+  }
+
+  .noticepreview-table th,
+  .noticepreview-table td {
+    padding: 10px;
+  }
+
+  .status-tag {
+    font-size: 11px;
+    padding: 3px 6px;
+  }
+}
+
+/* Tablet devices */
+@media (min-width: 481px) and (max-width: 768px) {
+  .noticepreview-title-main {
+    font-size: 19px;
+  }
+
+  .noticepreview-topbar {
+    flex-direction: row;
+    gap: 16px;
+  }
+
+  .noticepreview-toggle-wrapper {
+    gap: 8px;
+  }
+
+  .noticepreview-filter-bar {
+    flex-wrap: nowrap;
+    justify-content: space-between;
+  }
+
+  .noticepreview-search {
+    flex: 1.3;
+  }
+
+  .noticepreview-date-filter {
+    flex: 1;
+  }
+
+  .noticepreview-table td,
+  .noticepreview-table th {
+    padding: 11px 13px;
+  }
+
+  .action-btn {
+    padding: 4px 10px;
+  }
+}
+
+/* Small laptops */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .noticepreview-title-main {
+    font-size: 20px;
+  }
+
+  .noticepreview-topbar {
+    padding: 0 10px;
+  }
+
+  .noticepreview-filter-bar {
+    justify-content: space-between;
+    padding: 0 10px;
+  }
+
+  .noticepreview-date-filter input {
+    font-size: 14px;
+  }
+
+  .noticepreview-list-wrapper {
+    overflow-x: auto;
+  }
+
+  .noticepreview-table {
+    min-width: 800px;
+  }
+}
+
+/* Large desktops */
+@media (min-width: 1025px) and (max-width: 1440px) {
+  .noticepreview-title-main {
+    font-size: 22px;
+  }
+
+  .noticepreview-filter-bar {
+    max-width: 1200px;
+    margin: 0 auto 20px auto;
+  }
+
+  .noticepreview-table {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+}
+
+/* XXL displays */
+@media (min-width: 1441px) {
+  .noticepreview-page {
+    padding: 40px;
+  }
+
+  .noticepreview-title-main {
+    font-size: 24px;
+  }
+
+  .noticepreview-filter-bar {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .noticepreview-table {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .toggle-icon-btn {
+    padding: 10px;
+    border-radius: 10px;
+  }
+}
