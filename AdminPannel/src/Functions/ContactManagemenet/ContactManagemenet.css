@@ -1,0 +1,347 @@
+/*------------------ THEME VARIABLES ------------------*/
+:root {
+  /* Light Theme Variables */
+  --bg-light: #ffffff;
+  --bg-form-light: #ffffff;
+  --text-light: #333333;
+  --text-muted-light: #666666;
+  --border-light: #e0e0e0;
+  --accent: #4f46e5;
+  --success: #10b981;
+  --danger: #ef4444;
+  --info: #3b82f6;
+
+  /* Dark Theme Variables */
+  --bg-dark: #101828;
+  --bg-form-dark: #1e293b;
+  --text-dark: #f5f5f5;
+  --text-muted-dark: #cbd5e1;
+  --border-dark: #374151;
+}
+
+/*------------------ THEME STYLES ------------------*/
+/* Light Theme */
+:root[data-theme="light"] {
+  --bg: var(--bg-light);
+  --bg-form: var(--bg-form-light);
+  --text: var(--text-light);
+  --text-muted: var(--text-muted-light);
+  --border: var(--border-light);
+}
+
+/* Dark Theme */
+:root[data-theme="dark"] {
+  --bg: var(--bg-dark);
+  --bg-form: var(--bg-form-dark);
+  --text: var(--text-dark);
+  --text-muted: var(--text-muted-dark);
+  --border: var(--border-dark);
+}
+
+/*------------------ GLOBAL CONTAINER ------------------*/
+.ContactManagemenet-container {
+  display: flex;
+  gap: 30px;
+  padding: 25px;
+  flex-wrap: wrap;
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+/*------------------ FORM SECTION ------------------*/
+.ContactManagemenet-form-section {
+  flex: 1;
+  min-width: 320px;
+  background: var(--bg-form);
+  border-radius: 14px;
+  padding: 30px 20px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  max-height: 85vh;
+  overflow-y: auto;
+  border: 1px solid var(--border);
+}
+
+.ContactManagemenet-heading {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 10px;
+}
+
+/*------------------ FORM ELEMENTS ------------------*/
+.ContactManagemenet-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.ContactManagemenet-row {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.ContactManagemenet-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.ContactManagemenet-item label {
+  font-weight: 500;
+  margin-bottom: 5px;
+  color: var(--text-muted);
+}
+
+.ContactManagemenet-item input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  font-size: 14px;
+  outline: none;
+  background-color: var(--bg-form);
+  color: var(--text);
+}
+
+.ContactManagemenet-box input {
+  margin-bottom: 10px;
+}
+
+/* Submit Button */
+.ContactManagemenet-submit-btn {
+  background-color: var(--accent);
+  color: #fff;
+  padding: 12px 18px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.ContactManagemenet-submit-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+/*------------------ TABLE SECTION (IMPROVED) ------------------*/
+.ContactManagemenet-table-section {
+  flex: 1;
+  min-width: 350px;
+  background: var(--bg-form);
+  border-radius: 14px;
+  padding: 30px 20px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  max-height: 85vh;
+  overflow-y: auto;
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+}
+
+.ContactManagemenet-table-wrapper {
+  overflow-x: auto;
+  margin-top: 15px;
+  padding-bottom: 10px;
+}
+
+/* Table Layout */
+.ContactManagemenet-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 10px;
+  font-size: 14px;
+}
+
+.ContactManagemenet-table th {
+  background-color: var(--accent);
+  color: #fff;
+  padding: 12px;
+  text-align: center;
+  border-radius: 6px 6px 0 0;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.ContactManagemenet-table td {
+  background-color: var(--bg-form);
+  padding: 12px;
+  text-align: left;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--border);
+  vertical-align: top;
+}
+
+/* Align and space contents inside each column */
+.ContactManagemenet-table td:nth-child(1),
+.ContactManagemenet-table td:nth-child(2),
+.ContactManagemenet-table td:nth-child(3),
+.ContactManagemenet-table td:nth-child(8) {
+  text-align: center;
+}
+
+/*------------------ SOCIAL LINKS ------------------*/
+.ContactManagemenet-socials {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+}
+
+.ContactManagemenet-socials span {
+  background: rgba(79, 70, 229, 0.08);
+  border-radius: 6px;
+  padding: 4px 6px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+/*------------------ OPEN HOURS ------------------*/
+.ContactManagemenet-openhours {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px 12px;
+}
+
+.ContactManagemenet-openhours span {
+  background: rgba(59, 130, 246, 0.08);
+  border-radius: 6px;
+  padding: 4px 6px;
+  color: var(--text-muted);
+  font-size: 12px;
+  display: flex;
+  justify-content: space-between;
+}
+
+/*------------------ ADDRESSES ------------------*/
+.ContactManagemenet-table td:nth-child(7) {
+  white-space: pre-line;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--text-muted);
+}
+
+/*------------------ ACTION BUTTONS ------------------*/
+.ContactManagemenet-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+}
+
+.ContactManagemenet-actions button {
+  width: 90px;
+  padding: 7px 0;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  color: #fff;
+  transition: all 0.25s ease;
+}
+
+.ContactManagemenet-edit-btn { background: var(--accent); }
+.ContactManagemenet-delete-btn { background: var(--danger); }
+.ContactManagemenet-preview-btn { background: var(--info); }
+
+.ContactManagemenet-publish-btn {
+  background-color: var(--success);
+  color: #fff;
+}
+
+.ContactManagemenet-publish-btn.unpublished {
+  background-color: var(--info);
+}
+
+.ContactManagemenet-actions button:hover {
+  opacity: 0.85;
+  transform: translateY(-1px);
+}
+
+/*------------------ RESPONSIVE IMPROVEMENTS ------------------*/
+@media (max-width: 900px) {
+  .ContactManagemenet-openhours {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .ContactManagemenet-table th,
+  .ContactManagemenet-table td {
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  .ContactManagemenet-socials span,
+  .ContactManagemenet-openhours span {
+    font-size: 11px;
+  }
+
+  .ContactManagemenet-actions button {
+    width: 70px;
+    padding: 6px 0;
+    font-size: 11px;
+  }
+}
+
+
+@media (max-width: 1024px) {
+  .ContactManagemenet-container {
+    flex-direction: column;
+    gap: 20px;
+    padding: 15px;
+  }
+
+  .ContactManagemenet-form-section,
+  .ContactManagemenet-table-section {
+    max-width: 100%;
+    padding: 25px 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .ContactManagemenet-row {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .ContactManagemenet-item {
+    margin-bottom: 12px;
+  }
+
+  .ContactManagemenet-table-wrapper {
+    overflow-x: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .ContactManagemenet-container {
+    flex-direction: column;
+    padding: 0;
+    gap: 15px;
+  }
+
+  .ContactManagemenet-form-section,
+  .ContactManagemenet-table-section {
+    padding: 15px 10px;
+  }
+
+  .ContactManagemenet-table th,
+  .ContactManagemenet-table td {
+    padding: 6px;
+    font-size: 12px;
+  }
+
+  .ContactManagemenet-timepair input[type="time"] {
+    font-size: 12px;
+    padding: 5px;
+  }
+
+  .ContactManagemenet-actions button,
+  .ContactManagemenet-publish-btn {
+    padding: 5px 8px;
+    font-size: 11px;
+  }
+}

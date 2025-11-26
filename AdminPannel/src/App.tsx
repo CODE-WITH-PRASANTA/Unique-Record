@@ -28,6 +28,13 @@ import TeamMembersPreview from "./Functions/TeamMembersPreview/TeamMembersPrevie
 import AddEventPreview from "./Functions/AddEventPreview/AddEventPreview";
 import PostNoticePreview from "./Functions/PostNoticePreview/PostNoticePreview";
 import BlogPreview from "./Functions/BlogPreview/BlogPreview";
+import AchievementPreview from "./Functions/AchievementPreview/AchievementPreview";
+import PostEventPhotos from "./Functions/PostEventPhotos/PostEventPhotos";
+import YouTubeManage from "./components/YouTubeManage/YouTubeManage";
+import OtherPhotosManage from "./Functions/OtherPhotosManage/OtherPhotosManage";
+import UserOpinion from "./Functions/UserOpinion/UserOpinion";
+import BlogComments from "./Functions/BlogComments/BlogComments";
+import ContactManagemenet from "./Functions/ContactManagemenet/ContactManagemenet";
 
 
 export default function App() {
@@ -67,7 +74,25 @@ export default function App() {
 
 
           <Route path="/team/members" element={<ManageteamMember />} /> 
-          <Route path="/team/preview" element={<TeamMembersPreview />} /> 
+          <Route path="/team/preview" element={<TeamMembersPreview />} />
+
+
+
+          <Route path="/media/post-event" element={<PostEventPhotos />} />
+          <Route path="/media/youtube" element={<YouTubeManage/>} />
+          <Route path="/media/other" element={<OtherPhotosManage/>} />  
+        
+
+          <Route path="/user/opinion" element={<UserOpinion/>} />
+          <Route path="/contact/managements" element={<ContactManagemenet/>} />
+          
+
+
+
+
+
+          <Route path="/blog/comments" element={<BlogComments/>} />
+
 
 
           
@@ -82,7 +107,11 @@ export default function App() {
           
           
           <Route path="/uru/manage/edit/:id" element={<EditManageUruForm />} />
+
+
           <Route path="/achievements/add" element={<AddAchivment />} />
+          <Route path="/achievements/preview" element={<AchievementPreview />} />
+
 
           
           </Route>
