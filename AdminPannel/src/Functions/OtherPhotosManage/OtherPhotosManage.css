@@ -1,0 +1,794 @@
+/* OtherPhotosManage.css
+   - Fully responsive (4K → desktop → laptop → tablet → mobile)
+   - Only max-width media queries used (progressive narrowing)
+   - Preserves all class names, visual design, colors, spacing, borders, shadows
+   - Multi-line rule formatting, clean/consistent spacing
+*/
+
+/* -------------------------
+   Root tokens & global resets
+   ------------------------- */
+:root {
+  --bg: #f6f8fb;
+  --card: #ffffff;
+  --muted: #5d6a73;
+  --title: #0b1720;
+  --accent: #2563eb;
+  --danger: #e11d48;
+  --radius: 12px;
+  --gap: 14px;
+  --max-w: 1200px;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+/* -------------------------
+   Page wrapper
+   ------------------------- */
+.opm-root {
+  background: linear-gradient(
+    180deg,
+    #fbfdff,
+    var(--bg)
+  );
+  padding: 18px;
+  min-height: 100vh;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* -------------------------
+   Inner grid (base: two-column wide layout)
+   - We use a desktop-friendly base and narrow with max-width queries
+   - Left column: flexible 1fr, Right column: fixed 560px as original intent
+   ------------------------- */
+.opm-inner {
+  max-width: var(--max-w);
+  margin-left: auto;
+  margin-right: auto;
+  display: grid;
+  grid-template-columns: 1fr 560px;
+  gap: 18px;
+  align-items: start;
+  padding-left: 8px;
+  padding-right: 8px;
+  box-sizing: border-box;
+  min-width: 320px;
+}
+
+/* -------------------------
+   Cards
+   ------------------------- */
+.opm-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 12px;
+  box-shadow: 0 8px 24px rgba(6,12,28,0.06);
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+/* -------------------------
+   Headers & typography
+   ------------------------- */
+.opm-card-header {
+  margin-bottom: 8px;
+}
+
+.opm-title {
+  margin: 0;
+  font-size: clamp(16px, 1.3vw, 18px);
+  font-weight: 800;
+  color: var(--title);
+  line-height: 1.1;
+}
+
+.opm-title-small {
+  margin: 0;
+  font-size: clamp(14px, 1.1vw, 16px);
+  font-weight: 800;
+  color: var(--title);
+  line-height: 1.1;
+}
+
+.opm-sub {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+/* -------------------------
+   Form
+   ------------------------- */
+.opm-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 6px;
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+.opm-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+  box-sizing: border-box;
+}
+
+.opm-input,
+.opm-select,
+.opm-file {
+  width: 100%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 12px;
+  padding-right: 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(11,22,42,0.06);
+  background: #fff;
+  font-size: 14px;
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: 40px;
+}
+
+/* -------------------------
+   Uploader
+   - Mobile-first stacking behavior will be applied via max-width rules below
+   - On wide screens: preview fixed width, controls take remaining space
+   - Constrain preview to avoid pushing controls off-screen
+   ------------------------- */
+.opm-uploader {
+  display: flex;
+  gap: 12px;
+  flex-direction: column;
+  align-items: stretch;
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: 0;
+}
+
+.opm-preview {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.opm-preview-img {
+  width: 100%;
+  height: auto;
+  max-height: 220px; /* prevents preview from taking excessive height */
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid rgba(11,22,42,0.04);
+  box-sizing: border-box;
+  display: block;
+}
+
+.opm-placeholder {
+  width: 100%;
+  height: auto;
+  max-height: 220px;
+  min-height: 100px;
+  border-radius: 10px;
+  background: linear-gradient(180deg,#ffffff,#fbfdff);
+  border: 1px dashed rgba(11,22,42,0.04);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-direction: column;
+  color: rgba(11,22,42,0.35);
+  padding: 8px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.opm-placeholder-text {
+  font-size: 13px;
+  color: rgba(11,22,42,0.45);
+  box-sizing: border-box;
+}
+
+.opm-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* -------------------------
+   Buttons
+   ------------------------- */
+.opm-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 12px;
+  padding-right: 12px;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  background: #f3f6fb;
+  color: var(--title);
+  transition: transform .14s ease, box-shadow .14s ease;
+  box-sizing: border-box;
+  min-height: 40px;
+}
+
+.opm-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 28px rgba(6,12,28,0.06);
+}
+
+.opm-btn-primary {
+  background: linear-gradient(90deg,var(--accent),#1e40af);
+  color: #fff;
+  box-shadow: 0 10px 30px rgba(37,99,235,0.12);
+}
+
+.opm-btn-outline {
+  background: transparent;
+  border: 1px solid rgba(11,22,42,0.06);
+}
+
+.opm-btn-secondary {
+  background: #fff;
+  border: 1px solid rgba(11,22,42,0.06);
+}
+
+.opm-btn-ghost {
+  background: transparent;
+  color: var(--muted);
+}
+
+.opm-btn-danger {
+  background: linear-gradient(90deg,#ef4444,#dc2626);
+  color: #fff;
+}
+
+/* -------------------------
+   Form actions
+   ------------------------- */
+.opm-form-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+}
+
+/* -------------------------
+   Table / scroller
+   - Table keeps identical styling; wrapper provides horizontal scroll on narrower screens
+   ------------------------- */
+.opm-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  margin-top: 8px;
+  -webkit-overflow-scrolling: touch;
+  position: relative;
+  padding-bottom: 6px;
+  box-sizing: border-box;
+}
+
+.opm-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 720px;
+  background: var(--card);
+  border-radius: 8px;
+  overflow: hidden;
+  table-layout: auto;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+.opm-table th,
+.opm-table td {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 12px;
+  padding-right: 12px;
+  text-align: left;
+  font-size: 14px;
+  border-bottom: 1px solid rgba(11,22,42,0.04);
+  vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+.opm-table thead th {
+  background: #f3f6fb;
+  text-transform: uppercase;
+  font-size: 12px;
+  color: #475569;
+  font-weight: 800;
+  box-sizing: border-box;
+}
+
+/* -------------------------
+   Thumbnails, title, actions
+   ------------------------- */
+.opm-thumb {
+  width: 84px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid rgba(11,22,42,0.04);
+  display: block;
+  box-sizing: border-box;
+}
+
+.opm-td-title {
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+.opm-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.opm-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: #f3f6fb;
+  border: 1px solid rgba(11,22,42,0.03);
+  cursor: pointer;
+  transition: transform .12s ease;
+  color: var(--muted);
+  box-sizing: border-box;
+}
+
+.opm-icon-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(6,12,28,0.06);
+}
+
+.opm-icon-delete {
+  background: linear-gradient(90deg,#fff1f2,#fff5f5);
+  color: var(--danger);
+  border: 1px solid rgba(220,36,36,0.06);
+  box-sizing: border-box;
+}
+
+/* -------------------------
+   Empty / notes / modal
+   ------------------------- */
+.opm-empty {
+  text-align: center;
+  padding: 22px;
+  color: var(--muted);
+  box-sizing: border-box;
+}
+
+.opm-table-note {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--muted);
+  box-sizing: border-box;
+}
+
+.opm-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(6,12,28,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1200;
+  padding: 18px;
+  box-sizing: border-box;
+}
+
+.opm-modal-panel {
+  background: var(--card);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 20px 40px rgba(11,22,42,0.12);
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.opm-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(11,22,42,0.04);
+  box-sizing: border-box;
+}
+
+.opm-modal-header h4 {
+  margin: 0;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.opm-modal-close {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 6px;
+  color: var(--muted);
+  box-sizing: border-box;
+}
+
+.opm-modal-body {
+  padding: 16px;
+  font-size: 14px;
+  color: var(--muted);
+  box-sizing: border-box;
+}
+
+.opm-modal-actions {
+  padding: 12px;
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  border-top: 1px solid rgba(11,22,42,0.04);
+  box-sizing: border-box;
+}
+
+/* -------------------------
+   Focus & accessibility
+   ------------------------- */
+.opm-btn:focus,
+.opm-icon-btn:focus,
+.opm-input:focus,
+.opm-select:focus,
+.opm-modal-close:focus {
+  outline: 3px solid rgba(37,99,235,0.12);
+  outline-offset: 2px;
+  box-sizing: border-box;
+}
+
+/* -------------------------
+   Prevent accidental drag
+   ------------------------- */
+.opm-thumb,
+.opm-preview-img {
+  -webkit-user-drag: none;
+  user-select: none;
+  box-sizing: border-box;
+}
+
+/* -------------------------
+   Responsive overrides (only max-width queries)
+   - Breakpoints:
+     4000, 1920, 1440, 1366, 1024 (tablet stack), 768, 480, 360
+   - Tablet & mobile (below 1024px) → single column + table horizontal scroll
+   ------------------------- */
+
+/* Very large screens — comfortable spacing */
+@media (max-width: 4000px) {
+  .opm-root {
+    padding: 24px;
+  }
+
+  .opm-inner {
+    gap: 24px;
+    padding-left: 12px;
+    padding-right: 12px;
+    max-width: 1400px;
+  }
+
+  .opm-card {
+    padding: 16px;
+  }
+}
+
+/* Large desktops / 4K */
+@media (max-width: 1920px) {
+  .opm-root {
+    padding: 22px;
+  }
+
+  .opm-inner {
+    max-width: 1280px;
+  }
+
+  .opm-table {
+    min-width: 960px;
+  }
+}
+
+/* Desktop / laptop */
+@media (max-width: 1440px) {
+  .opm-inner {
+    grid-template-columns: 1fr 520px;
+    gap: 20px;
+  }
+
+  .opm-table {
+    min-width: 880px;
+  }
+
+  .opm-thumb {
+    width: 80px;
+    height: 52px;
+  }
+}
+
+/* Typical laptops */
+@media (max-width: 1366px) {
+  .opm-inner {
+    grid-template-columns: 1fr 480px;
+    gap: 18px;
+  }
+
+  .opm-card {
+    padding: 14px;
+  }
+
+  .opm-table {
+    min-width: 820px;
+  }
+
+  .opm-modal-panel {
+    max-width: 420px;
+  }
+}
+
+/* TABLET & BELOW — STACK layout and enable table horizontal scroll */
+@media (max-width: 1024px) {
+  .opm-root {
+    padding: 18px;
+  }
+
+  .opm-inner {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .opm-card {
+    padding: 12px;
+  }
+
+  /* Uploader becomes column (mobile-friendly) */
+  .opm-uploader {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  /* On stacked layout, preview should be full width but constrained height */
+  .opm-preview {
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .opm-preview-img {
+    max-height: 180px;
+  }
+
+  /* Table wrapper: horizontal scroll available */
+  .opm-table-wrap {
+    overflow-x: auto;
+    overflow-y: visible;
+    max-height: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .opm-table {
+    min-width: 720px;
+  }
+
+  .opm-table th,
+  .opm-table td {
+    font-size: 13px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .opm-td-title {
+    max-width: 260px;
+    font-size: 14px;
+  }
+
+  .opm-modal-panel {
+    max-width: 92%;
+    margin-left: 12px;
+    margin-right: 12px;
+  }
+}
+
+/* Small tablets / large phones */
+@media (max-width: 768px) {
+  .opm-root {
+    padding: 16px;
+  }
+
+  .opm-card {
+    padding: 12px;
+  }
+
+  .opm-inner {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .opm-table {
+    min-width: 600px;
+  }
+
+  .opm-thumb {
+    width: 72px;
+    height: 48px;
+  }
+
+  .opm-btn {
+    min-height: 44px;
+  }
+
+  .opm-preview-img {
+    max-height: 140px;
+  }
+}
+
+/* Phones */
+@media (max-width: 480px) {
+  .opm-root {
+    padding: 12px;
+  }
+
+  .opm-card {
+    padding: 10px;
+  }
+
+  .opm-inner {
+    gap: 12px;
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+
+  .opm-btn {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 14px;
+    min-height: 44px;
+  }
+
+  .opm-table {
+    min-width: 520px;
+  }
+
+  .opm-table th,
+  .opm-table td {
+    font-size: 12px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .opm-thumb {
+    width: 64px;
+    height: 44px;
+  }
+
+  .opm-td-title {
+    max-width: 180px;
+    font-size: 13px;
+  }
+
+  .opm-icon-btn {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* Very small phones */
+@media (max-width: 360px) {
+  .opm-root {
+    padding: 10px;
+  }
+
+  .opm-card {
+    padding: 8px;
+  }
+
+  .opm-title {
+    font-size: 15px;
+  }
+
+  .opm-table {
+    min-width: 460px;
+  }
+
+  .opm-td-title {
+    max-width: 140px;
+  }
+
+  .opm-thumb {
+    width: 56px;
+    height: 36px;
+  }
+
+  .opm-btn {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 8px;
+    padding-right: 8px;
+    font-size: 13px;
+    min-height: 40px;
+  }
+}
+
+/* -------------------------
+   Additional quality rules & overflow prevention
+   ------------------------- */
+
+/* Ensure grid children can shrink inside constrained containers */
+.opm-inner > * {
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/* Ensure images are responsive */
+.opm-thumb {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Keep table header from wrapping */
+.opm-table thead th {
+  white-space: nowrap;
+}
+
+/* Improve scrollbar behavior */
+.opm-table-wrap {
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+}
+
+/* Accessibility: consistent focus */
+.opm-btn:focus,
+.opm-icon-btn:focus,
+.opm-input:focus,
+.opm-select:focus,
+.opm-modal-close:focus {
+  outline: 3px solid rgba(37,99,235,0.12);
+  outline-offset: 2px;
+  box-sizing: border-box;
+}
+
+/* End of file */

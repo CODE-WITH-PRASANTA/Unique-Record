@@ -109,6 +109,7 @@ const navItems = [
     ],
   },
 
+  { icon: <MailIcon />, name: "Contact Managements", path: "/contact/managements" },
   { icon: <MailIcon />, name: "User Opinion", path: "/user/opinion" },
   { icon: <MailIcon />, name: "Subscribe Letter", path: "/subscribe-letter" },
   { icon: <RupeeIcon />, name: "Donation Manage", path: "/donation/manage" },

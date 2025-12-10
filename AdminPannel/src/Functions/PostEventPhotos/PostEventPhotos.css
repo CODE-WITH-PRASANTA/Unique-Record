@@ -1,0 +1,827 @@
+/* PostEventPhotos.css
+   - Fully responsive (4K → mobile)
+   - Fix for uploader: preview image doesn't hide other controls (Title, Category, Tags, Submit, Reset)
+   - Only max-width media queries used
+   - Preserves all class names and visual styling
+*/
+
+/* -------------------------
+   Base / Desktop (default, mobile-first semantics maintained)
+   ------------------------- */
+
+.pep-root {
+  --bg: #f6f8fb;
+  --card: #ffffff;
+  --muted: #5d6a73;
+  --title: #0b1720;
+  --accent: #2563eb;
+  --success: #06c58b;
+  --danger: #e11d48;
+  --soft-shadow: 0 12px 36px rgba(11,22,42,0.06);
+  --radius: 12px;
+  --gap: 16px;
+  --max-w: 1200px;
+
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  background: linear-gradient(180deg,#fbfdff,var(--bg));
+  padding: 18px;
+  box-sizing: border-box;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Ensure children use inherited box-sizing */
+.pep-root *,
+.pep-root *::before,
+.pep-root *::after {
+  box-sizing: inherit;
+}
+
+/* Inner layout wrapper (default: two-column wide layout) */
+.pep-inner {
+  max-width: var(--max-w);
+  margin-left: auto;
+  margin-right: auto;
+  display: grid;
+  grid-template-columns: 1fr 460px;
+  gap: 18px;
+  align-items: start;
+  padding-left: 8px;
+  padding-right: 8px;
+  height: calc(100vh - 36px);
+  box-sizing: border-box;
+  min-width: 320px;
+}
+
+/* Card base */
+.pep-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 24px rgba(6,12,28,0.06);
+  padding: 12px;
+  overflow: visible;
+  box-sizing: border-box;
+}
+
+/* Card header */
+.pep-card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.pep-title {
+  margin: 0;
+  font-size: clamp(16px, 1.2vw, 20px);
+  font-weight: 800;
+  color: var(--title);
+  line-height: 1.1;
+}
+
+.pep-title-small {
+  margin: 0;
+  font-size: clamp(14px, 1.1vw, 18px);
+  font-weight: 800;
+  color: var(--title);
+  line-height: 1.1;
+}
+
+.pep-sub {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* Form container */
+.pep-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 6px;
+  box-sizing: border-box;
+  min-width: 0; /* allow flex children to shrink */
+}
+
+/* Labels and controls */
+.pep-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+/* Inputs/selects/files */
+.pep-input,
+.pep-select,
+.pep-file {
+  width: 100%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 12px;
+  padding-right: 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(11,22,42,0.06);
+  background: #fff;
+  font-size: 14px;
+  color: var(--title);
+  box-sizing: border-box;
+  min-height: 40px;
+  min-width: 0; /* necessary for proper shrinking inside flex */
+}
+
+/* Remove native select arrow inconsistencies */
+.pep-select {
+  appearance: none;
+}
+
+/* Uploader area: MOBILE-FIRST defaults to column so fields stack on small screens */
+.pep-uploader {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0; /* allow shrink */
+  min-height: 0; /* allow shrink inside container */
+}
+
+/* Preview block - constrained to avoid pushing out other controls */
+.pep-preview {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  min-width: 0;
+  overflow: hidden;
+}
+
+/* Preview image: constrain height so it doesn't hide other form elements */
+.pep-preview-img {
+  width: 100%;
+  height: auto;
+  max-height: 220px; /* prevents the preview from growing too tall */
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid rgba(11,22,42,0.04);
+  box-sizing: border-box;
+  display: block;
+}
+
+/* Placeholder */
+.pep-placeholder {
+  width: 100%;
+  height: auto;
+  max-height: 220px;
+  min-height: 100px;
+  border-radius: 10px;
+  background: linear-gradient(180deg,#ffffff,#fbfdff);
+  border: 1px dashed rgba(11,22,42,0.04);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-direction: column;
+  color: rgba(11,22,42,0.35);
+  padding: 8px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* Uploader controls area (buttons, small inputs) */
+.pep-uploader-controls {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+/* Buttons */
+.pep-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 12px;
+  padding-right: 12px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+  background: #f3f6fb;
+  color: var(--title);
+  transition: transform .14s ease, box-shadow .14s ease;
+  box-sizing: border-box;
+  min-height: 40px;
+}
+
+.pep-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 28px rgba(6,12,28,0.06);
+}
+
+.pep-btn-primary {
+  background: linear-gradient(90deg,var(--accent),#1e40af);
+  color: #fff;
+  box-shadow: 0 10px 30px rgba(37,99,235,0.12);
+}
+
+.pep-btn-outline {
+  background: transparent;
+  border: 1px solid rgba(11,22,42,0.06);
+}
+
+.pep-btn-secondary {
+  background: #fff;
+  border: 1px solid rgba(11,22,42,0.06);
+}
+
+.pep-btn-ghost {
+  background: transparent;
+  color: var(--muted);
+}
+
+.pep-btn-danger {
+  background: linear-gradient(90deg,#ef4444,#dc2626);
+  color: white;
+  box-shadow: 0 10px 30px rgba(220,36,36,0.12);
+}
+
+/* Form actions row */
+.pep-form-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+}
+
+/* Right card: flex column so table wrapper can flex + scroll */
+.pep-right > .pep-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
+  box-sizing: border-box;
+  min-height: 200px;
+}
+
+/* Table wrapper */
+.pep-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: auto;
+  margin-top: 8px;
+  -webkit-overflow-scrolling: touch;
+  position: relative;
+  padding-bottom: 6px;
+  flex: 1 1 auto;
+  box-sizing: border-box;
+  max-width: 100%;
+  min-width: 0;
+}
+
+/* Table styles */
+.pep-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--card);
+  border-radius: 8px;
+  overflow: hidden;
+  table-layout: auto;
+  white-space: nowrap;
+  box-sizing: border-box;
+  min-width: 600px;
+}
+
+.pep-table th,
+.pep-table td {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 12px;
+  padding-right: 12px;
+  text-align: left;
+  font-size: 14px;
+  border-bottom: 1px solid rgba(11,22,42,0.04);
+  vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+.pep-table thead th {
+  background: #f3f6fb;
+  text-transform: uppercase;
+  font-size: 12px;
+  color: #475569;
+  font-weight: 800;
+}
+
+/* Thumbnail */
+.pep-thumb {
+  width: 84px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid rgba(11,22,42,0.04);
+  display: block;
+}
+
+/* Title cell */
+.pep-td-title {
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Actions */
+.pep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.pep-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: #f3f6fb;
+  border: 1px solid rgba(11,22,42,0.03);
+  cursor: pointer;
+  transition: transform .12s ease;
+  color: var(--muted);
+  box-sizing: border-box;
+}
+
+.pep-icon-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(6,12,28,0.06);
+}
+
+.pep-icon-delete {
+  background: linear-gradient(90deg,#fff1f2,#fff5f5);
+  color: var(--danger);
+  border: 1px solid rgba(220,36,36,0.06);
+}
+
+/* Empty row */
+.pep-empty {
+  text-align: center;
+  padding: 22px;
+  color: var(--muted);
+}
+
+/* Table note */
+.pep-table-note {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* Modal */
+.pep-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(6,12,28,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1200;
+  padding: 18px;
+  box-sizing: border-box;
+}
+
+.pep-modal-panel {
+  background: var(--card);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: var(--soft-shadow);
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.pep-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  padding-left: 14px;
+  padding-right: 14px;
+  border-bottom: 1px solid rgba(11,22,42,0.04);
+  box-sizing: border-box;
+}
+
+.pep-modal-header h4 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.pep-modal-close {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 6px;
+  color: var(--muted);
+}
+
+.pep-modal-body {
+  padding: 16px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.pep-modal-actions {
+  padding: 12px;
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  border-top: 1px solid rgba(11,22,42,0.04);
+  box-sizing: border-box;
+}
+
+/* Focus outlines */
+.pep-btn:focus,
+.pep-icon-btn:focus,
+.pep-input:focus,
+.pep-select:focus,
+.pep-file:focus,
+.pep-modal-close:focus {
+  outline: 3px solid rgba(37,99,235,0.12);
+  outline-offset: 2px;
+}
+
+/* Prevent accidental image selection during dragging */
+.pep-thumb,
+.pep-preview-img {
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+/* -------------------------
+   Responsive overrides (only max-width queries)
+   ------------------------- */
+
+/* Very large screens — adjust spacing */
+@media (max-width: 4000px) {
+  .pep-root {
+    padding: 24px;
+  }
+
+  .pep-inner {
+    gap: 24px;
+    padding-left: 12px;
+    padding-right: 12px;
+    max-width: 1400px;
+  }
+
+  .pep-card {
+    padding: 16px;
+  }
+}
+
+/* 1920px and below */
+@media (max-width: 1920px) {
+  .pep-root {
+    padding: 22px;
+  }
+
+  .pep-inner {
+    max-width: 1280px;
+  }
+}
+
+/* 1440px and below */
+@media (max-width: 1440px) {
+  .pep-inner {
+    max-width: 1180px;
+    grid-template-columns: 1fr 440px;
+    gap: 20px;
+  }
+
+  .pep-table {
+    min-width: 560px;
+  }
+}
+
+/* 1366px and below */
+@media (max-width: 1366px) {
+  .pep-inner {
+    grid-template-columns: 1fr 420px;
+    gap: 18px;
+  }
+
+  .pep-card {
+    padding: 14px;
+  }
+
+  .pep-modal-panel {
+    max-width: 400px;
+  }
+}
+
+/* Tablet & below — STACK layout */
+@media (max-width: 1024px) {
+  .pep-root {
+    height: auto;
+    overflow: visible;
+    padding: 18px;
+  }
+
+  .pep-inner {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    height: auto;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  /* Uploader: ensure column layout on stacked view */
+  .pep-uploader {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .pep-uploader-controls {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .pep-preview {
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Table wrapper: horizontal scroll on tablet & mobile */
+  .pep-table-wrap {
+    overflow-x: auto;
+    overflow-y: visible;
+    max-height: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .pep-table {
+    min-width: 640px;
+  }
+
+  .pep-table th,
+  .pep-table td {
+    font-size: 13px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .pep-preview-img {
+    max-height: 180px;
+  }
+
+  .pep-modal-panel {
+    margin-left: 12px;
+    margin-right: 12px;
+    max-width: 92%;
+  }
+}
+
+/* Larger phones / small tablets */
+@media (max-width: 768px) {
+  .pep-root {
+    padding: 16px;
+  }
+
+  .pep-card {
+    padding: 12px;
+  }
+
+  .pep-inner {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .pep-table {
+    min-width: 540px;
+  }
+
+  .pep-thumb {
+    width: 72px;
+    height: 48px;
+  }
+
+  .pep-btn {
+    min-height: 44px;
+  }
+
+  .pep-preview-img {
+    max-height: 140px;
+  }
+}
+
+/* Phones */
+@media (max-width: 480px) {
+  .pep-root {
+    padding: 12px;
+  }
+
+  .pep-card {
+    padding: 10px;
+  }
+
+  .pep-inner {
+    gap: 12px;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .pep-btn,
+  .pep-icon-btn {
+    min-height: 44px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .pep-title {
+    font-size: 16px;
+  }
+
+  .pep-table {
+    min-width: 480px;
+  }
+
+  .pep-table th,
+  .pep-table td {
+    font-size: 12px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .pep-preview-img {
+    max-height: 120px;
+  }
+
+  .pep-td-title {
+    max-width: 160px;
+  }
+
+  .pep-icon-btn {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* Very small phones */
+@media (max-width: 360px) {
+  .pep-root {
+    padding: 10px;
+  }
+
+  .pep-card {
+    padding: 8px;
+  }
+
+  .pep-title {
+    font-size: 15px;
+  }
+
+  .pep-preview-img {
+    max-height: 84px;
+  }
+
+  .pep-table {
+    min-width: 420px;
+  }
+
+  .pep-td-title {
+    max-width: 140px;
+  }
+
+  .pep-btn {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 8px;
+    padding-right: 8px;
+    font-size: 13px;
+  }
+}
+
+/* -------------------------
+   Uploader-specific layout for wide screens (desktop)
+   - Keep preview and controls side-by-side on wide screens,
+     preventing the preview from taking full height and hiding fields.
+   ------------------------- */
+@media (min-width: 1025px) {
+  /* Convert uploader to row layout on desktop so preview sits beside controls */
+  .pep-uploader {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  /* Give preview a fixed width but allow controls to take remaining space */
+  .pep-preview {
+    flex: 0 0 300px; /* fixed preview column on desktop */
+    max-width: 320px;
+  }
+
+  .pep-preview-img {
+    width: 100%;
+    height: auto;
+    max-height: 220px;
+  }
+
+  /* Controls (form + buttons) should take remaining space and be able to shrink */
+  .pep-uploader-controls,
+  .pep-form {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  /* Ensure buttons wrap into multiple rows rather than overflow */
+  .pep-uploader-controls {
+    flex-wrap: wrap;
+  }
+}
+
+/* -------------------------
+   Additional fixes & quality rules
+   ------------------------- */
+
+/* Make images/media responsive */
+.pep-preview-img,
+.pep-thumb {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Ensure flex children can shrink to avoid overflow */
+.pep-inner > * {
+  min-width: 0;
+  min-height: 0;
+}
+
+/* Inputs/selects/files: keep readable touch sizes */
+.pep-input,
+.pep-select,
+.pep-file {
+  font-size: 14px;
+  min-height: 40px;
+}
+
+/* Buttons: consistent touch targets */
+.pep-btn,
+.pep-icon-btn {
+  touch-action: manipulation;
+}
+
+/* Table wrapper scrollbar behavior */
+.pep-table-wrap {
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+}
+
+/* Keep header not wrapping */
+.pep-table thead th {
+  white-space: nowrap;
+}
+
+/* Scrollbar appearance hint (non-breaking enhancement) */
+.pep-table-wrap::-webkit-scrollbar {
+  height: 10px;
+}
+
+/* Accessibility: focus outlines */
+.pep-btn:focus,
+.pep-icon-btn:focus,
+.pep-input:focus,
+.pep-select:focus,
+.pep-file:focus,
+.pep-modal-close:focus {
+  outline: 3px solid rgba(37,99,235,0.12);
+  outline-offset: 2px;
+}
+
+/* End of file */

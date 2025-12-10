@@ -1,0 +1,872 @@
+/* UserOpinion.css
+   - Fully responsive (4K → desktop → laptop → tablet → mobile)
+   - Only max-width media queries used
+   - Preserves all class names, visual design, colors, spacing, borders, shadows
+   - Includes fixes to prevent Delete/action buttons from being hidden on small screens
+   - Table overlap / clipping fixes applied (cells can shrink, textual cells may wrap)
+*/
+
+/* -------------------------
+   Root / global resets
+   ------------------------- */
+:root {
+  --bg-1: #ffffff;
+  --bg-2: #fbfdff;
+  --card: #ffffff;
+  --muted: #5d6a73;
+  --title: #0b1720;
+  --accent: #2563eb;
+  --danger: #e11d48;
+  --radius: 12px;
+  --gap: 12px;
+  --max-w: 1500px;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+/* -------------------------
+   Page root
+   - locked to viewport on wide screens to preserve two-column UX
+   - will relax on smaller viewports via max-width queries
+   ------------------------- */
+.uo-root {
+  background: linear-gradient(
+    180deg,
+    var(--bg-1),
+    var(--bg-2)
+  );
+  padding: 18px;
+  height: 100vh;
+  overflow: hidden;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+/* -------------------------
+   Decorative header
+   ------------------------- */
+.uo-header-decor {
+  height: 96px;
+  border-radius: 12px;
+  background-size: cover;
+  background-position: center;
+  margin-bottom: 12px;
+  box-shadow: 0 12px 36px rgba(11,22,42,0.06);
+  box-sizing: border-box;
+}
+
+/* -------------------------
+   Inner layout wrapper
+   - desktop-friendly two-column by default (left panel + right table)
+   - constrained to fit inside viewport height
+   ------------------------- */
+.uo-inner {
+  max-width: var(--max-w);
+  margin-left: auto;
+  margin-right: auto;
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 18px;
+  box-sizing: border-box;
+  padding: 0 12px;
+  height: calc(100vh - 96px - 36px); /* header + breathing room */
+  overflow: hidden; /* keep scrolling constrained to table area */
+  min-width: 320px;
+}
+
+/* -------------------------
+   Card base
+   ------------------------- */
+.uo-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 12px;
+  box-shadow: 0 8px 24px rgba(6,12,28,0.06);
+  box-sizing: border-box;
+  overflow: visible;
+  min-width: 0;
+}
+
+/* Right card must be a flex column so header is fixed and table area can flex/scroll */
+.uo-right > .uo-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+/* Left card static content, but made scrollable when taller than available space */
+.uo-left > .uo-card {
+  display: block;
+  box-sizing: border-box;
+  /* Allow left panel to scroll independently if content exceeds available height.
+     This prevents fields like Address, Designation, Age etc. from being clipped. */
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  max-height: calc(100vh - 96px - 48px); /* header + breathing room; keeps left panel usable on tall viewports */
+  padding-right: 6px; /* small gutter for scrollbar */
+  min-width: 0;
+}
+
+/* -------------------------
+   Headers & typography
+   ------------------------- */
+.uo-card-header {
+  margin-bottom: 8px;
+}
+
+.uo-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--title);
+  line-height: 1.05;
+}
+
+.uo-title-small {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--title);
+  line-height: 1.05;
+}
+
+.uo-sub {
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* -------------------------
+   Form layout
+   ------------------------- */
+.uo-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 6px;
+  width: 100%;
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+/* allow form to scroll inside left card if needed */
+.uo-form {
+  overflow: visible;
+  min-width: 0;
+}
+
+.uo-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-sizing: border-box;
+}
+
+.uo-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+  box-sizing: border-box;
+}
+
+/* Inputs */
+.uo-input,
+.uo-textarea {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 12px;
+  padding-right: 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(11,22,42,0.06);
+  background: #fff;
+  font-size: 14px;
+  color: var(--title);
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+}
+
+/* Textarea specifics */
+.uo-textarea {
+  resize: vertical;
+  min-height: 88px;
+  line-height: 1.4;
+}
+
+/* Two-column grid for phone & age (mobile-first: single column default)
+   NOTE: original used min-width; responsive rules below use max-width to collapse */
+.uo-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* -------------------------
+   Form actions / buttons
+   ------------------------- */
+.uo-form-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+}
+
+.uo-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 12px;
+  padding-right: 12px;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  background: #f3f6fb;
+  color: var(--title);
+  transition: transform .12s ease, box-shadow .12s ease;
+  box-sizing: border-box;
+  min-height: 40px;
+}
+
+.uo-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 28px rgba(6,12,28,0.06);
+}
+
+.uo-btn-primary {
+  background: linear-gradient(90deg, var(--accent), #1e40af);
+  color: #fff;
+  box-shadow: 0 10px 30px rgba(37,99,235,0.12);
+}
+
+.uo-btn-secondary {
+  background: #fff;
+  border: 1px solid rgba(11,22,42,0.06);
+}
+
+.uo-btn-ghost {
+  background: transparent;
+  color: var(--muted);
+}
+
+.uo-btn-danger {
+  background: linear-gradient(90deg, #ef4444, #dc2626);
+  color: #fff;
+}
+
+/* -------------------------
+   Table wrapper (scrolling area)
+   - flex: 1 allows it to grow and scroll inside right card
+   ------------------------- */
+.uo-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: auto;
+  margin-top: 8px;
+  -webkit-overflow-scrolling: touch;
+  box-sizing: border-box;
+  padding-bottom: 6px;
+  flex: 1 1 auto;
+  max-height: none;
+  min-width: 0;
+}
+
+/* -------------------------
+   Table core
+   - changed to table-layout: auto to avoid forced narrow columns that clip actions
+   - ensure cells can shrink (min-width:0) to avoid pushing action buttons out
+   ------------------------- */
+.uo-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 920px; /* desktop-readable width; wrapper will scroll on smaller screens */
+  background: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  table-layout: auto; /* changed from fixed to auto to reduce overlap/clipping */
+  box-sizing: border-box;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.uo-table th,
+.uo-table td {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 12px;
+  padding-right: 12px;
+  text-align: left;
+  font-size: 13px;
+  border-bottom: 1px solid rgba(11,22,42,0.04);
+  vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  box-sizing: border-box;
+  min-width: 0; /* allows shrinking rather than forcing overflow */
+}
+
+.uo-table thead th {
+  background: #f3f6fb;
+  text-transform: uppercase;
+  font-size: 12px;
+  color: #475569;
+  font-weight: 800;
+  box-sizing: border-box;
+  white-space: nowrap;
+}
+
+/* -------------------------
+   Avatar, name, email, truncated cells
+   - allow important textual fields to wrap to prevent overlap
+   ------------------------- */
+.uo-avatar-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-sizing: border-box;
+}
+
+.uo-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid rgba(11,22,42,0.04);
+  display: inline-block;
+  box-sizing: border-box;
+}
+
+.uo-avatar-fallback {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  background: #f3f6fb;
+  border-radius: 50%;
+  box-sizing: border-box;
+}
+
+/* Name & email allow controlled wrapping to avoid overlap on small screens */
+.uo-td-name {
+  font-weight: 700;
+  max-width: 180px;
+  white-space: normal;          /* allow wrapping */
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+}
+
+.uo-td-email {
+  max-width: 220px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+}
+
+/* Address & message should wrap to avoid overlap */
+.uo-td-addr,
+.uo-td-msg {
+  max-width: 260px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+}
+
+/* -------------------------
+   Actions buttons (CRITICAL FIX)
+   - ensure action buttons (delete etc.) are never clipped/hidden
+   - action container uses inline-flex; buttons have explicit sizing and z-index
+   ------------------------- */
+.uo-actions {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  position: relative; /* stacking context */
+  z-index: 2;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.uo-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  min-height: 36px;
+  border-radius: 8px;
+  background: #f3f6fb;
+  border: 1px solid rgba(11,22,42,0.03);
+  cursor: pointer;
+  color: var(--muted);
+  position: relative;
+  z-index: 3; /* ensure visible above neighboring content */
+  box-sizing: border-box;
+}
+
+.uo-icon-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(6,12,28,0.06);
+}
+
+.uo-icon-delete {
+  background: linear-gradient(90deg, #fff1f2, #fff5f5);
+  color: var(--danger);
+  border: 1px solid rgba(220,36,36,0.06);
+  z-index: 4;
+  box-sizing: border-box;
+}
+
+/* Let table cells show visible positioned children (so buttons won't be clipped) */
+.uo-table td {
+  overflow: visible;
+  box-sizing: border-box;
+}
+
+/* Ensure last column (actions column) keeps overflow visible */
+.uo-table td:last-child {
+  white-space: nowrap;
+  vertical-align: middle;
+  overflow: visible;
+  box-sizing: border-box;
+}
+
+/* -------------------------
+   Empty / notes / modal
+   ------------------------- */
+.uo-empty {
+  text-align: center;
+  padding: 22px;
+  color: var(--muted);
+  box-sizing: border-box;
+}
+
+.uo-table-note {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--muted);
+  box-sizing: border-box;
+}
+
+.uo-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(6,12,28,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1200;
+  padding: 18px;
+  box-sizing: border-box;
+}
+
+.uo-modal-panel {
+  background: #ffffff;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 12px 36px rgba(11,22,42,0.06);
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.uo-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(11,22,42,0.04);
+  box-sizing: border-box;
+}
+
+.uo-modal-header h4 {
+  margin: 0;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.uo-modal-close {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 6px;
+  color: var(--muted);
+  box-sizing: border-box;
+}
+
+.uo-modal-body {
+  padding: 16px;
+  font-size: 14px;
+  color: var(--muted);
+  box-sizing: border-box;
+}
+
+.uo-modal-actions {
+  padding: 12px;
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  border-top: 1px solid rgba(11,22,42,0.04);
+  box-sizing: border-box;
+}
+
+/* -------------------------
+   Focus outlines & image selection prevention
+   ------------------------- */
+.uo-btn:focus,
+.uo-icon-btn:focus,
+.uo-input:focus,
+.uo-textarea:focus,
+.uo-modal-close:focus {
+  outline: 3px solid rgba(37,99,235,0.12);
+  outline-offset: 2px;
+  box-sizing: border-box;
+}
+
+.uo-avatar {
+  -webkit-user-drag: none;
+  user-select: none;
+  box-sizing: border-box;
+}
+
+/* -------------------------
+   Responsive overrides (only max-width queries)
+   - Breakpoints: 4000, 1920, 1440, 1366, 1024, 768, 480, 360
+   - Tablet & mobile (<1024px) → stacked layout, table horizontal scroll, unlock page height
+   ------------------------- */
+
+/* Very large screens — comfortable spacing */
+@media (max-width: 4000px) {
+  .uo-root {
+    padding: 24px;
+  }
+
+  .uo-inner {
+    gap: 24px;
+    padding-left: 16px;
+    padding-right: 16px;
+    max-width: 1600px;
+  }
+
+  .uo-card {
+    padding: 16px;
+  }
+}
+
+/* Large desktops */
+@media (max-width: 1920px) {
+  .uo-inner {
+    max-width: 1400px;
+  }
+
+  .uo-table {
+    min-width: 960px;
+  }
+}
+
+/* Desktop / laptop */
+@media (max-width: 1440px) {
+  .uo-inner {
+    grid-template-columns: 380px 1fr;
+    gap: 20px;
+  }
+
+  .uo-table {
+    min-width: 920px;
+  }
+
+  .uo-avatar {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+/* Typical laptops */
+@media (max-width: 1366px) {
+  .uo-inner {
+    grid-template-columns: 360px 1fr;
+    gap: 18px;
+  }
+
+  .uo-card {
+    padding: 14px;
+  }
+
+  .uo-table {
+    min-width: 880px;
+  }
+}
+
+/* TABLET & BELOW — stack panels and allow page to grow (unlock viewport lock) */
+@media (max-width: 1024px) {
+  .uo-root {
+    height: auto;       /* allow natural scrolling on small screens */
+    overflow: visible;
+    padding: 18px;
+  }
+
+  .uo-inner {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding-left: 10px;
+    padding-right: 10px;
+    height: auto;
+    overflow: visible;
+  }
+
+  /* Remove left-panel max-height on stacked layout so the full page scrolls normally */
+  .uo-left > .uo-card {
+    max-height: none;
+    overflow: visible;
+    padding-right: 0;
+  }
+
+  .uo-right > .uo-card {
+    height: auto;
+  }
+
+  .uo-table-wrap {
+    overflow-x: auto;
+    overflow-y: visible;
+    max-height: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .uo-table {
+    min-width: 720px;
+  }
+
+  .uo-table th,
+  .uo-table td {
+    font-size: 13px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .uo-td-name {
+    max-width: 180px;
+  }
+
+  .uo-td-email {
+    max-width: 200px;
+  }
+
+  .uo-td-addr,
+  .uo-td-msg {
+    max-width: 220px;
+  }
+
+  /* Reduce header height breathing room */
+  .uo-header-decor {
+    height: 84px;
+  }
+
+  .uo-modal-panel {
+    max-width: 92%;
+    margin-left: 12px;
+    margin-right: 12px;
+  }
+
+  /* Make grid-2 two columns on tablet+ (was previously min-width:480)
+     We emulate the original intent by increasing left column width in desktop base and here allowing a 2-col grid */
+  .uo-grid-2 {
+    grid-template-columns: 1fr 160px;
+  }
+}
+
+/* Small tablets / large phones */
+@media (max-width: 768px) {
+  .uo-root {
+    padding: 16px;
+  }
+
+  .uo-card {
+    padding: 12px;
+  }
+
+  .uo-inner {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .uo-table {
+    min-width: 600px;
+  }
+
+  .uo-avatar {
+    width: 40px;
+    height: 40px;
+  }
+
+  .uo-btn {
+    min-height: 44px;
+  }
+}
+
+/* Phones */
+@media (max-width: 480px) {
+  .uo-root {
+    padding: 12px;
+  }
+
+  .uo-card {
+    padding: 10px;
+  }
+
+  .uo-inner {
+    gap: 12px;
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+
+  .uo-btn,
+  .uo-icon-btn {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 14px;
+    min-height: 44px;
+  }
+
+  .uo-table {
+    min-width: 520px;
+  }
+
+  .uo-table th,
+  .uo-table td {
+    font-size: 12px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .uo-td-name {
+    max-width: 140px;
+    font-size: 13px;
+  }
+
+  .uo-td-email {
+    max-width: 160px;
+    font-size: 12px;
+  }
+
+  .uo-td-addr,
+  .uo-td-msg {
+    max-width: 160px;
+  }
+
+  .uo-avatar {
+    width: 36px;
+    height: 36px;
+  }
+
+  .uo-icon-btn {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+  }
+}
+
+/* Very small phones */
+@media (max-width: 360px) {
+  .uo-root {
+    padding: 10px;
+  }
+
+  .uo-card {
+    padding: 8px;
+  }
+
+  .uo-title {
+    font-size: 16px;
+  }
+
+  .uo-table {
+    min-width: 460px;
+  }
+
+  .uo-td-name {
+    max-width: 120px;
+  }
+
+  .uo-td-email {
+    max-width: 140px;
+  }
+
+  .uo-avatar {
+    width: 32px;
+    height: 32px;
+  }
+
+  .uo-btn {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 8px;
+    padding-right: 8px;
+    font-size: 13px;
+    min-height: 40px;
+  }
+}
+
+/* -------------------------
+   Misc quality rules & overflow prevention
+   ------------------------- */
+
+/* Ensure grid children can shrink inside constrained containers */
+.uo-inner > * {
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/* Ensure table header does not wrap */
+.uo-table thead th {
+  white-space: nowrap;
+}
+
+/* Improve scrollbar behaviour for webkit */
+.uo-table-wrap::-webkit-scrollbar {
+  height: 10px;
+}
+
+/* Accessibility: consistent focus */
+.uo-btn:focus,
+.uo-icon-btn:focus,
+.uo-input:focus,
+.uo-textarea:focus,
+.uo-modal-close:focus {
+  outline: 3px solid rgba(37,99,235,0.12);
+  outline-offset: 2px;
+  box-sizing: border-box;
+}
+
+/* End of file */
