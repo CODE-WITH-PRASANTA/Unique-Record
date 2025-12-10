@@ -1,230 +1,309 @@
-/* Base vars */
-:root {
-  --bg: #f4f6fb;
-  --card: #fff;
-  --muted: #6b7280;
-  --accent: #2563eb;
-  --success: #10b981;
-  --warn: #f59e0b;
-}
-
-/* Page */
+/* ----------------------------------------------------
+   PAGE WRAPPER
+---------------------------------------------------- */
 .teammembers-page {
-  background: var(--bg);
   min-height: 100vh;
-  padding: 28px 18px;
-  box-sizing: border-box;
+  padding: 34px 24px;
+  font-family: "Inter", sans-serif;
+  color: #111827;
+  transition: 0.2s ease;
 }
 
-/* header */
+/* ----------------------------------------------------
+   HEADER
+---------------------------------------------------- */
 .teammembers-header {
-  max-width: 1280px;
-  margin: 0 auto 12px;
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
-  gap: 12px;
+  align-items: flex-start;
+  margin-bottom: 28px;
+  gap: 18px;
   flex-wrap: wrap;
+}
+
+.teammembers-header-left {
+  display: flex;
+  flex-direction: column;
 }
 
 .teammembers-header-left h2 {
   margin: 0;
-  font-size: 20px;
-  color: #0f172a;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  color: #1f2937;
 }
 
 .teammembers-sub {
-  margin: 6px 0 0;
-  color: var(--muted);
-  font-size: 13px;
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-top: 4px;
 }
 
-/* View toggle */
+/* ----------------------------------------------------
+   VIEW MODE TOGGLE BUTTONS
+---------------------------------------------------- */
 .tm-view-toggle {
-  display: inline-flex;
-  align-items: center;
-  padding: 2px;
-  border-radius: 999px;
-  background: #e5edff;
-  border: 1px solid rgba(37, 99, 235, 0.35);
-  gap: 2px;
+  display: flex;
+  gap: 10px;
 }
 
 .tm-view-btn {
-  border: 0;
-  background: transparent;
-  padding: 6px 10px;
-  border-radius: 999px;
-  font-size: 12px;
-  display: inline-flex;
+  background: #eef1f6;
+  border: none;
+  padding: 9px 18px;
+  display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 7px;
   cursor: pointer;
-  color: #1d4ed8;
-  opacity: 0.8;
-  transition: background 0.16s ease, box-shadow 0.16s ease, opacity 0.16s ease,
-    transform 0.12s ease;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #374151;
+  font-weight: 500;
+  transition: background 0.25s ease, color 0.25s ease, transform 0.2s;
+}
+
+.tm-view-btn:hover {
+  background: #e0e4eb;
+  transform: translateY(-2px);
 }
 
 .tm-view-btn svg {
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .tm-view-btn.active {
-  background: #ffffff;
-  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.3);
-  opacity: 1;
-  transform: translateY(-1px);
+  background: var(--primary);
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+  transform: translateY(-2px);
 }
 
-.tm-view-btn:hover:not(.active) {
-  opacity: 1;
+/* ----------------------------------------------------
+   RESPONSIVE DESIGN
+---------------------------------------------------- */
+
+/* ----------- Large Monitors (1440px) ----------- */
+@media (max-width: 1440px) {
+  .teammembers-page {
+    padding: 0px 0px;
+  }
 }
 
-/* GRID VIEW */
+/* ----------- Laptop / Small Desktop (1200px) ----------- */
+@media (max-width: 1200px) {
+  .teammembers-header-left h2 {
+    font-size: 24px;
+  }
+}
+
+/* ----------- Tablets (992px) ----------- */
+@media (max-width: 992px) {
+  .teammembers-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .tm-view-toggle {
+    width: 100%;
+    justify-content: flex-start;
+    gap: 12px;
+  }
+}
+
+/* ----------- Tablets (768px) ----------- */
+@media (max-width: 768px) {
+  .teammembers-page {
+    padding: 0px 0px;
+  }
+
+  .tm-view-btn {
+    padding: 8px 14px;
+    font-size: 13px;
+  }
+}
+
+/* ----------- Mobile (480px) ----------- */
+@media (max-width: 480px) {
+  .teammembers-header-left h2 {
+    font-size: 20px;
+  }
+
+  .tm-view-toggle {
+    width: 100%;
+    gap: 10px;
+  }
+
+  .tm-view-btn {
+    flex: 1;
+    justify-content: center;
+    padding: 9px 12px;
+  }
+}
+
+/* ----------- Small Mobile (360px) ----------- */
+@media (max-width: 360px) {
+
+  .tm-view-btn {
+    padding: 8px 10px;
+    font-size: 12.5px;
+    border-radius: 6px;
+  }
+
+  .teammembers-header-left h2 {
+    font-size: 18px;
+  }
+}
+
+/* ----------------------------------------------------
+   VARIABLES
+---------------------------------------------------- */
+:root {
+  --bg: #f4f6fb;
+  --card: #ffffff;
+  --border: #e5e7eb;
+  --text-muted: #6b7280;
+  --primary: #2563eb;
+  --success: #10b981;
+  --danger: #ef4444;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* ----------------------------------------------------
+   GRID VIEW LAYOUT
+---------------------------------------------------- */
 .teammembers-grid {
-  max-width: 1280px;
-  margin: 12px auto 60px;
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 18px;
-  padding: 0 6px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+  margin-top: 24px;
 }
 
-/* card */
+/* ----------------------------------------------------
+   CARD STYLE
+---------------------------------------------------- */
 .teammembers-card {
   background: var(--card);
-  border-radius: 12px;
-  padding: 14px;
-  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.06);
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  transition: 0.3s ease;
+  position: relative;
 }
 
-.teammembers-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 14px 28px rgba(15, 23, 42, 0.12);
-}
 
-/* top */
+/* ----------------------------------------------------
+   TOP SECTION
+---------------------------------------------------- */
 .teammembers-top {
   display: flex;
   justify-content: space-between;
-  gap: 10px;
   align-items: flex-start;
 }
 
 .teammembers-left {
   display: flex;
+  align-items: center;
   gap: 12px;
-  min-width: 0;
 }
 
 .teammembers-photo {
-  width: 64px;
-  height: 64px;
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
   object-fit: cover;
-  border-radius: 10px;
-  flex-shrink: 0;
 }
 
 .teammembers-meta {
-  min-width: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .teammembers-name {
-  font-weight: 700;
-  font-size: 15px;
-  color: #0f172a;
-  line-height: 1.2;
-  max-height: 2.4em;
-  overflow: hidden;
+  font-weight: 600;
+  font-size: 17px;
 }
 
 .teammembers-design {
-  color: var(--muted);
-  margin-top: 6px;
-  font-size: 13px;
+  color: var(--primary);
+  font-size: 14px;
+  font-weight: 500;
 }
 
 .teammembers-joined {
-  font-size: 12px;
-  color: var(--muted);
-  margin-top: 6px;
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 4px;
 }
 
-/* menu */
+/* ----------------------------------------------------
+   MENU
+---------------------------------------------------- */
 .teammembers-menu {
   position: relative;
 }
 
 .teammembers-3dots {
   background: transparent;
-  border: 0;
-  padding: 8px;
-  border-radius: 8px;
+  border: none;
   cursor: pointer;
-  color: #374151;
-  display: inline-flex;
-  align-items: center;
+  padding: 6px;
+  font-size: 18px;
+  color: #6b7280;
 }
 
-.teammembers-3dots:hover {
-  background: rgba(15, 23, 42, 0.04);
-}
-
-/* dropdown */
 .teammembers-dropdown {
   position: absolute;
-  top: 36px;
+  background: #ffffff;
   right: 0;
-  width: 170px;
-  background: var(--card);
-  border-radius: 10px;
-  padding: 6px 0;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
-  z-index: 60;
+  top: 32px;
+  width: 160px;
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  z-index: 10;
 }
 
 .teammembers-dropdown-item {
+  padding: 10px 14px;
   display: flex;
-  gap: 10px;
   align-items: center;
+  gap: 8px;
   width: 100%;
-  padding: 10px 12px;
+  border: none;
   background: transparent;
-  border: 0;
   cursor: pointer;
   font-size: 14px;
-  color: #0f172a;
+  color: #374151;
+  transition: 0.2s;
 }
 
 .teammembers-dropdown-item:hover {
-  background: rgba(37, 99, 235, 0.06);
-  color: #0747a6;
+  background: #f3f4f6;
 }
 
 .teammembers-dropdown-item.danger {
-  color: #d11a2a;
+  color: var(--danger);
 }
 
-/* status */
+/* ----------------------------------------------------
+   STATUS
+---------------------------------------------------- */
 .teammembers-status {
+  margin-top: 12px;
+  font-size: 14px;
   display: flex;
-  gap: 10px;
   align-items: center;
-  color: var(--muted);
-  font-weight: 600;
-  font-size: 13px;
+  gap: 6px;
+  font-weight: 500;
 }
 
 .teammembers-dot {
-  width: 10px;
   height: 10px;
-  border-radius: 999px;
-  display: inline-block;
+  width: 10px;
+  border-radius: 50%;
 }
 
 .teammembers-dot.published {
@@ -232,298 +311,522 @@
 }
 
 .teammembers-dot.draft {
-  background: var(--warn);
+  background: var(--danger);
 }
 
-/* tiles */
+/* ----------------------------------------------------
+   TILES (Phone / Email / Dept / Social)
+---------------------------------------------------- */
 .teammembers-tiles {
+  margin-top: 16px;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
 }
 
 .teammembers-tile {
-  background: #f7fbff;
-  padding: 10px;
+  background: #f9fafb;
   border-radius: 10px;
-  border: 1px solid rgba(15, 23, 42, 0.04);
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+  padding: 12px;
+  border: 1px solid var(--border);
 }
 
 .tm-label {
-  color: var(--muted);
   font-size: 12px;
+  color: var(--text-muted);
 }
 
 .tm-value {
-  font-weight: 700;
-  color: #0f172a;
+  font-size: 14px;
+  margin-top: 3px;
   display: flex;
-  gap: 8px;
   align-items: center;
-  font-size: 13px;
+  gap: 6px;
 }
 
 .social-icons a {
-  margin-left: 6px;
-  color: #333;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  font-size: 16px;
+  margin-right: 8px;
+  color: var(--primary);
+  text-decoration: none;
 }
 
-/* bottom */
+.social-icons a:hover {
+  opacity: 0.7;
+}
+
+/* ----------------------------------------------------
+   BOTTOM SECTION
+---------------------------------------------------- */
 .teammembers-bottom {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
+  margin-top: 16px;
 }
 
 .teammembers-bio {
-  margin: 0;
-  color: #475569;
-  font-size: 13px;
-  line-height: 1.4;
-  max-height: 44px;
-  overflow: hidden;
-  flex: 1 1 60%;
-}
-
-.teammembers-actions-compact {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-
-.btn {
-  background: var(--accent);
-  color: #fff;
-  border: 0;
-  padding: 8px 10px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 700;
-  display: inline-flex;
-  gap: 8px;
-  align-items: center;
-  font-size: 13px;
+  font-size: 14px;
+  color: #374151;
+  margin-bottom: 10px;
+  line-height: 1.5;
 }
 
 .btn.ghost {
+  border: 1px solid var(--primary);
   background: transparent;
-  color: var(--accent);
-  border: 1px solid rgba(37, 99, 235, 0.12);
+  padding: 7px 14px;
+  font-size: 14px;
+  border-radius: 6px;
+  color: var(--primary);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: 0.25s;
 }
 
-/* empty */
-.teammembers-empty {
-  text-align: center;
-  padding: 20px;
-  color: var(--muted);
+.btn.ghost:hover {
+  background: var(--primary);
+  color: #fff;
+}
+
+/* ----------------------------------------------------
+   LIST / TABLE VIEW — PREMIUM UI
+---------------------------------------------------- */
+
+.teammembers-table-wrapper {
+  margin-top: 25px;
+  width: 100%;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+.teammembers-table-wrapper::-webkit-scrollbar {
+  height: 6px;
+}
+.teammembers-table-wrapper::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 20px;
+}
+.teammembers-table-wrapper::-webkit-scrollbar-track {
+  background: transparent;
+}
+/* ----------------------------------------------------
+   COMPACT + ATTRACTIVE CARD STYLE
+---------------------------------------------------- */
+.teammembers-card {
+  background: var(--card);
+  border-radius: 14px;
+  padding: 16px 18px; /* smaller */
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--border);
+  transition: 0.25s ease;
+  position: relative;
+  min-height: 240px; /* compact height */
+}
+
+.teammembers-card:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+/* Smaller top section */
+.teammembers-photo {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.teammembers-name {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.teammembers-design {
   font-size: 13px;
 }
 
-.teammembers-empty.in-table {
-  padding: 24px;
+.teammembers-joined {
+  font-size: 12px;
+  margin-top: 2px;
 }
 
-/* TABLE (LIST) VIEW */
-.teammembers-table-wrapper {
-  max-width: 1280px;
-  margin: 12px auto 60px;
-  padding: 0 6px;
-  overflow-x: auto;
+/* Status section */
+.teammembers-status {
+  margin-top: 10px;
+  font-size: 13px;
+  gap: 5px;
 }
 
-.teammembers-table-card {
-  background: var(--card);
-  border-radius: 12px;
-  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.06);
-  overflow: hidden;
+.teammembers-dot {
+  height: 9px;
+  width: 9px;
 }
+
+/* Tiles section */
+.teammembers-tiles {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.teammembers-tile {
+  padding: 10px;
+  border-radius: 10px;
+  background: #f8f9fb;
+  border: 1px solid var(--border);
+}
+
+.tm-label {
+  font-size: 11px;
+}
+
+
+.social-icons a {
+  font-size: 15px;
+  margin-right: 6px;
+}
+
+/* Bottom Bio */
+.teammembers-bio {
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.btn.ghost {
+  padding: 6px 12px;
+  font-size: 13px;
+  border-radius: 6px;
+}
+
+/* ----------------------------------------------------
+   IMPROVED GRID FOR ALL DEVICES
+---------------------------------------------------- */
+.teammembers-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px; /* smaller gap */
+  margin-top: 20px;
+}
+
+/* 1400px – slightly bigger screens */
+@media (max-width: 1400px) {
+  .teammembers-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+}
+
+/* 1200px – typical desktop */
+@media (max-width: 1200px) {
+  .teammembers-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Tablets – 992px */
+@media (max-width: 992px) {
+  .teammembers-card {
+    padding: 15px;
+  }
+  .teammembers-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Below 768px – mobile landscape */
+@media (max-width: 768px) {
+  .teammembers-photo {
+    width: 50px;
+    height: 50px;
+  }
+
+  .teammembers-name {
+    font-size: 15px;
+  }
+
+  .teammembers-tiles {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Mobile – 480px */
+@media (max-width: 480px) {
+  .teammembers-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .teammembers-card {
+    padding: 14px;
+  }
+
+  .teammembers-photo {
+    width: 48px;
+    height: 48px;
+  }
+
+
+  .btn.ghost {
+    font-size: 12.5px;
+    padding: 6px 10px;
+  }
+}
+
+/* Extra small mobile – 360px */
+@media (max-width: 360px) {
+  .teammembers-card {
+    padding: 12px;
+    border-radius: 10px;
+  }
+
+  .teammembers-photo {
+    width: 45px;
+    height: 45px;
+  }
+
+  .teammembers-name {
+    font-size: 14px;
+  }
+
+  .teammembers-tiles {
+    gap: 10px;
+  }
+}
+
+
+/* ----------------------------------------------------
+   FIXED LAYOUT TABLE – SAME ON ALL DEVICES
+---------------------------------------------------- */
 
 .teammembers-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 13px;
+  table-layout: fixed; /* PREVENT column shrinking */
+  white-space: nowrap; /* KEEP DESKTOP LOOK ALWAYS */
+  font-size: 15px;
 }
 
-.teammembers-table thead th {
-  text-align: left;
-  padding: 10px 12px;
-  background: #eff4ff;
-  color: #0f172a;
-  font-weight: 600;
-  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+/* Prevent wrapping */
+.teammembers-table td,
+.teammembers-table th {
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.teammembers-table tbody td {
-  padding: 9px 12px;
-  border-bottom: 1px solid rgba(15, 23, 42, 0.04);
-  vertical-align: middle;
+/* ----------------------------- FIXED COLUMN WIDTHS ----------------------------- */
+
+.teammembers-table th:nth-child(1),
+.teammembers-table td:nth-child(1) {
+  width: 60px;
 }
 
-.teammembers-table tbody tr:nth-child(even) {
-  background: #f9fbff;
+.teammembers-table th:nth-child(2),
+.teammembers-table td:nth-child(2) {
+  width: 260px; /* MEMBER COLUMN */
+}
+
+.teammembers-table th:nth-child(3),
+.teammembers-table td:nth-child(3) {
+  width: 160px; /* PHONE COLUMN */
+}
+
+.teammembers-table th:nth-child(4),
+.teammembers-table td:nth-child(4) {
+  width: 240px; /* EMAIL COLUMN */
+}
+
+.teammembers-table th:nth-child(5),
+.teammembers-table td:nth-child(5) {
+  width: 150px; /* STATUS COLUMN */
+}
+
+.teammembers-table th:nth-child(6),
+.teammembers-table td:nth-child(6) {
+  width: 120px; /* ACTIONS COLUMN */
+}
+
+/* ----------------------------- HEADER ----------------------------- */
+
+.teammembers-table th {
+  background: linear-gradient(to right, #eef2ff, #e0e7ff);
+  padding: 14px 16px;
+  text-align: left;
+  color: #1e3a8a;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.3px;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+
+/* ----------------------------- ROWS ----------------------------- */
+
+.teammembers-table tr {
+  transition: background 0.25s ease, transform 0.1s ease;
 }
 
 .teammembers-table tbody tr:hover {
-  background: #eef2ff;
+  background: #f9fafb;
+  transform: scale(1.005);
 }
 
-/* serial no. column */
-.tm-col-index {
-  width: 44px;
-  color: var(--muted);
-  font-size: 12px;
+/* ----------------------------- CELLS ----------------------------- */
+
+.teammembers-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+  color: #374151;
 }
 
-/* actions column */
-.tm-col-actions {
-  width: 70px;
-  text-align: right;
-}
+/* ----------------------------- PROFILE CELL ----------------------------- */
 
-/* table profile */
 .tm-table-profile {
   display: flex;
-  gap: 10px;
   align-items: center;
-  min-width: 0;
+  gap: 12px;
+  min-width: 220px; /* FIXED */
 }
 
 .tm-table-profile img {
-  width: 40px;
-  height: 40px;
-  border-radius: 999px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
   object-fit: cover;
-  flex-shrink: 0;
-}
-
-.tm-table-profile-text {
-  min-width: 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  border: 2px solid #fff;
 }
 
 .tm-table-name {
   font-weight: 600;
-  color: #0f172a;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  max-width: 220px;
+  font-size: 15px;
+  color: #111827;
 }
 
 .tm-table-designation {
-  font-size: 12px;
-  color: var(--muted);
+  font-size: 13px;
+  color: var(--primary);
+  font-weight: 500;
 }
 
-.tm-table-joined {
-  font-size: 11px;
-  color: var(--muted);
-  margin-top: 2px;
-}
+/* ----------------------------- STATUS TAG ----------------------------- */
 
-/* status pill */
 .tm-status-pill {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 4px 8px;
-  border-radius: 999px;
-  font-size: 11px;
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 30px;
+  font-size: 12.5px;
   font-weight: 600;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
 }
 
 .tm-status-pill.published {
-  background: rgba(16, 185, 129, 0.12);
-  color: #047857;
+  background: #d1fae5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
 }
 
 .tm-status-pill.draft {
-  background: rgba(245, 158, 11, 0.14);
-  color: #92400e;
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
 }
 
-/* modal */
-.tm-modal-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 120;
-  padding: 20px;
-}
+/* ----------------------------- ACTION MENU ----------------------------- */
 
-.tm-modal {
-  background: var(--card);
-  border-radius: 12px;
-  width: 100%;
-  max-width: 720px;
-  padding: 18px;
+.teammembers-menu {
   position: relative;
-  box-shadow: 0 20px 60px rgba(2, 6, 23, 0.2);
+  display: inline-block;
 }
 
-.tm-modal-close {
-  position: absolute;
-  right: 12px;
-  top: 12px;
+.teammembers-3dots {
   background: transparent;
-  border: 0;
-  font-size: 18px;
+  border: none;
   cursor: pointer;
+  font-size: 18px;
+  color: #6b7280;
+  padding: 6px;
+  border-radius: 50%;
+  transition: background 0.2s;
 }
 
-.tm-modal-top {
+.teammembers-3dots:hover {
+  background: #e5e7eb;
+}
+
+.teammembers-dropdown {
+  position: absolute;
+  right: 0;
+  top: 32px;
+  background: #fff;
+  width: 160px;
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  animation: dropdownFade 0.2s ease;
+  z-index: 20;
+}
+
+@keyframes dropdownFade {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.teammembers-dropdown-item {
+  padding: 12px 16px;
+  width: 100%;
+  background: transparent;
+  border: none;
+  text-align: left;
+  font-size: 14px;
   display: flex;
-  gap: 12px;
   align-items: center;
-}
-
-.tm-modal-top img {
-  width: 96px;
-  height: 96px;
-  object-fit: cover;
-  border-radius: 12px;
-}
-
-.tm-modal-top h3 {
-  margin: 0;
-}
-
-.tm-modal-top .muted {
-  color: var(--muted);
-  margin-top: 6px;
-}
-
-.tm-modal-body {
-  margin-top: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  color: #334155;
-}
-
-.tm-modal-body h4 {
-  margin: 8px 0 4px;
-  color: var(--accent);
-}
-
-.tm-modal-body p {
-  margin: 0;
-}
-
-.tm-modal-actions {
-  display: flex;
   gap: 8px;
-  justify-content: flex-end;
-  margin-top: 12px;
+  cursor: pointer;
+  color: #374151;
+  transition: background 0.2s ease;
+}
+
+.teammembers-dropdown-item:hover {
+  background: #f3f4f6;
+}
+
+.teammembers-dropdown-item.danger {
+  color: var(--danger);
+}
+
+/* ----------------------------------------------------
+   MOBILE — SCROLL ONLY, NO RESIZING
+---------------------------------------------------- */
+
+@media (max-width: 640px) {
+
+  .teammembers-table-wrapper {
+    overflow-x: auto !important;
+    overflow-y: hidden;
+    width: 100%;
+  }
+
+  /* KEEP FULL DESKTOP WIDTH ON MOBILE */
+  .teammembers-table-card {
+    min-width: 1000px !important;
+  }
+
+  /* Keep fonts exactly same */
+  .teammembers-table td,
+  .teammembers-table th {
+    font-size: 15px !important;
+  }
+
+  /* Keep profile image same */
+  .tm-table-profile img {
+    width: 52px !important;
+    height: 52px !important;
+  }
 }

@@ -250,3 +250,84 @@
     min-width: 500px;
   }
 }
+
+.ManageCategory-headerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ManageCategory-searchWrapper {
+  display: flex;
+  align-items: center;
+  background: #f4f6ff;
+  border: 1px solid #d9e4ff;
+  padding: 6px 10px;
+  border-radius: 8px;
+  gap: 6px;
+}
+
+.ManageCategory-searchIcon {
+  color: #1c3faa;
+  font-size: 15px;
+}
+
+.ManageCategory-searchInput {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 0.9rem;
+}
+
+/* 📱 Responsive Search Bar */
+@media (max-width: 992px) {
+  .ManageCategory-headerRow {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .ManageCategory-searchWrapper {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .ManageCategory-searchInput {
+    width: 100%;
+  }
+}
+
+/* Smaller Tablets & Large Mobiles */
+@media (max-width: 768px) {
+  .ManageCategory-searchWrapper {
+    padding: 6px 8px;
+  }
+
+  .ManageCategory-searchInput {
+    font-size: 0.85rem;
+  }
+
+  .ManageCategory-searchIcon {
+    font-size: 14px;
+  }
+}
+
+/* Phones */
+@media (max-width: 480px) {
+  .ManageCategory-headerRow {
+    width: 100%;
+  }
+
+  .ManageCategory-searchWrapper {
+    padding: 5px 6px;
+    border-radius: 6px;
+  }
+
+  .ManageCategory-searchIcon {
+    font-size: 13px;
+  }
+
+  .ManageCategory-searchInput {
+    font-size: 0.8rem;
+  }
+}

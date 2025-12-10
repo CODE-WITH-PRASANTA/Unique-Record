@@ -27,6 +27,7 @@
         "@tiptap/starter-kit": "^3.10.5",
         "apexcharts": "^4.1.0",
         "autoprefixer": "^10.4.20",
+        "axios": "^1.13.2",
         "classnames": "^2.5.1",
         "clsx": "^2.1.1",
         "flatpickr": "^4.6.13",
