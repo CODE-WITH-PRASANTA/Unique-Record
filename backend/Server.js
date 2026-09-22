@@ -25,18 +25,35 @@ const blogFeedbackRoutes = require('./Routes/blogFeedbackRoutes');
 const freeQuoteRoutes = require('./Routes/freeQuoteRoutes');
 const newsletterRoutes = require('./Routes/newsletterRoutes');
 
-
-
 dotenv.config();
 connectDB();
 
 const app = express();
-app.use(cors());
+
+// --- CORS Configuration ---
+const allowedOrigins = [
+  "https://backend.ouruniverse.in",
+  "https://ouruniverse.in",
+  "http://localhost:3000" // Added for local development convenience
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps, curl, Postman)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true, // Required if you are sending/receiving cookies or authorization headers
+}));
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.json({ limit: "100mb" }));
 app.use(express.urlencoded({ limit: "100mb", extended: true }));
-
 
 app.use("/api/notices", noticeRoutes);
 app.use("/api/events", eventRoutes);
@@ -62,7 +79,7 @@ app.use("/api/newsletter", newsletterRoutes);
 
 app.get('/', (req, res) => {
     res.send('Server is running...');
-  });
+});
 
 const PORT = process.env.PORT || 5007;
 app.listen(PORT, () => {
