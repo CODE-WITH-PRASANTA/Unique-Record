@@ -1,0 +1,563 @@
+/* DashboardHistory.css — transaction history table */
+
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap");
+
+.DashboardHistory {
+  --dh-ink: #10162e;
+  --dh-ink-dim: #6b7284;
+  --dh-ink-faint: #9aa0b4;
+  --dh-border: #eceff6;
+  --dh-radius-lg: 22px;
+  --dh-blue: #1cb0f5;
+
+  font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+  color: var(--dh-ink);
+}
+
+.DashboardHistory * {
+  box-sizing: border-box;
+}
+
+/* ============================
+   BANNER
+============================ */
+
+.DashboardHistory-banner {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--dh-radius-lg);
+  padding: 22px clamp(20px, 4vw, 32px);
+  background: linear-gradient(100deg, #2f8ef2 0%, #17c9ea 100%);
+  box-shadow: 0 16px 34px rgba(23, 137, 234, 0.28);
+}
+
+.DashboardHistory-bannerGlow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 90% 0%,
+    rgba(255, 255, 255, 0.25),
+    transparent 50%
+  );
+  pointer-events: none;
+}
+
+.DashboardHistory-bannerTitle {
+  position: relative;
+  margin: 0;
+  color: #ffffff;
+  font-size: clamp(19px, 2.2vw, 23px);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.DashboardHistory-bannerSubtitle {
+  position: relative;
+  margin: 4px 0 0;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+/* ============================
+   PANEL
+============================ */
+
+.DashboardHistory-panel {
+  margin-top: 18px;
+  background: #ffffff;
+  border-radius: var(--dh-radius-lg);
+  box-shadow: 0 18px 44px rgba(16, 22, 46, 0.07);
+  overflow: hidden;
+}
+
+/* ============================
+   TOOLBAR
+============================ */
+
+.DashboardHistory-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--dh-border);
+}
+
+.DashboardHistory-search {
+  position: relative;
+  flex: 1 1 220px;
+  min-width: 180px;
+}
+
+.DashboardHistory-searchIcon {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  color: var(--dh-ink-faint);
+  pointer-events: none;
+}
+
+.DashboardHistory-searchInput {
+  width: 100%;
+  padding: 9px 12px 9px 34px;
+  border-radius: 11px;
+  border: 1px solid var(--dh-border);
+  background: #f7f9fc;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--dh-ink);
+  outline: none;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.DashboardHistory-searchInput:focus {
+  border-color: var(--dh-blue);
+  background: #ffffff;
+}
+
+.DashboardHistory-filters {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.DashboardHistory-filterChip {
+  border: 1px solid var(--dh-border);
+  background: #ffffff;
+  color: var(--dh-ink-dim);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 7px 13px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.DashboardHistory-filterChip:hover {
+  border-color: var(--dh-blue);
+  color: var(--dh-blue);
+}
+
+.DashboardHistory-filterChip.is-active {
+  background: linear-gradient(100deg, #2f8ef2 0%, #17c9ea 100%);
+  border-color: transparent;
+  color: #ffffff;
+  box-shadow: 0 6px 14px rgba(23, 137, 234, 0.35);
+}
+
+.DashboardHistory-actions {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.DashboardHistory-actionBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--dh-border);
+  background: #ffffff;
+  color: var(--dh-ink-dim);
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 700;
+  padding: 8px 13px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.DashboardHistory-actionBtn:hover {
+  border-color: var(--dh-blue);
+  color: var(--dh-blue);
+}
+
+.DashboardHistory-actionBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.DashboardHistory-actionBtn--primary {
+  background: linear-gradient(100deg, #2f8ef2 0%, #17c9ea 100%);
+  border-color: transparent;
+  color: #ffffff;
+  box-shadow: 0 8px 18px rgba(23, 137, 234, 0.3);
+}
+
+.DashboardHistory-actionBtn--primary:hover {
+  color: #ffffff;
+  filter: brightness(1.06);
+}
+
+.is-spinning {
+  animation: dh-spin 0.8s linear infinite;
+}
+
+@keyframes dh-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ============================
+   TABLE
+============================ */
+
+.DashboardHistory-tableWrap {
+  overflow-x: auto;
+}
+
+.DashboardHistory-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 640px;
+}
+
+.DashboardHistory-th {
+  background: #f7f9fc;
+  text-align: left;
+  padding: 13px 20px;
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--dh-ink-dim);
+  white-space: nowrap;
+  border-bottom: 1px solid var(--dh-border);
+}
+
+.DashboardHistory-th--action {
+  width: 52px;
+}
+
+.DashboardHistory-thBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: none;
+  background: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+.DashboardHistory-sortIcon--idle {
+  opacity: 0.35;
+}
+
+.DashboardHistory-tr {
+  transition: background 0.15s ease;
+}
+
+.DashboardHistory-tr:hover {
+  background: #f9fbff;
+}
+
+.DashboardHistory-tr:not(:last-child) .DashboardHistory-td {
+  border-bottom: 1px solid var(--dh-border);
+}
+
+.DashboardHistory-td {
+  padding: 13px 20px;
+  font-size: 13.5px;
+  color: var(--dh-ink);
+  vertical-align: middle;
+}
+
+.DashboardHistory-td--action {
+  text-align: right;
+}
+
+.DashboardHistory-emptyCell {
+  padding: 46px 20px;
+  text-align: center;
+  color: var(--dh-ink-dim);
+  font-size: 13.5px;
+  font-style: normal;
+}
+
+.DashboardHistory-userCell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.DashboardHistory-avatar {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.DashboardHistory-userName {
+  font-weight: 700;
+}
+
+.DashboardHistory-categoryCell {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--dh-ink-dim);
+  font-weight: 600;
+}
+
+.DashboardHistory-categoryDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.DashboardHistory-amount {
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.DashboardHistory-statusPill {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 11px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 800;
+}
+
+.DashboardHistory-viewBtn {
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  border: 1px solid var(--dh-border);
+  background: #ffffff;
+  color: var(--dh-ink-dim);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.DashboardHistory-viewBtn:hover {
+  border-color: var(--dh-blue);
+  color: var(--dh-blue);
+}
+
+/* ============================
+   PAGINATION
+============================ */
+
+.DashboardHistory-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  border-top: 1px solid var(--dh-border);
+}
+
+.DashboardHistory-pageInfo {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--dh-ink-dim);
+}
+
+.DashboardHistory-pageBtns {
+  display: flex;
+  gap: 6px;
+}
+
+.DashboardHistory-pageBtn {
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  border: 1px solid var(--dh-border);
+  background: #ffffff;
+  color: var(--dh-ink);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.DashboardHistory-pageBtn:hover:not(:disabled) {
+  border-color: var(--dh-blue);
+  color: var(--dh-blue);
+}
+
+.DashboardHistory-pageBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ============================
+   MODAL
+============================ */
+
+.DashboardHistory-modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 15, 35, 0.5);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 1000;
+}
+
+.DashboardHistory-modal {
+  width: 100%;
+  max-width: 380px;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 30px 70px rgba(10, 15, 35, 0.35);
+  overflow: hidden;
+}
+
+.DashboardHistory-modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--dh-border);
+}
+
+.DashboardHistory-modalHeader h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.DashboardHistory-modalClose {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  border: none;
+  background: #f4f6fb;
+  color: var(--dh-ink-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.DashboardHistory-modalClose:hover {
+  background: #eceff6;
+  color: var(--dh-ink);
+}
+
+.DashboardHistory-modalBody {
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.DashboardHistory-modalRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+}
+
+.DashboardHistory-modalRow span:first-child {
+  color: var(--dh-ink-dim);
+  font-weight: 600;
+}
+
+.DashboardHistory-modalRow strong {
+  font-weight: 700;
+  text-align: right;
+}
+
+.DashboardHistory-modalActions {
+  padding: 14px 18px 18px;
+}
+
+.DashboardHistory-modalActions .DashboardHistory-actionBtn {
+  width: 100%;
+  justify-content: center;
+  padding: 10px 13px;
+}
+
+/* ============================
+   RESPONSIVE: table -> stacked cards
+============================ */
+
+@media (max-width: 720px) {
+  .DashboardHistory-actions {
+    margin-left: 0;
+    width: 100%;
+  }
+  .DashboardHistory-actionBtn {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .DashboardHistory-table,
+  .DashboardHistory-table thead,
+  .DashboardHistory-table tbody,
+  .DashboardHistory-table tr,
+  .DashboardHistory-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .DashboardHistory-table {
+    min-width: 0;
+  }
+
+  .DashboardHistory-table thead {
+    display: none;
+  }
+
+  .DashboardHistory-tr {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--dh-border);
+  }
+
+  .DashboardHistory-td {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 4px;
+    border-bottom: none !important;
+  }
+
+  .DashboardHistory-td::before {
+    content: attr(data-label);
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--dh-ink-faint);
+    margin-right: 12px;
+  }
+
+  .DashboardHistory-td--action {
+    justify-content: flex-end;
+  }
+
+  .DashboardHistory-td--action::before {
+    content: none;
+  }
+
+  .DashboardHistory-emptyCell {
+    display: block;
+  }
+}

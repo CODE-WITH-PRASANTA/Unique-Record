@@ -1,0 +1,467 @@
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap");
+
+.DashBoardSec {
+  --dbs-ink: #10162e;
+  --dbs-ink-dim: #6b7284;
+  --dbs-ink-faint: #9aa0b4;
+  --dbs-bg: #eef1f8;
+  --dbs-card-bg: #ffffff;
+  --dbs-blue: #2f6bff;
+  --dbs-mint: #16c79a;
+  --dbs-violet: #9b3cf5;
+  --dbs-pink: #ef2fa0;
+  --dbs-radius-lg: 22px;
+
+  font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+  color: var(--dbs-ink);
+  background: var(--dbs-bg);
+  padding: 4px clamp(0px, 1vw, 4px) 28px;
+}
+
+.DashBoardSec * {
+  box-sizing: border-box;
+}
+
+.DashBoardSec-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  align-items: stretch;
+}
+
+@media (max-width: 1080px) {
+  .DashBoardSec-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .DashBoardSec-card--mint {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 640px) {
+  .DashBoardSec-grid {
+    grid-template-columns: 1fr;
+  }
+  .DashBoardSec-card--mint {
+    grid-column: auto;
+  }
+}
+
+.DashBoardSec-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--dbs-card-bg);
+  border-radius: var(--dbs-radius-lg);
+  padding: 22px 22px 20px;
+  min-height: 380px;
+  box-shadow: 0 14px 34px rgba(16, 22, 46, 0.07);
+  border: 1.5px solid transparent;
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.DashBoardSec-card:hover {
+  box-shadow: 0 20px 44px rgba(16, 22, 46, 0.11);
+}
+
+.DashBoardSec-card--blue {
+  border-color: rgba(47, 107, 255, 0.35);
+}
+
+.DashBoardSec-card--mint {
+  border-color: rgba(22, 199, 154, 0.35);
+  align-items: center;
+  text-align: center;
+}
+
+.DashBoardSec-card--violet {
+  border: 1.5px solid transparent;
+  background-image: linear-gradient(#fff, #fff),
+    linear-gradient(135deg, var(--dbs-violet), var(--dbs-pink));
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
+.DashBoardSec-cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 14px;
+}
+
+.DashBoardSec-cardHeader--center {
+  justify-content: center;
+}
+
+.DashBoardSec-cardHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.DashBoardSec-cardIcon {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+}
+
+.DashBoardSec-cardIcon--blue {
+  background: linear-gradient(150deg, #5b8bff 0%, var(--dbs-blue) 100%);
+}
+.DashBoardSec-cardIcon--mint {
+  background: linear-gradient(150deg, #3fe0b3 0%, var(--dbs-mint) 100%);
+}
+.DashBoardSec-cardIcon--violet {
+  background: linear-gradient(150deg, var(--dbs-violet) 0%, var(--dbs-pink) 100%);
+}
+
+.DashBoardSec-cardTitle {
+  margin: 0;
+  font-size: 16.5px;
+  font-weight: 800;
+  color: var(--dbs-ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.DashBoardSec-cardBadge {
+  flex-shrink: 0;
+  min-width: 19px;
+  height: 19px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: var(--dbs-pink);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.DashBoardSec-cardAction {
+  flex-shrink: 0;
+  border: none;
+  background: none;
+  color: var(--dbs-violet);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 6px;
+  transition: background 0.2s ease;
+  white-space: nowrap;
+}
+
+.DashBoardSec-cardAction:hover {
+  background: rgba(155, 60, 245, 0.1);
+}
+
+.DashBoardSec-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  overflow-y: auto;
+}
+
+.DashBoardSec-listItem {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  padding: 10px 10px;
+  border-radius: 12px;
+  transition: background 0.18s ease;
+}
+
+li.DashBoardSec-listItem[role="button"] {
+  cursor: pointer;
+}
+
+.DashBoardSec-listItem:hover {
+  background: #f4f6fb;
+}
+
+.DashBoardSec-listItem--unread {
+  background: #f7f9ff;
+}
+
+.DashBoardSec-listItemIcon {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.DashBoardSec-listItemIcon--blue {
+  background: rgba(47, 107, 255, 0.1);
+  color: var(--dbs-blue);
+}
+.DashBoardSec-listItemIcon--violet {
+  background: rgba(155, 60, 245, 0.1);
+  color: var(--dbs-violet);
+}
+
+.DashBoardSec-listItemBody {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  text-align: left;
+}
+
+.DashBoardSec-listItemTitle {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--dbs-ink);
+  line-height: 1.35;
+}
+
+.DashBoardSec-listItem--unread .DashBoardSec-listItemTitle {
+  font-weight: 700;
+}
+
+.DashBoardSec-listItemMeta {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--dbs-ink-faint);
+}
+
+.DashBoardSec-unreadDot {
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  margin-top: 5px;
+  border-radius: 50%;
+  background: var(--dbs-pink);
+  box-shadow: 0 0 0 3px rgba(239, 47, 160, 0.15);
+}
+
+.DashBoardSec-viewAll {
+  margin-top: 12px;
+  align-self: flex-start;
+  border: none;
+  background: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--dbs-blue);
+  cursor: pointer;
+  padding: 4px 2px;
+}
+
+.DashBoardSec-viewAll:hover {
+  text-decoration: underline;
+}
+
+.DashBoardSec-emptyState {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 30px 10px;
+  color: var(--dbs-ink-faint);
+}
+
+.DashBoardSec-emptyIcon {
+  opacity: 0.5;
+}
+
+.DashBoardSec-emptyText {
+  font-size: 13.5px;
+  font-style: italic;
+  font-weight: 500;
+}
+
+.DashBoardSec-donutWrap {
+  position: relative;
+  width: 100%;
+  max-width: 230px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10px auto 0;
+}
+
+.DashBoardSec-donutSvg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.DashBoardSec-donutSegment {
+  transition: opacity 0.2s ease, stroke-width 0.2s ease;
+  cursor: pointer;
+}
+
+.DashBoardSec-donutCenter {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  pointer-events: none;
+}
+
+.DashBoardSec-donutCenterValue {
+  font-size: 21px;
+  font-weight: 800;
+  color: var(--dbs-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.DashBoardSec-donutCenterLabel {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--dbs-ink-dim);
+  max-width: 110px;
+  text-align: center;
+  line-height: 1.3;
+}
+
+.DashBoardSec-legend {
+  margin-top: 22px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px 22px;
+}
+
+.DashBoardSec-legendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: none;
+  background: none;
+  padding: 5px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.DashBoardSec-legendItem:hover,
+.DashBoardSec-legendItem.is-active {
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(16, 22, 46, 0.08);
+}
+
+.DashBoardSec-legendDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.6);
+}
+
+.DashBoardSec-legendLabel {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--dbs-ink-dim);
+}
+
+/* Modal Popup Styles */
+.DashBoardSec-modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(16, 22, 46, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.DashBoardSec-modalContent {
+  background: #ffffff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 480px;
+  padding: 24px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  animation: modalPop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalPop {
+  0% { transform: scale(0.95); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.DashBoardSec-modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #eef1f8;
+  padding-bottom: 12px;
+}
+
+.DashBoardSec-modalHeader h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--dbs-ink);
+}
+
+.DashBoardSec-modalClose {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--dbs-ink-dim);
+  padding: 4px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+}
+
+.DashBoardSec-modalClose:hover {
+  background: #f4f6fb;
+  color: var(--dbs-ink);
+}
+
+.DashBoardSec-modalList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.DashBoardSec-modalItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px;
+  border-radius: 10px;
+  background: #f8fafc;
+}
