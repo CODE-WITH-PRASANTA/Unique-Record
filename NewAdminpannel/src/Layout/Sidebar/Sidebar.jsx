@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
+
 import {
   Home,
   FileText,
@@ -17,7 +18,6 @@ import {
   Mail,
   ChevronDown,
   ChevronRight,
-  ChevronsLeft,
   PenTool,
   FolderKanban,
   PlusCircle,
@@ -29,8 +29,8 @@ import {
 import "./Sidebar.css";
 
 const Sidebar = ({
-  isCollapsed,
-  isMobileOpen,
+  isCollapsed = false,
+  isMobileOpen = false,
   onToggleCollapse = () => {},
   onProfileClick = () => {},
   brandName = "URU Admin Panel",
@@ -53,9 +53,12 @@ const Sidebar = ({
   };
 
   const menuItems = [
+    // =====================================================
+    // DASHBOARD
+    // =====================================================
     {
       type: "link",
-      icon: <Home size={19} />,
+      icon: <Home size={19} strokeWidth={2} />,
       text: "Dashboard",
       path: "/",
       primary: true,
@@ -64,67 +67,118 @@ const Sidebar = ({
     // =====================================================
     // BLOG SECTION
     // =====================================================
-    { type: "section-heading", text: "Blog Section" },
+    {
+      type: "section-heading",
+      text: "Blog Section",
+    },
     {
       type: "dropdown",
-      icon: <FileText size={19} />,
+      icon: <FileText size={19} strokeWidth={2} />,
       text: "Blogs",
       subItems: [
-        { text: "Create Blog", path: "/blogs/create", icon: <PenTool size={16} /> },
-        { text: "Manage Blogs", path: "/blogs/manage", icon: <FolderKanban size={16} /> },
+        {
+          text: "Create Blog",
+          path: "/blogs/create",
+          icon: <PenTool size={16} strokeWidth={2} />,
+        },
+        {
+          text: "Manage Blogs",
+          path: "/blogs/manage",
+          icon: <FolderKanban size={16} strokeWidth={2} />,
+        },
       ],
     },
 
     // =====================================================
     // NOTICE SECTION
     // =====================================================
-    { type: "section-heading", text: "Notice Section" },
+    {
+      type: "section-heading",
+      text: "Notice Section",
+    },
     {
       type: "dropdown",
-      icon: <Bell size={19} />,
+      icon: <Bell size={19} strokeWidth={2} />,
       text: "Notices",
       subItems: [
-        { text: "Add Notice", path: "/notices/add", icon: <PlusCircle size={16} /> },
-        { text: "Manage Notices", path: "/notices/manage", icon: <Edit3 size={16} /> },
+        {
+          text: "Add Notice",
+          path: "/notices/add",
+          icon: <PlusCircle size={16} strokeWidth={2} />,
+        },
+        {
+          text: "Manage Notices",
+          path: "/notices/manage",
+          icon: <Edit3 size={16} strokeWidth={2} />,
+        },
       ],
     },
 
     // =====================================================
     // EVENT SECTION
     // =====================================================
-    { type: "section-heading", text: "Event Section" },
+    {
+      type: "section-heading",
+      text: "Event Section",
+    },
     {
       type: "dropdown",
-      icon: <Calendar size={19} />,
+      icon: <Calendar size={19} strokeWidth={2} />,
       text: "Events",
       subItems: [
-        { text: "Add Event", path: "/events/add", icon: <PlusCircle size={16} /> },
-        { text: "Edit Event", path: "/events/edit", icon: <Edit3 size={16} /> },
-        { text: "Manage Registered", path: "/events/registered", icon: <Users size={16} /> },
+        {
+          text: "Add Event",
+          path: "/events/add",
+          icon: <PlusCircle size={16} strokeWidth={2} />,
+        },
+        {
+          text: "Edit Event",
+          path: "/events/edit",
+          icon: <Edit3 size={16} strokeWidth={2} />,
+        },
+        {
+          text: "Manage Registered",
+          path: "/events/registered",
+          icon: <Users size={16} strokeWidth={2} />,
+        },
       ],
     },
 
     // =====================================================
     // TEAM SECTION
     // =====================================================
-    { type: "section-heading", text: "Team Section" },
+    {
+      type: "section-heading",
+      text: "Team Section",
+    },
     {
       type: "dropdown",
-      icon: <Users size={19} />,
+      icon: <Users size={19} strokeWidth={2} />,
       text: "Team",
       subItems: [
-        { text: "Add Member", path: "/team/add", icon: <UserPlus size={16} /> },
-        { text: "Manage Members", path: "/team/manage", icon: <UserCheck size={16} /> },
+        {
+          text: "Add Member",
+          path: "/team/add",
+          icon: <UserPlus size={16} strokeWidth={2} />,
+        },
+        {
+          text: "Manage Members",
+          path: "/team/manage",
+          icon: <UserCheck size={16} strokeWidth={2} />,
+        },
       ],
     },
 
     // =====================================================
     // DONATIONS
     // =====================================================
-    { type: "section-heading", text: "Donations" },
+    {
+      type: "section-heading",
+      text: "Donations",
+    },
     {
       type: "link",
-      icon: <HeartHandshake size={19} />,
+      icon: <HeartHandshake size={19} strokeWidth={2} />,
       text: "Manage Donations",
       path: "/donations/manage",
     },
@@ -132,45 +186,67 @@ const Sidebar = ({
     // =====================================================
     // MEDIA
     // =====================================================
-    { type: "section-heading", text: "Media" },
+    {
+      type: "section-heading",
+      text: "Media",
+    },
     {
       type: "dropdown",
-      icon: <ImageIcon size={19} />,
+      icon: <ImageIcon size={19} strokeWidth={2} />,
       text: "Gallery",
       subItems: [
-        { text: "Event Gallery", path: "/gallery/events", icon: <ImageIcon size={16} /> },
-        { text: "Home Gallery", path: "/gallery/home", icon: <ImageIcon size={16} /> },
+        {
+          text: "Event Gallery",
+          path: "/gallery/events",
+          icon: <ImageIcon size={16} strokeWidth={2} />,
+        },
+        {
+          text: "Home Gallery",
+          path: "/gallery/home",
+          icon: <ImageIcon size={16} strokeWidth={2} />,
+        },
       ],
     },
     {
       type: "dropdown",
-      icon: <Video size={19} />,
+      icon: <Video size={19} strokeWidth={2} />,
       text: "Media Manage",
       subItems: [
-        { text: "YouTube Videos", path: "/media/youtube", icon: <Video size={16} /> },
-        { text: "Photos", path: "/media/photos", icon: <ImageIcon size={16} /> },
+        {
+          text: "YouTube Videos",
+          path: "/media/youtube",
+          icon: <Video size={16} strokeWidth={2} />,
+        },
+        {
+          text: "Photos",
+          path: "/media/photos",
+          icon: <ImageIcon size={16} strokeWidth={2} />,
+        },
       ],
     },
 
     // =====================================================
     // URU SECTION
     // =====================================================
-    { type: "section-heading", text: "URU Section" },
+    {
+      type: "section-heading",
+      text: "URU Section",
+    },
     {
       type: "link",
-      icon: <ThumbsUp size={19} />,
+      icon: <ThumbsUp size={19} strokeWidth={2} />,
       text: "Manage URU",
       path: "/uru/manage",
     },
     {
       type: "link",
-      icon: <CheckSquare size={19} />,
+      icon: <CheckSquare size={19} strokeWidth={2} />,
       text: "Approve URU",
       path: "/uru/approve",
     },
     {
       type: "link",
-      icon: <CheckSquare size={19} />,
+      icon: <CheckSquare size={19} strokeWidth={2} />,
       text: "Final URU",
       path: "/uru/final",
     },
@@ -178,24 +254,38 @@ const Sidebar = ({
     // =====================================================
     // ACHIEVEMENTS
     // =====================================================
-    { type: "section-heading", text: "Achievements" },
+    {
+      type: "section-heading",
+      text: "Achievements",
+    },
     {
       type: "dropdown",
-      icon: <Award size={19} />,
+      icon: <Award size={19} strokeWidth={2} />,
       text: "Achievements",
       subItems: [
-        { text: "Post Achievement", path: "/achievements/post", icon: <PlusCircle size={16} /> },
-        { text: "Manage Achievements", path: "/achievements/manage", icon: <Edit3 size={16} /> },
+        {
+          text: "Post Achievement",
+          path: "/achievements/post",
+          icon: <PlusCircle size={16} strokeWidth={2} />,
+        },
+        {
+          text: "Manage Achievements",
+          path: "/achievements/manage",
+          icon: <Edit3 size={16} strokeWidth={2} />,
+        },
       ],
     },
 
     // =====================================================
     // CATEGORIES
     // =====================================================
-    { type: "section-heading", text: "Categories" },
+    {
+      type: "section-heading",
+      text: "Categories",
+    },
     {
       type: "link",
-      icon: <Layers size={19} />,
+      icon: <Layers size={19} strokeWidth={2} />,
       text: "Manage Categories",
       path: "/categories/manage",
     },
@@ -203,30 +293,44 @@ const Sidebar = ({
     // =====================================================
     // COMMENTS
     // =====================================================
-    { type: "section-heading", text: "Comments" },
+    {
+      type: "section-heading",
+      text: "Comments",
+    },
     {
       type: "dropdown",
-      icon: <MessageSquare size={19} />,
+      icon: <MessageSquare size={19} strokeWidth={2} />,
       text: "Comments",
       subItems: [
-        { text: "Blog Comments", path: "/comments/blogs", icon: <MessageSquare size={16} /> },
-        { text: "Achievement Comments", path: "/comments/achievements", icon: <MessageSquare size={16} /> },
+        {
+          text: "Blog Comments",
+          path: "/comments/blogs",
+          icon: <MessageSquare size={16} strokeWidth={2} />,
+        },
+        {
+          text: "Achievement Comments",
+          path: "/comments/achievements",
+          icon: <MessageSquare size={16} strokeWidth={2} />,
+        },
       ],
     },
 
     // =====================================================
     // USERS
     // =====================================================
-    { type: "section-heading", text: "Users" },
+    {
+      type: "section-heading",
+      text: "Users",
+    },
     {
       type: "link",
-      icon: <MessageSquare size={19} />,
+      icon: <MessageSquare size={19} strokeWidth={2} />,
       text: "User Opinions",
       path: "/users/opinions",
     },
     {
       type: "link",
-      icon: <Mail size={19} />,
+      icon: <Mail size={19} strokeWidth={2} />,
       text: "Subscribed Newsletter",
       path: "/users/newsletter",
     },
@@ -238,9 +342,14 @@ const Sidebar = ({
         isMobileOpen ? "mobile-open" : ""
       }`}
     >
+      {/* ==========================================
+          BACKGROUND SHEEN
+      ========================================== */}
       <div className="Sidebar-sheen" aria-hidden="true" />
 
-      {/* BRAND HEADER */}
+      {/* ==========================================
+          BRAND HEADER
+      ========================================== */}
       <div className="Sidebar-logo">
         <div className="Sidebar-logo-iconWrap">
           <div className="Sidebar-logo-icon">
@@ -251,22 +360,17 @@ const Sidebar = ({
         {!isCollapsed && (
           <div className="Sidebar-logo-text-group">
             <span className="Sidebar-logo-text">{brandName}</span>
-            <span className="Sidebar-logo-tagline">{brandTagline}</span>
+
+            <span className="Sidebar-logo-tagline">
+              {brandTagline}
+            </span>
           </div>
         )}
-
-        <button
-          type="button"
-          className="Sidebar-collapse-btn"
-          onClick={onToggleCollapse}
-          aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-          title={isCollapsed ? "Expand" : "Collapse"}
-        >
-          <ChevronsLeft size={16} />
-        </button>
       </div>
 
-      {/* PROFILE CARD */}
+      {/* ==========================================
+          PROFILE CARD
+      ========================================== */}
       <button
         type="button"
         className="Sidebar-profile"
@@ -274,39 +378,74 @@ const Sidebar = ({
       >
         <span className="Sidebar-profile-avatar">
           {user.avatarUrl ? (
-            <img src={user.avatarUrl} alt={user.name} />
+            <img
+              src={user.avatarUrl}
+              alt={user.name}
+            />
           ) : (
-            <span>{user.initials}</span>
+            <span>
+              {user.initials ||
+                user.name
+                  ?.split(" ")
+                  .map((word) => word[0])
+                  .join("")
+                  .slice(0, 2)
+                  .toUpperCase()}
+            </span>
           )}
         </span>
 
         {!isCollapsed && (
           <>
             <span className="Sidebar-profile-info">
-              <span className="Sidebar-profile-name">{user.name}</span>
-              <span className="Sidebar-profile-role">{user.role}</span>
+              <span className="Sidebar-profile-name">
+                {user.name}
+              </span>
+
+              <span className="Sidebar-profile-role">
+                {user.role}
+              </span>
+
               <span className="Sidebar-profile-online">
                 <i />
                 Online
               </span>
             </span>
-            <ChevronDown size={15} className="Sidebar-profile-chevron" />
+
+            <ChevronDown
+              size={15}
+              className="Sidebar-profile-chevron"
+            />
           </>
         )}
       </button>
 
+      {/* ==========================================
+          NAVIGATION
+      ========================================== */}
       <nav className="Sidebar-nav">
         {menuItems.map((item, index) => {
+          /* ========================================
+             SECTION HEADING
+          ======================================== */
           if (item.type === "section-heading") {
             return (
-              <div key={index} className="Sidebar-section-wrapper">
+              <div
+                key={index}
+                className="Sidebar-section-wrapper"
+              >
                 {!isCollapsed && (
-                  <span className="Sidebar-section-title">{item.text}</span>
+                  <span className="Sidebar-section-title">
+                    {item.text}
+                  </span>
                 )}
               </div>
             );
           }
 
+          /* ========================================
+             NORMAL LINK
+          ======================================== */
           if (item.type === "link") {
             return (
               <NavLink
@@ -315,15 +454,29 @@ const Sidebar = ({
                 end={item.path === "/"}
                 title={isCollapsed ? item.text : undefined}
                 className={({ isActive }) =>
-                  `Sidebar-link ${item.primary ? "primary" : ""} ${
-                    isActive && !item.primary ? "active" : ""
-                  } ${isActive && item.primary ? "primary-active" : ""}`
+                  `Sidebar-link ${
+                    item.primary ? "primary" : ""
+                  } ${
+                    isActive && !item.primary
+                      ? "active"
+                      : ""
+                  } ${
+                    isActive && item.primary
+                      ? "primary-active"
+                      : ""
+                  }`
                 }
               >
-                <span className="Sidebar-icon">{item.icon}</span>
+                <span className="Sidebar-icon">
+                  {item.icon}
+                </span>
+
                 {!isCollapsed && (
                   <>
-                    <span className="Sidebar-text">{item.text}</span>
+                    <span className="Sidebar-text">
+                      {item.text}
+                    </span>
+
                     {!item.primary && (
                       <ChevronRight
                         size={15}
@@ -336,7 +489,11 @@ const Sidebar = ({
             );
           }
 
-          const isDropdownOpen = !!openDropdowns[item.text];
+          /* ========================================
+             DROPDOWN
+          ======================================== */
+          const isDropdownOpen =
+            !!openDropdowns[item.text];
 
           return (
             <div
@@ -347,19 +504,33 @@ const Sidebar = ({
             >
               <button
                 type="button"
-                onClick={() => !isCollapsed && toggleDropdown(item.text)}
-                title={isCollapsed ? item.text : undefined}
+                onClick={() =>
+                  !isCollapsed &&
+                  toggleDropdown(item.text)
+                }
+                title={
+                  isCollapsed
+                    ? item.text
+                    : undefined
+                }
                 className="Sidebar-link Sidebar-dropdown-toggle"
               >
-                <span className="Sidebar-icon">{item.icon}</span>
+                <span className="Sidebar-icon">
+                  {item.icon}
+                </span>
 
                 {!isCollapsed && (
                   <>
-                    <span className="Sidebar-text">{item.text}</span>
+                    <span className="Sidebar-text">
+                      {item.text}
+                    </span>
+
                     <ChevronDown
                       size={15}
                       className={`Sidebar-chevron ${
-                        isDropdownOpen ? "rotated" : ""
+                        isDropdownOpen
+                          ? "rotated"
+                          : ""
                       }`}
                     />
                   </>
@@ -368,20 +539,27 @@ const Sidebar = ({
 
               {!isCollapsed && (
                 <div className="Sidebar-submenu">
-                  {item.subItems.map((subItem, subIndex) => (
-                    <NavLink
-                      key={subIndex}
-                      to={subItem.path}
-                      className={({ isActive }) =>
-                        `Sidebar-submenu-link ${isActive ? "active" : ""}`
-                      }
-                    >
-                      <span className="Sidebar-submenu-icon">
-                        {subItem.icon || <span className="Sidebar-submenu-dot" />}
-                      </span>
-                      {subItem.text}
-                    </NavLink>
-                  ))}
+                  {item.subItems.map(
+                    (subItem, subIndex) => (
+                      <NavLink
+                        key={subIndex}
+                        to={subItem.path}
+                        className={({ isActive }) =>
+                          `Sidebar-submenu-link ${
+                            isActive ? "active" : ""
+                          }`
+                        }
+                      >
+                        <span className="Sidebar-submenu-icon">
+                          {subItem.icon || (
+                            <span className="Sidebar-submenu-dot" />
+                          )}
+                        </span>
+
+                        <span>{subItem.text}</span>
+                      </NavLink>
+                    )
+                  )}
                 </div>
               )}
             </div>
@@ -389,7 +567,9 @@ const Sidebar = ({
         })}
       </nav>
 
-      {/* BRAND FOOTER */}
+      {/* ==========================================
+          BRAND FOOTER
+      ========================================== */}
       <div className="Sidebar-brandFooter">
         <svg
           className="Sidebar-brandFooter-waves"
@@ -401,17 +581,23 @@ const Sidebar = ({
             className="wave wave-1"
             d="M0,45 C50,30 90,60 140,45 C190,30 230,55 270,40 L270,90 L0,90 Z"
           />
+
           <path
             className="wave wave-2"
             d="M0,58 C60,44 100,70 150,55 C200,40 235,66 270,52 L270,90 L0,90 Z"
           />
+
           <path
             className="wave wave-3"
             d="M0,72 C55,60 105,80 150,68 C205,54 240,76 270,64 L270,90 L0,90 Z"
           />
         </svg>
 
-        {!isCollapsed && <span className="Sidebar-version">{version}</span>}
+        {!isCollapsed && (
+          <span className="Sidebar-version">
+            {version}
+          </span>
+        )}
       </div>
     </aside>
   );
