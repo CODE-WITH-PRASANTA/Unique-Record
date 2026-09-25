@@ -106,11 +106,7 @@ const Sidebar = ({
           path: "/notices/add",
           icon: <PlusCircle size={16} strokeWidth={2} />,
         },
-        {
-          text: "Manage Notices",
-          path: "/notices/manage",
-          icon: <Edit3 size={16} strokeWidth={2} />,
-        },
+       
       ],
     },
 
@@ -131,16 +127,7 @@ const Sidebar = ({
           path: "/events/add",
           icon: <PlusCircle size={16} strokeWidth={2} />,
         },
-        {
-          text: "Edit Event",
-          path: "/events/edit",
-          icon: <Edit3 size={16} strokeWidth={2} />,
-        },
-        {
-          text: "Manage Registered",
-          path: "/events/registered",
-          icon: <Users size={16} strokeWidth={2} />,
-        },
+     
       ],
     },
 
@@ -161,11 +148,7 @@ const Sidebar = ({
           path: "/team/add",
           icon: <UserPlus size={16} strokeWidth={2} />,
         },
-        {
-          text: "Manage Members",
-          path: "/team/manage",
-          icon: <UserCheck size={16} strokeWidth={2} />,
-        },
+       
       ],
     },
 
@@ -200,11 +183,7 @@ const Sidebar = ({
           path: "/gallery/events",
           icon: <ImageIcon size={16} strokeWidth={2} />,
         },
-        {
-          text: "Home Gallery",
-          path: "/gallery/home",
-          icon: <ImageIcon size={16} strokeWidth={2} />,
-        },
+       
       ],
     },
     {
@@ -268,11 +247,8 @@ const Sidebar = ({
           path: "/achievements/post",
           icon: <PlusCircle size={16} strokeWidth={2} />,
         },
-        {
-          text: "Manage Achievements",
-          path: "/achievements/manage",
-          icon: <Edit3 size={16} strokeWidth={2} />,
-        },
+        
+       
       ],
     },
 

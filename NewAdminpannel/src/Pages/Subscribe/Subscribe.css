@@ -1,0 +1,220 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --sub-primary: #0284c7;
+  --sub-primary-hover: #0369a1;
+  --sub-primary-light: #e0f2fe;
+  --sub-table-header: #1e3a8a;
+  --sub-bg: #f8fafc;
+  --sub-surface: #ffffff;
+  --sub-text-main: #1e293b;
+  --sub-text-muted: #64748b;
+  --sub-border: #cbd5e1;
+  --sub-radius: 12px;
+  --sub-shadow: 0 10px 30px -5px rgba(2, 132, 199, 0.08), 0 8px 10px -6px rgba(2, 132, 199, 0.04);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+}
+
+.sub-container {
+  min-height: 100vh;
+  background-color: var(--sub-bg);
+  padding: 40px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.sub-wrapper {
+  width: 100%;
+  max-width: 1100px;
+  background: var(--sub-surface);
+  border-radius: var(--sub-radius);
+  box-shadow: var(--sub-shadow);
+  padding: 32px;
+  border: 1px solid var(--sub-border);
+}
+
+/* Header Section */
+.sub-header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.sub-title-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sub-title-icon {
+  font-size: 24px;
+}
+
+.sub-main-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--sub-text-main);
+  letter-spacing: -0.5px;
+}
+
+.sub-header-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.sub-search-wrapper {
+  max-width: 280px;
+  width: 100%;
+}
+
+.sub-search-input {
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--sub-surface);
+  border: 2px solid var(--sub-border);
+  border-radius: 8px;
+  font-size: 14px;
+  color: var(--sub-text-main);
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.sub-search-input:focus {
+  border-color: var(--sub-primary);
+  box-shadow: 0 0 0 4px var(--sub-primary-light);
+}
+
+/* Styled Blue Excel Button */
+.sub-btn-excel {
+  background-color: var(--sub-primary);
+  color: #ffffff;
+  border: none;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.2s ease, transform 0.1s;
+}
+
+.sub-btn-excel:hover {
+  background-color: var(--sub-primary-hover);
+}
+
+/* Table Section */
+.sub-table-section {
+  width: 100%;
+}
+
+.sub-table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--sub-border);
+  border-radius: var(--sub-radius);
+  background: var(--sub-surface);
+}
+
+.sub-data-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.sub-data-table th {
+  background-color: var(--sub-table-header);
+  color: #ffffff;
+  font-weight: 600;
+  padding: 14px 20px;
+  border-right: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.sub-data-table th:last-child {
+  border-right: none;
+  text-align: center;
+}
+
+.sub-data-table td {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--sub-border);
+  color: var(--sub-text-main);
+  vertical-align: middle;
+}
+
+.sub-table-row:hover {
+  background-color: #f8fafc;
+}
+
+.sub-empty-row {
+  text-align: center;
+  color: var(--sub-text-muted);
+  padding: 35px !important;
+}
+
+.sub-col-sl {
+  width: 100px;
+  color: var(--sub-text-muted);
+  font-weight: 500;
+}
+
+/* Action Buttons */
+.sub-action-group {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.sub-btn-delete {
+  background-color: #dc2626;
+  color: #ffffff;
+  border: none;
+  padding: 6px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.sub-btn-delete:hover {
+  background-color: #b91c1c;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .sub-wrapper {
+    padding: 16px;
+  }
+  
+  .sub-header-section {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .sub-header-actions {
+    flex-direction: column;
+  }
+
+  .sub-search-wrapper,
+  .sub-btn-excel {
+    max-width: 100%;
+    width: 100%;
+    justify-content: center;
+  }
+}

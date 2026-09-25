@@ -1,0 +1,290 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --auru-primary: #0284c7;
+  --auru-primary-hover: #0369a1;
+  --auru-primary-light: #e0f2fe;
+  --auru-table-header: #0284c7;
+  --auru-bg: #f8fafc;
+  --auru-surface: #ffffff;
+  --auru-text-main: #1e293b;
+  --auru-text-muted: #64748b;
+  --auru-border: #cbd5e1;
+  --auru-radius: 12px;
+  --auru-shadow: 0 10px 30px -5px rgba(2, 132, 199, 0.08), 0 8px 10px -6px rgba(2, 132, 199, 0.04);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+}
+
+.app-uru-container {
+  min-height: 100vh;
+  background-color: var(--auru-bg);
+  padding: 40px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.app-uru-wrapper {
+  width: 100%;
+  max-width: 1350px;
+  background: var(--auru-surface);
+  border-radius: var(--auru-radius);
+  box-shadow: var(--auru-shadow);
+  padding: 32px;
+  border: 1px solid var(--auru-border);
+}
+
+/* Header Section */
+.app-uru-header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.app-uru-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--auru-text-main);
+  letter-spacing: -0.5px;
+}
+
+.app-uru-header-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.app-uru-btn-excel {
+  background-color: #16a34a;
+  color: #ffffff;
+  border: none;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.2s ease, transform 0.1s;
+}
+
+.app-uru-btn-excel:hover {
+  background-color: #15803d;
+}
+
+.app-uru-btn-reminder {
+  background-color: #ef4444;
+  color: #ffffff;
+  border: none;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.2s ease, transform 0.1s;
+}
+
+.app-uru-btn-reminder:hover {
+  background-color: #dc2626;
+}
+
+/* Toolbar / Filter Section */
+.app-uru-toolbar-section {
+  margin-bottom: 24px;
+}
+
+.app-uru-select-wrapper {
+  display: inline-block;
+  background: var(--auru-surface);
+  border: 2px solid var(--auru-border);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.app-uru-select-wrapper:focus-within {
+  border-color: var(--auru-primary);
+  box-shadow: 0 0 0 4px var(--auru-primary-light);
+}
+
+.app-uru-filter-select {
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--auru-text-main);
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+/* Table Section */
+.app-uru-table-section {
+  width: 100%;
+}
+
+.app-uru-table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--auru-border);
+  border-radius: var(--auru-radius);
+  background: var(--auru-surface);
+}
+
+.app-uru-data-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.app-uru-data-table th {
+  background-color: var(--auru-table-header);
+  color: #ffffff;
+  font-weight: 600;
+  padding: 14px 16px;
+  border-right: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.app-uru-data-table th:last-child {
+  border-right: none;
+  text-align: center;
+}
+
+.app-uru-data-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--auru-border);
+  color: var(--auru-text-main);
+  vertical-align: middle;
+}
+
+.app-uru-table-row:hover {
+  background-color: #f8fafc;
+}
+
+.app-uru-empty-row {
+  text-align: center;
+  color: var(--auru-text-muted);
+  padding: 30px !important;
+}
+
+/* Price Input Field */
+.app-uru-input-price {
+  width: 90px;
+  padding: 8px 10px;
+  border: 1px solid var(--auru-border);
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  background: var(--auru-surface);
+  transition: border-color 0.2s;
+}
+
+.app-uru-input-price:focus {
+  border-color: var(--auru-primary);
+  box-shadow: 0 0 0 3px var(--auru-primary-light);
+}
+
+/* Payment Status Badges */
+.app-uru-status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 20px;
+}
+
+.app-uru-status-badge.pending {
+  background-color: #fef3c7;
+  color: #d97706;
+}
+
+.app-uru-status-badge.paid {
+  background-color: #dcfce7;
+  color: #16a34a;
+}
+
+/* Action Group */
+.app-uru-action-group {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.app-uru-btn-submit {
+  background-color: var(--auru-primary);
+  color: #ffffff;
+  border: none;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.app-uru-btn-submit:hover {
+  background-color: var(--auru-primary-hover);
+}
+
+.app-uru-btn-approve {
+  border: none;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.app-uru-btn-approve.pending {
+  background-color: #0ea5e9;
+  color: #ffffff;
+}
+
+.app-uru-btn-approve.pending:hover {
+  background-color: #0284c7;
+}
+
+.app-uru-btn-approve.approved {
+  background-color: #16a34a;
+  color: #ffffff;
+}
+
+.app-uru-btn-approve.approved:hover {
+  background-color: #15803d;
+}
+
+/* Responsive Breakdown */
+@media (max-width: 768px) {
+  .app-uru-wrapper {
+    padding: 16px;
+  }
+
+  .app-uru-header-section {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .app-uru-header-actions {
+    flex-direction: column;
+  }
+
+  .app-uru-btn-excel,
+  .app-uru-btn-reminder {
+    width: 100%;
+    justify-content: center;
+  }
+}

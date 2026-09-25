@@ -1,0 +1,384 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --mru-primary: #1d4ed8;
+  --mru-primary-hover: #1e40af;
+  --mru-primary-light: #eff6ff;
+  --mru-table-header-bg: #2563eb;
+  --mru-bg: #f8fafc;
+  --mru-surface: #ffffff;
+  --mru-text-main: #1e293b;
+  --mru-text-muted: #64748b;
+  --mru-border: #cbd5e1;
+  --mru-radius: 10px;
+  --mru-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.08), 0 8px 10px -6px rgba(37, 99, 235, 0.04);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+}
+
+.mru-container {
+  min-height: 100vh;
+  background-color: var(--mru-bg);
+  padding: 30px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.mru-wrapper {
+  width: 100%;
+  max-width: 1300px;
+  background: var(--mru-surface);
+  border-radius: var(--mru-radius);
+  box-shadow: var(--mru-shadow);
+  padding: 30px;
+  border: 1px solid var(--mru-border);
+}
+
+/* Header Section */
+.mru-header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.mru-main-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--mru-text-main);
+}
+
+.mru-excel-btn {
+  background-color: #16a34a; /* Professional Excel Green */
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.2s ease, transform 0.1s;
+}
+
+.mru-excel-btn:hover {
+  background-color: #15803d;
+}
+
+/* Filter / Search Section */
+.mru-filter-section {
+  margin-bottom: 24px;
+}
+
+.mru-search-bar-wrapper {
+  display: flex;
+  gap: 10px;
+  background: #ffffff;
+  border: 2px solid var(--mru-border);
+  border-radius: var(--mru-radius);
+  padding: 6px;
+  transition: all 0.3s ease;
+}
+
+.mru-search-bar-wrapper:focus-within {
+  border-color: var(--mru-primary);
+  box-shadow: 0 0 0 4px var(--mru-primary-light);
+}
+
+.mru-search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 10px 14px;
+  font-size: 14px;
+  color: var(--mru-text-main);
+  background: transparent;
+}
+
+.mru-search-btn {
+  background-color: var(--mru-primary);
+  color: #ffffff;
+  border: none;
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.mru-search-btn:hover {
+  background-color: var(--mru-primary-hover);
+}
+
+/* Data Table Section */
+.mru-table-section {
+  width: 100%;
+}
+
+.mru-table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--mru-border);
+  border-radius: var(--mru-radius);
+  background: var(--mru-surface);
+}
+
+.mru-data-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.mru-data-table th {
+  background-color: var(--mru-table-header-bg);
+  color: #ffffff;
+  font-weight: 600;
+  padding: 14px 16px;
+  border-right: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.mru-data-table th:last-child {
+  border-right: none;
+  text-align: center;
+}
+
+.mru-data-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--mru-border);
+  color: var(--mru-text-main);
+  vertical-align: middle;
+}
+
+.mru-table-row:hover {
+  background-color: #f8fafc;
+}
+
+.mru-empty-row {
+  text-align: center;
+  color: var(--mru-text-muted);
+  padding: 30px !important;
+}
+
+/* Action Buttons */
+.mru-action-group {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.mru-btn-edit {
+  background-color: var(--mru-primary);
+  color: #ffffff;
+  border: none;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.mru-btn-edit:hover {
+  background-color: var(--mru-primary-hover);
+}
+
+.mru-btn-delete {
+  background-color: #dc2626;
+  color: #ffffff;
+  border: none;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.mru-btn-delete:hover {
+  background-color: #b91c1c;
+}
+
+.mru-btn-status {
+  border: none;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.mru-btn-status.approved {
+  background-color: #16a34a;
+  color: #ffffff;
+}
+
+.mru-btn-status.approved:hover {
+  background-color: #15803d;
+}
+
+.mru-btn-status.pending {
+  background-color: #ca8a04;
+  color: #ffffff;
+}
+
+.mru-btn-status.pending:hover {
+  background-color: #a16207;
+}
+
+/* Edit Popup Modal */
+.mru-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.mru-modal-card {
+  background: var(--mru-surface);
+  width: 100%;
+  max-width: 500px;
+  border-radius: 12px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  animation: mruModalFadeIn 0.3s ease;
+}
+
+@keyframes mruModalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mru-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background: var(--mru-primary);
+  color: #ffffff;
+}
+
+.mru-modal-header h2 {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.mru-modal-close {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  font-size: 26px;
+  cursor: pointer;
+}
+
+.mru-modal-form {
+  padding: 20px;
+}
+
+.mru-form-group {
+  margin-bottom: 16px;
+}
+
+.mru-form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--mru-text-main);
+  margin-bottom: 6px;
+}
+
+.mru-form-group input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--mru-border);
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.mru-form-group input:focus {
+  border-color: var(--mru-primary);
+  box-shadow: 0 0 0 3px var(--mru-primary-light);
+}
+
+.mru-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.mru-btn-cancel {
+  background: transparent;
+  border: 1px solid var(--mru-border);
+  color: var(--mru-text-muted);
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.mru-btn-cancel:hover {
+  background: #f1f5f9;
+  color: var(--mru-text-main);
+}
+
+.mru-btn-save {
+  background: var(--mru-primary);
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.mru-btn-save:hover {
+  background: var(--mru-primary-hover);
+}
+
+/* Responsive Breakdown */
+@media (max-width: 768px) {
+  .mru-wrapper {
+    padding: 15px;
+  }
+  
+  .mru-search-bar-wrapper {
+    flex-direction: column;
+  }
+  
+  .mru-search-btn {
+    width: 100%;
+  }
+}
