@@ -1,287 +1,300 @@
-import React, { useState, useEffect } from "react";
-import { API_URL } from "../../Api";
-import { useLocation, useNavigate } from "react-router-dom";
-import {
-  FaUser,
-  FaEnvelope,
-  FaCalendarAlt,
-  FaMoneyBillWave,
-  FaMapMarkerAlt,
-  FaMobileAlt,
-  FaGlobe,
-  FaFileUpload,
-  FaCamera,
-  FaGraduationCap,
-} from "react-icons/fa";
-import axios from "axios";
-import "./RegisterForEvent.css";
+import React, { useState } from 'react';
+import { 
+  Calendar, 
+  User, 
+  Phone, 
+  MapPin, 
+  Mail, 
+  Globe, 
+  GraduationCap, 
+  FileText, 
+  Upload, 
+  CreditCard,
+  CheckCircle2,
+  Sparkles
+} from 'lucide-react';
+import './RegisterForEvent.css';
 
 const RegisterForEvent = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    eventName: '',
+    applicantName: '',
+    sex: '',
+    dateOfBirth: '',
+    whatsappNumber: '',
+    pinCode: '',
+    district: '',
+    state: '',
+    email: '',
+    website: '',
+    educationalQualification: '',
+    expertise: '',
+    bioData: null,
+    photo: null,
+    registrationFees: '₹0'
+  });
 
-  const [events, setEvents] = useState([]);
-  const [eventName, setEventName] = useState("");
-  const [eventPrice, setEventPrice] = useState(0);
-
-  const [applicantName, setApplicantName] = useState("");
-  const [sex, setSex] = useState("");
-  const [dob, setDob] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [pinCode, setPinCode] = useState("");
-  const [district, setDistrict] = useState("");
-  const [state, setState] = useState("");
-  const [email, setEmail] = useState("");
-  const [website, setWebsite] = useState(""); // optional
-  const [education, setEducation] = useState("");
-  const [skills, setSkills] = useState(""); // optional
-  const [bioData, setBioData] = useState(null);
-  const [photo, setPhoto] = useState(null);
-
-  useEffect(() => {
-    const urlParams = new URLSearchParams(location.search);
-    const eventNameParam = urlParams.get("eventName");
-    const eventPriceParam = urlParams.get("eventPrice");
-
-    if (eventNameParam && eventPriceParam) {
-      setEventName(decodeURIComponent(eventNameParam));
-      setEventPrice(eventPriceParam);
-    }
-
-    const fetchEvents = async () => {
-      try {
-        const response = await axios.get(`${API_URL}/events/status/Ongoing`);
-        setEvents(response.data.events);
-      } catch (error) {
-        console.error("Error fetching events:", error);
-      }
-    };
-    fetchEvents();
-  }, [location.search]);
-
-  const handleEventChange = (e) => {
-    const selectedEvent = events.find((event) => event.eventName === e.target.value);
-    if (selectedEvent) {
-      setEventName(selectedEvent.eventName);
-      setEventPrice(selectedEvent.pricePerTicket);
+  const handleChange = (e) => {
+    const { name, value, files } = e.target;
+    if (files) {
+      setFormData(prev => ({ ...prev, [name]: files[0] }));
+    } else {
+      setFormData(prev => ({ ...prev, [name]: value }));
     }
   };
 
-  const handlePayment = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (!bioData || !photo) {
-      alert("Please upload both biodata and photo!");
-      return;
-    }
-
-    if (phoneNumber.length !== 10) {
-      alert("Phone number must be exactly 10 digits!");
-      return;
-    }
-
-    try {
-      // Upload biodata and photo
-      const formData = new FormData();
-      formData.append("biodata", bioData);
-      formData.append("photo", photo);
-
-      const uploadResponse = await axios.post(`${API_URL}/upload/upload`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-
-      const { biodataUrl, photoUrl } = uploadResponse.data;
-      if (!biodataUrl || !photoUrl) {
-        alert("File upload failed! Please try again.");
-        return;
-      }
-
-      // Create Razorpay order
-      const paymentData = {
-        amount: eventPrice,
-        currency: "INR",
-        receipt: `receipt_${Date.now()}`,
-        phone: phoneNumber,
-      };
-      const { data } = await axios.post(`${API_URL}/payment/create-order`, paymentData);
-
-      const options = {
-        key: "rzp_live_1gSA9RbSjj0sEj",
-        amount: data.order.amount,
-        currency: data.order.currency,
-        name: "Unique Records of Universe",
-        description: "Event Registration Fee",
-        order_id: data.order.id,
-        handler: async (response) => {
-          const verifyRes = await axios.post(`${API_URL}/payment/verify-payment`, response);
-          if (verifyRes.data.success) {
-            try {
-              const registerRes = await axios.post(`${API_URL}/registerevent/register`, {
-                eventName,
-                applicantName,
-                sex,
-                dateOfBirth: dob,
-                phone: phoneNumber,
-                pinCode,
-                district,
-                state,
-                email,
-                website,
-                education,
-                skills,
-                bioDataUrl: biodataUrl,
-                passportPhotoUrl: photoUrl,
-                orderId: response.razorpay_order_id,
-                paymentId: response.razorpay_payment_id,
-                amount: data.order.amount / 100,
-                currency: data.order.currency,
-                method: "Razorpay",
-                status: "SUCCESS",
-              });
-
-              navigate("/payment-success", {
-                state: {
-                  order: {
-                    orderId: response.razorpay_order_id,
-                    paymentId: response.razorpay_payment_id,
-                    amount: data.order.amount / 100,
-                    currency: data.order.currency,
-                    phone: phoneNumber,
-                    date: new Date().toLocaleString(),
-                    method: "Razorpay",
-                    status: "SUCCESS",
-                  },
-                  registration: registerRes.data.data,
-                },
-              });
-            } catch (err) {
-              console.error("Error saving registration:", err);
-              alert("Registration failed after payment!");
-            }
-          } else {
-            alert("Payment Verification Failed!");
-          }
-        },
-        prefill: {
-          name: applicantName,
-          email: email,
-          contact: phoneNumber,
-        },
-        theme: { color: "#3399cc" },
-      };
-
-      const razor = new window.Razorpay(options);
-      razor.open();
-    } catch (error) {
-      console.error("Error:", error);
-      alert("Something went wrong. Please try again!");
-    }
+    console.log('Event registration submitted:', formData);
+    // Add your API integration / Axios request here
   };
 
   return (
-    <>
-      <h1 className="event-registaion-page heading">
-        Unique Records of Universe <span>Digitally Marking The Extraordinary Achievement</span>
-      </h1>
+    <div className="ure-page-wrapper">
+      <div className="ure-container">
+        
+        {/* Header Section */}
+        <div className="ure-header">
+          <div className="ure-badge">
+            <Sparkles size={16} /> Official Portal
+          </div>
+          <h1 className="ure-main-title">UNIQUE RECORDS OF UNIVERSE</h1>
+          <p className="ure-subtitle">Digitally Marking The Extraordinary Achievement</p>
+        </div>
 
-      <div className="event-container">
-        <h2 className="event-heading">Event Registration Form</h2>
-        <form className="event-form" onSubmit={handlePayment}>
-          <div className="event-row">
-            <div className="event-group">
-              <label><FaCalendarAlt /> Event Name *</label>
-              <select value={eventName} onChange={handleEventChange} required>
-                <option value="">Select an Event</option>
-                {events.map((event) => (
-                  <option key={event._id} value={event.eventName}>
-                    {event.eventName}
-                  </option>
-                ))}
-              </select>
+        {/* Form Card */}
+        <div className="ure-form-card">
+          <div className="ure-form-card-header">
+            <div className="ure-form-title-group">
+              <span className="ure-blue-accent-bar"></span>
+              <h2>EVENT REGISTRATION FORM</h2>
             </div>
+            <p className="ure-form-desc">Please fill out all required details accurately to complete your event registration.</p>
+          </div>
 
-            <div className="event-group">
-              <label><FaUser /> Applicant Name *</label>
-              <input type="text" value={applicantName} onChange={(e) => setApplicantName(e.target.value)} required />
-            </div>
-
-            <div className="event-group">
-              <label>Sex *</label>
-              <div className="event-radio">
-                <input type="radio" name="sex" value="Male" onChange={(e) => setSex(e.target.value)} required /> Male
-                <input type="radio" name="sex" value="Female" onChange={(e) => setSex(e.target.value)} required /> Female
-                <input type="radio" name="sex" value="Transgender" onChange={(e) => setSex(e.target.value)} required /> Transgender
+          <form onSubmit={handleSubmit} className="ure-form-grid">
+            
+            {/* Event Name & Applicant Name */}
+            <div className="ure-input-group">
+              <label><Calendar size={16} /> Event Name *</label>
+              <div className="ure-select-wrapper">
+                <select 
+                  name="eventName" 
+                  value={formData.eventName} 
+                  onChange={handleChange} 
+                  required
+                >
+                  <option value="">Select an Event</option>
+                  <option value="Global Achievers Summit">Global Achievers Summit</option>
+                  <option value="Universe Talent Showcase">Universe Talent Showcase</option>
+                  <option value="Innovation & Records Expo">Innovation & Records Expo</option>
+                </select>
               </div>
             </div>
-          </div>
 
-          <div className="event-row">
-            <div className="event-group">
-              <label><FaCalendarAlt /> Date of Birth *</label>
-              <input type="date" value={dob} onChange={(e) => setDob(e.target.value)} required />
+            <div className="ure-input-group">
+              <label><User size={16} /> Applicant Name *</label>
+              <input 
+                type="text" 
+                name="applicantName" 
+                placeholder="Enter your full name" 
+                value={formData.applicantName} 
+                onChange={handleChange} 
+                required 
+              />
             </div>
-            <div className="event-group">
-              <label><FaMobileAlt /> WhatsApp Mobile Number *</label>
-              <input type="tel" maxLength="10" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} required />
-            </div>
-          </div>
 
-          <div className="event-row">
-            <div className="event-group">
-              <label><FaMapMarkerAlt /> Pin Code *</label>
-              <input type="text" maxLength="6" value={pinCode} onChange={(e) => setPinCode(e.target.value)} required />
+            {/* Sex / Gender Selection */}
+            <div className="ure-input-group ure-full-width">
+              <label><User size={16} /> Sex *</label>
+              <div className="ure-radio-group">
+                {['Male', 'Female', 'Transgender'].map((option) => (
+                  <label key={option} className={`ure-radio-chip ${formData.sex === option ? 'active' : ''}`}>
+                    <input 
+                      type="radio" 
+                      name="sex" 
+                      value={option} 
+                      checked={formData.sex === option} 
+                      onChange={handleChange} 
+                      required 
+                    />
+                    <span>{option}</span>
+                  </label>
+                ))}
+              </div>
             </div>
-            <div className="event-group">
-              <label>District *</label>
-              <input type="text" value={district} onChange={(e) => setDistrict(e.target.value)} required />
-            </div>
-            <div className="event-group">
-              <label>State *</label>
-              <input type="text" value={state} onChange={(e) => setState(e.target.value)} required />
-            </div>
-          </div>
 
-          <div className="event-row">
-            <div className="event-group">
-              <label><FaEnvelope /> Email ID *</label>
-              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+            {/* Date of Birth & WhatsApp */}
+            <div className="ure-input-group">
+              <label><Calendar size={16} /> Date of Birth *</label>
+              <input 
+                type="date" 
+                name="dateOfBirth" 
+                value={formData.dateOfBirth} 
+                onChange={handleChange} 
+                required 
+              />
             </div>
-            <div className="event-group">
-              <label><FaGlobe /> Website (Optional)</label>
-              <input type="text" value={website} onChange={(e) => setWebsite(e.target.value)} />
+
+            <div className="ure-input-group">
+              <label><Phone size={16} /> WhatsApp Mobile Number *</label>
+              <input 
+                type="tel" 
+                name="whatsappNumber" 
+                placeholder="e.g. 9876543210" 
+                value={formData.whatsappNumber} 
+                onChange={handleChange} 
+                required 
+              />
             </div>
-          </div>
 
-          <div className="event-group">
-            <label><FaGraduationCap /> Educational Qualification *</label>
-            <input type="text" value={education} onChange={(e) => setEducation(e.target.value)} required />
-          </div>
-
-          <div className="event-group">
-            <label>Your Area of Expertise & Special Skills (Optional)</label>
-            <textarea value={skills} onChange={(e) => setSkills(e.target.value)} />
-          </div>
-
-          <div className="event-row">
-            <div className="event-group">
-              <label><FaFileUpload /> Attach Bio-data (Max 25MB) *</label>
-              <input type="file" accept=".jpg,.jpeg,.png,.pdf" onChange={(e) => setBioData(e.target.files[0])} required />
+            {/* Pin Code, District, State */}
+            <div className="ure-input-group">
+              <label><MapPin size={16} /> Pin Code *</label>
+              <input 
+                type="text" 
+                name="pinCode" 
+                placeholder="6-digit pin code" 
+                value={formData.pinCode} 
+                onChange={handleChange} 
+                required 
+              />
             </div>
-            <div className="event-group">
-              <label><FaCamera /> Upload Your Passport Size Photo *</label>
-              <input type="file" accept=".jpg,.jpeg,.png" onChange={(e) => setPhoto(e.target.files[0])} required />
+
+            <div className="ure-input-group">
+              <label><MapPin size={16} /> District *</label>
+              <input 
+                type="text" 
+                name="district" 
+                placeholder="Enter district" 
+                value={formData.district} 
+                onChange={handleChange} 
+                required 
+              />
             </div>
-          </div>
 
-          <div className="event-group">
-            <label><FaMoneyBillWave /> Registration Fees *</label>
-            <input type="text" value={`₹${eventPrice}`} readOnly />
-          </div>
+            <div className="ure-input-group">
+              <label><MapPin size={16} /> State *</label>
+              <input 
+                type="text" 
+                name="state" 
+                placeholder="Enter state" 
+                value={formData.state} 
+                onChange={handleChange} 
+                required 
+              />
+            </div>
 
-          <button type="submit" className="event-submit">Pay ₹{eventPrice} & Register</button>
-        </form>
+            {/* Email & Website */}
+            <div className="ure-input-group">
+              <label><Mail size={16} /> Email ID *</label>
+              <input 
+                type="email" 
+                name="email" 
+                placeholder="name@example.com" 
+                value={formData.email} 
+                onChange={handleChange} 
+                required 
+              />
+            </div>
+
+            <div className="ure-input-group">
+              <label><Globe size={16} /> Website (Optional)</label>
+              <input 
+                type="url" 
+                name="website" 
+                placeholder="https://yourwebsite.com" 
+                value={formData.website} 
+                onChange={handleChange} 
+              />
+            </div>
+
+            {/* Educational Qualification */}
+            <div className="ure-input-group ure-full-width">
+              <label><GraduationCap size={16} /> Educational Qualification *</label>
+              <input 
+                type="text" 
+                name="educationalQualification" 
+                placeholder="e.g., Bachelor of Technology / Master in Science" 
+                value={formData.educationalQualification} 
+                onChange={handleChange} 
+                required 
+              />
+            </div>
+
+            {/* Expertise & Special Skills */}
+            <div className="ure-input-group ure-full-width">
+              <label><FileText size={16} /> Your Area of Expertise & Special Skills (Optional)</label>
+              <textarea 
+                name="expertise" 
+                rows="4" 
+                placeholder="Describe your unique skills, background, or notable achievements..." 
+                value={formData.expertise} 
+                onChange={handleChange}
+              ></textarea>
+            </div>
+
+            {/* File Uploads */}
+            <div className="ure-input-group">
+              <label><Upload size={16} /> Attach Bio-data (Max 25MB) *</label>
+              <div className="ure-file-upload-box">
+                <input 
+                  type="file" 
+                  name="bioData" 
+                  id="bioData" 
+                  accept=".pdf,.doc,.docx" 
+                  onChange={handleChange} 
+                  required 
+                />
+                <label htmlFor="bioData" className="ure-file-custom-btn">
+                  <span>Choose File</span>
+                  <span className="ure-file-name">{formData.bioData ? formData.bioData.name : 'No file chosen'}</span>
+                </label>
+              </div>
+            </div>
+
+            <div className="ure-input-group">
+              <label><Upload size={16} /> Upload Your Passport Size Photo *</label>
+              <div className="ure-file-upload-box">
+                <input 
+                  type="file" 
+                  name="photo" 
+                  id="photo" 
+                  accept="image/*" 
+                  onChange={handleChange} 
+                  required 
+                />
+                <label htmlFor="photo" className="ure-file-custom-btn">
+                  <span>Choose File</span>
+                  <span className="ure-file-name">{formData.photo ? formData.photo.name : 'No file chosen'}</span>
+                </label>
+              </div>
+            </div>
+
+            {/* Registration Fees */}
+            <div className="ure-input-group ure-full-width">
+              <label><CreditCard size={16} /> Registration Fees *</label>
+              <input 
+                type="text" 
+                name="registrationFees" 
+                value={formData.registrationFees} 
+                readOnly 
+                className="ure-readonly-input" 
+              />
+            </div>
+
+            {/* Submit Button */}
+            <div className="ure-submit-wrapper ure-full-width">
+              <button type="submit" className="ure-submit-btn">
+                <span>PAY {formData.registrationFees} & REGISTER</span>
+                <CheckCircle2 size={20} />
+              </button>
+            </div>
+
+          </form>
+        </div>
       </div>
-    </>
+    </div>
   );
 };
 

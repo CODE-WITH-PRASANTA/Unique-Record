@@ -1,1348 +1,582 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios"; 
-import "./UserDashboard.css";
-import img1 from "../../assets/left.svg";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
-import {
-  faFacebookF,
-  faXTwitter,
-  faInstagram,
-  faTiktok,
-} from "@fortawesome/free-brands-svg-icons";
-import { API_URL } from '../../Api';
-import Companylogo from '../../assets/UNQUE.png'
-import Swal from "sweetalert2";
+import React, { useEffect, useRef, useState } from 'react';
+import './UserDashboard.css';
 
+const LOGO_SRC = null;
+
+const STEPS = [
+  { id: 1, title: 'Application Type', hint: 'Record or activity', desc: 'Choose what you want to register.' },
+  { id: 2, title: 'Personal Details', hint: 'About you', desc: 'Tell us who is applying.' },
+  { id: 3, title: 'Record Details', hint: 'What you attempted', desc: 'Describe what you attempted or achieved.' },
+  { id: 4, title: 'Evidence & Media', hint: 'Links and uploads', desc: 'Add links and files that prove it.' },
+  { id: 5, title: 'Witnesses', hint: 'Optional support', desc: 'Add up to two witnesses (optional).' },
+  { id: 6, title: 'Confirmation', hint: 'Accept & submit', desc: 'Review and complete your application.' }
+];
+const TOTAL_STEPS = STEPS.length;
+const COMPLETABLE = 5;
+
+const LINK_FIELDS = [
+  { name: 'driveLink', label: 'Google Drive Links', icon: 'globe' },
+  { name: 'facebookLink', label: 'Facebook Links', icon: 'globe' },
+  { name: 'youtubeLink', label: 'YouTube Links', icon: 'globe' },
+  { name: 'instagramLink', label: 'Instagram Links', icon: 'globe' },
+  { name: 'linkedinLink', label: 'LinkedIn Links', icon: 'globe' },
+  { name: 'twitterLink', label: 'X (Twitter) Links', icon: 'globe' },
+  { name: 'pinterestLink', label: 'Pinterest Links', icon: 'globe' },
+  { name: 'otherMediaLink', label: 'Other Media Links', icon: 'globe' }
+];
+
+const UPLOADS = [
+  { kind: 'photos', label: 'Upload Photos (JPG/PNG)', limit: 'Max total 10MB', maxMB: 10, accept: 'image/png,image/jpeg' },
+  { kind: 'videos', label: 'Upload Videos (MP4)', limit: 'Max total 100MB', maxMB: 100, accept: 'video/mp4' },
+  { kind: 'documents', label: 'Upload Documents (PDF)', limit: 'Total max 10MB', maxMB: 10, accept: 'application/pdf', full: true }
+];
+
+const ICONS = {
+  user: (<><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></>),
+  users: (<><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8" /></>),
+  calendar: (<><rect x="3" y="4" width="18" height="18" rx="2" /><path d="M16 2v4M8 2v4M3 10h18" /></>),
+  mapPin: (<><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></>),
+  home: (<><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><path d="M9 22V12h6v10" /></>),
+  globe: (<><circle cx="12" cy="12" r="10" /><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" /></>),
+  hash: (<path d="M4 9h16M4 15h16M10 3L8 21M16 3l-2 18" />),
+  cap: (<><path d="M22 10L12 5 2 10l10 5 10-5z" /><path d="M6 12v5c3 3 9 3 12 0v-5" /></>),
+  phone: (<path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8.1 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z" />),
+  mail: (<><rect x="2" y="4" width="20" height="16" rx="2" /><path d="M22 7l-10 6L2 7" /></>),
+  briefcase: (<><rect x="2" y="7" width="20" height="14" rx="2" /><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" /></>),
+  layers: (<><path d="M12 2L2 7l10 5 10-5z" /><path d="M2 17l10 5 10-5M2 12l10 5 10-5" /></>),
+  building: (<><rect x="4" y="2" width="16" height="20" rx="2" /><path d="M9 22v-4h6v4M8 6h.01M12 6h.01M16 6h.01M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01" /></>),
+  badge: (<><circle cx="12" cy="8" r="6" /><path d="M15.5 13.5L17 22l-5-3-5 3 1.5-8.5" /></>),
+  zap: (<path d="M13 2L3 14h9l-1 8 10-12h-9z" />),
+  upload: (<><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><path d="M17 8l-5-5-5 5M12 3v12" /></>),
+  check: (<path d="M20 6L9 17l-5-5" />)
+};
+
+const Icon = ({ name, className = 'udu-field-icon' }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    {ICONS[name]}
+  </svg>
+);
+
+const APPLICATION_TYPES = [
+  { value: 'Unique Record', icon: 'badge', desc: 'Register a verifiable world-class achievement, phenomenon or innovation.' },
+  { value: 'Unique Activity', icon: 'zap', desc: 'Register a distinctive landmark activity, expedition or event.' }
+];
+
+const Field = ({ label, name, value, onChange, type = 'text', placeholder, required, full, icon, children }) => (
+  <div className={`udu-input-group ${full ? 'udu-full-span' : ''}`}>
+    <label htmlFor={name}>
+      {label}
+      {required && <span className="udu-req">*</span>}
+    </label>
+    <div className={`udu-control ${icon ? 'udu-has-icon' : ''}`}>
+      {icon && <Icon name={icon} />}
+      {children || (
+        <input id={name} type={type} name={name} value={value} onChange={onChange} required={required} placeholder={placeholder} />
+      )}
+    </div>
+  </div>
+);
+
+const FilePreview = ({ file, kind, onRemove }) => {
+  const [url, setUrl] = useState(null);
+  useEffect(() => {
+    if (kind === 'documents') return undefined;
+    const u = URL.createObjectURL(file);
+    setUrl(u);
+    return () => URL.revokeObjectURL(u);
+  }, [file, kind]);
+
+  return (
+    <div className={`udu-preview udu-preview-${kind}`}>
+      {kind === 'photos' && url && <img src={url} alt={file.name} />}
+      {kind === 'videos' && url && <video src={url} controls preload="metadata" />}
+      {kind === 'documents' && (
+        <div className="udu-doc-chip">
+          <span className="udu-doc-icon">PDF</span>
+          <span className="udu-doc-name">{file.name}</span>
+        </div>
+      )}
+      <button type="button" className="udu-remove-btn" onClick={onRemove} aria-label={`Remove ${file.name}`}>×</button>
+    </div>
+  );
+};
+
+const Logo = () =>
+  LOGO_SRC ? (
+    <img className="udu-logo-img" src={LOGO_SRC} alt="Unique Records Universe" />
+  ) : (
+    <span className="udu-brand">
+      <span className="udu-logo-fallback" aria-hidden="true">
+        <span className="udu-logo-core"></span>
+      </span>
+      <span className="udu-brand-text">
+        <strong>URU</strong>
+        <em>Records Universe</em>
+      </span>
+    </span>
+  );
+
+const ClipboardIllustration = () => (
+  <svg className="udu-illustration" viewBox="0 0 260 250" role="img" aria-label="Record clipboard with medal">
+    <defs>
+      <radialGradient id="uduGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.45" />
+        <stop offset="70%" stopColor="#6366f1" stopOpacity="0.15" />
+        <stop offset="100%" stopColor="#6366f1" stopOpacity="0" />
+      </radialGradient>
+      <linearGradient id="uduBoard" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stopColor="#0ea5e9" />
+        <stop offset="100%" stopColor="#2563eb" />
+      </linearGradient>
+      <linearGradient id="uduGold" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stopColor="#fde047" />
+        <stop offset="100%" stopColor="#eab308" />
+      </linearGradient>
+    </defs>
+    <circle cx="130" cy="122" r="118" fill="url(#uduGlow)" />
+    <circle cx="130" cy="122" r="108" fill="none" stroke="#fff" strokeOpacity="0.2" strokeWidth="1.5" strokeDasharray="4 8" strokeLinecap="round" />
+    <ellipse cx="130" cy="228" rx="62" ry="8" fill="#000" fillOpacity="0.3" />
+    <g transform="translate(70 38)">
+      <rect x="0" y="14" width="120" height="164" rx="16" fill="url(#uduBoard)" />
+      <rect x="8" y="26" width="104" height="144" rx="10" fill="#ffffff" />
+      <rect x="36" y="4" width="48" height="24" rx="8" fill="#cbd5e1" />
+      <circle cx="34" cy="60" r="13" fill="#e2e8f0" />
+      <path d="M12 98c0-13 9-21 22-21s22 8 22 21z" fill="#e2e8f0" />
+      <rect x="64" y="50" width="34" height="7" rx="3.5" fill="#0f172a" />
+      <rect x="64" y="64" width="34" height="5" rx="2.5" fill="#94a3b8" />
+      <rect x="20" y="140" width="15" height="22" rx="4" fill="#38bdf8" />
+      <rect x="42" y="126" width="15" height="36" rx="4" fill="#10b981" />
+      <rect x="64" y="114" width="15" height="48" rx="4" fill="#6366f1" />
+      <rect x="86" y="132" width="15" height="30" rx="4" fill="#f59e0b" />
+    </g>
+    <g transform="translate(202 82)">
+      <path d="M-13 16L-20 48L-7 41L0 52L0 20Z" fill="#f43f5e" />
+      <path d="M13 16L20 48L7 41L0 52L0 20Z" fill="#e11d48" />
+      <circle r="26" fill="url(#uduGold)" stroke="#fff" strokeWidth="3" />
+      <circle r="18" fill="none" stroke="#fff" strokeOpacity="0.6" strokeWidth="1.5" />
+      <polygon points="0,-11 2.8,-3.8 10.5,-3.4 4.4,1.4 6.5,8.8 0,4.5 -6.5,8.8 -4.4,1.4 -10.5,-3.4 -2.8,-3.8" fill="#fff" />
+    </g>
+  </svg>
+);
 
 const UserDashboard = () => {
-  const [categories, setCategories] = useState([]);
-  const [step, setStep] = useState(1);
-  const [termsAccepted, setTermsAccepted] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const [showTerms, setShowTerms] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const progressStep = Math.min(Math.max(step - 1, 0), 5);
-  const progressPercent = (progressStep / 5) * 100;
-  const [photoSizeError, setPhotoSizeError] = useState(false);
-  const [videoSizeError, setVideoSizeError] = useState(false);
-  const [docSizeError, setDocSizeError] = useState(false);
-  const [showOverlay, setShowOverlay] = useState(false);
-
-  const handleOpen = () => setShowOverlay(true);
-  const handleClose = () => setShowOverlay(false);
-
+  const [currentStep, setCurrentStep] = useState(1);
+  const formRef = useRef(null);
 
   const [formData, setFormData] = useState({
-      applicantName: "",
-      sex: "",
-      dateOfBirth: "",
-      address: "",
-      district: "",
-      country: "",
-      state: "",
-      pinCode: "",
-      educationalQualification: "",
-      whatsappMobileNumber: "",
-      emailId: "",
-      occupation: "",
-      formCategory: "",  
-      recordCategory: "",
-      recordTitle: "",
-      recordDescription: "",
-      purposeOfRecordAttempt: "",
-      dateOfAttempt: "",
-      recordVenue: "",
-      organisationName: "",
-
-      googleDriveLink: [""],
-      facebookLink: [""],
-      youtubeLink: [""],
-      instagramLink: [""],
-      linkedInLink: [""],
-      xLink: [""],
-      pinterestLink: [""],
-      otherMediaLink: [""],
-
-
-      // ✅ files
-      photos: [],
-      videos: [],
-      documents: [],
-
-      // ✅ witnesses
-      witness1Name: "",
-      witness1Designation: "",
-      witness1Address: "",
-      witness1MobileNumber: "",
-      witness1EmailId: "",
-      witness2Name: "",
-      witness2Designation: "",
-      witness2Address: "",
-      witness2MobileNumber: "",
-      witness2EmailId: "",
-
-      position: "",
-      
+    applicationType: 'Unique Record',
+    applicantName: '',
+    sex: 'Female',
+    dateOfBirth: '',
+    address: '',
+    district: '',
+    state: '',
+    country: 'India',
+    pinCode: '',
+    educationalQualification: '',
+    whatsappNumber: '',
+    emailId: '',
+    occupation: '',
+    category: 'Other',
+    effortType: 'Individual Effort',
+    activityTitle: '',
+    activityDescription: '',
+    activityPurpose: '',
+    attemptDate: '',
+    activityVenue: '',
+    organisationName: '',
+    witness1Name: '',
+    witness1Designation: '',
+    witness1Address: '',
+    witness1Mobile: '',
+    witness1Email: '',
+    witness2Name: '',
+    witness2Designation: '',
+    witness2Address: '',
+    witness2Mobile: '',
+    witness2Email: '',
+    acceptTerms: false
   });
 
-  const handleLinkChange = (e, field, index) => {
-  const { value } = e.target;
-  setFormData((prev) => {
-    const updated = [...prev[field]];
-    updated[index] = value;
-    return { ...prev, [field]: updated };
-  });
-};
+  const [links, setLinks] = useState(
+    LINK_FIELDS.reduce((acc, f) => ({ ...acc, [f.name]: [''] }), {})
+  );
+  const [files, setFiles] = useState({ photos: [], videos: [], documents: [] });
 
-// ➕ Add new link field
-const addLinkField = (field) => {
-  setFormData((prev) => ({
-    ...prev,
-    [field]: [...prev[field], ""],
-  }));
-};
-
-// ❌ Remove a link field
-const removeLinkField = (field, index) => {
-  setFormData((prev) => {
-    const updated = [...prev[field]];
-    updated.splice(index, 1);
-    return { ...prev, [field]: updated };
-  });
-};
-
-const removeFile = (field, index) => {
-  setFormData((prev) => {
-    const updated = [...prev[field]];
-    updated.splice(index, 1);
-    return { ...prev, [field]: updated };
-  });
-};
-
-
-
-  useEffect(() => {
-  const fetchCategories = async () => {
-    try {
-      const response = await axios.get(`${API_URL}/categories`);
-      // ✅ Sort categories A–Z by name
-      const sortedCategories = response.data.sort((a, b) =>
-        a.name.localeCompare(b.name)
-      );
-      setCategories(sortedCategories);
-    } catch (error) {
-      console.error("Error fetching categories:", error);
-    }
-  };
-  fetchCategories();
-  }, []);
-  const handleInputChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
   };
 
-const handleFileChange = (e, type) => {
-  const files = Array.from(e.target.files);
+  const bind = (name) => ({ name, value: formData[name], onChange: handleChange });
 
-  if (type === "photos") {
-    const totalSize = [...formData.photos, ...files].reduce(
-      (acc, file) => acc + file.size,
-      0
-    );
-    if (totalSize > 10 * 1024 * 1024) {
-      setPhotoSizeError(true);
-      return; // ❌ Block adding
+  const updateLink = (key, index, value) =>
+    setLinks((prev) => ({ ...prev, [key]: prev[key].map((l, i) => (i === index ? value : l)) }));
+  const addLink = (key) => setLinks((prev) => ({ ...prev, [key]: [...prev[key], ''] }));
+  const removeLink = (key, index) =>
+    setLinks((prev) => ({ ...prev, [key]: prev[key].filter((_, i) => i !== index) }));
+
+  const handleFiles = (kind, maxMB, fileList, input) => {
+    const incoming = Array.from(fileList || []);
+    if (!incoming.length) return;
+    const currentSize = files[kind].reduce((sum, f) => sum + f.size, 0);
+    const incomingSize = incoming.reduce((sum, f) => sum + f.size, 0);
+    if (currentSize + incomingSize > maxMB * 1024 * 1024) {
+      alert(`Total size for this upload must be under ${maxMB}MB.`);
     } else {
-      setPhotoSizeError(false);
-      setFormData({ ...formData, photos: [...formData.photos, ...files] });
+      setFiles((prev) => ({ ...prev, [kind]: [...prev[kind], ...incoming] }));
     }
-  }
+    if (input) input.value = '';
+  };
 
-  if (type === "videos") {
-    // ✅ Calculate total size (existing + new)
-    const currentTotalSize = formData.videos.reduce((acc, file) => acc + file.size, 0);
-    const newFilesTotalSize = files.reduce((acc, file) => acc + file.size, 0);
-    const totalSize = currentTotalSize + newFilesTotalSize;
+  const removeFile = (kind, index) =>
+    setFiles((prev) => ({ ...prev, [kind]: prev[kind].filter((_, i) => i !== index) }));
 
-    if (totalSize > 100 * 1024 * 1024) { // 100MB
-      setVideoSizeError(true);
-      return; // ❌ Block adding
-    } else {
-      setVideoSizeError(false);
-      setFormData({ ...formData, videos: [...formData.videos, ...files] });
+  const handleNext = () => {
+    if (formRef.current && !formRef.current.reportValidity()) return;
+    if (currentStep < TOTAL_STEPS) {
+      setCurrentStep((s) => s + 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-  }
-
-  if (type === "documents") {
-    const currentTotalSize = formData.documents.reduce((acc, file) => acc + file.size, 0);
-    const newFilesTotalSize = files.reduce((acc, file) => acc + file.size, 0);
-    const totalSize = currentTotalSize + newFilesTotalSize;
-
-    if (totalSize > 10 * 1024 * 1024) {
-      setDocSizeError(true);
-      return; // ❌ Block adding
-    } else {
-      setDocSizeError(false);
-      setFormData({ ...formData, documents: [...formData.documents, ...files] });
-    }
-  }
-};
-
-
-
-
-  const handleNext = (e) => {
-      e.preventDefault();
-      const nextStep = step + 1;
-
-      // Save formData + currentStep in localStorage
-      localStorage.setItem("uruDraft", JSON.stringify({ 
-        formData, 
-        step: nextStep 
-      }));
-
-      setStep(nextStep);
   };
 
   const handlePrevious = () => {
-    setStep((prevStep) => prevStep - 1);
+    if (currentStep > 1) {
+      setCurrentStep((s) => s - 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
-  useEffect(() => {
-    const savedDraft = localStorage.getItem("uruDraft");
-    if (savedDraft) {
-      const { formData: savedData, step: savedStep } = JSON.parse(savedDraft);
-
-      // ensure all link fields are arrays
-      const normalizedData = {
-        ...savedData,
-        googleDriveLink: Array.isArray(savedData.googleDriveLink) ? savedData.googleDriveLink : [savedData.googleDriveLink || ""],
-        facebookLink: Array.isArray(savedData.facebookLink) ? savedData.facebookLink : [savedData.facebookLink || ""],
-        youtubeLink: Array.isArray(savedData.youtubeLink) ? savedData.youtubeLink : [savedData.youtubeLink || ""],
-        instagramLink: Array.isArray(savedData.instagramLink) ? savedData.instagramLink : [savedData.instagramLink || ""],
-        linkedInLink: Array.isArray(savedData.linkedInLink) ? savedData.linkedInLink : [savedData.linkedInLink || ""],
-        xLink: Array.isArray(savedData.xLink) ? savedData.xLink : [savedData.xLink || ""],
-        pinterestLink: Array.isArray(savedData.pinterestLink) ? savedData.pinterestLink : [savedData.pinterestLink || ""],
-        otherMediaLink: Array.isArray(savedData.otherMediaLink) ? savedData.otherMediaLink : [savedData.otherMediaLink || ""],
-      };
-
-      setFormData(normalizedData);
-      setStep(savedStep);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!formData.acceptTerms) {
+      alert('Please accept the Terms and Conditions.');
+      return;
     }
-  }, []);
-  
-const handleFinalSubmit = async (e) => {
-  e.preventDefault();
+    console.log('Submitted Application Data:', { ...formData, links, files });
+    alert('Application submitted successfully!');
+  };
 
-  if (!termsAccepted) {
-    // ⚠️ Terms not accepted
-    Swal.fire({
-      icon: "warning",
-      title: "Please accept the Terms and Conditions",
-      timer: 2000,
-      timerProgressBar: true,
-      showConfirmButton: false,
-    });
-    return;
-  }
-
-  setIsSubmitting(true);
-
-  let timerInterval;
-  Swal.fire({
-    title: "Processing Submission...",
-    html: "You are uploading high quality documents.<br/> Please wait up to <b>60</b> seconds while we verify your submission.",
-    timer: 60000, // 60 sec max
-    timerProgressBar: true,
-    allowOutsideClick: false,
-    didOpen: () => {
-      Swal.showLoading();
-      const timer = Swal.getPopup().querySelector("b");
-      timerInterval = setInterval(() => {
-        if (timer) {
-          timer.textContent = Math.ceil(Swal.getTimerLeft() / 1000); // show seconds left
-        }
-      }, 1000);
-    },
-    willClose: () => {
-      clearInterval(timerInterval);
-    },
-  });
-
-  try {
-    const formDataToSend = new FormData();
-    Object.keys(formData).forEach((key) => {
-      if (Array.isArray(formData[key])) {
-        formData[key].forEach((val) => {
-          formDataToSend.append(key, val);
-        });
-      } else {
-        formDataToSend.append(key, formData[key]);
-      }
-    });
-
-    const token = localStorage.getItem("token");
-    const response = await axios.post(
-      `${API_URL}/uru/create-uru`,
-      formDataToSend,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    Swal.close(); // close the countdown popup
-
-    if (response.status === 201) {
-      setSubmitted(true);
-      localStorage.removeItem("uruDraft");
-
-      Swal.fire({
-        icon: "success",
-        title: "Form submitted successfully ✅",
-        text: "Your record has been securely stored in the universe.",
-        timer: 2500,
-        showConfirmButton: false,
-      });
-    } else {
-      Swal.fire({
-        icon: "error",
-        title: "Something went wrong",
-        text: "Please try again.",
-        timer: 2500,
-        showConfirmButton: false,
-      });
-    }
-  } catch (error) {
-    Swal.close();
-    console.error("Error submitting form:", error);
-
-    let errorMessage = "Unexpected error occurred. Please try again.";
-    if (error.response && error.response.data) {
-      errorMessage = error.response.data.message || errorMessage;
-    } else if (error.message) {
-      errorMessage = error.message;
-    }
-
-    Swal.fire({
-      icon: "error",
-      title: "Submission Failed",
-      text: errorMessage,
-      timer: 3000,
-      timerProgressBar: true,
-      showConfirmButton: false,
-    });
-  } finally {
-    setIsSubmitting(false);
-  }
-};
-
+  const completed = Math.min(currentStep - 1, COMPLETABLE);
+  const progressPercent = (completed / COMPLETABLE) * 100;
+  const active = STEPS[currentStep - 1];
 
   return (
-    <>
-      <div className="achivment-container">
-        <div className="achievement-form-left-panel">
-      {/* Company Logo */}
-      <div className="achievement-form-logo">
-        <img src={Companylogo} alt="Company Logo" />
-      </div>
-
-      {/* Instructions Button */}
-      <div className="achievement-form-social-icons">
-        <button className="instructions-btn" onClick={handleOpen}>
-          Instructions
-        </button>
-      </div>
-
-      {/* Illustration */}
-      <div className="achievement-form-illustration">
-        <img src={img1} alt="Hiring Illustration" />
-      </div>
-
-      {/* Heading */}
-      <h1 className="achievement-form-heading">Unique Records Of Universe</h1>
-
-      {/* Description */}
-      <p className="achievement-form-description">
-        Unique Records Universe (URU) aims to provide a global platform and recognition to extraordinary, inspiring, verifiable human achievements, natural phenomena and innovations from around the world by digitally cataloguing them. Our aim is to preserve unique records or activities for positive inspiration to future generations with inclusive, transparent and ethical standards.
-      </p>
-
-        {/* Overlay */}
-        {showOverlay && (
-          <div className="overlay">
-            <div className="overlay-content">
-              <h2 className="left-uru-heading">
-                Important Guidelines for Filling Online Application Form
-              </h2>
-
-             <div className="left-uru-text">
-                <div className="left-uru-section">
-                  <span className="left-uru-number">1.</span>
-                  <p>
-                    <b>Start Application:</b> Login with the login ID created while
-                    registering your account in the login section on the website and
-                    click on the <b>"Apply for URU Holder"</b> tab and open the form.
-                  </p>
-                </div>
-
-                <div className="left-uru-section">
-                  <span className="left-uru-number">2.</span>
-                  <p>
-                    <b>Fill Personal Information:</b> Enter your full name, email,
-                    address, educational qualification details and contact number
-                    accurately.
-                  </p>
-                </div>
-
-                <div className="left-uru-section">
-                  <span className="left-uru-number">3.</span>
-                  <p>
-                    <b>Provide Record Details:</b> Provide a brief description of your
-                    unique activity or record and upload the relevant documents.
-                  </p>
-                </div>
-
-                <div className="left-uru-section">
-                  <span className="left-uru-number">4.</span>
-                  <p>
-                    <b>Complete All Sections:</b> Fill all the 5 steps of the form
-                    carefully, ensure that no mandatory field is left blank and fill in
-                    the details carefully and correctly. Because once the final form is
-                    submitted, you will not be able to edit, update that form.
-                  </p>
-                </div>
-
-                <div className="left-uru-section">
-                  <span className="left-uru-number">5.</span>
-                  <p>
-                    <b>Read Terms and Conditions:</b> Read and accept the terms and
-                    conditions carefully before submitting the form.
-                  </p>
-                </div>
-
-                <div className="left-uru-section">
-                  <span className="left-uru-number">6.</span>
-                  <p>
-                    <b>Review:</b> Recheck the details entered by you using the
-                    <b> "Previous"</b> button and make changes as required.
-                  </p>
-                </div>
-
-                <div className="left-uru-section">
-                  <span className="left-uru-number">7.</span>
-                  <p>
-                    <b>Submit:</b> After verifying all the information, click on the
-                    <b> "Submit"</b> button. After submission, you will receive a
-                    confirmation email.
-                  </p>
-                </div>
-
-                <div className="left-uru-section">
-                  <span className="left-uru-number">8.</span>
-                  <p>
-                    <b>Help:</b> For any issues, email our admin team at{" "}
-                    <b>uruonline2025@gmail.com</b> or contact us on mobile number{" "}
-                    <b>+91 9472351693</b>.
-                  </p>
-                </div>
-
-                <div className="left-uru-section">
-                  <span className="left-uru-number">9.</span>
-                  <p>
-                    After successful submission of the form, URU JURI team will
-                    thoroughly check the unique records/unique activities mentioned in
-                    your application. Recognition will be granted only if it is
-                    approved, otherwise your application may be rejected.
-                  </p>
-                </div>
-
-                <div className="left-uru-section">
-                  <span className="left-uru-number">10.</span>
-                  <p>
-                    If your application is verified by the scrutiny committee and jury
-                    committee, then in the next step you can see the updated status by
-                    opening the Application Status tab. After paying the prescribed fee
-                    mentioned there, your unique record/unique activity will be duly
-                    published on the URU's worldwide website along with all the details
-                    and information provided by you and a digital certificate will also
-                    be issued.
-                  </p>
-                </div>
-
-                <div className="left-uru-section">
-                  <span className="left-uru-number">11.</span>
-                  <p>
-                    The application, certification fee in URU is ₹9,639/-. But as per
-                    the decision of the committee, after the application is accepted
-                    till further notice, you will have to pay only ₹3,693/-. Concession
-                    will also be given from this revised fee for people from specially
-                    economically weaker meritorious class who have really done some
-                    unique work.
-                  </p>
-                </div>
-
-                {/* New Instructions */}
-                <div className="left-uru-section">
-                  <span className="left-uru-number">12.</span>
-                  <p>
-                    If you want to add some additional information in future to your
-                    successfully published <b>'Unique Record/Activity'</b> details, then
-                    this can be done. For this, you have to send information from the
-                    pre-registered email ID to URU's official email{" "}
-                    <b>uruonline2025@gmail.com</b> for update.
-                  </p>
-                </div>
-
-                <div className="left-uru-section">
-                  <span className="left-uru-number">13.</span>
-                  <p>
-                    If you have applied for a <b>'Unique Record'</b> and the jury
-                    committee feels that your application is of the type of{" "}
-                    <b>'Unique Activity'</b>, then you will be registered in the{" "}
-                    <b>'Unique Activity'</b> category.
-                  </p>
-                </div>
-
-                <div className="left-uru-section">
-                  <span className="left-uru-number">14.</span>
-                  <p>
-                    If your application has been received for a{" "}
-                    <b>'Unique Activity'</b> and the jury committee feels that your
-                    application is worthy of a <b>'Unique Record'</b>, then your
-                    application will be registered in the <b>'Unique Record'</b>{" "}
-                    category.
-                  </p>
-                </div>
-
-                <div className="left-uru-note">
-                  <b>Note:</b> All the information filled by you in the application
-                  should be accurate and true. Submission of incomplete or wrong
-                  information may result in cancellation of application. If your unique
-                  record/unique activity is registered on the URU website and in future
-                  that information is proved to be false, then your published details
-                  will be removed from the website. In this regard, you will also be
-                  informed separately and your side will also be taken.
-                </div>
-              </div>
-
-              <button className="close-btn" onClick={handleClose}>
-                Close
-              </button>
+    <div className="udu-dashboard-container">
+      {/* ================= Premium Sidebar ================= */}
+      <aside className="udu-sidebar-section">
+        <div className="udu-sidebar-inner">
+          <div className="udu-sidebar-top">
+            <Logo />
+            <div className="udu-sidebar-badge">
+              <span className="udu-badge-icon">i</span>
+              Instructions
             </div>
           </div>
-        )}
 
+          <div className="udu-sidebar-hero">
+            <ClipboardIllustration />
+          </div>
+
+          <h1 className="udu-sidebar-title">Unique Records Of Universe</h1>
+
+          <div className="udu-sidebar-desc-card">
+            <p className="udu-sidebar-desc">
+              Unique Records Universe (URU) empowers extraordinary, inspiring human achievements and innovations worldwide through digital archival preservation and global recognition.
+            </p>
+          </div>
+
+          <div className="udu-sidebar-progress">
+            <div className="udu-sp-row">
+              <span className="udu-sp-step">Step {currentStep} of {TOTAL_STEPS}</span>
+              <span className="udu-sp-pct">{Math.round((currentStep / TOTAL_STEPS) * 100)}%</span>
+            </div>
+            <strong className="udu-sp-title">{active.title}</strong>
+            <span className="udu-sp-hint">{active.desc}</span>
+            <div className="udu-sp-bars" aria-hidden="true">
+              {STEPS.map((st) => (
+                <span
+                  key={st.id}
+                  className={`udu-sp-bar ${st.id < currentStep ? 'done' : st.id === currentStep ? 'current' : ''}`}
+                ></span>
+              ))}
+            </div>
+          </div>
         </div>
+      </aside>
 
-        <div className="right-panel">
-          <div className="form-achivment-container">
-            <h2 className="heading">Apply Online Appliction Form</h2>
-            <small className="Sub-heading">Apply online to have your unique record or activity registered in the digital archives of the universe</small>
-            <div className="progress-bar-achivment-container">
-              <div className="progress-text">{progressStep} of 5 completed</div>
-              <div className="progress-bar">
-                <div className="progress-fill" style={{ width: `${progressPercent}%` }}></div>
+      {/* ================= Main Content Container ================= */}
+      <main className="udu-main-content">
+        <div className="udu-main-inner">
+          <header className="udu-form-header">
+            <div className="udu-header-tag">Official Registration Portal</div>
+            <h2 className="udu-form-main-title">Apply Online Application Form</h2>
+            <p className="udu-form-subtitle">
+              Secure your unique record or historic activity permanently in the global digital archives of the universe.
+            </p>
+            <div className="udu-progress-indicator">
+              <div className="udu-progress-meta">
+                <span className="udu-completed-count">
+                  ✨ Step {currentStep} of {COMPLETABLE} Completed
+                </span>
+                <span className="udu-progress-pct">{Math.round(progressPercent)}% Done</span>
+              </div>
+              <div className="udu-progress-track">
+                <div className="udu-progress-fill" style={{ width: `${progressPercent}%` }}></div>
               </div>
             </div>
-            {step === 1 && (
-              <>
-                <p className="paragraph">Select the position you are applying for:</p>
-                <form onSubmit={handleNext} >
-                  <label className="radio-box">
-                    <input type="radio" name="position" value="Unique Record" onChange={handleInputChange} />
-                    <span>Unique Record</span>
-                  </label>
-                  <label className="radio-box">
-                    <input type="radio" name="position" value="Unique Activity" onChange={handleInputChange} />
-                    <span>Unique Activity</span>
-                  </label>
-                  <small>* Start  Choose branch radio based</small>
-                  <div className="form-footer">
-                    <button type="submit" className="next-button">Save & Next</button>
-                  </div>
-                </form>
-              </>
-            )}
-            {step === 2 && (
-              <>
-                <p className="section-title">Please fill in your personal details:</p>
-                <form className="personal-form" onSubmit={handleNext}>
-                  <div className="grid-form">
-                    <div className="achivment-form-group">
-                      <label>Applicant Name*</label>
-                      <input type="text" name="applicantName" value={formData.applicantName} onChange={handleInputChange} required />
-                    </div>
-                    <div className="achivment-form-group">
-                      <label>Sex*</label>
-                      <select name="sex" value={formData.sex} onChange={handleInputChange} required>
-                        <option value="">Select</option>
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                        <option value="transgender">Transgender</option>
-                      </select>
-                    </div>
-                    <div className="achivment-form-group">
-                      <label>Date of Birth*</label>
-                      <input type="date" name="dateOfBirth" value={formData.dateOfBirth} onChange={handleInputChange} required />
-                    </div>
-                    <div className="achivment-form-group">
-                      <label>Address*</label>
-                      <input type="text" name="address" value={formData.address} onChange={handleInputChange} required />
-                    </div>
-                    <div className="achivment-form-group">
-                      <label>District*</label>
-                      <input type="text" name="district" value={formData.district} onChange={handleInputChange} required />
-                    </div>
-                    <div className="achivment-form-group">
-                      <label>State*</label>
-                      <input type="text" name="state" value={formData.state} onChange={handleInputChange} required />
-                    </div>
-                    <div className="achivment-form-group">
-                      <label>Country*</label>
-                      <input type="text" name="country" value={formData.country} onChange={handleInputChange} required />
-                    </div>
-                    <div className="achivment-form-group">
-                      <label>Pin Code*</label>
-                      <input type="text" name="pinCode" value={formData.pinCode} onChange={handleInputChange} required />
-                    </div>
-                    <div className="achivment-form-group">
-                      <label>Educational Qualification*</label>
-                      <input type="text" name="educationalQualification" value={formData.educationalQualification} onChange={handleInputChange} required />
-                    </div>
-                    <div className="achivment-form-group">
-                      <label>WhatsApp Mobile Number*</label>
-                      <input type="tel" name="whatsappMobileNumber" value={formData.whatsappMobileNumber} onChange={handleInputChange} required />
-                    </div>
-                    <div className="achivment-form-group">
-                      <label>Email ID*</label>
-                      <input type="email" name="emailId" value={formData.emailId} onChange={handleInputChange} required />
-                    </div>
-                    <div className="achivment-form-group">
-                      <label>Occupation*</label>
-                      <input type="text" name="occupation" value={formData.occupation} onChange={handleInputChange} required />
-                    </div>
-                  </div>
-                  <div className="form-footer">
-                    <button type="button" className="prev-button" onClick={handlePrevious}>← Previous</button>
-                    <button type="submit" className="next-button">Save & Next</button>
-                  </div>
-                </form>
-              </>
-            )}
-            {step === 3 && (
-              <>
-                <p className="section-title">Fill about Record/Activity Details:</p>
-                <form className="personal-form" onSubmit={handleNext}>
-                  <div className="grid-form">
+          </header>
 
-                   {/* New Category Selection */}
-                    <div className="achivment-form-group">
-                      <label>Select Category *</label>
-                      <select
-                        name="formCategory"
-                        value={formData.formCategory}
-                        onChange={handleInputChange}
-                        required
+          <form className="udu-multi-step-form" onSubmit={handleSubmit} ref={formRef}>
+            <div className="udu-card-head">
+              <span className="udu-card-badge">{currentStep}</span>
+              <div className="udu-card-headtext">
+                <h3 className="udu-card-title">{active.title}</h3>
+                <p className="udu-card-desc">{active.desc}</p>
+              </div>
+            </div>
+
+            <div className="udu-card-body">
+              {/* ---------- STEP 1 ---------- */}
+              {currentStep === 1 && (
+                <div className="udu-form-step-pane udu-step-1">
+                  <h3 className="udu-section-heading">Select the position you are applying for:</h3>
+                  <div className="udu-radio-group-cards">
+                    {APPLICATION_TYPES.map((t) => (
+                      <label
+                        key={t.value}
+                        className={`udu-radio-card ${formData.applicationType === t.value ? 'active' : ''}`}
                       >
-                        <option value="">Select Category</option>
-                        {categories.map((cat) => (
-                          <option key={cat._id} value={cat.name}>
-                            {cat.name}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    <div className="achivment-form-group">
-                      <label>Effort Type *</label>
-                      <select name="recordCategory" value={formData.recordCategory} onChange={handleInputChange} required>
-                        <option value="">Select</option>
-                        <option value="individual">Individual Effort</option>
-                        <option value="group">Group Effort</option>
-                      </select>
-                    </div>
-                    <div className="achivment-form-group">
-                      <label>Record/Activity Title*</label>
-                      < textarea type="text" name="recordTitle" value={formData.recordTitle} onChange={handleInputChange} required />
-                    </div>
-                    <div className="achivment-form-group">
-                      <label>Description of Record/Activity*</label>
-                      <textarea name="recordDescription" value={formData.recordDescription} onChange={handleInputChange} required />
-                    </div>
-                    <div className="achivment-form-group">
-                      <label>Purpose of the Record/Activity Attempt*</label>
-                      <textarea name="purposeOfRecordAttempt" value={formData.purposeOfRecordAttempt} onChange={handleInputChange} required />
-                    </div>
-                    <div className="achivment-form-group">
-                      <label>Date of the Attempted*</label>
-                      <input type="date" name="dateOfAttempt" value={formData.dateOfAttempt} onChange={handleInputChange} required />
-                    </div>
-                    <div className="achivment-form-group">
-                      <label>Record/Activity Venue*</label>
-                      <input type="text" name="recordVenue" value={formData.recordVenue} onChange={handleInputChange} required />
-                    </div>
-                    <div className="achivment-form-group">
-                      <label>Organisation Name (optional)</label>
-                      <input type="text" name="organisationName" value={formData.organisationName} onChange={handleInputChange} />
-                    </div>
+                        <input
+                          type="radio"
+                          name="applicationType"
+                          value={t.value}
+                          checked={formData.applicationType === t.value}
+                          onChange={handleChange}
+                          required
+                        />
+                        <span className="udu-radio-icon">
+                          <Icon name={t.icon} className="udu-radio-svg" />
+                        </span>
+                        <span className="udu-radio-label-text">{t.value}</span>
+                        <span className="udu-radio-desc">{t.desc}</span>
+                        <span className="udu-radio-check" aria-hidden="true">
+                          {formData.applicationType === t.value && <Icon name="check" className="udu-check-svg" />}
+                        </span>
+                      </label>
+                    ))}
                   </div>
-                  <div className="form-footer">
-                    <button type="button" className="prev-button" onClick={handlePrevious}>← Previous</button>
-                    <button type="submit" className="next-button">Save & Next</button>
-                  </div>
-                </form>
-              </>
+                  <p className="udu-helper-note">* Choose your branch radio selection carefully to proceed.</p>
+                </div>
               )}
-            {step === 4 && (
-                <>
-                  <div className="section-title">
-                    <h2 className="evidence-heading">Evidence :</h2>
-                    <p>
-                      You should attach full details of evidence related to your achievements,
-                      photographs, biodata including newspaper cuttings and various types of
-                      social media and web links.
+
+              {/* ---------- STEP 2 ---------- */}
+              {currentStep === 2 && (
+                <div className="udu-form-step-pane udu-step-2">
+                  <h3 className="udu-section-heading">Please fill in your personal details:</h3>
+                  <div className="udu-form-grid">
+                    <Field label="Applicant Name" icon="user" {...bind('applicantName')} placeholder="Enter full name" required />
+                    <Field label="Sex" icon="user" name="sex" required>
+                      <select id="sex" {...bind('sex')}>
+                        <option value="Female">Female</option>
+                        <option value="Male">Male</option>
+                        <option value="Other">Other</option>
+                      </select>
+                    </Field>
+                    <Field label="Date of Birth" icon="calendar" {...bind('dateOfBirth')} type="date" required />
+                    <Field label="Address" icon="home" {...bind('address')} placeholder="Street address" required />
+                    <Field label="District" icon="mapPin" {...bind('district')} placeholder="District" required />
+                    <Field label="State" icon="mapPin" {...bind('state')} placeholder="State" required />
+                    <Field label="Country" icon="globe" {...bind('country')} placeholder="Country" required />
+                    <Field label="Pin Code" icon="hash" {...bind('pinCode')} placeholder="Pin code" required />
+                    <Field label="Educational Qualification" icon="cap" {...bind('educationalQualification')} placeholder="e.g. BTech" required />
+                    <Field label="WhatsApp Mobile Number" icon="phone" {...bind('whatsappNumber')} type="tel" placeholder="Mobile number" required />
+                    <Field label="Email ID" icon="mail" {...bind('emailId')} type="email" placeholder="name@example.com" required />
+                    <Field label="Occupation" icon="briefcase" {...bind('occupation')} placeholder="Your occupation" required />
+                  </div>
+                </div>
+              )}
+
+              {/* ---------- STEP 3 ---------- */}
+              {currentStep === 3 && (
+                <div className="udu-form-step-pane udu-step-3">
+                  <h3 className="udu-section-heading">Fill about Record/Activity Details:</h3>
+                  <div className="udu-form-grid">
+                    <Field label="Select Category" icon="layers" name="category" required>
+                      <select id="category" {...bind('category')}>
+                        <option value="Other">Other</option>
+                        <option value="Science & Tech">Science & Tech</option>
+                        <option value="Arts & Culture">Arts & Culture</option>
+                        <option value="Sports">Sports</option>
+                      </select>
+                    </Field>
+                    <Field label="Effort Type" icon="users" name="effortType" required>
+                      <select id="effortType" {...bind('effortType')}>
+                        <option value="Individual Effort">Individual Effort</option>
+                        <option value="Group Effort">Group Effort</option>
+                      </select>
+                    </Field>
+                    <Field label="Record/Activity Title" name="activityTitle" required full>
+                      <textarea id="activityTitle" {...bind('activityTitle')} rows="2" required placeholder="Title of your record/activity"></textarea>
+                    </Field>
+                    <Field label="Description of Record/Activity" name="activityDescription" required full>
+                      <textarea id="activityDescription" {...bind('activityDescription')} rows="4" required placeholder="Detailed description..."></textarea>
+                    </Field>
+                    <Field label="Purpose of the Record/Activity Attempt" name="activityPurpose" required full>
+                      <textarea id="activityPurpose" {...bind('activityPurpose')} rows="3" required placeholder="State the purpose"></textarea>
+                    </Field>
+                    <Field label="Date of the Attempted" icon="calendar" {...bind('attemptDate')} type="date" required />
+                    <Field label="Record/Activity Venue" icon="mapPin" {...bind('activityVenue')} placeholder="Location / Venue" required />
+                    <Field label="Organisation Name (optional)" icon="building" {...bind('organisationName')} placeholder="Associated organisation, if any" full />
+                  </div>
+                </div>
+              )}
+
+              {/* ---------- STEP 4 ---------- */}
+              {currentStep === 4 && (
+                <div className="udu-form-step-pane udu-step-4">
+                  <h3 className="udu-section-heading">Evidence & Documentation:</h3>
+                  <p className="udu-section-subtext">
+                    Attach full evidentiary details, photographs, biodata, newspaper cuttings, and official web/social media links.
+                  </p>
+
+                  <div className="udu-links-grid">
+                    {LINK_FIELDS.map((f) => (
+                      <div className="udu-input-group-addon" key={f.name}>
+                        <label htmlFor={`${f.name}-0`}>{f.label}</label>
+                        {links[f.name].map((val, i) => (
+                          <div className="udu-input-with-btn" key={i}>
+                            <input
+                              id={`${f.name}-${i}`}
+                              type="url"
+                              value={val}
+                              onChange={(e) => updateLink(f.name, i, e.target.value)}
+                              placeholder="https://..."
+                            />
+                            {i === 0 ? (
+                              <button type="button" className="udu-add-btn" onClick={() => addLink(f.name)} aria-label={`Add another ${f.label}`}>+</button>
+                            ) : (
+                              <button type="button" className="udu-add-btn udu-add-btn-remove" onClick={() => removeLink(f.name, i)} aria-label="Remove link">×</button>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="udu-upload-section-grid">
+                    {UPLOADS.map((u) => (
+                      <div className={`udu-upload-box ${u.full ? 'udu-full-span' : ''}`} key={u.kind}>
+                        <label className="udu-upload-label" htmlFor={u.kind}>
+                          {u.label} <small>({u.limit})</small>
+                        </label>
+                        <label className="udu-dropzone" htmlFor={u.kind}>
+                          <span className="udu-choose-btn">
+                            <Icon name="upload" className="udu-btn-svg" />
+                            Choose Files
+                          </span>
+                          <span className="udu-choose-text">
+                            {files[u.kind].length ? `${files[u.kind].length} file(s) selected` : 'No file chosen'}
+                          </span>
+                          <input
+                            id={u.kind}
+                            type="file"
+                            multiple
+                            accept={u.accept}
+                            onChange={(e) => handleFiles(u.kind, u.maxMB, e.target.files, e.target)}
+                          />
+                        </label>
+
+                        {files[u.kind].length > 0 && (
+                          <div className="udu-preview-grid">
+                            {files[u.kind].map((file, i) => (
+                              <FilePreview key={`${file.name}-${file.size}-${i}`} file={file} kind={u.kind} onRemove={() => removeFile(u.kind, i)} />
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* ---------- STEP 5 ---------- */}
+              {currentStep === 5 && (
+                <div className="udu-form-step-pane udu-step-5">
+                  <h3 className="udu-section-heading">Witness Details (Optional):</h3>
+
+                  {[1, 2].map((n) => (
+                    <div className={`udu-witness-card-section ${n === 2 ? 'udu-mt-4' : ''}`} key={n}>
+                      <h4 className="udu-sub-heading">
+                        <span className="udu-sub-badge">{n}</span>
+                        Witness {n}
+                      </h4>
+                      <div className="udu-form-grid">
+                        <Field label={`Name of Witness ${n}`} icon="user" {...bind(`witness${n}Name`)} placeholder="Full name" />
+                        <Field label="Witness Designation" icon="badge" {...bind(`witness${n}Designation`)} placeholder="Designation" />
+                        <Field label="Witness Address" icon="home" {...bind(`witness${n}Address`)} placeholder="Address" full />
+                        <Field label="Witness Mobile Number" icon="phone" {...bind(`witness${n}Mobile`)} type="tel" placeholder="Mobile number" />
+                        <Field label="Witness Email ID" icon="mail" {...bind(`witness${n}Email`)} type="email" placeholder="Email address" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* ---------- STEP 6 ---------- */}
+              {currentStep === 6 && (
+                <div className="udu-form-step-pane udu-step-6">
+                  <div className="udu-thankyou-card">
+                    <div className="udu-success-icon-badge">🎉</div>
+                    <h3 className="udu-thank-title">Thank you very much for your unique contribution.</h3>
+                    <div className="udu-thank-note">
+                      <p className="udu-thank-desc">
+                        This is the final step of application to digitally secure your unique <span>record/activity legacy</span> in the universe.
+                      </p>
+                    </div>
+                    <p className="udu-contact-notice">
+                      We will contact you shortly at the following email address{' '}
+                      <strong>{formData.emailId || 'your-email@gmail.com'}</strong>
                     </p>
                   </div>
 
-                  <form className="personal-form" onSubmit={handleNext}>
-                    <div className="grid-form">
-
-                      {/* 🔗 Google Drive Links */}
-                      <div className="achivment-form-group">
-                        <label>Google Drive Links</label>
-                        {formData.googleDriveLink.map((link, index) => (
-                          <div key={index} className="link-input-group">
-                            <input
-                              type="url"
-                              value={link}
-                              onChange={(e) => handleLinkChange(e, "googleDriveLink", index)}
-                              placeholder="Enter Google Drive link"
-                              className="link-input"
-                            />
-                            {index === formData.googleDriveLink.length - 1 && (
-                              <button
-                                type="button"
-                                onClick={() => addLinkField("googleDriveLink")}
-                                className="step-btn step-btn-add"
-                              >
-                                ➕
-                              </button>
-                            )}
-                            {formData.googleDriveLink.length > 1 && (
-                              <button
-                                type="button"
-                                onClick={() => removeLinkField("googleDriveLink", index)}
-                                className="step-btn step-btn-remove"
-                              >
-                                ❌
-                              </button>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-
-                      {/* 🔗 Facebook Links */}
-                      <div className="achivment-form-group">
-                        <label>Facebook Links</label>
-                        {formData.facebookLink.map((link, index) => (
-                          <div key={index} className="link-input-group">
-                            <input
-                              type="url"
-                              value={link}
-                              onChange={(e) => handleLinkChange(e, "facebookLink", index)}
-                              placeholder="Enter Facebook link"
-                              className="link-input"
-                            />
-                            {index === formData.facebookLink.length - 1 && (
-                              <button
-                                type="button"
-                                onClick={() => addLinkField("facebookLink")}
-                                className="step-btn step-btn-add"
-                              >
-                                ➕
-                              </button>
-                            )}
-                            {formData.facebookLink.length > 1 && (
-                              <button
-                                type="button"
-                                onClick={() => removeLinkField("facebookLink", index)}
-                                className="step-btn step-btn-remove"
-                              >
-                                ❌
-                              </button>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-
-                      {/* 🔗 YouTube Links */}
-                      <div className="achivment-form-group">
-                        <label>YouTube Links</label>
-                        {formData.youtubeLink.map((link, index) => (
-                          <div key={index} className="link-input-group">
-                            <input
-                              type="url"
-                              value={link}
-                              onChange={(e) => handleLinkChange(e, "youtubeLink", index)}
-                              placeholder="Enter YouTube link"
-                              className="link-input"
-                            />
-                            {index === formData.youtubeLink.length - 1 && (
-                              <button
-                                type="button"
-                                onClick={() => addLinkField("youtubeLink")}
-                                className="step-btn step-btn-add"
-                              >
-                                ➕
-                              </button>
-                            )}
-                            {formData.youtubeLink.length > 1 && (
-                              <button
-                                type="button"
-                                onClick={() => removeLinkField("youtubeLink", index)}
-                                className="step-btn step-btn-remove"
-                              >
-                                ❌
-                              </button>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-
-                      {/* 🔗 Instagram Links */}
-                      <div className="achivment-form-group">
-                        <label>Instagram Links</label>
-                        {formData.instagramLink.map((link, index) => (
-                          <div key={index} className="link-input-group">
-                            <input
-                              type="url"
-                              value={link}
-                              onChange={(e) => handleLinkChange(e, "instagramLink", index)}
-                              placeholder="Enter Instagram link"
-                              className="link-input"
-                            />
-                            {index === formData.instagramLink.length - 1 && (
-                              <button
-                                type="button"
-                                onClick={() => addLinkField("instagramLink")}
-                                className="step-btn step-btn-add"
-                              >
-                                ➕
-                              </button>
-                            )}
-                            {formData.instagramLink.length > 1 && (
-                              <button
-                                type="button"
-                                onClick={() => removeLinkField("instagramLink", index)}
-                                className="step-btn step-btn-remove"
-                              >
-                                ❌
-                              </button>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-
-                      {/* 🔗 LinkedIn Links */}
-                      <div className="achivment-form-group">
-                        <label>LinkedIn Links</label>
-                        {formData.linkedInLink.map((link, index) => (
-                          <div key={index} className="link-input-group">
-                            <input
-                              type="url"
-                              value={link}
-                              onChange={(e) => handleLinkChange(e, "linkedInLink", index)}
-                              placeholder="Enter LinkedIn link"
-                              className="link-input"
-                            />
-                            {index === formData.linkedInLink.length - 1 && (
-                              <button
-                                type="button"
-                                onClick={() => addLinkField("linkedInLink")}
-                                className="step-btn step-btn-add"
-                              >
-                                ➕
-                              </button>
-                            )}
-                            {formData.linkedInLink.length > 1 && (
-                              <button
-                                type="button"
-                                onClick={() => removeLinkField("linkedInLink", index)}
-                                className="step-btn step-btn-remove"
-                              >
-                                ❌
-                              </button>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-
-                      {/* 🔗 X (Twitter) Links */}
-                      <div className="achivment-form-group">
-                        <label>X (Twitter) Links</label>
-                        {formData.xLink.map((link, index) => (
-                          <div key={index} className="link-input-group">
-                            <input
-                              type="url"
-                              value={link}
-                              onChange={(e) => handleLinkChange(e, "xLink", index)}
-                              placeholder="Enter X (Twitter) link"
-                              className="link-input"
-                            />
-                            {index === formData.xLink.length - 1 && (
-                              <button
-                                type="button"
-                                onClick={() => addLinkField("xLink")}
-                                className="step-btn step-btn-add"
-                              >
-                                ➕
-                              </button>
-                            )}
-                            {formData.xLink.length > 1 && (
-                              <button
-                                type="button"
-                                onClick={() => removeLinkField("xLink", index)}
-                                className="step-btn step-btn-remove"
-                              >
-                                ❌
-                              </button>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-
-                      {/* 🔗 Pinterest Links */}
-                      <div className="achivment-form-group">
-                        <label>Pinterest Links</label>
-                        {formData.pinterestLink.map((link, index) => (
-                          <div key={index} className="link-input-group">
-                            <input
-                              type="url"
-                              value={link}
-                              onChange={(e) => handleLinkChange(e, "pinterestLink", index)}
-                              placeholder="Enter Pinterest link"
-                              className="link-input"
-                            />
-                            {index === formData.pinterestLink.length - 1 && (
-                              <button
-                                type="button"
-                                onClick={() => addLinkField("pinterestLink")}
-                                className="step-btn step-btn-add"
-                              >
-                                ➕
-                              </button>
-                            )}
-                            {formData.pinterestLink.length > 1 && (
-                              <button
-                                type="button"
-                                onClick={() => removeLinkField("pinterestLink", index)}
-                                className="step-btn step-btn-remove"
-                              >
-                                ❌
-                              </button>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-
-                      {/* 🔗 Other Media Links */}
-                      <div className="achivment-form-group">
-                        <label>Other Media Links</label>
-                        {formData.otherMediaLink.map((link, index) => (
-                          <div key={index} className="link-input-group">
-                            <input
-                              type="url"
-                              value={link}
-                              onChange={(e) => handleLinkChange(e, "otherMediaLink", index)}
-                              placeholder="Enter Other Media link"
-                              className="link-input"
-                            />
-                            {index === formData.otherMediaLink.length - 1 && (
-                              <button
-                                type="button"
-                                onClick={() => addLinkField("otherMediaLink")}
-                                className="step-btn step-btn-add"
-                              >
-                                ➕
-                              </button>
-                            )}
-                            {formData.otherMediaLink.length > 1 && (
-                              <button
-                                type="button"
-                                onClick={() => removeLinkField("otherMediaLink", index)}
-                                className="step-btn step-btn-remove"
-                              >
-                                ❌
-                              </button>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-
-                    {/* 📷 Photos */}
-                    <div className="achivment-form-group">
-                      <label>
-                        Upload Photos (JPG/PNG) <small>(Max total 10MB)</small>
-                      </label>
+                  <div className="udu-terms-checkbox-wrap">
+                    <label>
                       <input
-                        type="file"
-                        accept="image/*"
-                        multiple
-                        onChange={(e) => handleFileChange(e, "photos")}
+                        type="checkbox"
+                        name="acceptTerms"
+                        checked={formData.acceptTerms}
+                        onChange={handleChange}
+                        required
                       />
-                      <div className="file-preview-container">
-                        {formData.photos.map((file, index) => (
-                          <div key={index} className="file-preview">
-                            {file instanceof File ? (
-                              <img
-                                src={URL.createObjectURL(file)}
-                                alt="preview"
-                                className="file-img"
-                              />
-                            ) : (
-                              <img src={file} alt="preview" className="file-img" />
-                            )}
-                            <button
-                              type="button"
-                              onClick={() => removeFile("photos", index)}
-                              className="step-btn-remove-file"
-                            >
-                              ❌
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                      {/* Warning for Photos */}
-                      {photoSizeError && (
-                        <p className="error-text">⚠️ Total photo size must be under 10MB</p>
-                      )}
-                    </div>
-
-                    {/* 🎥 Videos */}
-                    <div className="achivment-form-group">
-                      <label>
-                        Upload Videos (MP4) <small>(Max total 100MB)</small>
-                      </label>
-                      <input
-                        type="file"
-                        accept="video/*"
-                        multiple
-                        onChange={(e) => handleFileChange(e, "videos")}
-                      />
-                      <ul className="file-list">
-                        {formData.videos.map((file, index) => (
-                          <li key={index} className="file-list-item">
-                            {file instanceof File ? (
-                              <video src={URL.createObjectURL(file)} controls className="file-video" />
-                            ) : (
-                              <video src={file} controls className="file-video" />
-                            )}
-                            <button
-                              type="button"
-                              onClick={() => removeFile("videos", index)}
-                              className="step-btn step-btn-remove"
-                            >
-                              ❌
-                            </button>
-                          </li>
-                        ))}
-                      </ul>
-                      {/* Warning for Videos */}
-                      {videoSizeError && (
-                        <p className="error-text">⚠️ Total video size must be under 100MB</p>
-                      )}
-                    </div>
-
-                    {/* 📄 Documents */}
-                    <div className="achivment-form-group">
-                     <label>
-                        Upload Documents (PDF) <small>(Total max 10MB)</small>
-                      </label>
-                      <input
-                        type="file"
-                        accept=".pdf"
-                        multiple
-                        onChange={(e) => handleFileChange(e, "documents")}
-                      />
-                      <ul className="file-list">
-                        {formData.documents.map((file, index) => (
-                          <li key={index} className="file-list-item">
-                            <span className="file-name">{file.name}</span>
-                            <button
-                              type="button"
-                              onClick={() => removeFile("documents", index)}
-                              className="step-btn step-btn-remove"
-                            >
-                              ❌
-                            </button>
-                          </li>
-                        ))}
-                      </ul>
-                      {docSizeError && (
-                          <p className="error-text">⚠️ Total documents size must be under 10MB</p>
-                        )}
-                    </div>
-
-
-                    </div>
-
-                    {/* Navigation */}
-                    <div className="form-footer">
-                      <button type="button" className="prev-button" onClick={handlePrevious}>← Previous</button>
-                      <button type="submit" className="next-button">Save & Next</button>
-                    </div>
-                  </form>
-                </>
-            )}
-            {step === 5 && (
-              <>
-                <p className="section-title">Witness Details (Optional):</p>
-                <form className="personal-form" onSubmit={handleNext}>
-                  <div className="grid-form">
-                    <h3>Witness 1</h3>
-                    <div className="achivment-form-group">
-                      <label>Name of Witness 1</label>
-                      <input type="text" name="witness1Name" value={formData.witness1Name} onChange={handleInputChange} />
-                    </div>
-                    <div className="achivment-form-group">
-                      <label>Witness Designation</label>
-                      <input type="text" name="witness1Designation" value={formData.witness1Designation} onChange={handleInputChange} />
-                    </div>
-                    <div className="achivment-form-group">
-                      <label>Witness Address</label>
-                      <input type="text" name="witness1Address" value={formData.witness1Address} onChange={handleInputChange} />
-                    </div>
-                    <div className="achivment-form-group">
-                      <label>Witness Mobile Number</label>
-                      <input type="tel" name="witness1MobileNumber" value={formData.witness1MobileNumber} onChange={handleInputChange} />
-                    </div>
-                    <div className="achivment-form-group">
-                      <label>Witness Email ID</label>
-                      <input type="email" name="witness1EmailId" value={formData.witness1EmailId} onChange={handleInputChange} />
-                    </div>
-
-                    <h3>Witness 2</h3>
-                    <div className="achivment-form-group">
-                      <label>Name of Witness 2</label>
-                      <input type="text" name="witness2Name" value={formData.witness2Name} onChange={handleInputChange} />
-                    </div>
-                    <div className="achivment-form-group">
-                      <label>Witness Designation</label>
-                      <input type="text" name="witness2Designation" value={formData.witness2Designation} onChange={handleInputChange} />
-                    </div>
-                     <div className="achivment-form-group">
-                      <label>Witness Address</label>
-                      <input type="text" name="witness2Address" value={formData.witness2Address} onChange={handleInputChange} />
-                    </div>
-                    <div className="achivment-form-group">
-                      <label>Witness Mobile Number</label>
-                      <input type="tel" name="witness2MobileNumber" value={formData.witness2MobileNumber} onChange={handleInputChange} />
-                    </div>
-                    <div className="achivment-form-group">
-                      <label>Witness Email ID</label>
-                      <input type="email" name="witness2EmailId" value={formData.witness2EmailId} onChange={handleInputChange} />
-                    </div>
-
-                  </div>
-                  <div className="form-footer">
-                    <button type="button" className="prev-button" onClick={handlePrevious}>← Previous</button>
-                    <button type="submit" className="next-button">Save & Next</button>
-                  </div>
-                </form>
-              </>
-            )}
-            {step === 6 && !submitted && (
-          <form className="thank-you-achivment-container" onSubmit={handleFinalSubmit}>
-          <div className="thankyou-container">
-              <h2 className="thankyou-heading">
-                Thank you very much for your unique contribution.
-              </h2>
-              <div className="thankyou-system">
-                <p>
-                  This is the final step of application to digitally secure your unique 
-                  <span className="highlight"> record/activity legacy </span> in the universe.
-                </p>
-              </div>
-              <p className="thankyou-paragraph">
-                We will contact you shortly at the following email address 
-                <strong> {formData.emailId}</strong>
-              </p>
-            </div>
-
-
-            {/* Terms and Conditions Checkbox */}
-            <div className="checkbox-area">
-              <label>
-                <input 
-                  type="checkbox" 
-                  checked={termsAccepted} 
-                  onChange={() => setTermsAccepted(!termsAccepted)} 
-                />
-                I accept the{" "}
-                <span className="terms-link" onClick={() => setShowTerms(true)}>
-                  Terms and Conditions
-                </span>
-              </label>
-            </div>
-
-            {/* Footer */}
-            <div className="form-footer">
-              <button type="button" className="prev-button" onClick={handlePrevious}>
-                Previous
-              </button>
-            <button 
-                  type="submit" 
-                  className="submit-button" 
-                  disabled={!termsAccepted || isSubmitting}
-                >
-                  {isSubmitting ? "Processing..." : "Submit"}
-            </button>
-                    </div>
-                  </form>
-            )}
-            {showTerms && (
-                <div
-                  className="user-dashboard-terms-overlay"
-                  onClick={() => setShowTerms(false)}
-                >
-                  <div
-                    className="user-dashboard-terms-modal"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <div className="user-dashboard-terms-header">
-                      <h2>Policy, Rules, and Terms for Recording Achievements</h2>
-                      <button
-                        className="user-dashboard-close-btn"
-                        onClick={() => setShowTerms(false)}
-                      >
-                        ✕
-                      </button>
-                    </div>
-
-                    <div className="user-dashboard-terms-content">
-                      <h3>1. Objective</h3>
-                      <p>
-                        Unique Records of Universe (URU) aims to recognize and showcase extraordinary,
-                        inspiring, and verified human achievements, natural phenomena, and innovations
-                        on a global platform. Our goal is to preserve records with inclusive, transparent,
-                        and ethical standards.
-                      </p>
-
-                      <h3>2. Eligibility</h3>
-                      <p>
-                        <strong>2.1 Applicants</strong>: Any individual, group, organization, or community
-                        (regardless of age, gender, nationality, or background) may apply for a record.
-                      </p>
-                      <p><strong>2.2 Type of Achievement</strong>: Records may fall under, but are not limited to:</p>
-                      <ul>
-                        <li>Human skills (e.g., completing a task in the fastest time)</li>
-                        <li>Natural phenomena (e.g., longest, shortest, highest, lowest)</li>
-                        <li>Social impact (e.g., largest participation in a social initiative)</li>
-                        <li>Technological innovations (e.g., smallest solar energy device)</li>
-                        <li>Cultural and artistic achievements (e.g., longest, shortest, or collective dance performance)</li>
-                      </ul>
-                      <p>
-                        <strong>2.3 Original Achievement</strong>: The record must be unique and not duplicate
-                        any existing record in the URU database, unless it surpasses an existing record.
-                      </p>
-                      <p>
-                        <strong>2.4 Ethics</strong>: The achievement must not be illegal, unethical, indecent,
-                        obscene, or harmful to the environment or society in any way.
-                      </p>
-
-                      <h3>3. Application Process</h3>
-                      <p><strong>3.1 Application Form</strong>: Applicants must log in to the official URU website and complete the "Record Application Form." The form should include:</p>
-                      <ul>
-                        <li>Description of the achievement</li>
-                        <li>Mention of category and uniqueness</li>
-                        <li>Location, date, and time</li>
-                        <li>Evidence for the proposed record (videos, photos, witness statements)</li>
-                      </ul>
-                      <p>
-                        <strong>3.2 Initial Fee</strong>: A non-refundable initial fee of ₹3,693/- will be
-                        charged to cover application review, verification process, and digital maintenance.
-                        The fee may change over time as per the website’s information board.
-                      </p>
-                      <p>
-                        <strong>3.3 Review Time</strong>: The initial review will be completed within
-                        15 working days. If approved, the applicant will be directed to pay the designated
-                        fee through their login ID. Upon successful payment, the entry and digital
-                        certificate will be published on the website.
-                      </p>
-
-                      <h3>4. Evidence and Verification</h3>
-                      <p><strong>4.1 Types of Evidence:</strong></p>
-                      <ul>
-                        <li><strong>Visual Evidence</strong>: High-quality videos, photos, social media links with timestamps</li>
-                        <li><strong>Written Evidence</strong>: Signed statements from at least two independent witnesses</li>
-                        <li><strong>Technical Evidence</strong>: Calibration certificates for measuring devices (if applicable)</li>
-                      </ul>
-                      <p><strong>4.2 Independent Verification</strong>: URU may include experts based on the achievement’s nature or send a representative (expenses borne by the applicant).</p>
-                      <p><strong>4.3 Transparency</strong>: Applicants will be regularly updated on verification progress.</p>
-
-                      <h3>5. Rules and Terms</h3>
-                      <p><strong>5.1 Accuracy</strong>: Applicants must provide truthful information. False or misleading details may result in cancellation, liability, or legal action.</p>
-                      <p><strong>5.2 Ownership</strong>: URU reserves the right to use record-related materials (videos, photos, descriptions, etc.) for promotion with credit to the applicant.</p>
-                      <p><strong>5.3 Dispute Resolution</strong>: Disputes will be resolved by URU’s expert panel, and their decision will be final.</p>
-                      <p><strong>5.4 Right to Amend</strong>: URU may amend policies and terms without notice.</p>
-                      <p><strong>5.5 Risk Responsibility</strong>: Applicants are solely responsible for injuries, damages, or legal issues during the attempt.</p>
-
-                      <h3>6. Record Recognition</h3>
-                      <p><strong>6.1 Certificate</strong>: Successfully verified records receive an official URU certificate.</p>
-                      <p><strong>6.2 Publication</strong>: Records are featured on the URU website, magazine, and promotional materials.</p>
-                      <p><strong>6.3 Validity</strong>: A record remains valid until surpassed. Outdated records are archived as “Historical Records.”</p>
-
-                      <h3>7. Privacy and Data Protection</h3>
-                      <p><strong>7.1 Data Usage</strong>: Personal data will only be used for verification and promotion.</p>
-                      <p><strong>7.2 Security</strong>: URU adopts technical measures to ensure confidentiality and security of applicant data.</p>
-
-                      <h3>8. Contact and Support</h3>
-                      <p><strong>8.1 Assistance</strong>: Applicants may contact URU through the official website or helpline.</p>
-                      <p><strong>8.2 Feedback</strong>: URU welcomes suggestions for improvement.</p>
-
-                      <h3>9. Legal Compliance</h3>
-                      <ul>
-                        <li>Applicants must comply with all applicable laws (India and respective regions).</li>
-                        <li>Use of the website for illegal activities is strictly prohibited.</li>
-                      </ul>
-
-                      <h3>10. Security Guidelines</h3>
-                      <ul>
-                        <li><strong>Account Security</strong>: Use strong passwords and don’t share credentials.</li>
-                        <li><strong>Secure Browsing</strong>: Keep devices safe (updated antivirus, etc.).</li>
-                        <li><strong>Suspicious Activity</strong>: Report any suspicious activity immediately.</li>
-                      </ul>
-
-                      <h3>11. Policy Updates</h3>
-                      <p>
-                        Policies may be updated periodically to reflect legal or technological changes.
-                        Updates will be notified on the website, and continued use will be deemed acceptance
-                        of the latest policy.
-                      </p>
-                    </div>
+                      <span>I accept the Terms and Conditions and verify all data provided is accurate.</span>
+                    </label>
                   </div>
                 </div>
-            )}
-            {submitted && (
-              <div className="thank-you-wrapper">
-                <div className="thank-you-card">
-                  <div className="success-icon">
-                    <FontAwesomeIcon icon={faCircleCheck} size="3x" color="#fff" />
-                  </div>
-                  <h2 className="thank-heading">The application process was successful!</h2>
-                  <p className="thank-text">
-                    Your application for <strong>'Unique Records Of Universe'</strong> Holder has been successfully received by URU Admin Section. 
-                    After application approval, go to the Application Status page and pay the prescribed fee.
-                  </p>
-                </div>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
+
+            {/* ---------- Navigation Actions ---------- */}
+            <div className="udu-form-action-buttons">
+              {currentStep > 1 && (
+                <button type="button" className="udu-btn-prev" onClick={handlePrevious}>
+                  ← Previous Step
+                </button>
+              )}
+              {currentStep < TOTAL_STEPS ? (
+                <button type="button" className="udu-btn-next" onClick={handleNext}>
+                  Save &amp; Next Step →
+                </button>
+              ) : (
+                <button type="submit" className="udu-btn-submit" disabled={!formData.acceptTerms}>
+                  Submit Application 🚀
+                </button>
+              )}
+            </div>
+          </form>
         </div>
-      </div>
-    </>
+      </main>
+    </div>
   );
 };
 
