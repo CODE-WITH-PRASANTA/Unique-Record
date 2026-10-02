@@ -1,4 +1,7 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import API from "../../api/axiosInstance";
+import { Editor } from "@tinymce/tinymce-react";
 import {
   FiPlus,
   FiEdit,
@@ -9,19 +12,13 @@ import {
   FiFileText,
   FiUser,
   FiMail,
-  FiBold,
-  FiItalic,
-  FiUnderline,
-  FiList,
-  FiAlignLeft,
-  FiAlignCenter,
-  FiAlignRight,
-  FiLink,
-  FiType,
 } from "react-icons/fi";
 import "./Blog.css";
 
 const Blog = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   // =========================================================
   // FORM STATE
   // =========================================================
@@ -40,55 +37,77 @@ const Blog = () => {
   });
 
   const [editingId, setEditingId] = useState(null);
-
   const [tagInput, setTagInput] = useState("");
-
-  const [tags, setTags] = useState([
-    "Real Estate",
-    "Bhubaneswar",
-  ]);
-
+  const [tags, setTags] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-
-  // Rich editor reference
-  const editorRef = useRef(null);
+  const [blogsList, setBlogsList] = useState([]);
+  const [imagePreview, setImagePreview] = useState("");
 
   // =========================================================
-  // SAMPLE BLOG DATA
+  // FETCH BLOGS AND CATEGORIES FROM DATABASE
   // =========================================================
 
-  const [blogsList, setBlogsList] = useState([
-    {
-      id: 1,
-      title: "Luxury Living in Baramunda",
-      author: "Admin",
-      category: "Apartments",
-      date: "Sep 22, 2026",
-      status: "Published",
-      authorDesignation: "Senior Manager",
-      shortDesc: "Experience luxury living.",
-      quotes: "Home is where heart is.",
-      content:
-        "<p>Detailed content about luxury living in Baramunda...</p>",
-      email: "admin@utkalproperty.com",
-      address: "Baramunda, Bhubaneswar",
-    },
-    {
-      id: 2,
-      title: "Real Estate Investment Trends 2026",
-      author: "Property Expert",
-      category: "Commercial",
-      date: "Sep 20, 2026",
-      status: "Draft",
-      authorDesignation: "Analyst",
-      shortDesc: "Market trends overview.",
-      quotes: "Invest wisely.",
-      content:
-        "<p>Detailed content about trends...</p>",
-      email: "expert@utkalproperty.com",
-      address: "Satya Nagar, Bhubaneswar",
-    },
-  ]);
+  const fetchBlogs = async () => {
+    try {
+      const res = await API.get("/blogs/all");
+      if (res.data && res.data.success) {
+        setBlogsList(res.data.data || []);
+      }
+    } catch (err) {
+      console.error("Error fetching blogs:", err);
+    }
+  };
+
+  const fetchCategories = async () => {
+    try {
+      const res = await API.get("/categories");
+      if (res.data && res.data.success) {
+        const catNames = res.data.data.map((c) => c.name);
+        setCategories(catNames);
+        if (catNames.length > 0 && !formData.category) {
+          setFormData((prev) => ({ ...prev, category: catNames[0] }));
+        }
+      }
+    } catch (err) {
+      console.warn("Could not load categories:", err);
+    }
+  };
+
+  const handleEditClick = (blog) => {
+    setEditingId(blog._id || blog.id);
+
+    setFormData({
+      title: blog.title || "",
+      authorName: blog.author || "",
+      authorDesignation: blog.authorDesignation || "",
+      shortDesc: blog.shortDesc || "",
+      quotes: blog.quotes || "",
+      content: blog.content || "",
+      category: blog.category || "",
+      email: blog.email || "",
+      address: blog.address || "",
+      image: null,
+    });
+
+    setTags(blog.tags || []);
+    setImagePreview(blog.image || "");
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
+  useEffect(() => {
+    fetchBlogs();
+    fetchCategories();
+
+    // If navigated with edit state
+    if (location.state?.blog) {
+      handleEditClick(location.state.blog);
+    }
+  }, [location.state]);
 
   // =========================================================
   // INPUT CHANGE
@@ -104,117 +123,11 @@ const Blog = () => {
   };
 
   // =========================================================
-  // RICH TEXT EDITOR
-  // =========================================================
-
-  const syncEditorContent = () => {
-    if (!editorRef.current) return;
-
-    setFormData((prev) => ({
-      ...prev,
-      content: editorRef.current.innerHTML,
-    }));
-  };
-
-  const focusEditor = () => {
-    if (editorRef.current) {
-      editorRef.current.focus();
-    }
-  };
-
-  const executeEditorCommand = (command, value = null) => {
-    focusEditor();
-
-    document.execCommand(command, false, value);
-
-    syncEditorContent();
-  };
-
-  // =========================================================
-  // TEXT FORMAT
-  // =========================================================
-
-  const handleBold = () => {
-    executeEditorCommand("bold");
-  };
-
-  const handleItalic = () => {
-    executeEditorCommand("italic");
-  };
-
-  const handleUnderline = () => {
-    executeEditorCommand("underline");
-  };
-
-  const handleBulletList = () => {
-    executeEditorCommand("insertUnorderedList");
-  };
-
-  const handleNumberList = () => {
-    executeEditorCommand("insertOrderedList");
-  };
-
-  const handleAlignLeft = () => {
-    executeEditorCommand("justifyLeft");
-  };
-
-  const handleAlignCenter = () => {
-    executeEditorCommand("justifyCenter");
-  };
-
-  const handleAlignRight = () => {
-    executeEditorCommand("justifyRight");
-  };
-
-  const handleHeading = (e) => {
-    const value = e.target.value;
-
-    if (!value) return;
-
-    executeEditorCommand("formatBlock", value);
-
-    e.target.value = "";
-  };
-
-  const handleCreateLink = () => {
-    const url = window.prompt("Enter URL:");
-
-    if (!url) return;
-
-    executeEditorCommand("createLink", url);
-  };
-
-  // =========================================================
-  // EDITOR KEY HANDLER
-  // =========================================================
-
-  const handleEditorKeyDown = (e) => {
-    // Ctrl + B
-    if (e.ctrlKey && e.key.toLowerCase() === "b") {
-      e.preventDefault();
-      handleBold();
-    }
-
-    // Ctrl + I
-    if (e.ctrlKey && e.key.toLowerCase() === "i") {
-      e.preventDefault();
-      handleItalic();
-    }
-
-    // Ctrl + U
-    if (e.ctrlKey && e.key.toLowerCase() === "u") {
-      e.preventDefault();
-      handleUnderline();
-    }
-  };
-
-  // =========================================================
   // TAG FUNCTIONS
   // =========================================================
 
   const handleAddTag = () => {
     const newTag = tagInput.trim();
-
     if (newTag && !tags.includes(newTag)) {
       setTags((prev) => [...prev, newTag]);
       setTagInput("");
@@ -222,9 +135,7 @@ const Blog = () => {
   };
 
   const handleRemoveTag = (tagToRemove) => {
-    setTags((prev) =>
-      prev.filter((tag) => tag !== tagToRemove)
-    );
+    setTags((prev) => prev.filter((tag) => tag !== tagToRemove));
   };
 
   // =========================================================
@@ -239,16 +150,14 @@ const Blog = () => {
       shortDesc: "",
       quotes: "",
       content: "",
-      category: "",
+      category: categories[0] || "",
       email: "",
       address: "",
       image: null,
     });
 
-    if (editorRef.current) {
-      editorRef.current.innerHTML = "";
-    }
-
+    setTags([]);
+    setImagePreview("");
     setEditingId(null);
   };
 
@@ -256,7 +165,7 @@ const Blog = () => {
   // SUBMIT
   // =========================================================
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!formData.title.trim()) {
@@ -264,137 +173,82 @@ const Blog = () => {
       return;
     }
 
-    const editorContent =
-      editorRef.current?.innerHTML || formData.content;
-
-    if (editingId) {
-      // UPDATE
-      setBlogsList((prev) =>
-        prev.map((blog) =>
-          blog.id === editingId
-            ? {
-                ...blog,
-                title: formData.title,
-                author:
-                  formData.authorName || blog.author,
-                category:
-                  formData.category || blog.category,
-                authorDesignation:
-                  formData.authorDesignation,
-                shortDesc:
-                  formData.shortDesc,
-                quotes:
-                  formData.quotes,
-                content:
-                  editorContent,
-                email:
-                  formData.email,
-                address:
-                  formData.address,
-              }
-            : blog
-        )
-      );
-
-      alert("Blog updated successfully!");
-    } else {
-      // CREATE
-      const newBlog = {
-        id: Date.now(),
-        title: formData.title,
-        author:
-          formData.authorName || "Admin",
-        category:
-          formData.category || "General",
-        date: new Date().toLocaleDateString(
-          "en-US",
-          {
-            month: "short",
-            day: "numeric",
-            year: "numeric",
-          }
-        ),
-        status: "Published",
-        authorDesignation:
-          formData.authorDesignation,
-        shortDesc:
-          formData.shortDesc,
-        quotes:
-          formData.quotes,
-        content:
-          editorContent,
-        email:
-          formData.email,
-        address:
-          formData.address,
-      };
-
-      setBlogsList((prev) => [
-        newBlog,
-        ...prev,
-      ]);
-
-      alert("Blog published successfully!");
+    if (!formData.content || !formData.content.trim()) {
+      alert("Please enter blog content!");
+      return;
     }
 
-    resetForm();
-  };
+    const payload = {
+      title: formData.title.trim(),
+      author: formData.authorName.trim() || "Admin",
+      category: formData.category || (categories[0] || "General"),
+      authorDesignation: formData.authorDesignation.trim(),
+      shortDesc: formData.shortDesc.trim(),
+      quotes: formData.quotes.trim(),
+      content: formData.content,
+      email: formData.email.trim(),
+      address: formData.address.trim(),
+      tags: tags,
+      image: imagePreview || "",
+      status: "Published",
+    };
 
-  // =========================================================
-  // EDIT
-  // =========================================================
-
-  const handleEditClick = (blog) => {
-    setEditingId(blog.id);
-
-    setFormData({
-      title: blog.title || "",
-      authorName: blog.author || "",
-      authorDesignation:
-        blog.authorDesignation || "",
-      shortDesc:
-        blog.shortDesc || "",
-      quotes:
-        blog.quotes || "",
-      content:
-        blog.content || "",
-      category:
-        blog.category || "",
-      email:
-        blog.email || "",
-      address:
-        blog.address || "",
-      image: null,
-    });
-
-    // Put HTML inside editor
-    setTimeout(() => {
-      if (editorRef.current) {
-        editorRef.current.innerHTML =
-          blog.content || "";
+    try {
+      if (editingId) {
+        // UPDATE IN DATABASE
+        const res = await API.put(`/blogs/${editingId}`, payload);
+        if (res.data && res.data.success) {
+          alert("Blog updated successfully!");
+          resetForm();
+          fetchBlogs();
+          navigate("/blogs/manage");
+        } else {
+          alert(res.data?.message || "Failed to update blog");
+        }
+      } else {
+        // CREATE IN DATABASE
+        const res = await API.post("/blogs", payload);
+        if (res.data && res.data.success) {
+          alert("Blog published successfully!");
+          resetForm();
+          fetchBlogs();
+          navigate("/blogs/manage");
+        } else {
+          alert(res.data?.message || "Failed to create blog");
+        }
       }
-    }, 0);
-
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+    } catch (err) {
+      console.error("Error saving blog:", err);
+      alert(err.response?.data?.message || "Error saving blog to database.");
+    }
   };
+
+
 
   // =========================================================
   // DELETE
   // =========================================================
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this blog?"
     );
 
     if (!confirmDelete) return;
 
-    setBlogsList((prev) =>
-      prev.filter((blog) => blog.id !== id)
-    );
+    try {
+      const res = await API.delete(`/blogs/${id}`);
+      if (res.data && res.data.success) {
+        setBlogsList((prev) => prev.filter((blog) => (blog._id || blog.id) !== id));
+        if (editingId === id) {
+          resetForm();
+        }
+        alert("Blog deleted successfully!");
+      }
+    } catch (err) {
+      console.error("Error deleting blog:", err);
+      alert("Failed to delete blog from database.");
+    }
   };
 
   // =========================================================
@@ -403,39 +257,19 @@ const Blog = () => {
 
   const filteredBlogs = blogsList.filter(
     (blog) =>
-      blog.title
+      (blog.title || "")
         .toLowerCase()
         .includes(searchTerm.toLowerCase()) ||
-      blog.author
+      (blog.author || "")
         .toLowerCase()
         .includes(searchTerm.toLowerCase()) ||
-      blog.category
+      (blog.category || "")
         .toLowerCase()
         .includes(searchTerm.toLowerCase())
   );
 
-  // =========================================================
-  // WORD COUNT
-  // =========================================================
-
-  const getWordCount = () => {
-    if (!editorRef.current) return 0;
-
-    const text =
-      editorRef.current.innerText.trim();
-
-    if (!text) return 0;
-
-    return text.split(/\s+/).length;
-  };
-
-  // =========================================================
-  // UI
-  // =========================================================
-
   return (
     <div className="blog-page-container">
-
       {/* =====================================================
           HEADER
       ===================================================== */}
@@ -446,42 +280,29 @@ const Blog = () => {
         </h1>
 
         <p className="blog-page-subtitle">
-          Publish insightful articles,
-          announcements, and news for your
-          platform.
+          Publish insightful articles, announcements, and news for your audience.
         </p>
       </div>
 
       {/* =====================================================
-          FORM CARD
+          FORM
       ===================================================== */}
 
       <div className="blog-form-card">
-
         <div className="blog-card-header">
-          <FiFileText className="blog-card-header-icon" />
-
-          <h2>
-            {editingId
-              ? "Edit Blog Post"
-              : "New Blog Post Form"}
+          <FiFileText className="blog-card-icon" />
+          <h2 className="blog-card-title">
+            {editingId ? "Edit Blog Article" : "Write Blog Article"}
           </h2>
         </div>
 
-        <form
-          onSubmit={handleSubmit}
-          className="blog-form"
-        >
-
-          {/* =================================================
-              BASIC INFORMATION
-          ================================================= */}
-
+        <form onSubmit={handleSubmit}>
           <div className="blog-form-grid">
+            {/* TITLE */}
 
-            <div className="blog-form-group">
+            <div className="blog-form-group full-width">
               <label className="blog-form-label">
-                Blog Title
+                Blog Title <span>*</span>
               </label>
 
               <div className="blog-input-wrapper">
@@ -496,6 +317,8 @@ const Blog = () => {
                 />
               </div>
             </div>
+
+            {/* AUTHOR */}
 
             <div className="blog-form-group">
               <label className="blog-form-label">
@@ -516,6 +339,8 @@ const Blog = () => {
               </div>
             </div>
 
+            {/* DESIGNATION */}
+
             <div className="blog-form-group">
               <label className="blog-form-label">
                 Author Designation
@@ -525,15 +350,50 @@ const Blog = () => {
                 <input
                   type="text"
                   name="authorDesignation"
-                  value={
-                    formData.authorDesignation
-                  }
+                  value={formData.authorDesignation}
                   onChange={handleInputChange}
-                  placeholder="Enter author designation"
+                  placeholder="e.g. Senior Editor"
                   className="blog-form-input"
                 />
               </div>
             </div>
+
+            {/* CATEGORY */}
+
+            <div className="blog-form-group">
+              <label className="blog-form-label">
+                Category <span>*</span>
+              </label>
+
+              <div className="blog-input-wrapper">
+                <select
+                  name="category"
+                  value={formData.category}
+                  onChange={handleInputChange}
+                  className="blog-form-select"
+                  required
+                >
+                  <option value="" disabled>
+                    Select category
+                  </option>
+                  {categories.length === 0 ? (
+                    <>
+                      <option value="Apartments">Apartments</option>
+                      <option value="Commercial">Commercial</option>
+                      <option value="Villas">Villas</option>
+                    </>
+                  ) : (
+                    categories.map((cat) => (
+                      <option key={cat} value={cat}>
+                        {cat}
+                      </option>
+                    ))
+                  )}
+                </select>
+              </div>
+            </div>
+
+            {/* SHORT DESC */}
 
             <div className="blog-form-group">
               <label className="blog-form-label">
@@ -541,310 +401,80 @@ const Blog = () => {
               </label>
 
               <div className="blog-input-wrapper">
-                <input
-                  type="text"
+                <textarea
                   name="shortDesc"
                   value={formData.shortDesc}
                   onChange={handleInputChange}
-                  placeholder="Enter short description"
+                  placeholder="Brief summary"
+                  className="blog-form-textarea tiny"
+                />
+              </div>
+            </div>
+
+            {/* QUOTE */}
+
+            <div className="blog-form-group full-width">
+              <label className="blog-form-label">
+                Featured Quote
+              </label>
+
+              <div className="blog-input-wrapper">
+                <input
+                  type="text"
+                  name="quotes"
+                  value={formData.quotes}
+                  onChange={handleInputChange}
+                  placeholder="Enter quote"
                   className="blog-form-input"
                 />
               </div>
             </div>
 
-          </div>
+            {/* =================================================
+                TINYMCE RICH TEXT EDITOR
+            ================================================= */}
 
-          {/* =================================================
-              QUOTE
-          ================================================= */}
-
-          <div className="blog-form-group full-width">
-
-            <label className="blog-form-label">
-              Quotes
-            </label>
-
-            <textarea
-              name="quotes"
-              value={formData.quotes}
-              onChange={handleInputChange}
-              placeholder="Enter featured quote..."
-              className="blog-form-textarea small"
-            />
-
-          </div>
-
-          {/* =================================================
-              REAL RICH TEXT EDITOR
-          ================================================= */}
-
-          <div className="blog-form-group full-width">
-
-            <label className="blog-form-label">
-              Blog Content
-            </label>
-
-            <div className="blog-editor-box">
-
-              {/* TOOLBAR */}
-
-              <div className="blog-editor-toolbar">
-
-                {/* Heading */}
-
-                <select
-                  className="blog-editor-heading"
-                  defaultValue=""
-                  onChange={handleHeading}
-                >
-                  <option value="">
-                    Paragraph
-                  </option>
-
-                  <option value="h1">
-                    Heading 1
-                  </option>
-
-                  <option value="h2">
-                    Heading 2
-                  </option>
-
-                  <option value="h3">
-                    Heading 3
-                  </option>
-
-                  <option value="h4">
-                    Heading 4
-                  </option>
-                </select>
-
-                <span className="editor-divider">
-                  |
-                </span>
-
-                {/* BOLD */}
-
-                <button
-                  type="button"
-                  className="blog-editor-btn"
-                  onMouseDown={(e) =>
-                    e.preventDefault()
-                  }
-                  onClick={handleBold}
-                  title="Bold"
-                >
-                  <FiBold size={16} />
-                </button>
-
-                {/* ITALIC */}
-
-                <button
-                  type="button"
-                  className="blog-editor-btn"
-                  onMouseDown={(e) =>
-                    e.preventDefault()
-                  }
-                  onClick={handleItalic}
-                  title="Italic"
-                >
-                  <FiItalic size={16} />
-                </button>
-
-                {/* UNDERLINE */}
-
-                <button
-                  type="button"
-                  className="blog-editor-btn"
-                  onMouseDown={(e) =>
-                    e.preventDefault()
-                  }
-                  onClick={handleUnderline}
-                  title="Underline"
-                >
-                  <FiUnderline size={16} />
-                </button>
-
-                <span className="editor-divider">
-                  |
-                </span>
-
-                {/* BULLET */}
-
-                <button
-                  type="button"
-                  className="blog-editor-btn"
-                  onMouseDown={(e) =>
-                    e.preventDefault()
-                  }
-                  onClick={handleBulletList}
-                  title="Bullet List"
-                >
-                  <FiList size={16} />
-                </button>
-
-                {/* NUMBER LIST */}
-
-                <button
-                  type="button"
-                  className="blog-editor-btn"
-                  onMouseDown={(e) =>
-                    e.preventDefault()
-                  }
-                  onClick={handleNumberList}
-                  title="Numbered List"
-                >
-                  <FiType size={16} />
-                </button>
-
-                <span className="editor-divider">
-                  |
-                </span>
-
-                {/* LEFT */}
-
-                <button
-                  type="button"
-                  className="blog-editor-btn"
-                  onMouseDown={(e) =>
-                    e.preventDefault()
-                  }
-                  onClick={handleAlignLeft}
-                  title="Align Left"
-                >
-                  <FiAlignLeft size={16} />
-                </button>
-
-                {/* CENTER */}
-
-                <button
-                  type="button"
-                  className="blog-editor-btn"
-                  onMouseDown={(e) =>
-                    e.preventDefault()
-                  }
-                  onClick={handleAlignCenter}
-                  title="Align Center"
-                >
-                  <FiAlignCenter size={16} />
-                </button>
-
-                {/* RIGHT */}
-
-                <button
-                  type="button"
-                  className="blog-editor-btn"
-                  onMouseDown={(e) =>
-                    e.preventDefault()
-                  }
-                  onClick={handleAlignRight}
-                  title="Align Right"
-                >
-                  <FiAlignRight size={16} />
-                </button>
-
-                <span className="editor-divider">
-                  |
-                </span>
-
-                {/* LINK */}
-
-                <button
-                  type="button"
-                  className="blog-editor-btn"
-                  onMouseDown={(e) =>
-                    e.preventDefault()
-                  }
-                  onClick={handleCreateLink}
-                  title="Insert Link"
-                >
-                  <FiLink size={16} />
-                </button>
-
-              </div>
-
-              {/* EDITABLE AREA */}
-
-              <div
-                ref={editorRef}
-                className="blog-rich-editor"
-                contentEditable="true"
-                suppressContentEditableWarning={true}
-                data-placeholder="Write your main article content here..."
-                onInput={syncEditorContent}
-                onKeyDown={handleEditorKeyDown}
-                spellCheck={true}
-              />
-
-              {/* FOOTER */}
-
-              <div className="blog-editor-footer">
-
-                <span>
-                  Rich Text Editor
-                </span>
-
-                <span>
-                  {getWordCount()} words
-                </span>
-
-              </div>
-
-            </div>
-          </div>
-
-          {/* =================================================
-              CATEGORY / TAGS / EMAIL / ADDRESS
-          ================================================= */}
-
-          <div className="blog-form-grid">
-
-            {/* CATEGORY */}
-
-            <div className="blog-form-group">
-
+            <div className="blog-form-group full-width">
               <label className="blog-form-label">
-                Choose Category
+                Blog Content <span>*</span>
               </label>
 
-              <select
-                name="category"
-                value={formData.category}
-                onChange={handleInputChange}
-                className="blog-form-select"
-              >
-                <option value="">
-                  Select category
-                </option>
-
-                <option value="Apartments">
-                  Apartments
-                </option>
-
-                <option value="Commercial">
-                  Commercial
-                </option>
-
-                <option value="Villas">
-                  Villas
-                </option>
-
-                <option value="Real Estate News">
-                  Real Estate News
-                </option>
-              </select>
-
+              <div style={{ marginTop: "6px", borderRadius: "10px", overflow: "hidden", border: "1px solid #cbd5e1" }}>
+                <Editor
+                  apiKey="jeq7g2k84sqpi9364o8x9ptqf09aoesaq8jxmp49dl4sh57z"
+                  value={formData.content}
+                  onEditorChange={(content) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      content: content,
+                    }))
+                  }
+                  init={{
+                    height: 380,
+                    menubar: true,
+                    branding: false,
+                    resize: false,
+                    statusbar: true,
+                    plugins:
+                      "advlist autolink lists link image charmap preview anchor searchreplace visualblocks code fullscreen insertdatetime media table help wordcount",
+                    toolbar:
+                      "undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media table | removeformat fullscreen",
+                    content_style:
+                      "body { font-family: 'Plus Jakarta Sans', Inter, Arial, sans-serif; font-size: 15px; color: #1e293b; line-height: 1.7; padding: 12px; }",
+                    placeholder: "Write your engaging and rich blog article content here...",
+                  }}
+                />
+              </div>
             </div>
 
             {/* TAGS */}
 
             <div className="blog-form-group">
-
               <label className="blog-form-label">
                 Tags
               </label>
 
               <div className="blog-tag-input-row">
-
                 <input
                   type="text"
                   value={tagInput}
@@ -869,11 +499,9 @@ const Blog = () => {
                   <FiPlus />
                   Add Tag
                 </button>
-
               </div>
 
               <div className="blog-tags-container">
-
                 {tags.map((tag, idx) => (
                   <span
                     key={idx}
@@ -891,24 +519,19 @@ const Blog = () => {
                     >
                       &times;
                     </button>
-
                   </span>
                 ))}
-
               </div>
-
             </div>
 
             {/* EMAIL */}
 
             <div className="blog-form-group">
-
               <label className="blog-form-label">
                 Email
               </label>
 
               <div className="blog-input-wrapper">
-
                 <FiMail className="blog-input-icon" />
 
                 <input
@@ -919,21 +542,17 @@ const Blog = () => {
                   placeholder="Enter email"
                   className="blog-form-input with-icon"
                 />
-
               </div>
-
             </div>
 
             {/* ADDRESS */}
 
             <div className="blog-form-group">
-
               <label className="blog-form-label">
                 Address
               </label>
 
               <div className="blog-input-wrapper">
-
                 <textarea
                   name="address"
                   value={formData.address}
@@ -941,11 +560,8 @@ const Blog = () => {
                   placeholder="Enter address"
                   className="blog-form-textarea tiny"
                 />
-
               </div>
-
             </div>
-
           </div>
 
           {/* =================================================
@@ -953,45 +569,43 @@ const Blog = () => {
           ================================================= */}
 
           <div className="blog-form-group full-width">
-
             <label className="blog-form-label">
               Upload Image
             </label>
 
             <div className="blog-file-upload-box">
-
               <label className="blog-file-custom-btn">
-
                 <FiUpload />
-
                 Choose File
-
                 <input
                   type="file"
                   accept="image/*"
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      image:
-                        e.target.files?.[0] ||
-                        null,
-                    })
-                  }
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      setFormData({
+                        ...formData,
+                        image: file,
+                      });
+                      const reader = new FileReader();
+                      reader.onloadend = () => {
+                        setImagePreview(reader.result);
+                      };
+                      reader.readAsDataURL(file);
+                    }
+                  }}
                   className="blog-file-input"
                 />
-
               </label>
 
               <span className="blog-file-name">
-
                 {formData.image
                   ? formData.image.name
+                  : imagePreview
+                  ? "Image selected"
                   : "No file chosen"}
-
               </span>
-
             </div>
-
           </div>
 
           {/* =================================================
@@ -999,7 +613,6 @@ const Blog = () => {
           ================================================= */}
 
           <div className="blog-submit-wrapper">
-
             <button
               type="submit"
               className="blog-publish-btn"
@@ -1018,9 +631,7 @@ const Blog = () => {
                 Cancel Edit
               </button>
             )}
-
           </div>
-
         </form>
       </div>
 
@@ -1029,15 +640,12 @@ const Blog = () => {
       ===================================================== */}
 
       <div className="blog-table-card">
-
         <div className="blog-table-header-row">
-
           <h2>
             Published Blogs Directory
           </h2>
 
           <div className="blog-search-wrapper">
-
             <FiSearch className="blog-search-icon" />
 
             <input
@@ -1049,17 +657,12 @@ const Blog = () => {
               }
               className="blog-search-input"
             />
-
           </div>
-
         </div>
 
         <div className="blog-table-responsive">
-
           <table className="blog-data-table">
-
             <thead>
-
               <tr>
                 <th>#ID</th>
                 <th>Blog Title</th>
@@ -1069,16 +672,13 @@ const Blog = () => {
                 <th>Status</th>
                 <th>Actions</th>
               </tr>
-
             </thead>
 
             <tbody>
-
               {filteredBlogs.length > 0 ? (
                 filteredBlogs.map(
                   (blog, index) => (
-                    <tr key={blog.id}>
-
+                    <tr key={blog._id || blog.id || index}>
                       <td>
                         {index + 1}
                       </td>
@@ -1098,23 +698,25 @@ const Blog = () => {
                       </td>
 
                       <td>
-                        {blog.date}
+                        {blog.createdAt
+                          ? new Date(blog.createdAt).toLocaleDateString("en-US", {
+                              month: "short",
+                              day: "numeric",
+                              year: "numeric",
+                            })
+                          : blog.date || "N/A"}
                       </td>
 
                       <td>
-
                         <span
-                          className={`blog-status-badge ${blog.status.toLowerCase()}`}
+                          className={`blog-status-badge ${(blog.status || "published").toLowerCase()}`}
                         >
                           {blog.status}
                         </span>
-
                       </td>
 
                       <td>
-
                         <div className="blog-action-btns">
-
                           <button
                             type="button"
                             className="blog-action-btn edit"
@@ -1131,16 +733,13 @@ const Blog = () => {
                             className="blog-action-btn delete"
                             title="Delete"
                             onClick={() =>
-                              handleDelete(blog.id)
+                              handleDelete(blog._id || blog.id)
                             }
                           >
                             <FiTrash2 size={14} />
                           </button>
-
                         </div>
-
                       </td>
-
                     </tr>
                   )
                 )
@@ -1150,19 +749,14 @@ const Blog = () => {
                     colSpan="7"
                     className="blog-empty-row"
                   >
-                    No blogs found matching
-                    your search.
+                    No blogs found matching your search.
                   </td>
                 </tr>
               )}
-
             </tbody>
-
           </table>
-
         </div>
       </div>
-
     </div>
   );
 };

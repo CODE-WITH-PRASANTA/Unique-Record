@@ -2,22 +2,36 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./EventGalary.css";
 import { FaLink, FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import { API_URL } from "../../Api"; // Importing API_URL from config.js
+import { API_URL } from "../../Api";
 
 const EventGalary = () => {
   const [images, setImages] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [imagesPerSlide, setImagesPerSlide] = useState(3);
-  const EVENTS_GALLERY_API = `${API_URL}/eventsgalary/`; // Constructing the endpoint
 
   useEffect(() => {
-    // Fetch event images from backend
     const fetchImages = async () => {
       try {
-        const response = await axios.get(EVENTS_GALLERY_API);
-        setImages(response.data); // Assuming the backend sends an array of images
+        const response = await axios.get(`${API_URL}/gallery`);
+        const data = response.data;
+        if (Array.isArray(data)) {
+          setImages(data);
+        } else if (data && Array.isArray(data.data)) {
+          setImages(data.data);
+        }
       } catch (error) {
         console.error("Error fetching images:", error);
+        try {
+          const res = await axios.get(`${API_URL}/eventsgalary`);
+          const d = res.data;
+          if (Array.isArray(d)) {
+            setImages(d);
+          } else if (d && Array.isArray(d.data)) {
+            setImages(d.data);
+          }
+        } catch (err2) {
+          console.error("Fallback error fetching event gallery:", err2);
+        }
       }
     };
 
@@ -34,7 +48,7 @@ const EventGalary = () => {
     return () => window.removeEventListener("resize", updateImagesPerSlide);
   }, []);
 
-  const totalSlides = Math.ceil(images.length / imagesPerSlide);
+  const totalSlides = Math.max(1, Math.ceil(images.length / imagesPerSlide));
 
   const handleNext = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % totalSlides);
@@ -44,52 +58,61 @@ const EventGalary = () => {
     setCurrentIndex((prevIndex) => (prevIndex - 1 + totalSlides) % totalSlides);
   };
 
+  if (images.length === 0) {
+    return null;
+  }
+
   return (
     <div className="event-galary-container">
       <h2 className="event-galary-heading">Our Event's Gallery</h2>
 
       <div className="event-galary-wrapper">
-        <button className="event-galary-prev" onClick={handlePrev}>
+        <button className="event-galary-prev" onClick={handlePrev} aria-label="Previous">
           <FaChevronLeft />
         </button>
 
         <div className="event-galary-slider">
           {images
             .slice(currentIndex * imagesPerSlide, (currentIndex + 1) * imagesPerSlide)
-            .map((image) => (
-              <div key={image._id} className="event-galary-item">
-                <img src={image.imageUrl} alt="Event" className="event-galary-img" />
-                <div className="event-galary-overlay">
-                  {image.instagram && (
-                    <a href={image.instagram} target="_blank" rel="noopener noreferrer">
-                      <FaLink className="event-galary-icon" />
-                    </a>
-                  )}
-                  {image.facebook && (
-                    <a href={image.facebook} target="_blank" rel="noopener noreferrer">
-                      <FaLink className="event-galary-icon" />
-                    </a>
-                  )}
+            .map((image, idx) => {
+              const imgSrc = image.imageUrl || image.photoUrl;
+              return (
+                <div key={image._id || image.id || idx} className="event-galary-item">
+                  <img src={imgSrc} alt="Event" className="event-galary-img" />
+                  <div className="event-galary-overlay">
+                    {image.instagram && (
+                      <a href={image.instagram} target="_blank" rel="noopener noreferrer" title="Instagram">
+                        <FaLink className="event-galary-icon" />
+                      </a>
+                    )}
+                    {image.facebook && (
+                      <a href={image.facebook} target="_blank" rel="noopener noreferrer" title="Facebook">
+                        <FaLink className="event-galary-icon" />
+                      </a>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
         </div>
 
-        <button className="event-galary-next" onClick={handleNext}>
+        <button className="event-galary-next" onClick={handleNext} aria-label="Next">
           <FaChevronRight />
         </button>
       </div>
 
       {/* Pagination Dots */}
-      <div className="event-galary-pagination">
-        {[...Array(totalSlides)].map((_, index) => (
-          <span
-            key={index}
-            className={`event-galary-bullet ${index === currentIndex ? "active" : ""}`}
-            onClick={() => setCurrentIndex(index)}
-          ></span>
-        ))}
-      </div>
+      {totalSlides > 1 && (
+        <div className="event-galary-pagination">
+          {[...Array(totalSlides)].map((_, index) => (
+            <span
+              key={index}
+              className={`event-galary-bullet ${index === currentIndex ? "active" : ""}`}
+              onClick={() => setCurrentIndex(index)}
+            ></span>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

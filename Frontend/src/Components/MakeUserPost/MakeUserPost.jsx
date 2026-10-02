@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import './MakeUserPost.css';
-import { API_URL } from '../../Api'; // Import the API_URL
+import { API_URL } from '../../Api';
 import Swal from 'sweetalert2';
+import axios from 'axios';
 
 const MakeUserPost = () => {
   const [formData, setFormData] = useState({
@@ -23,15 +24,19 @@ const MakeUserPost = () => {
   const [categories, setCategories] = useState([]);
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch(`${API_URL}/categories`);
-        const data = await response.json();
-        // Sort categories in alphabetical order
-        const sortedCategories = data.sort((a, b) => a.name.localeCompare(b.name));
-        setCategories(sortedCategories);
+        const response = await axios.get(`${API_URL}/categories`);
+        const catData = response.data?.data || response.data || [];
+        if (Array.isArray(catData)) {
+          const sortedCategories = catData.sort((a, b) =>
+            (a.name || '').localeCompare(b.name || '')
+          );
+          setCategories(sortedCategories);
+        }
       } catch (error) {
         console.error("Error fetching categories:", error);
       }
@@ -96,35 +101,49 @@ const MakeUserPost = () => {
       return;
     }
 
+    if (!formData.content || !formData.content.trim()) {
+      Swal.fire({
+        title: "<strong>Blog Content Required</strong>",
+        text: "Please write some content for your blog post.",
+        icon: "warning",
+      });
+      return;
+    }
+
+    setSubmitting(true);
+
     const formPayload = new FormData();
-    formPayload.append("blogTitle", formData.title);
-    formPayload.append("shortDescription", formData.quotes);
+    formPayload.append("title", formData.title);
+    formPayload.append("shortDesc", formData.quotes);
     formPayload.append("quotes", formData.quotes);
-    formPayload.append("blogContent", formData.content);
-    formPayload.append("category", formData.category);
-    formPayload.append("authorName", formData.authorName || "Anonymous");
-    formPayload.append("authorDesignation", formData.authorDesignation);
-    formPayload.append("phoneNumber", formData.phoneNumber);
-    formPayload.append("email", formData.email);
-    formPayload.append("address", formData.address);
+    formPayload.append("content", formData.content);
+    formPayload.append("category", formData.category || (categories[0]?.name || "General"));
+    formPayload.append("author", formData.authorName || "Anonymous");
+    formPayload.append("authorDesignation", formData.authorDesignation || "");
+    formPayload.append("phoneNumber", formData.phoneNumber || "");
+    formPayload.append("email", formData.email || "");
+    formPayload.append("address", formData.address || "");
     formPayload.append("tags", JSON.stringify(formData.tags));
-    formPayload.append("image", formData.image);
+    formPayload.append("status", "Draft");
+
+    if (formData.image) {
+      formPayload.append("image", formData.image);
+    }
 
     try {
-      const response = await fetch(`${API_URL}/blogs/create`, {
-        method: "POST",
-        body: formPayload,
+      const response = await axios.post(`${API_URL}/blogs`, formPayload, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       });
 
-      const data = await response.json();
-
-      if (response.ok) {
+      if (response.data && response.data.success) {
         Swal.fire({
           title: "<strong>Blog Post Sent Successfully!</strong>",
           icon: "success",
           html: `
-            Your Blog Post has been successfully received by URU admin team. 
-            After review, it will be published on the website soon and you will also be notified via email.
+            Your Blog Post has been successfully submitted to the URU admin team as a <b>Draft</b>.<br/>
+            After administrative review and approval, it will be published live on the website!
           `,
           showCloseButton: false,
           showCancelButton: false,
@@ -134,6 +153,7 @@ const MakeUserPost = () => {
           `,
           confirmButtonAriaLabel: "Thumbs up, great!",
         });
+
         setFormData({
           title: '',
           quotes: '',
@@ -150,11 +170,21 @@ const MakeUserPost = () => {
         setTagInput('');
         setTermsAccepted(false);
       } else {
-        alert(`❌ Failed to post: ${data.message}`);
+        Swal.fire({
+          title: "Failed to Post",
+          text: response.data?.message || "Could not submit post",
+          icon: "error",
+        });
       }
     } catch (error) {
       console.error("Error submitting blog:", error);
-      alert("❌ Server error. Try again later.");
+      Swal.fire({
+        title: "Server Error",
+        text: error.response?.data?.message || "Network error. Please try again later.",
+        icon: "error",
+      });
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -356,7 +386,9 @@ const MakeUserPost = () => {
           <label htmlFor="terms">I accept the <span onClick={handleShowTerms} className="Make-User-Post-TermsLink">terms and conditions</span></label>
         </div>
 
-        <button type="submit" className="Make-User-Post-SubmitButton">Post Blog</button>
+        <button type="submit" className="Make-User-Post-SubmitButton" disabled={submitting}>
+          {submitting ? "Submitting Post..." : "Post Blog"}
+        </button>
       </form>
 
       {showTerms && (

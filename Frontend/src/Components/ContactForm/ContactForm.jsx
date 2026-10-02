@@ -2,35 +2,36 @@ import React, { useState } from "react";
 import { FaHome, FaPhoneAlt, FaEnvelope, FaFacebookF, FaInstagram, FaWhatsapp, FaTelegramPlane } from "react-icons/fa";
 import './ContactForm.css';
 
+import axios from "axios";
+import { API_URL } from "../../Api";
+
 const ContactPage = () => {
   const [result, setResult] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    setResult("Sending....");
-    const formData = new FormData(event.target);
-
-    // Your Web3Forms public access key
-    formData.append("access_key", "fb86678f-47b3-4e43-86cd-f01157e658c6");
+    setSubmitting(true);
+    setResult("Sending...");
+    
+    const formElement = event.target;
+    const formData = new FormData(formElement);
+    const data = Object.fromEntries(formData.entries());
 
     try {
-      const response = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        body: formData
-      });
+      const response = await axios.post(`${API_URL}/contact`, data);
 
-      const data = await response.json();
-
-      if (data.success) {
+      if (response.data && response.data.success) {
         setResult("Form Submitted Successfully ✅");
-        event.target.reset();
+        formElement.reset();
       } else {
-        console.log("Error", data);
-        setResult(data.message || "Something went wrong ❌");
+        setResult(response.data?.message || "Something went wrong ❌");
       }
     } catch (err) {
-      console.error(err);
-      setResult("Something went wrong ❌");
+      console.error("Error submitting contact form:", err);
+      setResult(err.response?.data?.message || "Something went wrong ❌");
+    } finally {
+      setSubmitting(false);
     }
   };
 

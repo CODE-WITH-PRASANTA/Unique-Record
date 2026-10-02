@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import {
   FaImages,
   FaImage,
@@ -17,26 +17,8 @@ import {
   FaChevronRight,
   FaExternalLinkAlt,
 } from "react-icons/fa";
+import API from "../../api/axiosInstance";
 import "./Gallery.css";
-
-const STORAGE_KEY = "admin_event_gallery_data";
-
-const INITIAL_GALLERY = [
-  {
-    id: 1,
-    photoUrl: "",
-    instagram: "https://instagram.com/p/sample1",
-    facebook: "https://facebook.com/photo/sample1",
-    createdAt: "2026-09-20",
-  },
-  {
-    id: 2,
-    photoUrl: "",
-    instagram: "https://instagram.com/p/sample2",
-    facebook: "",
-    createdAt: "2026-09-22",
-  },
-];
 
 const emptyForm = {
   photoUrl: "",
@@ -45,18 +27,14 @@ const emptyForm = {
 };
 
 const Gallery = () => {
-  const [galleryItems, setGalleryItems] = useState(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      return saved ? JSON.parse(saved) : INITIAL_GALLERY;
-    } catch {
-      return INITIAL_GALLERY;
-    }
-  });
+  const [galleryItems, setGalleryItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
 
   const [formData, setFormData] = useState(emptyForm);
   const [editingId, setEditingId] = useState(null);
   const [imagePreview, setImagePreview] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -68,21 +46,52 @@ const Gallery = () => {
 
   const formRef = useRef(null);
 
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(galleryItems));
-  }, [galleryItems]);
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchTerm]);
-
   const showMessage = (text, type = "success") => {
     setMessage({ show: true, type, text });
     window.clearTimeout(window.__galleryToast);
     window.__galleryToast = window.setTimeout(() => {
       setMessage({ show: false, type: "", text: "" });
-    }, 3000);
+    }, 3500);
   };
+
+  const fetchGalleryItems = useCallback(async () => {
+    try {
+      setLoading(true);
+      const res = await API.get("/gallery/all");
+      if (res.data && res.data.success && Array.isArray(res.data.data)) {
+        setGalleryItems(res.data.data);
+      } else if (Array.isArray(res.data)) {
+        setGalleryItems(res.data);
+      } else if (res.data && Array.isArray(res.data.data)) {
+        setGalleryItems(res.data.data);
+      } else {
+        setGalleryItems([]);
+      }
+    } catch (err) {
+      console.error("Error fetching gallery items:", err);
+      try {
+        const fallbackRes = await API.get("/gallery");
+        if (Array.isArray(fallbackRes.data)) {
+          setGalleryItems(fallbackRes.data);
+        } else if (fallbackRes.data && Array.isArray(fallbackRes.data.data)) {
+          setGalleryItems(fallbackRes.data.data);
+        }
+      } catch (fallbackErr) {
+        console.error("Fallback error fetching gallery:", fallbackErr);
+        showMessage("Failed to load gallery photos from server.", "error");
+      }
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchGalleryItems();
+  }, [fetchGalleryItems]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -98,11 +107,12 @@ const Gallery = () => {
       return;
     }
 
-    if (file.size > 5 * 1024 * 1024) {
-      showMessage("Image size should be less than 5MB.", "error");
+    if (file.size > 10 * 1024 * 1024) {
+      showMessage("Image size should be less than 10MB.", "error");
       return;
     }
 
+    setSelectedFile(file);
     const reader = new FileReader();
     reader.onloadend = () => {
       const result = reader.result;
@@ -114,13 +124,14 @@ const Gallery = () => {
 
   const removeImage = () => {
     setImagePreview("");
+    setSelectedFile(null);
     setFormData((prev) => ({ ...prev, photoUrl: "" }));
     const fileInput = document.getElementById("gallery-photo-upload");
     if (fileInput) fileInput.value = "";
   };
 
   const validateForm = () => {
-    if (!formData.photoUrl) {
+    if (!formData.photoUrl && !selectedFile) {
       showMessage("Please upload a gallery photo.", "error");
       return false;
     }
@@ -131,59 +142,105 @@ const Gallery = () => {
     setFormData(emptyForm);
     setEditingId(null);
     setImagePreview("");
+    setSelectedFile(null);
     const fileInput = document.getElementById("gallery-photo-upload");
     if (fileInput) fileInput.value = "";
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
 
-    if (editingId) {
-      setGalleryItems((prev) =>
-        prev.map((item) =>
-          item.id === editingId
-            ? { ...formData, id: editingId, createdAt: item.createdAt }
-            : item
-        )
-      );
-      showMessage("Gallery item updated successfully.");
-    } else {
-      const newItem = {
-        ...formData,
-        id: Date.now(),
-        createdAt: new Date().toISOString().split("T")[0],
-      };
-      setGalleryItems((prev) => [newItem, ...prev]);
-      showMessage("Gallery photo uploaded successfully.");
-    }
+    try {
+      setSubmitting(true);
+      const data = new FormData();
+      data.append("instagram", formData.instagram.trim());
+      data.append("facebook", formData.facebook.trim());
+      data.append("category", "Events");
 
-    resetForm();
-    setTimeout(() => {
-      document.getElementById("gallery-list-section")?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }, 100);
+      if (selectedFile) {
+        data.append("image", selectedFile);
+      } else if (formData.photoUrl) {
+        data.append("photoUrl", formData.photoUrl);
+        data.append("imageUrl", formData.photoUrl);
+      }
+
+      if (editingId) {
+        const res = await API.put(`/gallery/${editingId}`, data, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+        if (res.data?.success || res.status === 200) {
+          showMessage("Gallery item updated successfully.");
+          await fetchGalleryItems();
+          resetForm();
+        } else {
+          showMessage(res.data?.message || "Failed to update item.", "error");
+        }
+      } else {
+        const res = await API.post("/gallery", data, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+        if (res.data?.success || res.status === 201) {
+          showMessage("Gallery photo uploaded successfully.");
+          await fetchGalleryItems();
+          resetForm();
+        } else {
+          showMessage(res.data?.message || "Failed to upload photo.", "error");
+        }
+      }
+
+      setTimeout(() => {
+        document.getElementById("gallery-list-section")?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }, 100);
+    } catch (err) {
+      console.error("Error saving gallery item:", err);
+      showMessage(
+        err.response?.data?.message || "Error saving gallery item to database.",
+        "error"
+      );
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleEdit = (item) => {
-    setEditingId(item.id);
+    const targetId = item._id || item.id;
+    setEditingId(targetId);
+    const photo = item.photoUrl || item.imageUrl || "";
     setFormData({
-      photoUrl: item.photoUrl || "",
+      photoUrl: photo,
       instagram: item.instagram || "",
       facebook: item.facebook || "",
     });
-    setImagePreview(item.photoUrl || "");
+    setImagePreview(photo);
+    setSelectedFile(null);
     formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (!deleteModal) return;
-    setGalleryItems((prev) => prev.filter((item) => item.id !== deleteModal.id));
-    if (editingId === deleteModal.id) resetForm();
-    showMessage("Gallery item deleted successfully.");
-    setDeleteModal(null);
+    const targetId = deleteModal._id || deleteModal.id;
+    try {
+      const res = await API.delete(`/gallery/${targetId}`);
+      if (res.data?.success || res.status === 200) {
+        showMessage("Gallery item deleted successfully.");
+        if (editingId === targetId) resetForm();
+        await fetchGalleryItems();
+      } else {
+        showMessage(res.data?.message || "Failed to delete item.", "error");
+      }
+    } catch (err) {
+      console.error("Error deleting gallery item:", err);
+      showMessage(
+        err.response?.data?.message || "Error deleting gallery photo.",
+        "error"
+      );
+    } finally {
+      setDeleteModal(null);
+    }
   };
 
   const filteredItems = useMemo(() => {
@@ -208,6 +265,21 @@ const Gallery = () => {
   const goToPage = (page) => {
     if (page < 1 || page > totalPages) return;
     setCurrentPage(page);
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return "Recently";
+    try {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) return dateString;
+      return date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      });
+    } catch {
+      return dateString;
+    }
   };
 
   return (
@@ -268,7 +340,7 @@ const Gallery = () => {
                 </div>
                 <div className="gallery-page__image-preview-info">
                   <strong>Preview Ready</strong>
-                  <span>This photo will be added to the gallery.</span>
+                  <span>This photo will be converted to WebP and added to the gallery.</span>
                 </div>
                 <button
                   type="button"
@@ -318,12 +390,21 @@ const Gallery = () => {
                 type="button"
                 className="gallery-page__reset-btn"
                 onClick={resetForm}
+                disabled={submitting}
               >
                 <FaUndo /> Cancel Edit
               </button>
             )}
-            <button type="submit" className="gallery-page__submit-btn">
-              {editingId ? "Update Gallery" : "Submit"}
+            <button
+              type="submit"
+              className="gallery-page__submit-btn"
+              disabled={submitting}
+            >
+              {submitting
+                ? "Saving..."
+                : editingId
+                ? "Update Gallery"
+                : "Submit"}
             </button>
           </div>
         </form>
@@ -389,90 +470,108 @@ const Gallery = () => {
               </tr>
             </thead>
             <tbody>
-              {paginatedItems.length > 0 ? (
-                paginatedItems.map((item, index) => (
-                  <tr key={item.id}>
-                    <td>
-                      <span className="gallery-page__serial">
-                        {(safePage - 1) * itemsPerPage + index + 1}
-                      </span>
-                    </td>
-                    <td>
-                      <div className="gallery-page__thumb-cell">
-                        <div
-                          className="gallery-page__table-thumb"
-                          onClick={() => setImageModal(item)}
-                          title="Click to zoom"
-                        >
-                          {item.photoUrl ? (
-                            <img src={item.photoUrl} alt="Gallery item" />
-                          ) : (
-                            <FaImage />
-                          )}
+              {loading ? (
+                <tr>
+                  <td colSpan="6" className="gallery-page__empty-cell">
+                    <div className="gallery-page__empty">
+                      <div className="gallery-page__empty-icon">
+                        <FaImages />
+                      </div>
+                      <h3>Loading Gallery Photos...</h3>
+                      <p>Fetching records from database.</p>
+                    </div>
+                  </td>
+                </tr>
+              ) : paginatedItems.length > 0 ? (
+                paginatedItems.map((item, index) => {
+                  const itemId = item._id || item.id;
+                  const photoSrc = item.photoUrl || item.imageUrl;
+                  return (
+                    <tr key={itemId}>
+                      <td>
+                        <span className="gallery-page__serial">
+                          {(safePage - 1) * itemsPerPage + index + 1}
+                        </span>
+                      </td>
+                      <td>
+                        <div className="gallery-page__thumb-cell">
+                          <div
+                            className="gallery-page__table-thumb"
+                            onClick={() => setImageModal(item)}
+                            title="Click to zoom"
+                          >
+                            {photoSrc ? (
+                              <img src={photoSrc} alt="Gallery item" />
+                            ) : (
+                              <FaImage />
+                            )}
+                          </div>
                         </div>
-                      </div>
-                    </td>
-                    <td>
-                      {item.instagram ? (
-                        <a
-                          href={item.instagram}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="gallery-page__social-link"
-                        >
-                          <FaInstagram /> View Instagram <FaExternalLinkAlt size={10} />
-                        </a>
-                      ) : (
-                        <span className="gallery-page__text-muted">Not provided</span>
-                      )}
-                    </td>
-                    <td>
-                      {item.facebook ? (
-                        <a
-                          href={item.facebook}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="gallery-page__social-link"
-                        >
-                          <FaFacebook /> View Facebook <FaExternalLinkAlt size={10} />
-                        </a>
-                      ) : (
-                        <span className="gallery-page__text-muted">Not provided</span>
-                      )}
-                    </td>
-                    <td>
-                      <span className="gallery-page__date-text">{item.createdAt}</span>
-                    </td>
-                    <td>
-                      <div className="gallery-page__actions">
-                        <button
-                          type="button"
-                          className="gallery-page__action-btn gallery-page__action-btn--image"
-                          title="View Full Photo"
-                          onClick={() => setImageModal(item)}
-                        >
-                          <FaEye />
-                        </button>
-                        <button
-                          type="button"
-                          className="gallery-page__action-btn gallery-page__action-btn--edit"
-                          title="Edit Item"
-                          onClick={() => handleEdit(item)}
-                        >
-                          <FaEdit />
-                        </button>
-                        <button
-                          type="button"
-                          className="gallery-page__action-btn gallery-page__action-btn--delete"
-                          title="Delete Item"
-                          onClick={() => setDeleteModal(item)}
-                        >
-                          <FaTrash />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))
+                      </td>
+                      <td>
+                        {item.instagram ? (
+                          <a
+                            href={item.instagram}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="gallery-page__social-link"
+                          >
+                            <FaInstagram /> View Instagram <FaExternalLinkAlt size={10} />
+                          </a>
+                        ) : (
+                          <span className="gallery-page__text-muted">Not provided</span>
+                        )}
+                      </td>
+                      <td>
+                        {item.facebook ? (
+                          <a
+                            href={item.facebook}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="gallery-page__social-link"
+                          >
+                            <FaFacebook /> View Facebook <FaExternalLinkAlt size={10} />
+                          </a>
+                        ) : (
+                          <span className="gallery-page__text-muted">Not provided</span>
+                        )}
+                      </td>
+                      <td>
+                        <span className="gallery-page__date-text">
+                          {formatDate(item.createdAt)}
+                        </span>
+                      </td>
+                      <td>
+                        <div className="gallery-page__actions">
+                          <button
+                            type="button"
+                            className="gallery-page__action-btn gallery-page__action-btn--image"
+                            title="View Full Photo"
+                            onClick={() => setImageModal(item)}
+                          >
+                            <FaEye />
+                          </button>
+                          <button
+                            type="button"
+                            className="gallery-page__action-btn gallery-page__action-btn--edit"
+                            title="Edit Item"
+                            onClick={() => handleEdit(item)}
+                          >
+                            <FaEdit />
+                          </button>
+                          <button
+                            type="button"
+                            className="gallery-page__action-btn gallery-page__action-btn--delete"
+                            title="Delete Item"
+                            onClick={() => setDeleteModal(item)}
+                          >
+                            <FaTrash />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })
               ) : (
                 <tr>
                   <td colSpan="6" className="gallery-page__empty-cell">
@@ -481,7 +580,7 @@ const Gallery = () => {
                         <FaImages />
                       </div>
                       <h3>No Gallery Photos Found</h3>
-                      <p>No records match your search criteria.</p>
+                      <p>No records match your search criteria or database is empty.</p>
                     </div>
                   </td>
                 </tr>
@@ -492,72 +591,82 @@ const Gallery = () => {
 
         {/* MOBILE CARDS */}
         <div className="gallery-page__mobile-list">
-          {paginatedItems.length > 0 ? (
-            paginatedItems.map((item) => (
-              <article className="gallery-page__mobile-card" key={item.id}>
-                <div className="gallery-page__mobile-card-top">
-                  <div
-                    className="gallery-page__mobile-image"
-                    onClick={() => setImageModal(item)}
-                  >
-                    {item.photoUrl ? (
-                      <img src={item.photoUrl} alt="Gallery item" />
-                    ) : (
-                      <FaImage />
-                    )}
-                  </div>
-                  <div className="gallery-page__mobile-title">
-                    <span>Uploaded on</span>
-                    <strong>{item.createdAt}</strong>
-                  </div>
-                </div>
-
-                <div className="gallery-page__mobile-details">
-                  {item.instagram && (
-                    <div>
-                      <span>Instagram</span>
-                      <a href={item.instagram} target="_blank" rel="noreferrer">
-                        Open Link <FaExternalLinkAlt size={9} />
-                      </a>
-                    </div>
-                  )}
-                  {item.facebook && (
-                    <div>
-                      <span>Facebook</span>
-                      <a href={item.facebook} target="_blank" rel="noreferrer">
-                        Open Link <FaExternalLinkAlt size={9} />
-                      </a>
-                    </div>
-                  )}
-                </div>
-
-                <div className="gallery-page__mobile-bottom">
-                  <div className="gallery-page__actions">
-                    <button
-                      type="button"
-                      className="gallery-page__action-btn gallery-page__action-btn--image"
+          {loading ? (
+            <div className="gallery-page__mobile-empty">
+              <FaImages />
+              <h3>Loading Gallery Photos...</h3>
+              <p>Fetching records from database.</p>
+            </div>
+          ) : paginatedItems.length > 0 ? (
+            paginatedItems.map((item) => {
+              const itemId = item._id || item.id;
+              const photoSrc = item.photoUrl || item.imageUrl;
+              return (
+                <article className="gallery-page__mobile-card" key={itemId}>
+                  <div className="gallery-page__mobile-card-top">
+                    <div
+                      className="gallery-page__mobile-image"
                       onClick={() => setImageModal(item)}
                     >
-                      <FaEye />
-                    </button>
-                    <button
-                      type="button"
-                      className="gallery-page__action-btn gallery-page__action-btn--edit"
-                      onClick={() => handleEdit(item)}
-                    >
-                      <FaEdit />
-                    </button>
-                    <button
-                      type="button"
-                      className="gallery-page__action-btn gallery-page__action-btn--delete"
-                      onClick={() => setDeleteModal(item)}
-                    >
-                      <FaTrash />
-                    </button>
+                      {photoSrc ? (
+                        <img src={photoSrc} alt="Gallery item" />
+                      ) : (
+                        <FaImage />
+                      )}
+                    </div>
+                    <div className="gallery-page__mobile-title">
+                      <span>Uploaded on</span>
+                      <strong>{formatDate(item.createdAt)}</strong>
+                    </div>
                   </div>
-                </div>
-              </article>
-            ))
+
+                  <div className="gallery-page__mobile-details">
+                    {item.instagram && (
+                      <div>
+                        <span>Instagram</span>
+                        <a href={item.instagram} target="_blank" rel="noreferrer">
+                          Open Link <FaExternalLinkAlt size={9} />
+                        </a>
+                      </div>
+                    )}
+                    {item.facebook && (
+                      <div>
+                        <span>Facebook</span>
+                        <a href={item.facebook} target="_blank" rel="noreferrer">
+                          Open Link <FaExternalLinkAlt size={9} />
+                        </a>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="gallery-page__mobile-bottom">
+                    <div className="gallery-page__actions">
+                      <button
+                        type="button"
+                        className="gallery-page__action-btn gallery-page__action-btn--image"
+                        onClick={() => setImageModal(item)}
+                      >
+                        <FaEye />
+                      </button>
+                      <button
+                        type="button"
+                        className="gallery-page__action-btn gallery-page__action-btn--edit"
+                        onClick={() => handleEdit(item)}
+                      >
+                        <FaEdit />
+                      </button>
+                      <button
+                        type="button"
+                        className="gallery-page__action-btn gallery-page__action-btn--delete"
+                        onClick={() => setDeleteModal(item)}
+                      >
+                        <FaTrash />
+                      </button>
+                    </div>
+                  </div>
+                </article>
+              );
+            })
           ) : (
             <div className="gallery-page__mobile-empty">
               <FaImages />
@@ -568,7 +677,7 @@ const Gallery = () => {
         </div>
 
         {/* PAGINATION */}
-        {filteredItems.length > 0 && (
+        {!loading && filteredItems.length > 0 && (
           <div className="gallery-page__pagination">
             <div className="gallery-page__pagination-info">
               Showing{" "}
@@ -633,7 +742,10 @@ const Gallery = () => {
               </button>
             </div>
             <div className="gallery-page__large-image">
-              <img src={imageModal.photoUrl} alt="Gallery full view" />
+              <img
+                src={imageModal.photoUrl || imageModal.imageUrl}
+                alt="Gallery full view"
+              />
             </div>
             <div className="gallery-page__modal-footer">
               <button type="button" onClick={() => setImageModal(null)}>
