@@ -1,186 +1,226 @@
-import React, { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
-import "./Sidebar.css";
-import profileImg from "../../assets/diffult-profile-pic.png";
+import React, { useState } from "react";
+import { NavLink } from "react-router-dom";
 import {
-  FaBars,
-  FaTimes,
-  FaFileAlt,
-  FaEdit,
-  FaDownload,
-  FaTrophy,
-  FaCalendarCheck,
-  FaUserEdit,
-  FaClipboardList,
-  FaSignOutAlt,
-  FaChevronDown,
-  FaChevronUp,
-} from "react-icons/fa";
-import { API_URL } from "../../Api";
+  UserRound,
+  Trophy,
+  ChevronDown,
+  ChevronUp,
+  FileText,
+  ClipboardList,
+  Download,
+  CalendarCheck,
+  ClipboardCheck,
+  LogOut,
+  Menu,
+  X,
+  Hash,
+  Mail,
+  Clock3,
+} from "lucide-react";
+
+import "./Sidebar.css";
 
 const Sidebar = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(false);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [isEventDropdownOpen, setIsEventDropdownOpen] = useState(false);
-  const [user, setUser] = useState(null);
-  const [profilePicturePreview, setProfilePicturePreview] = useState(profileImg);
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
 
-  useEffect(() => {
-    const fetchUserDetails = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          navigate("/login");
-          return;
-        }
+  const [openSections, setOpenSections] = useState({
+    uniqueRecords: true,
+    eventRegistration: true,
+  });
 
-        const response = await axios.get(`${API_URL}/auth/user`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        setUser(response.data);
-      } catch (error) {
-        console.error(
-          "Error fetching user details:",
-          error.response?.data?.message || error.message
-        );
-
-        if (error.response?.status === 401) {
-          localStorage.removeItem("token");
-          navigate("/login");
-        }
-      }
-    };
-
-    fetchUserDetails();
-  }, [navigate]);
-
-  const handleLogout = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        navigate("/login");
-        return;
-      }
-
-      await axios.post(`${API_URL}/auth/logout`, {}, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      localStorage.removeItem("token");
-      navigate("/login");
-    } catch (error) {
-      console.error("Logout failed:", error.response?.data?.message || error.message);
-
-      if (error.response?.status === 401) {
-        localStorage.removeItem("token");
-        navigate("/login");
-      }
-    }
+  const toggleSection = (section) => {
+    setOpenSections((prev) => ({
+      ...prev,
+      [section]: !prev[section],
+    }));
   };
 
-  const toggleSidebar = () => {
-    setIsOpen(!isOpen);
+  const closeMobileSidebar = () => {
+    setIsMobileOpen(false);
   };
 
- const toggleDropdown = () => {
-  setTimeout(() => {
-    setIsDropdownOpen(!isDropdownOpen);
-  }, 100); // Added a 100ms delay
-};
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("user");
 
- const toggleEventDropdown = () => {
-  setTimeout(() => {
-    setIsEventDropdownOpen(!isEventDropdownOpen);
-  }, 100); // Added a 100ms delay
-};
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("isAuthenticated");
+
+    window.location.href = "/login";
+  };
 
   return (
     <>
-      <button className="menu-button" onClick={toggleSidebar}>
-        {isOpen ? <FaTimes /> : <FaBars />}
-      </button>
-
-      <div className={`sidebar-container ${isOpen ? "open" : ""}`}>
-        <div className="sidebar-profile">
-          <label htmlFor="profile-picture-upload">
-            <img
-              src={profilePicturePreview}
-              alt="Profile"
-              className="sidebar-profile-img"
-            />
-          </label>
-          {user ? (
-            <>
-              <h3 className="sidebar-username">{user.fullName}</h3>
-              <p className="sidebar-user-info">🔹 Unique ID: {user.uniqueId}</p>
-              <p className="sidebar-user-info">📧 Email: {user.email}</p>
-              <p className="sidebar-user-info">⏳ Last Login: {user.lastLogin || "Never Logged In"}</p>
-            </>
-          ) : (
-            <p className="sidebar-user-info">Loading user data...</p>
-          )}
-        </div>
-
-        <nav className="sidebar-nav">
-          {/* Unique Records Section with Dropdown */}
-          <div className="sidebar-section">
-            <h4 className="sidebar-section-title" onClick={toggleDropdown}>
-              <FaTrophy /> Unique Records
-              {isDropdownOpen ? <FaChevronUp className="dropdown-icon" /> : <FaChevronDown className="dropdown-icon" />}
-            </h4>
-
-            {isDropdownOpen && (
-              <div className={`sidebar-dropdown ${isDropdownOpen ? "open" : ""}`}>
-                <Link to="/dashboard" className={location.pathname === "/dashboard" ? "sidebar-active" : ""}>
-                  <FaFileAlt /> Apply for "URU" Holder
-                </Link>
-                <Link to="/dashboard/application-status" className={location.pathname === "/dashboard/application-status" ? "sidebar-active" : ""}>
-                  <FaClipboardList /> Application Status
-                </Link>
-                <Link to="/dashboard/down-certificate" className={location.pathname === "/dashboard/down-certificate" ? "sidebar-active" : ""}>
-                  <FaEdit /> Download Certificate
-                </Link>
-                {/* <Link to="/download-application" className={location.pathname === "/download-application" ? "sidebar-active" : ""}>
-                  <FaDownload /> Download Application Form
-                </Link> */}
-              </div>
-            )}
-          </div>
-
-          {/* Event Registration Section with Dropdown */}
-          <div className="sidebar-section">
-            <h4 className="sidebar-section-title" onClick={toggleEventDropdown}>
-              <FaCalendarCheck /> Event Registration
-              {isEventDropdownOpen ? <FaChevronUp className="dropdown-icon" /> : <FaChevronDown className="dropdown-icon" />}
-            </h4>
-
-            {isEventDropdownOpen && (
-              <div className={`sidebar-dropdown ${isEventDropdownOpen ? "open" : ""}`}>
-                <Link to="/dashboard/event-registration" className={location.pathname === "/dashboard/event-registration" ? "sidebar-active" : ""}>
-                  <FaClipboardList /> Register for Event
-                </Link>
-                <Link to="/dashboard/event-status" className={location.pathname === "/dashboard/event-status" ? "sidebar-active" : ""}>
-                  <FaClipboardList /> Registration Status
-                </Link>
-                {/* <Link to="/dashboard/edit-event" className={location.pathname === "/dashboard/edit-event" ? "sidebar-active" : ""}>
-                  <FaUserEdit /> Download Your Ticket
-                </Link> */}
-                {/* <Link to="/download-event" className={location.pathname === "/download-event" ? "sidebar-active" : ""}>
-                  <FaDownload /> Download Event Form
-                </Link> */}
-              </div>
-            )}
-          </div>
-        </nav>
-
-        <button className="sidebar-logout" onClick={handleLogout}>
-          <FaSignOutAlt /> Logout
+      {/* Mobile Header */}
+      <div className="ur-mobile-header">
+        <button
+          className="ur-mobile-menu-btn"
+          onClick={() => setIsMobileOpen(true)}
+          aria-label="Open sidebar"
+        >
+          <Menu size={23} />
         </button>
+
+        <div className="ur-mobile-title">
+          <span>Unique Records</span>
+        </div>
       </div>
+
+      {/* Mobile Overlay */}
+      {isMobileOpen && (
+        <div
+          className="ur-sidebar-overlay"
+          onClick={closeMobileSidebar}
+        />
+      )}
+
+      {/* Sidebar */}
+      <aside
+        className={`ur-sidebar ${
+          isMobileOpen ? "ur-sidebar-mobile-open" : ""
+        }`}
+      >
+        {/* Mobile Close Button */}
+        <button
+          className="ur-mobile-close"
+          onClick={closeMobileSidebar}
+          aria-label="Close sidebar"
+        >
+          <X size={22} />
+        </button>
+
+        <div className="ur-sidebar-inner">
+
+          {/* Profile */}
+          <div className="ur-profile-section">
+            <div className="ur-profile-image-wrapper">
+              <div className="ur-profile-image">
+                <UserRound size={58} strokeWidth={1.7} />
+              </div>
+              <span className="ur-online-dot"></span>
+            </div>
+
+            <h2 className="ur-profile-name">Ankita</h2>
+
+            <div className="ur-profile-info">
+              <div className="ur-info-row">
+                <Hash size={14} />
+                <span>Unique ID: 260S716799</span>
+              </div>
+
+              <div className="ur-info-row">
+                <Mail size={14} />
+                <span>Email: nayakankita554@gmail.com</span>
+              </div>
+
+              <div className="ur-info-row">
+                <Clock3 size={14} />
+                <span>Last Login: 29-09-2026 23:02:33</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="ur-profile-divider"></div>
+
+          {/* Navigation Links */}
+          <nav className="ur-navigation">
+
+            {/* ================= UNIQUE RECORDS ================= */}
+            <div className="ur-menu-section">
+              <button
+                type="button"
+                className={`ur-section-header ${
+                  openSections.uniqueRecords ? "ur-section-active" : ""
+                }`}
+                onClick={() => toggleSection("uniqueRecords")}
+              >
+                <div className="ur-section-title">
+                  <Trophy size={21} />
+                  <span>Unique Records</span>
+                </div>
+                {openSections.uniqueRecords ? <ChevronUp size={21} /> : <ChevronDown size={21} />}
+              </button>
+
+              <div className={`ur-submenu ${openSections.uniqueRecords ? "ur-submenu-open" : ""}`}>
+                <NavLink
+                  to="/uru/apply"
+                  onClick={closeMobileSidebar}
+                  className={({ isActive }) => `ur-submenu-item ${isActive ? "ur-submenu-active" : ""}`}
+                >
+                  <FileText size={17} />
+                  <span>Apply for "URU" Holder</span>
+                </NavLink>
+
+                <NavLink
+                  to="/uru/application-status"
+                  onClick={closeMobileSidebar}
+                  className={({ isActive }) => `ur-submenu-item ${isActive ? "ur-submenu-active" : ""}`}
+                >
+                  <ClipboardList size={17} />
+                  <span>Application Status</span>
+                </NavLink>
+
+                <NavLink
+                  to="/uru/download-certificate"
+                  onClick={closeMobileSidebar}
+                  className={({ isActive }) => `ur-submenu-item ${isActive ? "ur-submenu-active" : ""}`}
+                >
+                  <Download size={17} />
+                  <span>Download Certificate</span>
+                </NavLink>
+              </div>
+            </div>
+
+            {/* ================= EVENT REGISTRATION ================= */}
+            <div className="ur-menu-section">
+              <button
+                type="button"
+                className={`ur-section-header ${
+                  openSections.eventRegistration ? "ur-section-active" : ""
+                }`}
+                onClick={() => toggleSection("eventRegistration")}
+              >
+                <div className="ur-section-title">
+                  <CalendarCheck size={21} />
+                  <span>Event Registration</span>
+                </div>
+                {openSections.eventRegistration ? <ChevronUp size={21} /> : <ChevronDown size={21} />}
+              </button>
+
+              <div className={`ur-submenu ${openSections.eventRegistration ? "ur-submenu-open" : ""}`}>
+                <NavLink
+                  to="/event/register"
+                  onClick={closeMobileSidebar}
+                  className={({ isActive }) => `ur-submenu-item ${isActive ? "ur-submenu-active" : ""}`}
+                >
+                  <ClipboardCheck size={17} />
+                  <span>Register for Event</span>
+                </NavLink>
+
+                <NavLink
+                  to="/event/registration-status"
+                  onClick={closeMobileSidebar}
+                  className={({ isActive }) => `ur-submenu-item ${isActive ? "ur-submenu-active" : ""}`}
+                >
+                  <ClipboardList size={17} />
+                  <span>Registration Status</span>
+                </NavLink>
+              </div>
+            </div>
+
+          </nav>
+
+          {/* Logout Footer */}
+          <div className="ur-sidebar-footer">
+            <button className="ur-logout-btn" onClick={handleLogout} type="button">
+              <LogOut size={21} />
+              <span>Logout</span>
+            </button>
+          </div>
+
+        </div>
+      </aside>
     </>
   );
 };

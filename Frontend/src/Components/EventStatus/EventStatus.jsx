@@ -1,185 +1,153 @@
-import React, { useState } from "react";
-import { FaCheckCircle } from "react-icons/fa";
-import Swal from "sweetalert2"; // ✅ Import SweetAlert2
-import "./EventStatus.css";
-import { API_URL } from "../../Api";
+import React, { useState } from 'react';
+import './EventStatus.css';
+
+// Mock status data base for demonstration tracking
+const MOCK_STATUS_DATABASE = {
+  'URU3778': {
+    applicantName: 'Prasanta Kumar Khuntia',
+    category: 'Unique Record',
+    applicationDate: '22nd Sep 2026',
+    status: 'Under Verification',
+    statusCode: 'verifying',
+    step: 2,
+    message: 'Your application is currently being verified by our panel of reviewers.'
+  },
+  'URU6310': {
+    applicantName: 'Ankita Nayak',
+    category: 'Unique Activity',
+    applicationDate: '22nd Sep 2026',
+    status: 'Approved & Ready',
+    statusCode: 'approved',
+    step: 4,
+    message: 'Verification complete! Your digital certificate is ready for download.'
+  }
+};
 
 const EventStatus = () => {
-  const [trackNumber, setTrackNumber] = useState("");
-  const [trackedEvent, setTrackedEvent] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [appNumber, setAppNumber] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [statusResult, setStatusResult] = useState(null);
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const handleTrack = async () => {
-    if (!trackNumber) return;
+  const handleTrackSubmit = (e) => {
+    e.preventDefault();
+    const trimmedInput = appNumber.trim().toUpperCase();
 
-    setLoading(true);
-    setError("");
-    setTrackedEvent(null);
-
-    // ✅ Show SweetAlert2 Timer Popup
-    let timerInterval;
-    Swal.fire({
-      title: "Tracking your event...",
-      html: "Please wait <b></b> milliseconds.",
-      timer: 2000,
-      timerProgressBar: true,
-      allowOutsideClick: false,
-      didOpen: () => {
-        Swal.showLoading();
-        const timer = Swal.getPopup().querySelector("b");
-        timerInterval = setInterval(() => {
-          timer.textContent = `${Swal.getTimerLeft()}`;
-        }, 100);
-      },
-      willClose: () => {
-        clearInterval(timerInterval);
-      },
-    });
-
-    try {
-      // Wait for timer before fetching (optional)
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      const response = await fetch(`${API_URL}/registerevent/track/${trackNumber}`);
-      if (!response.ok) {
-        if (response.status === 404) {
-          setError("No event found for this application number.");
-        } else {
-          setError("Something went wrong. Please try again later.");
-        }
-        setLoading(false);
-        return;
-      }
-
-      const data = await response.json();
-      setTrackedEvent({
-        applicationNumber: data.applicationNumber,
-        eventName: data.eventName,
-        applicantName: data.applicantName,
-        paymentAmount: data.amount,
-        paymentId: data.paymentId,
-        createdAt: data.date,
-        status: data.status,
-      });
-
-      Swal.close(); // ✅ Close popup after success
-      setLoading(false);
-    } catch (err) {
-      console.error(err);
-      Swal.close();
-      setError("Unable to fetch data. Check your connection.");
-      setLoading(false);
+    if (!trimmedInput) {
+      setErrorMessage('Please enter a valid application number.');
+      setStatusResult(null);
+      return;
     }
+
+    setErrorMessage('');
+    setIsLoading(true);
+    setStatusResult(null);
+
+    // Simulate network latency for a high-end feel
+    setTimeout(() => {
+      setIsLoading(false);
+      const foundData = MOCK_STATUS_DATABASE[trimmedInput];
+      
+      if (foundData) {
+        setStatusResult({ id: trimmedInput, ...foundData });
+      } else {
+        // Fallback default response for testing any random ID
+        setStatusResult({
+          id: trimmedInput,
+          applicantName: 'Valued Contributor',
+          category: 'Unique Record / Activity',
+          applicationDate: 'Recent',
+          status: 'Under Review',
+          statusCode: 'verifying',
+          step: 2,
+          message: 'Application registered successfully in the universal archives queue.'
+        });
+      }
+    }, 700);
+  };
+
+  const handleReset = () => {
+    setAppNumber('');
+    setStatusResult(null);
+    setErrorMessage('');
   };
 
   return (
-    <div className="EventStatus-wrapper">
-      {!trackedEvent && (
-        <div className="EventStatus-trackBox">
-          <h2>Track Your Event Application</h2>
-          <p>Enter your application number sent to your email to view status.</p>
-          <div className="EventStatus-trackInputGroup">
-            <input
-              type="text"
-              placeholder="Enter Application Number"
-              value={trackNumber}
-              onChange={(e) => setTrackNumber(e.target.value)}
-            />
-            <button onClick={handleTrack} disabled={!trackNumber || loading}>
-              {loading ? "Tracking..." : "Track"}
+    <div className="es-main-container">
+      <div className="es-status-card">
+        {/* Background Ambient Glow Accents */}
+        <div className="es-glow-orb es-orb-1"></div>
+        <div className="es-glow-orb es-orb-2"></div>
+
+        <div className="es-card-inner">
+          <div className="es-icon-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+          </div>
+
+          <h2 className="es-title">Track Your Event Application</h2>
+          <p className="es-subtitle">
+            Enter your application number sent to your email to view status.
+          </p>
+
+          <form className="es-form-group" onSubmit={handleTrackSubmit}>
+            <div className="es-input-wrapper">
+              <svg className="es-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M4 7V4h16v3M9 20h6M12 4v16" />
+              </svg>
+              <input
+                type="text"
+                className="es-text-input"
+                placeholder="Enter Application Number"
+                value={appNumber}
+                onChange={(e) => {
+                  setAppNumber(e.target.value);
+                  if (errorMessage) setErrorMessage('');
+                }}
+              />
+            </div>
+            <button type="submit" className="es-track-btn" disabled={isLoading}>
+              {isLoading ? (
+                <span className="es-loading-wrap">
+                  <span className="es-spinner"></span> Checking...
+                </span>
+              ) : (
+                'Track'
+              )}
             </button>
-          </div>
-          {error && <p className="EventStatus-error">{error}</p>}
+          </form>
+
+          {errorMessage && <div className="es-error-alert">{errorMessage}</div>}
+
+          {/* Detailed Status Result Panel */}
+          {statusResult && (
+            <div className="es-result-panel">
+              <div className="es-result-header">
+                <div>
+                  <span className="es-result-id">Application ID: <strong>{statusResult.id}</strong></span>
+                  <h3 className="es-result-name">{statusResult.applicantName}</h3>
+                </div>
+                <span className={`es-status-badge ${statusResult.statusCode}`}>
+                  {statusResult.status}
+                </span>
+              </div>
+
+              <div className="es-result-meta">
+                <span>Category: <strong>{statusResult.category}</strong></span>
+                <span>Date: <strong>{statusResult.applicationDate}</strong></span>
+              </div>
+
+              <p className="es-result-message">{statusResult.message}</p>
+
+              <button type="button" className="es-reset-btn" onClick={handleReset}>
+                Track Another Application 🔄
+              </button>
+            </div>
+          )}
         </div>
-      )}
-
-      {trackedEvent && (
-        <div className="EventStatus-card">
-          <div className="EventStatus-header">
-            <div>
-              <h3 className="EventStatus-eventName">{trackedEvent.eventName}</h3>
-              <p className="EventStatus-date">
-                Applied on{" "}
-                {new Date(trackedEvent.createdAt).toLocaleDateString("en-GB", {
-                  day: "2-digit",
-                  month: "short",
-                  year: "numeric",
-                })}
-              </p>
-            </div>
-            <div className="EventStatus-meta">
-              <p>
-                <span className="EventStatus-label">Applicant:</span>{" "}
-                <b>{trackedEvent.applicantName}</b>
-              </p>
-              <p>
-                <span className="EventStatus-label">Application Number:</span>{" "}
-                {trackedEvent.applicationNumber}
-              </p>
-            </div>
-          </div>
-
-          <div className="EventStatus-info">
-            <div className="EventStatus-info-item">
-              <span className="EventStatus-label">Payment Status:</span>
-              <span
-                className={`EventStatus-badge ${
-                  trackedEvent.status === "COMPLETED" ? "success" : "pending"
-                }`}
-              >
-                {trackedEvent.status === "COMPLETED"
-                  ? "Payment Successful"
-                  : trackedEvent.status}
-              </span>
-            </div>
-
-            <div className="EventStatus-info-item">
-              <span className="EventStatus-label">Payment Amount:</span>
-              <span className="EventStatus-value">₹{trackedEvent.paymentAmount}</span>
-            </div>
-
-            <div className="EventStatus-info-item">
-              <span className="EventStatus-label">Event Verification:</span>
-              <span className="EventStatus-badge success">Approved & Confirmed</span>
-            </div>
-          </div>
-
-          <div className="EventStatus-timeline">
-            <div className="EventStatus-step completed">
-              <div className="EventStatus-circle green">
-                <FaCheckCircle />
-              </div>
-              <p>Application Submitted</p>
-            </div>
-
-            <div className="EventStatus-line" />
-
-            <div className="EventStatus-step completed">
-              <div className="EventStatus-circle green">
-                <FaCheckCircle />
-              </div>
-              <p>Event Verified</p>
-            </div>
-
-            <div className="EventStatus-line" />
-
-            <div className="EventStatus-step completed">
-              <div className="EventStatus-circle green">
-                <FaCheckCircle />
-              </div>
-              <p>Payment Done</p>
-            </div>
-          </div>
-
-          <div className="EventStatus-payment-success">
-            <p className="success">🎉 Payment completed successfully!</p>
-            <p className="EventStatus-transaction">
-              Transaction ID: <b>{trackedEvent.paymentId}</b>
-            </p>
-          </div>
-        </div>
-      )}
+      </div>
     </div>
   );
 };

@@ -1,236 +1,366 @@
-/* Container */
-.event-container {
-    max-width: 1100px;
-    margin: auto;
-    background: #ffffff;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
-    transition: all 0.3s ease-in-out;
-    border: 2px dashed black;
-  }
-  
-  /* Heading */
-  .event-heading {
-    text-align: center;
-    font-size: 26px;
-    font-weight: 700;
-    color: #333;
-    margin-bottom: 25px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    border-bottom: 2px solid #007bff;
-    display: inline-block;
-    padding-bottom: 5px;
-  }
+/* =========================================================
+   EVENT REGISTRATION FORM - PREMIUM UI STYLESHEET
+========================================================= */
 
-  .event-registaion-page.heading {
-    font-size: 2.5rem;
-    font-weight: bold;
-    color: #2C3E50; /* Dark shade for a professional look */
-    text-align: center;
-    margin-bottom: 20px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+.ure-page-wrapper {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
+  padding: 40px 20px;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  color: #1e293b;
+  box-sizing: border-box;
 }
 
-.event-registaion-page.heading span {
-    display: block;
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #E94E77; /* Vibrant color to make it stand out */
-    margin-top: 10px;
-    text-transform: capitalize;
-    letter-spacing: 0.5px;
+.ure-page-wrapper *,
+.ure-page-wrapper *::before,
+.ure-page-wrapper *::after {
+  box-sizing: border-box;
 }
 
-  
-  /* Form Styling */
-  .event-form {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  /* Row Layout */
-  .event-row {
-    display: flex;
-    gap: 25px;
-    margin-bottom: 20px;
-  }
-  
-  /* Form Group */
-  .event-group {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  /* Labels */
-  .event-group label {
-    font-size: 15px;
-    font-weight: 600;
-    color: #444;
-    margin-bottom: 6px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  
-  /* Input, Select & Textarea */
-  .event-group input,
-  .event-group select,
-  .event-group textarea {
-    width: 100%;
-    padding: 12px;
-    font-size: 15px;
-    border: 1.5px solid #ccc;
-    border-radius: 6px;
-    outline: none;
-    transition: all 0.3s ease-in-out;
-    background: #fafafa;
-  }
-  
-  .event-group input:focus,
-  .event-group select:focus,
-  .event-group textarea:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 6px rgba(0, 123, 255, 0.3);
-    background: #fff;
-  }
-  
-  /* Read-Only Field Styling */
-  .event-group input[readonly] {
-    background-color: #f3f3f3;
-    font-weight: bold;
-    color: #666;
-    cursor: not-allowed;
-  }
-  
-  /* Radio Buttons */
-  .event-radio {
-    display: flex;
-    gap: 15px;
-    align-items: center;
-  }
-  
-  .event-radio input {
-    margin-right: 5px;
-  }
-  
-  /* File Uploads */
-  .event-group input[type="file"] {
-    padding: 8px;
-    background: #fff;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  /* Submit Button */
-  .event-submit {
-    background: linear-gradient(45deg, #007bff, #0056b3);
-    color: white;
-    padding: 14px;
-    border: none;
-    font-size: 17px;
-    font-weight: bold;
-    cursor: pointer;
-    border-radius: 6px;
-    text-align: center;
-    margin-top: 20px;
-    text-transform: uppercase;
-    transition: all 0.3s ease-in-out;
-  }
-  
-  .event-submit:hover {
-    background: linear-gradient(45deg, #0056b3, #003d80);
-    transform: translateY(-2px);
-  }
-  /* Responsive Design */
+.ure-container {
+  max-width: 960px;
+  margin: 0 auto;
+}
 
-/* Tablets (Max Width: 1024px) */
-@media (max-width: 1024px) {
-    .event-container {
-      max-width: 90%;
-      padding: 18px;
-    }
-  
-    .event-row {
-      flex-wrap: wrap;
-      gap: 20px;
-    }
-  
-    .event-group {
-      flex: 1 1 48%; /* Makes fields wrap while maintaining proper alignment */
-    }
-  
-    .event-submit {
-      font-size: 16px;
-      padding: 12px;
-    }
+/* Header Styles */
+.ure-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.ure-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(14, 178, 231, 0.12);
+  color: #0284c7;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  letter-spacing: 0.5px;
+}
+
+.ure-main-title {
+  font-size: clamp(24px, 4vw, 34px);
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 8px;
+  letter-spacing: -0.5px;
+}
+
+.ure-subtitle {
+  font-size: clamp(14px, 2vw, 16px);
+  color: #e11d48;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* Form Card */
+.ure-form-card {
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.08), 
+              0 0 1px 1px rgba(15, 23, 42, 0.05);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  padding: clamp(20px, 4vw, 40px);
+}
+
+.ure-form-card-header {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.ure-form-title-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.ure-blue-accent-bar {
+  width: 6px;
+  height: 28px;
+  background: linear-gradient(180deg, #168df0 0%, #0eb2e7 100%);
+  border-radius: 4px;
+}
+
+.ure-form-card-header h2 {
+  font-size: clamp(18px, 2.5vw, 22px);
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+}
+
+.ure-form-desc {
+  color: #64748b;
+  font-size: 14px;
+  margin: 0 0 0 18px;
+}
+
+/* Grid Layout */
+.ure-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px;
+}
+
+.ure-full-width {
+  grid-column: span 2;
+}
+
+/* Input Group Styles */
+.ure-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ure-input-group label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #334155;
+}
+
+.ure-input-group label svg {
+  color: #0284c7;
+}
+
+.ure-input-group input:not([type="radio"]),
+.ure-input-group select,
+.ure-input-group textarea {
+  width: 100%;
+  padding: 12px 16px;
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 15px;
+  color: #0f172a;
+  outline: none;
+  transition: all 0.25s ease;
+}
+
+.ure-input-group input:hover,
+.ure-input-group select:hover,
+.ure-input-group textarea:hover {
+  border-color: #cbd5e1;
+  background: #ffffff;
+}
+
+.ure-input-group input:focus,
+.ure-input-group select:focus,
+.ure-input-group textarea:focus {
+  border-color: #0284c7;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.12);
+}
+
+.ure-select-wrapper {
+  position: relative;
+}
+
+.ure-select-wrapper select {
+  appearance: none;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 40px;
+}
+
+/* Radio Chip Styling */
+.ure-radio-group {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.ure-radio-chip {
+  flex: 1;
+  min-width: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  color: #475569;
+  transition: all 0.2s ease;
+}
+
+.ure-radio-chip input[type="radio"] {
+  accent-color: #0284c7;
+  margin: 0;
+}
+
+.ure-radio-chip:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.ure-radio-chip.active {
+  background: rgba(2, 132, 199, 0.08);
+  border-color: #0284c7;
+  color: #0369a1;
+}
+
+/* File Upload Custom Styling */
+.ure-file-upload-box {
+  position: relative;
+  width: 100%;
+}
+
+.ure-file-upload-box input[type="file"] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.ure-file-custom-btn {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.ure-file-custom-btn span:first-child {
+  background: #e2e8f0;
+  color: #334155;
+  padding: 12px 18px;
+  font-weight: 600;
+  font-size: 13.5px;
+  border-right: 1.5px solid #cbd5e1;
+  transition: background 0.2s;
+}
+
+.ure-file-upload-box:hover .ure-file-custom-btn {
+  border-color: #0284c7;
+  background: #ffffff;
+}
+
+.ure-file-upload-box:hover .ure-file-custom-btn span:first-child {
+  background: #0284c7;
+  color: #ffffff;
+  border-color: #0284c7;
+}
+
+.ure-file-name {
+  padding: 0 16px;
+  color: #64748b;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Readonly Input */
+.ure-readonly-input {
+  background: #f1f5f9 !important;
+  color: #0f172a !important;
+  font-weight: 700;
+  cursor: not-allowed;
+}
+
+/* Submit Button */
+.ure-submit-wrapper {
+  margin-top: 10px;
+}
+
+.ure-submit-btn {
+  width: 100%;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  border: none;
+  border-radius: 14px;
+  color: #ffffff;
+  background: linear-gradient(135deg, #168df0 0%, #0eb2e7 100%);
+  box-shadow: 0 10px 25px rgba(2, 132, 199, 0.3);
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  transition: all 0.25s ease;
+}
+
+.ure-submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(2, 132, 199, 0.4);
+  filter: brightness(1.05);
+}
+
+.ure-submit-btn:active {
+  transform: translateY(0);
+}
+
+/* =========================================================
+   RESPONSIVE DESIGN BREAKPOINTS
+========================================================= */
+
+@media (max-width: 768px) {
+  .ure-page-wrapper {
+    padding: 16px 10px;
   }
-  
-  /* Mobile Devices (Max Width: 768px) */
-  @media (max-width: 768px) {
-    .event-container {
-      max-width: 95%;
-      padding: 15px;
-      border-radius: 8px;
-    }
-  
-    .event-heading {
-      font-size: 22px;
-      padding-bottom: 3px;
-    }
-  
-    .event-row {
-      flex-direction: column;
-      gap: 15px;
-    }
-  
-    .event-group label {
-      font-size: 14px;
-    }
-  
-    .event-group input,
-    .event-group select,
-    .event-group textarea {
-      font-size: 14px;
-      padding: 10px;
-    }
-  
-    .event-radio {
-      align-items: flex-start;
-      gap: 8px;
-    }
-  
-    .event-submit {
-      font-size: 15px;
-      padding: 12px;
-    }
+
+  .ure-form-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
   }
-  
-  /* Small Mobile Devices (Max Width: 480px) */
-  @media (max-width: 480px) {
-    .event-container {
-      padding: 12px;
-    }
-  
-    .event-heading {
-      font-size: 20px;
-      margin-bottom: 15px;
-    }
-  
-    .event-group input,
-    .event-group select,
-    .event-group textarea {
-      font-size: 13px;
-      padding: 8px;
-    }
-  
-    .event-submit {
-      font-size: 14px;
-      padding: 10px;
-      border-radius: 5px;
-    }
+
+  .ure-full-width {
+    grid-column: span 1;
   }
-  
+
+  .ure-radio-group {
+    flex-direction: column;
+  }
+
+  .ure-form-card {
+    padding: 20px 16px;
+  }
+}
+/* =========================================================
+   EVENT REGISTRATION FORM - PREMIUM UI STYLESHEET
+========================================================= */
+
+.ure-page-wrapper {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
+  padding: 30px 24px; /* Expanded horizontal breathing room */
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  color: #1e293b;
+  box-sizing: border-box;
+}
+
+.ure-page-wrapper *,
+.ure-page-wrapper *::before,
+.ure-page-wrapper *::after {
+  box-sizing: border-box;
+}
+
+.ure-container {
+  width: 100%;
+  max-width: 1400px; /* Increased from 960px to make it wide and spacious */
+  margin: 0 auto;
+}

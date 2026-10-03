@@ -37,16 +37,19 @@ import AdminLogin from "./Components/AdminLogin/AdminLogin";
 import AchiverDetails from "./Pages/AchiverDetails/AchiverDetails";
 import AchiversAbout from "./Components/AchiversAbout/AchiversAbout";
 import Loader from "./Loader";
-import "./App.css";
 import RegisterForEvent from "./Components/RegisterForEvent/RegisterForEvent";
 import EventStatus from "./Components/EventStatus/EventStatus";
+import "./App.css";
 
 function Layout() {
   const location = useLocation();
   const [loading, setLoading] = useState(false);
 
   const isAdminPage = location.pathname.startsWith("/admin");
-  const isDashboardPage = location.pathname.startsWith("/dashboard");
+  const isDashboardPage =
+    location.pathname.startsWith("/dashboard") ||
+    location.pathname.startsWith("/uru") ||
+    location.pathname.startsWith("/event/");
 
   // 🌀 Show loader on every route change
   useEffect(() => {
@@ -68,20 +71,21 @@ function Layout() {
             <Routes>
               <Route element={<ProtectedRoute />}>
                 <Route path="/dashboard" element={<UserDashboard />} />
+                <Route path="/uru/apply" element={<UserDashboard />} />
                 <Route
-                  path="/dashboard/event-registration"
-                  element={<RegisterForEvent />}
-                />
-                <Route
-                  path="/dashboard/application-status"
+                  path="/uru/application-status"
                   element={<ApplicationStatus />}
                 />
                 <Route
-                  path="/dashboard/down-certificate"
+                  path="/uru/download-certificate"
                   element={<DownCertificate />}
                 />
                 <Route
-                  path="/dashboard/event-status"
+                  path="/event/register"
+                  element={<RegisterForEvent />}
+                />
+                <Route
+                  path="/event/registration-status"
                   element={<EventStatus />}
                 />
               </Route>
