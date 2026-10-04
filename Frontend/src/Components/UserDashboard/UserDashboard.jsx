@@ -1,4 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import Swal from 'sweetalert2';
+import { API_URL } from '../../Api';
 import './UserDashboard.css';
 
 const LOGO_SRC = null;
@@ -160,7 +164,9 @@ const ClipboardIllustration = () => (
 );
 
 const UserDashboard = () => {
+  const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const formRef = useRef(null);
 
   const [formData, setFormData] = useState({
@@ -197,6 +203,24 @@ const UserDashboard = () => {
     witness2Email: '',
     acceptTerms: false
   });
+
+  // Pre-fill user data from localStorage if logged in
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem('user');
+      if (stored) {
+        const u = JSON.parse(stored);
+        setFormData((prev) => ({
+          ...prev,
+          applicantName: prev.applicantName || u.name || u.fullName || '',
+          emailId: prev.emailId || u.email || '',
+          whatsappNumber: prev.whatsappNumber || u.phoneNumber || u.mobile || '',
+        }));
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }, []);
 
   const [links, setLinks] = useState(
     LINK_FIELDS.reduce((acc, f) => ({ ...acc, [f.name]: [''] }), {})
@@ -247,14 +271,106 @@ const UserDashboard = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.acceptTerms) {
-      alert('Please accept the Terms and Conditions.');
-      return;
+      return Swal.fire({
+        icon: 'warning',
+        title: 'Terms & Conditions Required',
+        text: 'Please accept the Terms and Conditions before submitting your application.',
+      });
     }
-    console.log('Submitted Application Data:', { ...formData, links, files });
-    alert('Application submitted successfully!');
+
+    try {
+      setIsSubmitting(true);
+      Swal.fire({
+        title: 'Submitting Application...',
+        text: 'Please wait while we upload your files and save your application.',
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+
+      const data = new FormData();
+      // Append form fields
+      Object.keys(formData).forEach((key) => {
+        data.append(key, formData[key]);
+      });
+
+      // Attach logged-in user identification
+      try {
+        const stored = localStorage.getItem('user');
+        if (stored) {
+          const u = JSON.parse(stored);
+          if (u.id || u._id) data.append('userId', u.id || u._id);
+          if (u.uniqueId) data.append('uniqueId', u.uniqueId);
+          if (!formData.emailId && u.email) data.append('emailId', u.email);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+
+      // Append links
+      data.append('links', JSON.stringify(links));
+
+      // Append files
+      if (files.photos && files.photos.length > 0) {
+        files.photos.forEach((file) => data.append('photos', file));
+      }
+      if (files.videos && files.videos.length > 0) {
+        files.videos.forEach((file) => data.append('videos', file));
+      }
+      if (files.documents && files.documents.length > 0) {
+        files.documents.forEach((file) => data.append('documents', file));
+      }
+
+      // Attach token if present
+      const token = localStorage.getItem('token');
+      const headers = {
+        'Content-Type': 'multipart/form-data',
+      };
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
+      const res = await axios.post(`${API_URL}/uru/apply`, data, { headers });
+
+      const appNumber = res.data?.applicationNumber || res.data?.data?.applicationNumber || res.data?.appNo || 'URU';
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Application Submitted!',
+        html: `
+          <div style="font-size: 15px; margin-top: 10px;">
+            <p>Your unique application has been registered successfully.</p>
+            <div style="background: #f1f5f9; padding: 12px; border-radius: 8px; margin: 15px 0;">
+              <strong>Application Number:</strong>
+              <div style="font-size: 20px; font-weight: bold; color: #0284c7; margin-top: 4px;">${appNumber}</div>
+            </div>
+            <p style="color: #64748b; font-size: 13px;">Our evaluation team will review your application. You can track status on your dashboard.</p>
+          </div>
+        `,
+        confirmButtonText: 'View Application Status',
+        showCancelButton: true,
+        cancelButtonText: 'Submit Another',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate('/uru/application-status');
+        } else {
+          window.location.reload();
+        }
+      });
+    } catch (err) {
+      console.error('Error submitting application:', err);
+      Swal.fire({
+        icon: 'error',
+        title: 'Submission Failed',
+        text: err.response?.data?.message || 'Failed to submit application. Please try again.',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const completed = Math.min(currentStep - 1, COMPLETABLE);
@@ -568,8 +684,8 @@ const UserDashboard = () => {
                   Save &amp; Next Step →
                 </button>
               ) : (
-                <button type="submit" className="udu-btn-submit" disabled={!formData.acceptTerms}>
-                  Submit Application 🚀
+                <button type="submit" className="udu-btn-submit" disabled={!formData.acceptTerms || isSubmitting}>
+                  {isSubmitting ? 'Submitting Application...' : 'Submit Application 🚀'}
                 </button>
               )}
             </div>

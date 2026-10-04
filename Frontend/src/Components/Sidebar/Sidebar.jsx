@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
+import axios from "axios";
+import { API_URL } from "../../Api";
 import {
   UserRound,
   Trophy,
@@ -28,6 +30,39 @@ const Sidebar = () => {
     eventRegistration: true,
   });
 
+  // Dynamic Logged-in User State from localStorage & API
+  const [currentUser, setCurrentUser] = useState(() => {
+    try {
+      const stored = localStorage.getItem("user");
+      return stored ? JSON.parse(stored) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  // Fetch updated user profile on mount
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const token = localStorage.getItem("token") || localStorage.getItem("authToken");
+        if (token) {
+          const res = await axios.get(`${API_URL}/auth/me`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          if (res.data?.user || res.data?.fullName) {
+            const userData = res.data.user || res.data;
+            setCurrentUser((prev) => ({ ...prev, ...userData }));
+            localStorage.setItem("user", JSON.stringify({ ...currentUser, ...userData }));
+          }
+        }
+      } catch (err) {
+        console.warn("Could not refresh user profile from server:", err.message);
+      }
+    };
+
+    fetchUserProfile();
+  }, []);
+
   const toggleSection = (section) => {
     setOpenSections((prev) => ({
       ...prev,
@@ -49,6 +84,11 @@ const Sidebar = () => {
 
     window.location.href = "/login";
   };
+
+  const userName = currentUser?.fullName || currentUser?.name || "User";
+  const userUniqueId = currentUser?.uniqueId || currentUser?.userId || "26OS000000";
+  const userEmail = currentUser?.email || "user@gmail.com";
+  const userLastLogin = currentUser?.lastLogin || new Date().toLocaleString();
 
   return (
     <>
@@ -92,7 +132,7 @@ const Sidebar = () => {
 
         <div className="ur-sidebar-inner">
 
-          {/* Profile */}
+          {/* Dynamic Profile */}
           <div className="ur-profile-section">
             <div className="ur-profile-image-wrapper">
               <div className="ur-profile-image">
@@ -101,22 +141,22 @@ const Sidebar = () => {
               <span className="ur-online-dot"></span>
             </div>
 
-            <h2 className="ur-profile-name">Ankita</h2>
+            <h2 className="ur-profile-name">{userName}</h2>
 
             <div className="ur-profile-info">
               <div className="ur-info-row">
                 <Hash size={14} />
-                <span>Unique ID: 260S716799</span>
+                <span>Unique ID: {userUniqueId}</span>
               </div>
 
               <div className="ur-info-row">
                 <Mail size={14} />
-                <span>Email: nayakankita554@gmail.com</span>
+                <span>Email: {userEmail}</span>
               </div>
 
               <div className="ur-info-row">
                 <Clock3 size={14} />
-                <span>Last Login: 29-09-2026 23:02:33</span>
+                <span>Last Login: {userLastLogin}</span>
               </div>
             </div>
           </div>

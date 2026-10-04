@@ -14,11 +14,12 @@ const AchiverSection = () => {
       try {
         const response = await fetch(`${API_URL}/uru/fetch-published-uru`);
         const data = await response.json();
+        const list = Array.isArray(data) ? data : (data?.data || []);
         // Reverse the data to show the latest posts first
-        data.reverse();
-        setAchievers(data);
+        const reversed = [...list].reverse();
+        setAchievers(reversed);
       } catch (error) {
-        console.error(error);
+        console.error('Error fetching published records:', error);
       }
     };
     fetchPublishedUrus();
@@ -36,8 +37,8 @@ const AchiverSection = () => {
     const query = searchQuery.toLowerCase();
 
     return (
-      achiever.applicantName.toLowerCase().includes(query) ||
-      achiever.applicationNumber.toLowerCase().includes(query) ||
+      (achiever.applicantName || achiever.name || '').toLowerCase().includes(query) ||
+      (achiever.applicationNumber || achiever.appNo || '').toLowerCase().includes(query) ||
       serialNo.toString().includes(query)
     );
   });
@@ -84,10 +85,23 @@ const AchiverSection = () => {
           filteredAchievers.map((achiever, index) => (
             <div className="Achiver-Details-Card" key={achiever._id}>
               <img
-                src={achiever.certificateUrl}
-                alt={achiever.applicantName}
+                src={
+                  achiever.certificateUrl ||
+                  (achiever.photos && achiever.photos[0]?.url) ||
+                  'https://placehold.co/400x300/1e293b/ffffff?text=Certificate'
+                }
+                alt={achiever.applicantName || 'URU Record'}
                 className="Achiver-Details-Photo"
-                onClick={() => setSelectedPhoto(achiever.certificateUrl)}
+                onClick={() =>
+                  setSelectedPhoto(
+                    achiever.certificateUrl ||
+                    (achiever.photos && achiever.photos[0]?.url)
+                  )
+                }
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = 'https://placehold.co/400x300/1e293b/ffffff?text=Unique+Record';
+                }}
               />
                       <div className="Achiver-Details-Info">
             <p className="Achiver-Details-Application">

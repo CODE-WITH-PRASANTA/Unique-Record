@@ -123,7 +123,7 @@ const Topbar = ({ toggleSidebar }) => {
 
             <div className="Topbar-user-info">
               <span className="Topbar-username">{adminName}</span>
-              <span className="Topbar-role">Super Admin</span>
+              <span className="Topbar-role">{(user?.role || 'admin').toUpperCase()}</span>
             </div>
 
             <ChevronDown size={15} className={`Topbar-chevron ${dropdownOpen ? 'open' : ''}`} />
@@ -133,7 +133,28 @@ const Topbar = ({ toggleSidebar }) => {
                 <div className="Topbar-user-card">
                   <p className="Topbar-card-name">{adminName}</p>
                   <p className="Topbar-card-email">{adminEmail}</p>
+                  <span style={{ fontSize: '11px', color: '#64748b', display: 'block', marginTop: '4px' }}>
+                    ID: {user?.uniqueId || user?.userId || 'admin'}
+                  </span>
                 </div>
+                <div className="Topbar-dropdown-divider" />
+                <Link
+                  to="/users/manage"
+                  className="Topbar-dropdown-item"
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    padding: '10px 14px',
+                    fontSize: '13px',
+                    color: '#334155',
+                    fontWeight: 600,
+                    textDecoration: 'none',
+                  }}
+                  onClick={() => setDropdownOpen(false)}
+                >
+                  <User size={16} /> Manage All Users
+                </Link>
                 <div className="Topbar-dropdown-divider" />
                 <button
                   type="button"

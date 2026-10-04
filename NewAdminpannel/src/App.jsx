@@ -62,53 +62,53 @@ const App = () => {
               element={<Navigate to="/dashboard" replace />}
             />
 
-          {/* Dashboard */}
+            {/* Dashboard */}
+            <Route
+              path="/dashboard"
+              element={<DashBoard />}
+            />
+
+            {/* Blog Create & Edit Routes */}
+            <Route
+              path="/blogs/create"
+              element={<Blog />}
+            />
+            <Route
+              path="/blogs/edit/:id"
+              element={<Blog />}
+            />
+            <Route path="/blogs/manage" element={<BlogManage />} />
+            <Route path="/notices/add" element={<Notice />} />
+            <Route path="/events/add" element={<Event />} />
+            <Route path="/events/category" element={<EventCategory />} />
+            <Route path="/events/categories" element={<EventCategory />} />
+            <Route path="/team/add" element={<Team />} />
+            <Route path="/donations/manage" element={<ManageDonate />} />
+            <Route path="/gallery/events" element={<Gallery />} />
+            <Route path="/media/youtube" element={<Youtube />} />
+            <Route path="/media/photos" element={<MedieaPhoto />} />
+            <Route path="/uru/manage" element={<ManageUru />} />
+            <Route path="/uru/approve" element={<ApproveUru />} />
+            <Route path="/uru/final" element={<FinallUru />} />
+            <Route path="/achievements/post" element={<ArchivementPost />} />
+            <Route path="/achievements/category" element={<AchievementCategory />} />
+            <Route path="/categories/manage" element={<Managecatgory />} />
+            <Route path="/comments/blogs" element={<BlogCommentes />} />
+            <Route path="/comments/achievements" element={<ArchivementComment />} />
+            <Route path="users/opinions" element={<UserOpinion />} />
+            <Route path="/users/newsletter" element={<Subscribe />} />
+
+          </Route>
+
+          {/* Fallback */}
           <Route
-            path="/dashboard"
-            element={<DashBoard />}
+            path="*"
+            element={<Navigate to="/dashboard" replace />}
           />
 
-          {/* Blog Create & Edit Routes */}
-          <Route 
-            path="/blogs/create" 
-            element={<Blog />} 
-          />
-          <Route 
-            path="/blogs/edit/:id" 
-            element={<Blog />} 
-          />
-          <Route path="/blogs/manage" element={<BlogManage />} />
-          <Route path="/notices/add" element={<Notice />} />
-          <Route path="/events/add" element={<Event />} />
-          <Route path="/events/category" element={<EventCategory />} />
-          <Route path="/events/categories" element={<EventCategory />} />
-          <Route path="/team/add" element={<Team />} />
-          <Route path="/donations/manage"element={<ManageDonate/>}/>
-          <Route path="/gallery/events"element={<Gallery/>}/>
-          <Route path="/media/youtube"element={<Youtube/>}/>
-          <Route path="/media/photos"element={<MedieaPhoto/>}/>
-          <Route path="/uru/manage"element={<ManageUru/>}/>
-          <Route path="/uru/approve"element={<ApproveUru/>}/>
-          <Route path="/uru/final"element={<FinallUru/>}/>
-<Route path="/achievements/post" element={<ArchivementPost/>}/>
-<Route path="/achievements/category" element={<AchievementCategory/>}/>
-<Route path="/categories/manage" element={<Managecatgory/>}/>
-<Route  path="/comments/blogs"element={<BlogCommentes/>}/>
-<Route path="/comments/achievements"element={<ArchivementComment/>}/>
-<Route path="users/opinions"element={<UserOpinion/>}/>
-<Route path="/users/newsletter"element={<Subscribe/>}/>
-
-        </Route>
-
-        {/* Fallback */}
-        <Route
-          path="*"
-          element={<Navigate to="/dashboard" replace />}
-        />
-
-      </Routes>
-    </BrowserRouter>
-  </AuthProvider>
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
 };
 

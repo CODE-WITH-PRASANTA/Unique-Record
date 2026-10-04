@@ -1004,107 +1004,67 @@ module.exports = {
   updatePublishStatus: async (req, res) => {
     try {
       const { id } = req.params;
-      const { isPublished } = req.body;
+      const { isPublished, published } = req.body;
 
-      const uru = await URU.findById(id);
+      let uru;
+      if (id && mongoose.isValidObjectId(id)) {
+        uru = await URU.findById(id);
+      }
+      if (!uru && id) {
+        uru = await URU.findOne({
+          $or: [{ applicationNumber: id }, { appNo: id }],
+        });
+      }
+
       if (!uru) {
         return res.status(404).json({ message: "URU application not found" });
       }
 
-      uru.isPublished = isPublished;
+      let nextPublished;
+      if (typeof isPublished === 'boolean') {
+        nextPublished = isPublished;
+      } else if (typeof published === 'boolean') {
+        nextPublished = published;
+      } else if (isPublished === 'true' || published === 'true') {
+        nextPublished = true;
+      } else if (isPublished === 'false' || published === 'false') {
+        nextPublished = false;
+      } else {
+        nextPublished = !uru.isPublished;
+      }
+
+      uru.isPublished = nextPublished;
       await uru.save();
 
-      // ✅ Setup transporter (use your Gmail credentials or SMTP)
-      const transporter = nodemailer.createTransport({
-        service: "gmail",
-        auth: {
-          user: process.env.EMAIL_USER, // e.g., uruonline2025@gmail.com
-          pass: process.env.EMAIL_PASS, // your app password (not Gmail password)
-        },
-      });
+      // Setup transporter safely
+      if (nextPublished && uru.emailId && process.env.EMAIL_PASS) {
+        try {
+          const transporter = nodemailer.createTransport({
+            service: "gmail",
+            auth: {
+              user: process.env.EMAIL_USER || "uruonline2025@gmail.com",
+              pass: process.env.EMAIL_PASS,
+            },
+          });
 
-     const mailOptions = {
-  from: '"Unique Records of Universe" <uruonline2025@gmail.com>',
-  to: uru.emailId,
-  subject: isPublished
-    ? "✅ Your Record/Activity Has Been Published!"
-    : "⚠️ Your Record/Activity Has Been Unpublished",
-  html: `
-  <div style="font-family:'Segoe UI',Roboto,Arial,sans-serif;max-width:650px;margin:auto;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.08);">
-    
-    <!-- Header -->
-    <div style="background:linear-gradient(135deg,#1abc9c,#16a085);padding:20px;text-align:center;">
-      <h1 style="color:#fff;margin:0;font-size:22px;">Unique Records of Universe</h1>
-      <p style="color:#ecf0f1;margin:5px 0 0;font-size:14px;">Record Status Update</p>
-    </div>
+          const mailOptions = {
+            from: '"Unique Records of Universe" <uruonline2025@gmail.com>',
+            to: uru.emailId,
+            subject: "✅ Your Record/Activity Has Been Published!",
+            html: `<div style="font-family: Arial; padding: 20px;"><h2>Congratulations ${uru.applicantName}!</h2><p>Your record is published.</p></div>`,
+          };
 
-    <!-- Body -->
-    <div style="padding:25px;color:#333;line-height:1.6;">
-      <h2 style="color:${isPublished ? "#27ae60" : "#e74c3c"}; margin-bottom:12px; font-size:20px; font-weight:600;">
-        ${isPublished 
-          ? "🎉 Congratulations! Your unique record/activity is now published in its own universe." 
-          : "⚠️ Your record/activity has been unpublished."}
-      </h2>
-
-      <p style="font-size:15px;">Dear <b>${uru.applicantName}</b>,</p>
-      <p style="font-size:15px;color:#555;">
-        ${isPublished
-          ? `We are happy to inform you that your <b>Unique Records of Universe</b> application fee has been successfully received and your record is published.`
-          : `We would like to notify you that your <b>Unique Records of Universe</b> application has been unpublished.`}
-      </p>
-
-      <!-- Record Details -->
-      <div style="background:#f9fafb;border:1px solid #e1e8ed;border-radius:8px;padding:15px;margin:20px 0;">
-        <h3 style="margin:0 0 10px;font-size:16px;color:#2c3e50;">Application Details</h3>
-        <ul style="list-style:none;padding:0;margin:0;font-size:14px;">
-          <li style="padding:6px 0;"><b>Position:</b> ${uru.position || "N/A"}</li>
-          <li style="padding:6px 0;"><b>Application Number:</b> ${uru.applicationNumber}</li>
-          <li style="padding:6px 0;"><b>Application Date:</b> ${uru.createdAt ? new Date(uru.createdAt).toLocaleDateString("en-GB", { day: '2-digit', month: 'short', year: 'numeric'}) : "N/A"}</li>
-          <li style="padding:6px 0;"><b>Registration Number:</b> ${uru.regNo || "N/A"}</li>
-          <li style="padding:6px 0;"><b>Applicant Name:</b> ${uru.applicantName}</li>
-          <li style="padding:6px 0;"><b>Email:</b> ${uru.emailId}</li>
-          <li style="padding:6px 0;"><b>Status:</b> <span style="font-weight:600;color:${isPublished ? "#27ae60" : "#e74c3c"};">${isPublished ? "Published" : "Unpublished"}</span></li>
-        </ul>
-      </div>
-
-      <p style="font-size:15px;margin-top:15px;">
-        ${isPublished
-          ? "Our verification team will now proceed with the next steps, and you will receive updates soon."
-          : "If you believe this was done in error, kindly reach out to our support team."}
-      </p>
-
-      <!-- Call to Action -->
-      <div style="text-align:center;margin:0px 0;">
-        <a href="mailto:uruonline2025@gmail.com" 
-          style="background:#27ae60;color:#fff;padding:12px 22px;border-radius:6px;text-decoration:none;font-size:15px;font-weight:600;display:inline-block;margin:0 8px;box-shadow:0 3px 6px rgba(0,0,0,0.1);">
-          📩 Contact Support
-        </a>
-        <a href="https://ouruniverse.in/achievers" 
-          style="background:#2980b9;color:#fff;padding:12px 22px;border-radius:6px;text-decoration:none;font-size:15px;font-weight:600;display:inline-block;margin:0 8px;box-shadow:0 3px 6px rgba(0,0,0,0.1);">
-          📜 Check Out Post
-        </a>
-      </div>
-    </div>
-
-    <!-- Footer -->
-    <div style="background:#f4f6f9;padding:15px;text-align:center;font-size:13px;color:#777;">
-      <p style="margin:5px 0;">📌 For any queries, reach us at 
-        <a href="mailto:uruonline2025@gmail.com" style="color:#2980b9;">uruonline2025@gmail.com</a>
-      </p>
-      <p style="margin:5px 0;color:#aaa;">© ${new Date().getFullYear()} Unique Records of Universe. All Rights Reserved.</p>
-    </div>
-  </div>
-  `,
-};
-
-
-      // ✅ Send mail only if Published
-      if (isPublished) {
-        await transporter.sendMail(mailOptions);
+          transporter.sendMail(mailOptions).catch((e) => console.log('Mail send error in backend publish:', e.message));
+        } catch (e) {
+          console.error("Transporter setup error in backend publish:", e.message);
+        }
       }
 
       res.status(200).json({
-        message: `URU has been ${isPublished ? "Published" : "Unpublished"} successfully`,
+        success: true,
+        message: `URU has been ${nextPublished ? "Published" : "Unpublished"} successfully`,
+        isPublished: nextPublished,
+        published: nextPublished,
         data: uru,
       });
     } catch (error) {

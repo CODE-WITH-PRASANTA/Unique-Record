@@ -72,6 +72,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -127,9 +128,19 @@
 }
 
 @keyframes loginShake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-6px); }
-  75% { transform: translateX(6px); }
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-6px);
+  }
+
+  75% {
+    transform: translateX(6px);
+  }
 }
 
 /* Form Groups */
@@ -187,7 +198,7 @@
   box-shadow: 0 0 0 4px var(--login-primary-light);
 }
 
-.login-input:focus + .login-input-icon,
+.login-input:focus+.login-input-icon,
 .login-input-wrap:focus-within .login-input-icon {
   color: var(--login-primary);
 }

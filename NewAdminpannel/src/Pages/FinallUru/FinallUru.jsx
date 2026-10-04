@@ -1,78 +1,149 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import API from '../../api/axiosInstance';
 import './FinallUru.css';
 
 const FinallUru = () => {
-  // Initial Mock Data based on the reference UI
-  const [records, setRecords] = useState([
-    {
-      id: 1,
-      appNo: 'URU6310',
-      date: '22 Sept 2026',
-      name: 'Prasanta Kumar Khuntia',
-      paymentStatus: 'Success',
-      fileName: 'No file chosen',
-      file: null,
-      published: false,
-    },
-    {
-      id: 2,
-      appNo: 'URU3778',
-      date: '22 Sept 2026',
-      name: 'Prasanta Kumar Khuntia',
-      paymentStatus: 'Success',
-      fileName: 'No file chosen',
-      file: null,
-      published: false,
-    },
-  ]);
-
+  const [records, setRecords] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [uploadingId, setUploadingId] = useState(null);
+
+  // Fetch Paid URU applications from backend
+  const fetchPaidRecords = async () => {
+    try {
+      setLoading(true);
+      const res = await API.get('/uru/paid');
+      const list = res.data?.data || (Array.isArray(res.data) ? res.data : []);
+      setRecords(list);
+    } catch (error) {
+      console.error('Error fetching paid URU records:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPaidRecords();
+  }, []);
 
   // Filter records based on search query
   const filteredRecords = records.filter((item) => {
     const term = searchTerm.toLowerCase();
     return (
-      item.name.toLowerCase().includes(term) ||
-      item.appNo.toLowerCase().includes(term)
+      (item.name || item.applicantName || '').toLowerCase().includes(term) ||
+      (item.appNo || item.applicationNumber || '').toLowerCase().includes(term) ||
+      (item.transactionId || '').toLowerCase().includes(term) ||
+      (item.email || '').toLowerCase().includes(term)
     );
   });
 
-  // Handle file upload per row
+  // Handle file selection per row
   const handleFileChange = (id, e) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
-      setRecords(
-        records.map((rec) =>
-          rec.id === id ? { ...rec, file, fileName: file.name } : rec
+      setRecords((prev) =>
+        prev.map((rec) =>
+          (rec.id || rec._id) === id ? { ...rec, file, fileName: file.name } : rec
         )
       );
     }
   };
 
-  // Submit Action
-  const handleSubmit = (item) => {
+  // Submit Certificate Upload Action
+  const handleSubmitCertificate = async (item) => {
+    const recordId = item._id || item.id || item.appNo || item.applicationNumber;
     if (!item.file) {
-      alert('Please choose a certificate file before submitting.');
+      alert('Please choose a certificate file to upload first.');
       return;
     }
-    alert(`Certificate "${item.fileName}" successfully submitted for application ${item.appNo}!`);
+
+    try {
+      setUploadingId(item.id || item._id);
+      const formData = new FormData();
+      formData.append('certificate', item.file);
+
+      const res = await API.post(`/uru/upload-certificate/${recordId}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+
+      const updatedCertUrl = res.data?.certificateUrl || res.data?.data?.certificateUrl;
+
+      setRecords((prev) =>
+        prev.map((rec) =>
+          (rec.id || rec._id) === (item.id || item._id)
+            ? {
+                ...rec,
+                certificateUrl: updatedCertUrl || rec.certificateUrl,
+                fileName: updatedCertUrl ? updatedCertUrl.split('/').pop() : item.file.name,
+                file: null,
+              }
+            : rec
+        )
+      );
+
+      alert(`Certificate uploaded successfully for application ${item.appNo || item.applicationNumber}!`);
+    } catch (err) {
+      console.error('Error uploading certificate:', err);
+      alert(err.response?.data?.message || err.message || 'Failed to upload certificate.');
+    } finally {
+      setUploadingId(null);
+    }
   };
 
-  // Publish Action
-  const handlePublish = (id) => {
-    setRecords(
-      records.map((rec) =>
-        rec.id === id ? { ...rec, published: !rec.published } : rec
-      )
-    );
-    const item = records.find((rec) => rec.id === id);
-    alert(`Application ${item.appNo} publication status updated!`);
+  // Publish / Unpublish Action
+  const handlePublish = async (id) => {
+    const item = records.find((rec) => (rec.id || rec._id) === id);
+    if (!item) return;
+
+    const currentStatus = Boolean(item.published || item.isPublished);
+    const targetStatus = !currentStatus;
+
+    try {
+      const res = await API.put(`/uru/publish-uru/${id}`, {
+        isPublished: targetStatus,
+        published: targetStatus,
+      });
+
+      const isNowPublished =
+        typeof res.data?.isPublished === 'boolean'
+          ? res.data.isPublished
+          : typeof res.data?.published === 'boolean'
+          ? res.data.published
+          : targetStatus;
+
+      setRecords((prev) =>
+        prev.map((rec) =>
+          (rec.id || rec._id) === id
+            ? { ...rec, published: isNowPublished, isPublished: isNowPublished }
+            : rec
+        )
+      );
+
+      alert(
+        isNowPublished
+          ? `Application ${item.appNo || item.applicationNumber} is now Published!`
+          : `Application ${item.appNo || item.applicationNumber} has been Unpublished.`
+      );
+    } catch (err) {
+      console.error('Error toggling publish status:', err);
+      alert(err.response?.data?.message || err.message || 'Failed to update publication status.');
+    }
   };
 
   // Delete Action
-  const handleDelete = (id) => {
-    if (window.confirm('Are you sure you want to delete this record?')) {
-      setRecords(records.filter((rec) => rec.id !== id));
+  const handleDelete = async (id) => {
+    const item = records.find((rec) => (rec.id || rec._id) === id);
+    const appLabel = item ? (item.appNo || item.applicationNumber) : 'this record';
+
+    if (window.confirm(`Are you sure you want to delete application ${appLabel}?`)) {
+      try {
+        await API.delete(`/uru/${id}`);
+        setRecords((prev) => prev.filter((rec) => (rec.id || rec._id) !== id));
+        alert(`Application ${appLabel} deleted successfully.`);
+      } catch (err) {
+        console.error('Error deleting record:', err);
+        alert('Failed to delete application.');
+      }
     }
   };
 
@@ -83,15 +154,25 @@ const FinallUru = () => {
       return;
     }
 
-    const headers = ['Sl No.', 'Application No.', 'Application Date', 'Applicant Name', 'Payment Status', 'Certificate File', 'Published Status'];
+    const headers = [
+      'Sl No.',
+      'Application No.',
+      'Application Date',
+      'Applicant Name',
+      'Payment Status',
+      'Transaction ID',
+      'Certificate URL',
+      'Published Status',
+    ];
     const rows = filteredRecords.map((item, index) => [
       index + 1,
-      item.appNo,
-      item.date,
-      `"${item.name}"`,
-      item.paymentStatus,
-      item.fileName,
-      item.published ? 'Published' : 'Draft',
+      item.appNo || item.applicationNumber,
+      item.date || 'N/A',
+      `"${item.name || item.applicantName || ''}"`,
+      item.paymentStatus || 'Success',
+      item.transactionId || 'N/A',
+      item.certificateUrl || 'No Certificate',
+      item.published || item.isPublished ? 'Published' : 'Draft',
     ]);
 
     const csvContent = [headers.join(','), ...rows.map((row) => row.join(','))].join('\n');
@@ -99,7 +180,7 @@ const FinallUru = () => {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.setAttribute('href', url);
-    link.setAttribute('download', `Final_URU_Records_${new Date().toISOString().slice(0, 10)}.xls`);
+    link.setAttribute('download', `Final_Paid_URU_Records_${new Date().toISOString().slice(0, 10)}.xls`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -108,15 +189,30 @@ const FinallUru = () => {
   return (
     <div className="fin-uru-container">
       <div className="fin-uru-wrapper">
-        
         {/* Header Section */}
         <header className="fin-uru-header-section">
           <div className="fin-uru-title-group">
-            <h1 className="fin-uru-title">Final URU</h1>
+            <h1 className="fin-uru-title">Final URU (Paid Applications)</h1>
             <div className="fin-uru-title-underline"></div>
+            <p style={{ color: '#64748b', fontSize: '14px', marginTop: '6px' }}>
+              Applications with successful payment status appear here for certificate uploads and live publication.
+            </p>
           </div>
           <button className="fin-uru-btn-excel" onClick={handleDownloadExcel}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
             <span>Download Excel Sheet</span>
           </button>
         </header>
@@ -124,10 +220,10 @@ const FinallUru = () => {
         {/* Search Toolbar */}
         <div className="fin-uru-toolbar-section">
           <div className="fin-uru-search-wrapper">
-            <input 
-              type="text" 
-              className="fin-uru-search-input" 
-              placeholder="Search by application number or name..."
+            <input
+              type="text"
+              className="fin-uru-search-input"
+              placeholder="Search by application number, applicant name, or transaction ID..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -150,68 +246,99 @@ const FinallUru = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredRecords.length === 0 ? (
+                {loading ? (
                   <tr>
-                    <td colSpan="7" className="fin-uru-empty-row">No records found.</td>
+                    <td colSpan="7" className="fin-uru-empty-row" style={{ padding: '30px', textAlign: 'center' }}>
+                      Loading paid URU records...
+                    </td>
+                  </tr>
+                ) : filteredRecords.length === 0 ? (
+                  <tr>
+                    <td colSpan="7" className="fin-uru-empty-row">
+                      No paid URU applications found. When an application payment is confirmed, it will appear here automatically.
+                    </td>
                   </tr>
                 ) : (
-                  filteredRecords.map((item, index) => (
-                    <tr key={item.id} className="fin-uru-table-row">
-                      <td className="fin-uru-col-sl">{index + 1}</td>
-                      <td className="fin-uru-col-appno"><strong>{item.appNo}</strong></td>
-                      <td>{item.date}</td>
-                      <td className="fin-uru-col-name">{item.name}</td>
-                      <td>
-                        <span className="fin-uru-status-badge success">{item.paymentStatus}</span>
-                      </td>
-                      <td className="fin-uru-col-upload">
-                        <div className="fin-uru-file-picker">
-                          <label className="fin-uru-file-btn">
-                            Choose File
-                            <input 
-                              type="file" 
-                              className="fin-uru-hidden-input" 
-                              onChange={(e) => handleFileChange(item.id, e)}
-                            />
-                          </label>
-                          <span className="fin-uru-file-name" title={item.fileName}>
-                            {item.fileName}
+                  filteredRecords.map((item, index) => {
+                    const recordId = item.id || item._id;
+                    const isPublished = Boolean(item.published || item.isPublished);
+                    const isUploading = uploadingId === recordId;
+
+                    return (
+                      <tr key={recordId || index} className="fin-uru-table-row">
+                        <td className="fin-uru-col-sl">{index + 1}</td>
+                        <td className="fin-uru-col-appno">
+                          <strong>{item.appNo || item.applicationNumber}</strong>
+                        </td>
+                        <td>{item.date}</td>
+                        <td className="fin-uru-col-name">{item.name || item.applicantName}</td>
+                        <td>
+                          <span className="fin-uru-status-badge success">
+                            {item.paymentStatus || 'Success'}
                           </span>
-                        </div>
-                      </td>
-                      <td className="fin-uru-col-action">
-                        <div className="fin-uru-action-group">
-                          <button 
-                            className="fin-uru-btn-submit" 
-                            onClick={() => handleSubmit(item)}
-                          >
-                            Submit
-                          </button>
-                          <button 
-                            className="fin-uru-btn-delete" 
-                            onClick={() => handleDelete(item.id)}
-                          >
-                            Delete
-                          </button>
-                          <button 
-                            className={`fin-uru-btn-publish ${item.published ? 'published' : ''}`}
-                            onClick={() => handlePublish(item.id)}
-                          >
-                            {item.published ? 'Published' : 'Publish'}
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
+                        </td>
+                        <td className="fin-uru-col-upload">
+                          <div className="fin-uru-file-picker">
+                            <label className="fin-uru-file-btn">
+                              Choose File
+                              <input
+                                type="file"
+                                accept=".pdf,.png,.jpg,.jpeg,.doc,.docx"
+                                className="fin-uru-hidden-input"
+                                onChange={(e) => handleFileChange(recordId, e)}
+                              />
+                            </label>
+                            <span className="fin-uru-file-name" title={item.fileName || 'No file chosen'}>
+                              {item.certificateUrl ? (
+                                <a
+                                  href={item.certificateUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  style={{ color: '#7c3aed', textDecoration: 'underline' }}
+                                  title="Click to view existing certificate"
+                                >
+                                  {item.fileName || 'View Certificate'}
+                                </a>
+                              ) : (
+                                item.fileName || 'No file chosen'
+                              )}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="fin-uru-col-action">
+                          <div className="fin-uru-action-group">
+                            <button
+                              className="fin-uru-btn-submit"
+                              onClick={() => handleSubmitCertificate(item)}
+                              disabled={isUploading}
+                            >
+                              {isUploading ? 'Uploading…' : 'Submit'}
+                            </button>
+                            <button
+                              className="fin-uru-btn-delete"
+                              onClick={() => handleDelete(recordId)}
+                            >
+                              Delete
+                            </button>
+                            <button
+                              className={`fin-uru-btn-publish ${isPublished ? 'published' : ''}`}
+                              onClick={() => handlePublish(recordId)}
+                            >
+                              {isPublished ? 'Published' : 'Publish'}
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
                 )}
               </tbody>
             </table>
           </div>
         </section>
-
       </div>
     </div>
   );
 };
 
-export default FinallUru;
+export default FinallUru;
