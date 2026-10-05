@@ -127,7 +127,11 @@ const Sidebar = ({
           path: "/events/add",
           icon: <PlusCircle size={16} strokeWidth={2} />,
         },
-     
+        {
+          text: "Event Category",
+          path: "/events/category",
+          icon: <FolderKanban size={16} strokeWidth={2} />,
+        },
       ],
     },
 
@@ -247,8 +251,11 @@ const Sidebar = ({
           path: "/achievements/post",
           icon: <PlusCircle size={16} strokeWidth={2} />,
         },
-        
-       
+        {
+          text: "Achievement Category",
+          path: "/achievements/category",
+          icon: <Layers size={16} strokeWidth={2} />,
+        },
       ],
     },
 

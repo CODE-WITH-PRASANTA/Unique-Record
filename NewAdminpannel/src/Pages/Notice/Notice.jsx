@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import API from "../../api/axiosInstance";
 import "./Notice.css";
 
 /* =========================================
@@ -182,8 +183,9 @@ const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "
 
 const formatDate = (value) => {
   if (!value) return "-";
-  const [y, m, d] = value.split("-");
-  if (!y || !m || !d) return value;
+  const str = typeof value === "string" ? value.substring(0, 10) : "";
+  const [y, m, d] = str.split("-");
+  if (!y || !m || !d) return String(value);
   return `${d} ${MONTHS[Number(m) - 1] || m} ${y}`;
 };
 
@@ -226,6 +228,44 @@ const Notice = () => {
   const formCardRef = useRef(null);
   const toastTimer = useRef(null);
 
+  const [submitting, setSubmitting] = useState(false);
+
+  // Fetch notices from database
+  const fetchNotices = async () => {
+    try {
+      const res = await API.get("/notices/all");
+      if (res.data && res.data.success) {
+        const mapped = (res.data.data || []).map((item) => {
+          let photoObj = null;
+          if (item.photo) {
+            const photoUrl = typeof item.photo === "string" ? item.photo : item.photo?.url;
+            if (photoUrl) {
+              photoObj = { url: photoUrl, name: item.photo?.name || "Notice Photo" };
+            }
+          }
+          return {
+            ...item,
+            id: item._id || item.id,
+            photo: photoObj,
+            files: (item.files || []).map((f) => ({
+              id: f._id || f.id || uid(),
+              name: f.name || "Attachment",
+              size: f.size || 0,
+              url: typeof f === "string" ? f : f.url,
+            })),
+          };
+        });
+        setNotices(mapped);
+      }
+    } catch (err) {
+      console.error("Error fetching notices from database:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchNotices();
+  }, []);
+
   const noticesRef = useRef([]);
   const photoRef = useRef(null);
   const extraFilesRef = useRef([]);
@@ -235,7 +275,7 @@ const Notice = () => {
 
   const isSavedUrl = (url) =>
     noticesRef.current.some(
-      (item) => item.photo?.url === url || item.files.some((f) => f.url === url)
+      (item) => item.photo?.url === url || (item.files || []).some((f) => f.url === url)
     );
 
   const revokeIfUnsaved = (url) => {
@@ -247,11 +287,15 @@ const Notice = () => {
     return () => {
       clearTimeout(toastTimer.current);
       noticesRef.current.forEach((item) => {
-        revokeUrl(item.photo?.url);
-        item.files.forEach((f) => revokeUrl(f.url));
+        if (item.photo?.url) revokeUrl(item.photo.url);
+        (item.files || []).forEach((f) => {
+          if (f?.url) revokeUrl(f.url);
+        });
       });
-      revokeUrl(photoRef.current?.url);
-      extraFilesRef.current.forEach((f) => revokeUrl(f.url));
+      if (photoRef.current?.url) revokeUrl(photoRef.current.url);
+      extraFilesRef.current.forEach((f) => {
+        if (f?.url) revokeUrl(f.url);
+      });
     };
   }, []);
 
@@ -300,7 +344,7 @@ const Notice = () => {
     }
 
     if (photo) revokeIfUnsaved(photo.url);
-    setPhoto({ url: URL.createObjectURL(file), name: file.name });
+    setPhoto({ url: URL.createObjectURL(file), name: file.name, file });
     setErrors((prev) => ({ ...prev, photo: "" }));
   };
 
@@ -336,6 +380,7 @@ const Notice = () => {
         name: file.name,
         size: file.size,
         url: URL.createObjectURL(file),
+        file,
       });
     });
 
@@ -416,7 +461,7 @@ const Notice = () => {
     if (filesInputRef.current) filesInputRef.current.value = "";
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!validate()) {
@@ -424,61 +469,91 @@ const Notice = () => {
       return;
     }
 
-    const payload = {
-      postingDate: form.postingDate,
-      postOwner: form.postOwner.trim(),
-      title: form.title.trim(),
-      description: form.description.trim(),
-      link: normalizeUrl(form.link),
-      photo,
-      files: extraFiles,
-    };
+    setSubmitting(true);
 
-    if (editId) {
-      const oldItem = notices.find((item) => item.id === editId);
-      const updated = { ...oldItem, ...payload };
+    try {
+      const formData = new FormData();
+      formData.append("postingDate", form.postingDate);
+      formData.append("postOwner", form.postOwner.trim());
+      formData.append("title", form.title.trim());
+      formData.append("description", form.description.trim());
+      formData.append("link", normalizeUrl(form.link) || "");
 
-      setNotices((prev) => prev.map((item) => (item.id === editId ? updated : item)));
-
-      if (oldItem) {
-        const keep = new Set([updated.photo.url, ...updated.files.map((f) => f.url)]);
-        [oldItem.photo?.url, ...oldItem.files.map((f) => f.url)].forEach((url) => {
-          if (url && !keep.has(url)) revokeUrl(url);
-        });
+      if (photo?.file) {
+        formData.append("photo", photo.file);
+      } else if (photo?.url) {
+        formData.append("photo", photo.url);
       }
 
-      showToast("success", "Notice updated successfully.");
-      resetForm(false);
-      return;
+      extraFiles.forEach((fileObj) => {
+        if (fileObj.file) {
+          formData.append("files", fileObj.file);
+        }
+      });
+
+      const existingFiles = extraFiles
+        .filter((f) => !f.file && f.url)
+        .map((f) => ({ name: f.name, url: f.url, size: f.size || 0 }));
+      if (existingFiles.length > 0) {
+        formData.append("files", JSON.stringify(existingFiles));
+      }
+
+      if (editId) {
+        const res = await API.put(`/notices/${editId}`, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+
+        if (res.data && res.data.success) {
+          showToast("success", "Notice updated successfully.");
+          resetForm(false);
+          fetchNotices();
+        } else {
+          showToast("error", res.data?.message || "Failed to update notice.");
+        }
+      } else {
+        const res = await API.post("/notices", formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+
+        if (res.data && res.data.success) {
+          showToast("success", "Notice published to database successfully.");
+          resetForm(false);
+          setSearch("");
+          setCurrentPage(1);
+          fetchNotices();
+        } else {
+          showToast("error", res.data?.message || "Failed to create notice.");
+        }
+      }
+    } catch (err) {
+      console.error("Error saving notice:", err);
+      showToast("error", err.response?.data?.message || "Server error saving notice.");
+    } finally {
+      setSubmitting(false);
     }
-
-    const newItem = {
-      id: Date.now(),
-      active: true,
-      ...payload,
-    };
-
-    setNotices((prev) => [newItem, ...prev]);
-    setSearch("");
-    setCurrentPage(1);
-    showToast("success", "Notice published successfully.");
-    resetForm(false);
   };
 
   const handleEdit = (item) => {
-    if (photo) revokeIfUnsaved(photo.url);
-    extraFiles.forEach((f) => revokeIfUnsaved(f.url));
-
-    setEditId(item.id);
-    setForm({
-      postingDate: item.postingDate,
-      postOwner: item.postOwner,
-      title: item.title,
-      description: item.description,
-      link: item.link,
+    if (photo?.url) revokeIfUnsaved(photo.url);
+    extraFiles.forEach((f) => {
+      if (f?.url) revokeIfUnsaved(f.url);
     });
-    setPhoto(item.photo);
-    setExtraFiles([...item.files]);
+
+    setEditId(item.id || item._id);
+    let dateStr = "";
+    if (item.postingDate) {
+      dateStr = typeof item.postingDate === "string" ? item.postingDate.substring(0, 10) : "";
+    }
+
+    setForm({
+      postingDate: dateStr,
+      postOwner: item.postOwner || "",
+      title: item.title || "",
+      description: item.description || "",
+      link: item.link || "",
+    });
+    setPhoto(item.photo || null);
+    setExtraFiles([...(item.files || [])]);
     setErrors({});
 
     if (photoInputRef.current) photoInputRef.current.value = "";
@@ -487,26 +562,40 @@ const Notice = () => {
     formCardRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (!deleteTarget) return;
     const target = deleteTarget;
 
-    if (editId === target.id) resetForm(false);
-
-    setNotices((prev) => prev.filter((item) => item.id !== target.id));
-
-    revokeUrl(target.photo?.url);
-    target.files.forEach((f) => revokeUrl(f.url));
-
-    if (viewItem?.id === target.id) setViewItem(null);
-    setDeleteTarget(null);
-    showToast("success", "Notice deleted successfully.");
+    try {
+      const res = await API.delete(`/notices/${target.id || target._id}`);
+      if (res.data && res.data.success) {
+        showToast("success", "Notice deleted successfully.");
+        if (editId === target.id) resetForm(false);
+        if (viewItem?.id === target.id) setViewItem(null);
+        setDeleteTarget(null);
+        fetchNotices();
+      } else {
+        showToast("error", res.data?.message || "Failed to delete notice.");
+      }
+    } catch (err) {
+      console.error("Error deleting notice:", err);
+      showToast("error", "Failed to delete notice from database.");
+    }
   };
 
-  const toggleStatus = (id) => {
-    setNotices((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, active: !item.active } : item))
-    );
+  const toggleStatus = async (id) => {
+    try {
+      const res = await API.patch(`/notices/${id}/status`);
+      if (res.data && res.data.success) {
+        setNotices((prev) =>
+          prev.map((item) => (item.id === id ? { ...item, active: !item.active } : item))
+        );
+        showToast("success", res.data.message || "Status updated.");
+      }
+    } catch (err) {
+      console.error("Error toggling status:", err);
+      showToast("error", "Failed to update notice status.");
+    }
   };
 
   const filteredNotices = useMemo(() => {
@@ -807,11 +896,11 @@ const Notice = () => {
 
           {/* BUTTONS */}
           <div className="NoticeFormActions">
-            <button type="button" className="NoticeClearButton" onClick={() => resetForm()}>
+            <button type="button" className="NoticeClearButton" onClick={() => resetForm()} disabled={submitting}>
               {editId ? "Cancel Edit" : "Clear"}
             </button>
-            <button type="submit" className="NoticeSubmitButton">
-              {editId ? "Update Notice" : "Submit"}
+            <button type="submit" className="NoticeSubmitButton" disabled={submitting}>
+              {submitting ? "Saving..." : editId ? "Update Notice" : "Submit"}
             </button>
           </div>
         </form>
@@ -880,7 +969,23 @@ const Notice = () => {
 
                     <td data-label="Photo">
                       <div className="NoticeTableImage">
-                        <img key={item.photo.url} src={item.photo.url} alt={item.title} />
+                        {item.photo?.url ? (
+                          <img src={item.photo.url} alt={item.title} />
+                        ) : (
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              width: "100%",
+                              height: "100%",
+                              color: "var(--notice-text-muted, #94a3b8)",
+                              background: "var(--notice-surface-2, #f8fafc)",
+                            }}
+                          >
+                            <Icon name="image" size={18} />
+                          </div>
+                        )}
                       </div>
                     </td>
 
@@ -1063,9 +1168,11 @@ const Notice = () => {
             </div>
 
             <div className="NoticeModalBody">
-              <div className="NoticeModalImage">
-                <img src={viewItem.photo.url} alt={viewItem.title} />
-              </div>
+              {viewItem.photo?.url && (
+                <div className="NoticeModalImage">
+                  <img src={viewItem.photo.url} alt={viewItem.title} />
+                </div>
+              )}
 
               <h4 className="NoticeModalTitle">{viewItem.title}</h4>
 
@@ -1083,23 +1190,25 @@ const Notice = () => {
 
               <p className="NoticeModalDescription">{viewItem.description}</p>
 
-              <a
-                className="NoticeModalLink"
-                href={viewItem.link}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Icon name="link" size={15} />
-                <span>{viewItem.link}</span>
-                <Icon name="external" size={14} />
-              </a>
+              {viewItem.link && (
+                <a
+                  className="NoticeModalLink"
+                  href={viewItem.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Icon name="link" size={15} />
+                  <span>{viewItem.link}</span>
+                  <Icon name="external" size={14} />
+                </a>
+              )}
 
-              {viewItem.files.length > 0 && (
+              {(viewItem.files || []).length > 0 && (
                 <div className="NoticeModalFiles">
                   <h5>Attached Files</h5>
                   <ul className="NoticeFileList">
-                    {viewItem.files.map((file) => (
-                      <li key={file.id} className="NoticeFileItem">
+                    {(viewItem.files || []).map((file) => (
+                      <li key={file.id || file._id || file.url} className="NoticeFileItem">
                         <span className="NoticeFileExt">{getExt(file.name) || "file"}</span>
                         <div className="NoticeFileInfo">
                           <strong title={file.name}>{file.name}</strong>
@@ -1111,6 +1220,8 @@ const Notice = () => {
                           download={file.name}
                           title="Download"
                           aria-label={`Download ${file.name}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
                         >
                           <Icon name="download" size={15} />
                         </a>

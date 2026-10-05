@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import API from "../../api/axiosInstance";
 import { 
   FiSearch, 
   FiGrid, 
@@ -14,65 +16,92 @@ import {
 } from "react-icons/fi";
 import "./BlogManage.css";
 
-// Sample initial blog data with images
-const initialBlogs = [
-  {
-    id: 1,
-    title: "Luxury Living in Baramunda Apartments",
-    author: "Admin",
-    category: "Apartments",
-    date: "Sep 22, 2026",
-    status: "Published",
-    image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=600&q=80",
-    desc: "Experience high-end residential living with state-of-the-art facilities in Baramunda."
-  },
-  {
-    id: 2,
-    title: "Real Estate Investment Trends 2026",
-    author: "Property Expert",
-    category: "Commercial",
-    date: "Sep 20, 2026",
-    status: "Draft",
-    image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=600&q=80",
-    desc: "An in-depth look at commercial real estate growth and future projections in Bhubaneswar."
-  },
-  {
-    id: 3,
-    title: "Exploring Independent Villas in Patia",
-    author: "Editorial Team",
-    category: "Villas",
-    date: "Sep 18, 2026",
-    status: "Published",
-    image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=600&q=80",
-    desc: "Discover spacious luxury villas offering supreme privacy and modern architecture."
-  }
-];
-
 const BlogManage = () => {
-  const [blogs, setBlogs] = useState(initialBlogs);
+  const navigate = useNavigate();
+
+  const [blogs, setBlogs] = useState([]);
+  const [categories, setCategories] = useState(["All"]);
   const [viewMode, setViewMode] = useState("grid"); // 'grid' or 'list'
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [statusFilter, setStatusFilter] = useState("All"); // 'All', 'Published', 'Draft'
 
-  const handleDelete = (id) => {
-    if (window.confirm("Are you sure you want to delete this blog?")) {
-      setBlogs(blogs.filter((blog) => blog.id !== id));
+  // Fetch blogs from database (including Drafts and Published)
+  const fetchBlogs = async () => {
+    try {
+      const res = await API.get("/blogs/all");
+      if (res.data && res.data.success) {
+        setBlogs(res.data.data || []);
+      }
+    } catch (err) {
+      console.error("Error fetching blogs from database:", err);
     }
   };
 
-  const handleToggleStatus = (id) => {
-    setBlogs(blogs.map(blog => {
-      if (blog.id === id) {
-        const newStatus = blog.status === "Published" ? "Draft" : "Published";
-        return { ...blog, status: newStatus };
+  // Fetch categories from database
+  const fetchCategories = async () => {
+    try {
+      const res = await API.get("/categories");
+      if (res.data && res.data.success) {
+        const catNames = res.data.data.map((c) => c.name);
+        setCategories(["All", ...catNames]);
       }
-      return blog;
-    }));
+    } catch (err) {
+      console.warn("Could not load categories for filter:", err);
+      setCategories(["All", "Apartments", "Commercial", "Villas"]);
+    }
+  };
+
+  useEffect(() => {
+    fetchBlogs();
+    fetchCategories();
+  }, []);
+
+  const handleDelete = async (id) => {
+    if (window.confirm("Are you sure you want to delete this blog?")) {
+      try {
+        const res = await API.delete(`/blogs/${id}`);
+        if (res.data && res.data.success) {
+          setBlogs(blogs.filter((blog) => (blog._id || blog.id) !== id));
+          alert("Blog deleted successfully!");
+        }
+      } catch (err) {
+        console.error("Error deleting blog:", err);
+        alert("Failed to delete blog from database.");
+      }
+    }
+  };
+
+  const handleToggleStatus = async (id) => {
+    try {
+      const res = await API.patch(`/blogs/${id}/status`);
+      if (res.data && res.data.success) {
+        const updatedBlog = res.data.data;
+        setBlogs(
+          blogs.map((blog) =>
+            (blog._id || blog.id) === id ? updatedBlog : blog
+          )
+        );
+      }
+    } catch (err) {
+      console.error("Error toggling blog status:", err);
+    }
+  };
+
+  const formatDate = (dateStr) => {
+    if (!dateStr) return "N/A";
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return dateStr;
+    return d.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
   };
 
   const filteredBlogs = blogs.filter((blog) => {
-    const matchesSearch = blog.title.toLowerCase().includes(searchTerm.toLowerCase());
+    const title = blog.title || "";
+    const matchesSearch = title.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCat = selectedCategory === "All" || blog.category === selectedCategory;
     const matchesStatus = statusFilter === "All" || blog.status === statusFilter;
     return matchesSearch && matchesCat && matchesStatus;
@@ -123,7 +152,7 @@ const BlogManage = () => {
       {/* FILTER TOOLBAR: CATEGORY & STATUS BUTTONS */}
       <div className="blog-filter-toolbar">
         <div className="blog-manage-filters">
-          {["All", "Apartments", "Commercial", "Villas"].map((cat) => (
+          {categories.map((cat) => (
             <button
               key={cat}
               type="button"
@@ -157,10 +186,21 @@ const BlogManage = () => {
           /* ================= GRID VIEW ================= */
           <div className="blog-grid-view">
             {filteredBlogs.map((blog) => (
-              <div key={blog.id} className="blog-grid-card">
+              <div key={blog._id || blog.id} className="blog-grid-card">
                 <div className="blog-grid-img-wrap">
-                  <img src={blog.image} alt={blog.title} className="blog-grid-img" />
-                  <span className={`blog-status-tag ${blog.status.toLowerCase()}`}>
+                  <img
+                    src={
+                      blog.image ||
+                      "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=600&q=80"
+                    }
+                    alt={blog.title}
+                    className="blog-grid-img"
+                    onError={(e) => {
+                      e.target.src =
+                        "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=600&q=80";
+                    }}
+                  />
+                  <span className={`blog-status-tag ${(blog.status || "published").toLowerCase()}`}>
                     {blog.status}
                   </span>
                   <span className="blog-cat-tag">
@@ -170,30 +210,51 @@ const BlogManage = () => {
 
                 <div className="blog-grid-body">
                   <div className="blog-grid-meta">
-                    <span><FiCalendar size={13} /> {blog.date}</span>
-                    <span><FiUser size={13} /> {blog.author}</span>
+                    <span>
+                      <FiCalendar size={13} /> {formatDate(blog.createdAt || blog.date)}
+                    </span>
+                    <span>
+                      <FiUser size={13} /> {blog.author || "Admin"}
+                    </span>
                   </div>
                   <h3 className="blog-grid-heading">{blog.title}</h3>
-                  <p className="blog-grid-desc">{blog.desc}</p>
+                  <p className="blog-grid-desc">
+                    {blog.shortDesc ||
+                      blog.desc ||
+                      blog.content?.replace(/<[^>]*>?/gm, "").substring(0, 100) ||
+                      ""}
+                  </p>
                 </div>
 
                 <div className="blog-grid-footer">
                   <button 
-                    className={`blog-status-toggle-btn ${blog.status.toLowerCase()}`}
-                    onClick={() => handleToggleStatus(blog.id)}
+                    className={`blog-status-toggle-btn ${(blog.status || "published").toLowerCase()}`}
+                    onClick={() => handleToggleStatus(blog._id || blog.id)}
                     title="Click to toggle status"
                   >
                     {blog.status === "Published" ? "Make Draft" : "Publish Now"}
                   </button>
 
                   <div className="blog-grid-right-btns">
-                    <button className="blog-action-btn view" title="Preview">
+                    <button
+                      className="blog-action-btn view"
+                      title="Preview"
+                      onClick={() => navigate("/blogs/create", { state: { blog } })}
+                    >
                       <FiEye size={14} />
                     </button>
-                    <button className="blog-action-btn edit" title="Edit">
+                    <button
+                      className="blog-action-btn edit"
+                      title="Edit"
+                      onClick={() => navigate("/blogs/create", { state: { blog } })}
+                    >
                       <FiEdit3 size={14} />
                     </button>
-                    <button className="blog-action-btn delete" title="Delete" onClick={() => handleDelete(blog.id)}>
+                    <button
+                      className="blog-action-btn delete"
+                      title="Delete"
+                      onClick={() => handleDelete(blog._id || blog.id)}
+                    >
                       <FiTrash2 size={14} />
                     </button>
                   </div>
@@ -219,24 +280,43 @@ const BlogManage = () => {
                 </thead>
                 <tbody>
                   {filteredBlogs.map((blog) => (
-                    <tr key={blog.id}>
+                    <tr key={blog._id || blog.id}>
                       <td>
-                        <img src={blog.image} alt="" className="blog-list-thumb" />
+                        <img
+                          src={
+                            blog.image ||
+                            "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=600&q=80"
+                          }
+                          alt=""
+                          className="blog-list-thumb"
+                          onError={(e) => {
+                            e.target.src =
+                              "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=600&q=80";
+                          }}
+                        />
                       </td>
                       <td className="blog-list-title-cell">
                         <strong>{blog.title}</strong>
-                        <p>{blog.desc.substring(0, 50)}...</p>
+                        <p>
+                          {(
+                            blog.shortDesc ||
+                            blog.desc ||
+                            blog.content?.replace(/<[^>]*>?/gm, "") ||
+                            ""
+                          ).substring(0, 50)}
+                          ...
+                        </p>
                       </td>
                       <td>
                         <span className="blog-table-cat">{blog.category}</span>
                       </td>
-                      <td>{blog.author}</td>
-                      <td>{blog.date}</td>
+                      <td>{blog.author || "Admin"}</td>
+                      <td>{formatDate(blog.createdAt || blog.date)}</td>
                       <td>
                         <button
                           type="button"
-                          className={`blog-status-badge-btn ${blog.status.toLowerCase()}`}
-                          onClick={() => handleToggleStatus(blog.id)}
+                          className={`blog-status-badge-btn ${(blog.status || "published").toLowerCase()}`}
+                          onClick={() => handleToggleStatus(blog._id || blog.id)}
                           title="Click to toggle status"
                         >
                           {blog.status}
@@ -244,13 +324,25 @@ const BlogManage = () => {
                       </td>
                       <td>
                         <div className="blog-list-actions">
-                          <button className="blog-action-btn view" title="Preview">
+                          <button
+                            className="blog-action-btn view"
+                            title="Preview"
+                            onClick={() => navigate("/blogs/create", { state: { blog } })}
+                          >
                             <FiEye size={13} />
                           </button>
-                          <button className="blog-action-btn edit" title="Edit">
+                          <button
+                            className="blog-action-btn edit"
+                            title="Edit"
+                            onClick={() => navigate("/blogs/create", { state: { blog } })}
+                          >
                             <FiEdit3 size={13} />
                           </button>
-                          <button className="blog-action-btn delete" title="Delete" onClick={() => handleDelete(blog.id)}>
+                          <button
+                            className="blog-action-btn delete"
+                            title="Delete"
+                            onClick={() => handleDelete(blog._id || blog.id)}
+                          >
                             <FiTrash2 size={13} />
                           </button>
                         </div>

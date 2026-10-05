@@ -10,35 +10,25 @@ import {
   ChevronsUpDown,
   ChevronLeft,
   ChevronRight,
-  Receipt,
+  FileSpreadsheet,
+  Mail,
+  User,
 } from "lucide-react";
 
 import "./DashboardHistory.css";
 
-/* ---------------------------------------------------
-   Dummy data — swap via the `transactions` prop once
-   your API is wired in. Shape shown below.
---------------------------------------------------- */
 const defaultTransactions = [
-  { id: "TXN-1042", user: "Rahul Sharma", category: "Water Can Delivery", date: "2026-09-23T10:42:00", amount: 480, status: "paid" },
-  { id: "TXN-1041", user: "Priya Nair", category: "Subscription Renewal", date: "2026-09-23T09:15:00", amount: 1200, status: "paid" },
-  { id: "TXN-1040", user: "Amit Verma", category: "Bottle Deposit Return", date: "2026-09-22T18:05:00", amount: 150, status: "pending" },
-  { id: "TXN-1039", user: "Sneha Patil", category: "Custom Bulk Order", date: "2026-09-22T14:30:00", amount: 3600, status: "paid" },
-  { id: "TXN-1038", user: "Vikram Singh", category: "Delivery Charge", date: "2026-09-22T11:20:00", amount: 60, status: "failed" },
-  { id: "TXN-1037", user: "Anjali Gupta", category: "Monthly Plan Upgrade", date: "2026-09-21T17:48:00", amount: 2400, status: "paid" },
-  { id: "TXN-1036", user: "Rohit Das", category: "Water Can Delivery", date: "2026-09-21T09:02:00", amount: 480, status: "pending" },
-  { id: "TXN-1035", user: "Kavya Reddy", category: "Late Fee Payment", date: "2026-09-20T20:11:00", amount: 100, status: "failed" },
-  { id: "TXN-1034", user: "Manish Kumar", category: "Subscription Renewal", date: "2026-09-20T12:55:00", amount: 1200, status: "paid" },
-  { id: "TXN-1033", user: "Divya Iyer", category: "Custom Bulk Order", date: "2026-09-19T16:40:00", amount: 5400, status: "paid" },
-  { id: "TXN-1032", user: "Suresh Rao", category: "Bottle Deposit Return", date: "2026-09-19T08:25:00", amount: 150, status: "paid" },
-  { id: "TXN-1031", user: "Neha Joshi", category: "Water Can Delivery", date: "2026-09-18T19:10:00", amount: 480, status: "pending" },
-  { id: "TXN-1030", user: "Arjun Mehta", category: "Delivery Charge", date: "2026-09-18T10:00:00", amount: 60, status: "paid" },
+  { id: "INQ-AA2D", user: "Saroj Kumar", category: "Contact Inquiry", email: "saroj@gmail.com", date: new Date().toISOString(), message: "Interested in world record submission guidelines and event registrations.", status: "approved" },
+  { id: "SUB-22DF", user: "Saroj Mallik", category: "Newsletter Subscription", email: "sarojkumar@gmail.com", date: new Date().toISOString(), message: "Subscribed with email: sarojkumar@gmail.com", status: "approved" },
+  { id: "CMT-AE32", user: "Cricket Fan", category: "Blog Feedback", email: "fan@gmail.com", date: new Date().toISOString(), message: "Great insights on the record breaking innings by Sanju Samson!", status: "approved" },
+  { id: "CMT-AE31", user: "Rahul Sharma", category: "Blog Feedback", email: "rahul@gmail.com", date: new Date().toISOString(), message: "Looking forward to upcoming cricket awards and achievements.", status: "pending" },
 ];
 
 const statusMeta = {
-  paid: { label: "Paid", color: "#16a34a", bg: "#e7f8ee" },
-  pending: { label: "Pending", color: "#b45309", bg: "#fef3c8" },
-  failed: { label: "Failed", color: "#dc2626", bg: "#fde8e8" },
+  approved: { label: "Approved", color: "#16a34a", bg: "#e7f8ee" },
+  pending: { label: "Pending Review", color: "#b45309", bg: "#fef3c8" },
+  draft: { label: "Draft", color: "#64748b", bg: "#f1f5f9" },
+  rejected: { label: "Rejected", color: "#dc2626", bg: "#fde8e8" },
 };
 
 const categoryPalette = ["#2f6bff", "#9b3cf5", "#16c79a", "#f97316", "#ec4899"];
@@ -51,8 +41,10 @@ function categoryColor(category) {
 }
 
 function initialsOf(name) {
+  if (!name) return "U";
   return name
     .split(" ")
+    .filter(Boolean)
     .map((p) => p[0])
     .slice(0, 2)
     .join("")
@@ -68,11 +60,12 @@ const dateFormatter = new Intl.DateTimeFormat("en-IN", {
 });
 
 function formatDate(iso) {
-  return dateFormatter.format(new Date(iso));
-}
-
-function formatAmount(value) {
-  return `₹${Number(value).toLocaleString("en-IN")}`;
+  if (!iso) return "Recently";
+  try {
+    return dateFormatter.format(new Date(iso));
+  } catch {
+    return "Recently";
+  }
 }
 
 function downloadTextFile(filename, content, mime = "text/plain") {
@@ -88,28 +81,32 @@ function downloadTextFile(filename, content, mime = "text/plain") {
 }
 
 function buildCsv(rows) {
-  const header = ["Transaction ID", "User Name", "Category", "Date/Time", "Amount", "Status"];
-  const lines = rows.map((r) =>
-    [r.id, r.user, r.category, formatDate(r.date), r.amount, statusMeta[r.status].label]
+  const header = ["ID", "User / Contact", "Category", "Email", "Date/Time", "Message / Note", "Status"];
+  const lines = rows.map((r) => {
+    const meta = statusMeta[r.status] || statusMeta.approved;
+    return [r.id, r.user, r.category, r.email || "", formatDate(r.date), r.message || "", meta.label]
       .map((v) => `"${String(v).replace(/"/g, '""')}"`)
-      .join(",")
-  );
+      .join(",");
+  });
   return [header.join(","), ...lines].join("\n");
 }
 
 const PAGE_SIZE = 5;
 const columns = [
-  { key: "user", label: "User Name" },
+  { key: "user", label: "User / Contact" },
   { key: "category", label: "Category" },
   { key: "date", label: "Date/Time" },
-  { key: "amount", label: "Amount" },
+  { key: "message", label: "Message / Detail" },
   { key: "status", label: "Status" },
 ];
 
 const DashboardHistory = ({
-  transactions = defaultTransactions,
-  title = "Transaction History",
+  submissions = null,
+  title = "Recent Inquiries & Community Submissions",
+  onRefresh = null,
 }) => {
+  const transactions = (submissions && submissions.length > 0) ? submissions : defaultTransactions;
+
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [sortKey, setSortKey] = useState("date");
@@ -123,10 +120,19 @@ const DashboardHistory = ({
     let rows = transactions.filter((t) => {
       const matchesTerm =
         !term ||
-        t.user.toLowerCase().includes(term) ||
-        t.category.toLowerCase().includes(term) ||
-        t.id.toLowerCase().includes(term);
-      const matchesStatus = statusFilter === "all" || t.status === statusFilter;
+        (t.user && t.user.toLowerCase().includes(term)) ||
+        (t.category && t.category.toLowerCase().includes(term)) ||
+        (t.email && t.email.toLowerCase().includes(term)) ||
+        (t.message && t.message.toLowerCase().includes(term)) ||
+        (t.id && t.id.toLowerCase().includes(term));
+      
+      let matchesStatus = true;
+      if (statusFilter === "approved") matchesStatus = t.status === "approved";
+      else if (statusFilter === "pending") matchesStatus = t.status === "pending";
+      else if (statusFilter === "inquiry") matchesStatus = t.category.toLowerCase().includes("inquiry") || t.category.toLowerCase().includes("contact");
+      else if (statusFilter === "feedback") matchesStatus = t.category.toLowerCase().includes("feedback") || t.category.toLowerCase().includes("comment");
+      else if (statusFilter === "newsletter") matchesStatus = t.category.toLowerCase().includes("newsletter");
+
       return matchesTerm && matchesStatus;
     });
 
@@ -134,13 +140,11 @@ const DashboardHistory = ({
       let av = a[sortKey];
       let bv = b[sortKey];
       if (sortKey === "date") {
-        av = new Date(av).getTime();
-        bv = new Date(bv).getTime();
-      } else if (sortKey === "amount") {
-        // numeric already
+        av = new Date(av || 0).getTime();
+        bv = new Date(bv || 0).getTime();
       } else {
-        av = String(av).toLowerCase();
-        bv = String(bv).toLowerCase();
+        av = String(av || "").toLowerCase();
+        bv = String(bv || "").toLowerCase();
       }
       if (av < bv) return sortDir === "asc" ? -1 : 1;
       if (av > bv) return sortDir === "asc" ? 1 : -1;
@@ -169,6 +173,9 @@ const DashboardHistory = ({
 
   const handleRefresh = () => {
     setIsRefreshing(true);
+    if (typeof onRefresh === "function") {
+      onRefresh();
+    }
     setTimeout(() => {
       setSearchTerm("");
       setStatusFilter("all");
@@ -181,33 +188,19 @@ const DashboardHistory = ({
 
   const handleExport = () => {
     downloadTextFile(
-      "transaction-history.csv",
+      "unique-record-submissions.csv",
       buildCsv(filtered),
       "text/csv"
     );
   };
 
-  const handleDownloadReceipt = (txn) => {
-    const receipt = [
-      "ALKA DROPS — PAYMENT RECEIPT",
-      "-----------------------------",
-      `Transaction ID : ${txn.id}`,
-      `User           : ${txn.user}`,
-      `Category       : ${txn.category}`,
-      `Date/Time      : ${formatDate(txn.date)}`,
-      `Amount         : ${formatAmount(txn.amount)}`,
-      `Status         : ${statusMeta[txn.status].label}`,
-      "-----------------------------",
-      "Thank you for your business.",
-    ].join("\n");
-    downloadTextFile(`${txn.id}-receipt.txt`, receipt);
-  };
-
   const statusFilters = [
-    { key: "all", label: "All" },
-    { key: "paid", label: "Paid" },
+    { key: "all", label: "All Items" },
+    { key: "inquiry", label: "Inquiries" },
+    { key: "feedback", label: "Feedback" },
+    { key: "newsletter", label: "Newsletter" },
+    { key: "approved", label: "Approved" },
     { key: "pending", label: "Pending" },
-    { key: "failed", label: "Failed" },
   ];
 
   return (
@@ -220,8 +213,8 @@ const DashboardHistory = ({
         <div>
           <h1 className="DashboardHistory-bannerTitle">{title}</h1>
           <p className="DashboardHistory-bannerSubtitle">
-            {filtered.length} transaction{filtered.length !== 1 ? "s" : ""}{" "}
-            found
+            {filtered.length} active record{filtered.length !== 1 ? "s" : ""}{" "}
+            found across inquiry, feedback, and subscribers
           </p>
         </div>
       </div>
@@ -237,7 +230,7 @@ const DashboardHistory = ({
             <input
               type="text"
               className="DashboardHistory-searchInput"
-              placeholder="Search by user, category or ID..."
+              placeholder="Search by contact name, email, topic or message..."
               value={searchTerm}
               onChange={(e) => {
                 setSearchTerm(e.target.value);
@@ -326,15 +319,15 @@ const DashboardHistory = ({
               {pageRows.length === 0 ? (
                 <tr>
                   <td colSpan={columns.length + 1} className="DashboardHistory-emptyCell">
-                    No recent transactions found
+                    No submissions found
                   </td>
                 </tr>
               ) : (
                 pageRows.map((txn) => {
-                  const meta = statusMeta[txn.status];
+                  const meta = statusMeta[txn.status] || statusMeta.approved;
                   return (
                     <tr key={txn.id} className="DashboardHistory-tr">
-                      <td data-label="User Name" className="DashboardHistory-td">
+                      <td data-label="User / Contact" className="DashboardHistory-td">
                         <div className="DashboardHistory-userCell">
                           <span
                             className="DashboardHistory-avatar"
@@ -342,9 +335,16 @@ const DashboardHistory = ({
                           >
                             {initialsOf(txn.user)}
                           </span>
-                          <span className="DashboardHistory-userName">
-                            {txn.user}
-                          </span>
+                          <div>
+                            <span className="DashboardHistory-userName">
+                              {txn.user}
+                            </span>
+                            {txn.email && (
+                              <div style={{ fontSize: "11px", color: "#64748b" }}>
+                                {txn.email}
+                              </div>
+                            )}
+                          </div>
                         </div>
                       </td>
 
@@ -364,9 +364,9 @@ const DashboardHistory = ({
                         {formatDate(txn.date)}
                       </td>
 
-                      <td data-label="Amount" className="DashboardHistory-td">
-                        <span className="DashboardHistory-amount">
-                          {formatAmount(txn.amount)}
+                      <td data-label="Message / Detail" className="DashboardHistory-td">
+                        <span className="DashboardHistory-amount" style={{ fontSize: "13px", fontWeight: "500", color: "#475569" }}>
+                          {txn.message ? (txn.message.length > 55 ? `${txn.message.slice(0, 55)}...` : txn.message) : "—"}
                         </span>
                       </td>
 
@@ -438,7 +438,7 @@ const DashboardHistory = ({
             onClick={(e) => e.stopPropagation()}
           >
             <div className="DashboardHistory-modalHeader">
-              <h3>Transaction Details</h3>
+              <h3>Submission & Inquiry Details</h3>
               <button
                 type="button"
                 className="DashboardHistory-modalClose"
@@ -450,35 +450,43 @@ const DashboardHistory = ({
 
             <div className="DashboardHistory-modalBody">
               <div className="DashboardHistory-modalRow">
-                <span>Transaction ID</span>
+                <span>Record ID</span>
                 <strong>{selected.id}</strong>
               </div>
               <div className="DashboardHistory-modalRow">
-                <span>User</span>
+                <span>Name</span>
                 <strong>{selected.user}</strong>
               </div>
+              {selected.email && (
+                <div className="DashboardHistory-modalRow">
+                  <span>Email</span>
+                  <strong>{selected.email}</strong>
+                </div>
+              )}
               <div className="DashboardHistory-modalRow">
                 <span>Category</span>
                 <strong>{selected.category}</strong>
               </div>
               <div className="DashboardHistory-modalRow">
-                <span>Date/Time</span>
+                <span>Submitted On</span>
                 <strong>{formatDate(selected.date)}</strong>
               </div>
-              <div className="DashboardHistory-modalRow">
-                <span>Amount</span>
-                <strong>{formatAmount(selected.amount)}</strong>
+              <div className="DashboardHistory-modalRow" style={{ flexDirection: "column", alignItems: "flex-start", gap: "6px" }}>
+                <span>Message Content:</span>
+                <div style={{ background: "#f8fafc", padding: "12px", borderRadius: "8px", width: "100%", fontSize: "13px", lineHeight: "1.5", color: "#1e293b", border: "1px solid #e2e8f0" }}>
+                  {selected.message || "No additional message provided."}
+                </div>
               </div>
               <div className="DashboardHistory-modalRow">
                 <span>Status</span>
                 <span
                   className="DashboardHistory-statusPill"
                   style={{
-                    color: statusMeta[selected.status].color,
-                    background: statusMeta[selected.status].bg,
+                    color: (statusMeta[selected.status] || statusMeta.approved).color,
+                    background: (statusMeta[selected.status] || statusMeta.approved).bg,
                   }}
                 >
-                  {statusMeta[selected.status].label}
+                  {(statusMeta[selected.status] || statusMeta.approved).label}
                 </span>
               </div>
             </div>
@@ -487,10 +495,9 @@ const DashboardHistory = ({
               <button
                 type="button"
                 className="DashboardHistory-actionBtn DashboardHistory-actionBtn--primary"
-                onClick={() => handleDownloadReceipt(selected)}
+                onClick={() => setSelected(null)}
               >
-                <Receipt size={15} />
-                Download Receipt
+                Close View
               </button>
             </div>
           </div>

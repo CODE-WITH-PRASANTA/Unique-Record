@@ -104,11 +104,14 @@ function Layout() {
           <Route path="/media" element={<Media />} />
           <Route path="/vision" element={<Vision />} />
           <Route path="/achivments" element={<OurAchivments />} />
+          <Route path="/achievements" element={<OurAchivments />} />
+          <Route path="/archivement/:name" element={<AchivmentDetails />} />
+          <Route path="/achievement/:name" element={<AchivmentDetails />} />
           <Route path="/achievers" element={<AchiverDetails />} />
           <Route path="/achiever/:id" element={<AchiversAbout />} />
           <Route path="/achivment-details/:id" element={<AchivmentDetails />} />
           <Route path="/blog" element={<Blog />} />
-          <Route path="/blog/:id" element={<BlogDetails />} />
+          <Route path="/blog/:slug" element={<BlogDetails />} />
           <Route path="/login" element={<Login />} />
           <Route path="/event" element={<Event />} />
           <Route path="/donate" element={<Donate />} />

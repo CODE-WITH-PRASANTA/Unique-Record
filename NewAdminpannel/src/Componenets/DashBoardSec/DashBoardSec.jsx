@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
 import {
   Trophy,
-  Target,
-  CheckCircle2,
   Bell,
-  Wallet,
-  Truck,
+  Layers,
   ChevronRight,
   Inbox,
   BellOff,
   X,
+  BookOpen,
+  Calendar,
+  MailCheck,
+  MessageSquareText,
 } from "lucide-react";
 
 import "./DashBoardSec.css";
@@ -17,23 +18,20 @@ import "./DashBoardSec.css";
 const defaultAchievements = [
   {
     id: "ach-1",
-    icon: <Trophy size={16} />,
-    title: "50 Orders Delivered",
-    meta: "2 days ago",
+    title: "Saroj Kumar Mallik",
+    meta: "Sports Category • Verified Record",
     tone: "blue",
   },
   {
     id: "ach-2",
-    icon: <Target size={16} />,
-    title: "₹50,000 Sales Milestone Reached",
-    meta: "5 days ago",
+    title: "National Excellence Award",
+    meta: "Leadership • Approved",
     tone: "blue",
   },
   {
     id: "ach-3",
-    icon: <CheckCircle2 size={16} />,
-    title: "Zero Pending Complaints This Week",
-    meta: "1 week ago",
+    title: "Youngest Record Holder 2026",
+    meta: "Academics • Published",
     tone: "blue",
   },
 ];
@@ -41,32 +39,33 @@ const defaultAchievements = [
 const defaultNotifications = [
   {
     id: "notif-1",
-    icon: <Bell size={16} />,
-    title: "New order received from Rahul Sharma",
+    type: "opinion",
+    title: "New contact inquiry received from visitor",
     meta: "10 mins ago",
     read: false,
   },
   {
     id: "notif-2",
-    icon: <Wallet size={16} />,
-    title: "Payment of ₹2,500 confirmed",
+    type: "subscriber",
+    title: "New newsletter subscription confirmed",
     meta: "1 hour ago",
     read: false,
   },
   {
     id: "notif-3",
-    icon: <Truck size={16} />,
-    title: "Delivery boy assigned to Route 3",
+    type: "event",
+    title: "Upcoming event schedule updated",
     meta: "3 hours ago",
     read: true,
   },
 ];
 
-const defaultExpenseSegments = [
-  { key: "paid", label: "Paid", value: 62, color: "#22c55e" },
-  { key: "pending", label: "Pending", value: 18, color: "#eab308" },
-  { key: "formFilled", label: "Total Form Filled", value: 13, color: "#ef4444" },
-  { key: "moneyUpdated", label: "Total Money Updated", value: 7, color: "#3b82f6" },
+const defaultDistribution = [
+  { key: "blogs", label: "Blogs & Articles", value: 3, color: "#3b82f6" },
+  { key: "events", label: "Events & Programs", value: 1, color: "#10b981" },
+  { key: "achievements", label: "Achievements", value: 2, color: "#8b5cf6" },
+  { key: "opinions", label: "User Inquiries", value: 2, color: "#f59e0b" },
+  { key: "gallery", label: "Media & Photos", value: 1, color: "#ec4899" },
 ];
 
 function DonutChart({
@@ -80,7 +79,7 @@ function DonutChart({
   const cx = size / 2;
   const cy = size / 2;
   const r = 72;
-  const strokeWidth = 36;
+  const strokeWidth = 34;
   const circumference = 2 * Math.PI * r;
   const gap = 3;
   const total = segments.reduce((sum, s) => sum + s.value, 0) || 1;
@@ -101,7 +100,7 @@ function DonutChart({
         className="DashBoardSec-donutSvg"
         viewBox={`0 0 ${size} ${size}`}
         role="img"
-        aria-label="Total expenses breakdown"
+        aria-label="Content distribution breakdown"
       >
         <defs>
           <filter id="dbsDonutShadow" x="-40%" y="-40%" width="180%" height="180%">
@@ -171,15 +170,56 @@ function DonutChart({
 }
 
 const DashBoardSec = ({
-  achievements = defaultAchievements,
-  notifications: notificationsProp = defaultNotifications,
-  expenseSegments = defaultExpenseSegments,
-  totalExpensesValue = "₹1,24,500",
+  achievementsList = null,
+  recentActivityList = null,
+  distributionSegments = null,
+  totalItemsCount = 0,
   onViewAllAchievements,
 }) => {
-  const [notifications, setNotifications] = useState(notificationsProp);
+  // Format achievements
+  const achievements = (achievementsList && achievementsList.length > 0)
+    ? achievementsList.map((item, i) => ({
+        id: item._id || `ach-${i}`,
+        title: item.title || item.heading || "Untitled Achievement",
+        meta: `${item.category || "General"} • ${item.status || "Published"}`,
+        tone: "blue",
+      }))
+    : defaultAchievements;
+
+  // Format notifications / recent activity
+  const initialNotifications = (recentActivityList && recentActivityList.length > 0)
+    ? recentActivityList.map((act, i) => ({
+        id: act.id || `notif-${i}`,
+        type: act.type,
+        title: act.title,
+        meta: act.meta,
+        read: i > 2, // first 3 unread by default
+      }))
+    : defaultNotifications;
+
+  const [notifications, setNotifications] = useState(initialNotifications);
   const [hoveredKey, setHoveredKey] = useState(null);
   const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    if (recentActivityList && recentActivityList.length > 0) {
+      setNotifications(
+        recentActivityList.map((act, i) => ({
+          id: act.id || `notif-${i}`,
+          type: act.type,
+          title: act.title,
+          meta: act.meta,
+          read: i > 2,
+        }))
+      );
+    }
+  }, [recentActivityList]);
+
+  const expenseSegments = (distributionSegments && distributionSegments.length > 0)
+    ? distributionSegments
+    : defaultDistribution;
+
+  const totalDisplay = totalItemsCount > 0 ? `${totalItemsCount} Items` : "100%";
 
   const unreadCount = notifications.filter((n) => !n.read).length;
 
@@ -198,6 +238,14 @@ const DashBoardSec = ({
       onViewAllAchievements();
     }
     setShowModal(true);
+  };
+
+  const getNotifIcon = (type) => {
+    if (type === "blog") return <BookOpen size={15} />;
+    if (type === "event") return <Calendar size={15} />;
+    if (type === "opinion") return <MessageSquareText size={15} />;
+    if (type === "subscriber") return <MailCheck size={15} />;
+    return <Bell size={15} />;
   };
 
   return (
@@ -228,7 +276,7 @@ const DashBoardSec = ({
               {achievements.map((item) => (
                 <li key={item.id} className="DashBoardSec-listItem">
                   <span className="DashBoardSec-listItemIcon DashBoardSec-listItemIcon--blue">
-                    {item.icon}
+                    <Trophy size={15} />
                   </span>
                   <span className="DashBoardSec-listItemBody">
                     <span className="DashBoardSec-listItemTitle">
@@ -256,29 +304,29 @@ const DashBoardSec = ({
         </section>
 
         {/* ============================
-            TOTAL EXPENSES (DONUT)
+            ECOSYSTEM DISTRIBUTION (DONUT)
         ============================ */}
         <section className="DashBoardSec-card DashBoardSec-card--mint">
           <header className="DashBoardSec-cardHeader DashBoardSec-cardHeader--center">
             <div className="DashBoardSec-cardHeaderLeft">
               <span className="DashBoardSec-cardIcon DashBoardSec-cardIcon--mint">
-                <Wallet size={16} />
+                <Layers size={16} />
               </span>
-              <h2 className="DashBoardSec-cardTitle">Total Expenses</h2>
+              <h2 className="DashBoardSec-cardTitle">Content Distribution</h2>
             </div>
           </header>
 
           <DonutChart
             segments={expenseSegments}
-            centerValue={totalExpensesValue}
-            centerLabel="Total Expenses"
+            centerValue={totalDisplay}
+            centerLabel="Ecosystem Assets"
             hoveredKey={hoveredKey}
             onHover={setHoveredKey}
           />
         </section>
 
         {/* ============================
-            NOTIFICATIONS
+            LIVE NOTIFICATIONS & ACTIVITY
         ============================ */}
         <section className="DashBoardSec-card DashBoardSec-card--violet">
           <header className="DashBoardSec-cardHeader">
@@ -286,7 +334,7 @@ const DashBoardSec = ({
               <span className="DashBoardSec-cardIcon DashBoardSec-cardIcon--violet">
                 <Bell size={16} />
               </span>
-              <h2 className="DashBoardSec-cardTitle">Notifications</h2>
+              <h2 className="DashBoardSec-cardTitle">Live Activity Feed</h2>
               {unreadCount > 0 && (
                 <span className="DashBoardSec-cardBadge">{unreadCount}</span>
               )}
@@ -307,7 +355,7 @@ const DashBoardSec = ({
             <div className="DashBoardSec-emptyState">
               <BellOff size={26} className="DashBoardSec-emptyIcon" />
               <span className="DashBoardSec-emptyText">
-                No new notifications
+                No new activity
               </span>
             </div>
           ) : (
@@ -323,7 +371,7 @@ const DashBoardSec = ({
                   tabIndex={0}
                 >
                   <span className="DashBoardSec-listItemIcon DashBoardSec-listItemIcon--violet">
-                    {item.icon}
+                    {getNotifIcon(item.type)}
                   </span>
                   <span className="DashBoardSec-listItemBody">
                     <span className="DashBoardSec-listItemTitle">
@@ -364,7 +412,7 @@ const DashBoardSec = ({
               className="DashBoardSec-legendDot"
               style={{ backgroundColor: seg.color }}
             />
-            <span className="DashBoardSec-legendLabel">{seg.label}</span>
+            <span className="DashBoardSec-legendLabel">{seg.label} ({seg.value})</span>
           </button>
         ))}
       </div>
@@ -376,7 +424,7 @@ const DashBoardSec = ({
         <div className="DashBoardSec-modalOverlay" onClick={() => setShowModal(false)}>
           <div className="DashBoardSec-modalContent" onClick={(e) => e.stopPropagation()}>
             <div className="DashBoardSec-modalHeader">
-              <h3>All Achievements</h3>
+              <h3>All Project Achievements</h3>
               <button className="DashBoardSec-modalClose" onClick={() => setShowModal(false)}>
                 <X size={18} />
               </button>
@@ -385,7 +433,7 @@ const DashBoardSec = ({
               {achievements.map((item) => (
                 <li key={item.id} className="DashBoardSec-modalItem">
                   <span className="DashBoardSec-listItemIcon DashBoardSec-listItemIcon--blue">
-                    {item.icon}
+                    <Trophy size={16} />
                   </span>
                   <div>
                     <div className="DashBoardSec-listItemTitle">{item.title}</div>

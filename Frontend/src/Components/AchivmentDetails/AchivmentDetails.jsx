@@ -14,7 +14,9 @@ import { FaXTwitter } from "react-icons/fa6";
 library.add(fab);
 
 const AchivmentDetails = () => {
-  const { id } = useParams();
+  const { name, id } = useParams();
+  const targetParam = name || id;
+
   const [achivmentDetails, setAchivmentDetails] = useState({});
   const [latestAchievements, setLatestAchievements] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -41,41 +43,56 @@ const AchivmentDetails = () => {
   useEffect(() => {
     const fetchAchievement = async () => {
       try {
-        const response = await axios.get(`${API_URL}/achievements/get-achievement/${id}`);
-        setAchivmentDetails(response.data);
+        const response = await axios.get(`${API_URL}/achievements/get-achievement/${targetParam}`);
+        const data = response.data?.data || response.data || {};
+        setAchivmentDetails(data);
       } catch (error) {
-        console.error(error);
+        console.error('Error fetching achievement details:', error);
       }
     };
 
     const fetchLatestAchievements = async () => {
       try {
         const response = await axios.get(`${API_URL}/achievements/get-all-achievements`);
-        setLatestAchievements(response.data);
-        const achievementCategories = [...new Set(response.data.map((achievement) => achievement.category))];
+        const list = Array.isArray(response.data) ? response.data : (response.data?.data || []);
+        setLatestAchievements(list);
+        const achievementCategories = [...new Set(list.map((achievement) => achievement.category).filter(Boolean))];
         setCategories(achievementCategories);
-        const achievementTags = [...new Set(response.data.flatMap((achievement) => achievement.tags))];
+        const achievementTags = [
+          ...new Set(
+            list.flatMap((achievement) =>
+              Array.isArray(achievement.tags)
+                ? achievement.tags
+                : typeof achievement.tags === 'string'
+                ? achievement.tags.split(',')
+                : []
+            ).map(t => typeof t === 'string' ? t.trim() : t).filter(Boolean)
+          ),
+        ];
         setTags(achievementTags);
       } catch (error) {
-        console.error(error);
+        console.error('Error fetching latest achievements:', error);
       }
     };
 
     const fetchComments = async () => {
       try {
         const res = await axios.get(`${API_URL}/comment/feedbacks`);
-        setComments(res.data);
+        const list = Array.isArray(res.data) ? res.data : (res.data?.data || []);
+        setComments(list);
       } catch (error) {
-        console.error(error);
+        console.error('Error fetching comments:', error);
       } finally {
         setLoadingComments(false);
       }
     };
 
-    fetchAchievement();
+    if (targetParam) {
+      fetchAchievement();
+    }
     fetchLatestAchievements();
     fetchComments();
-  }, [id]);
+  }, [targetParam]);
 
   const handleViewAllCategories = () => setShowAllCategories(!showAllCategories);
 
@@ -90,10 +107,14 @@ const AchivmentDetails = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`${API_URL}/comment/feedback`, formData, {
+      await axios.post(`${API_URL}/comment/feedback`, {
+        ...formData,
+        achievementId: achivmentDetails._id,
+        achievementTitle: achivmentDetails.title,
+      }, {
         headers: { 'Content-Type': 'application/json' }
       });
-      setStatus("✅ Feedback submitted successfully!");
+      setStatus("✅ Feedback submitted successfully! Received as Draft for admin review.");
       setFormData({ name: "", email: "", phone: "", subject: "", address: "", message: "" });
     } catch (err) {
       setStatus(`❌ Failed to submit feedback. ${err.response?.data?.message || 'Try again.'}`);
@@ -176,7 +197,12 @@ const AchivmentDetails = () => {
             <div className="Achivments-details-tags-row">
               <div className="tags">
                 <strong>Tags:</strong> 
-                {achivmentDetails.tags?.map((tag) => (
+                {(Array.isArray(achivmentDetails.tags)
+                  ? achivmentDetails.tags
+                  : typeof achivmentDetails.tags === 'string'
+                  ? achivmentDetails.tags.split(',').map((t) => t.trim()).filter(Boolean)
+                  : []
+                ).map((tag) => (
                   <span key={tag} className="Achivments-details-tag">{tag}</span>
                 ))}
               </div>
@@ -267,7 +293,7 @@ const AchivmentDetails = () => {
                 <img src={post.image} alt="Post" />
                 <div className="Achivments-details-recent-post-content">
                   <h3>{post.title}</h3>
-                  <a href={`/achivment-details/${post._id}`} className="Achivments-details-read-more">Read More</a>
+                  <a href={`/archivement/${post.slug || post._id}`} className="Achivments-details-read-more">Read More</a>
                 </div>
               </div>
             ))}

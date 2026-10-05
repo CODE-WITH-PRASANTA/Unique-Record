@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import {
   FaUserPlus,
   FaUserEdit,
@@ -25,40 +25,8 @@ import {
   FaTwitter,
   FaLinkedin,
 } from "react-icons/fa";
+import API from "../../api/axiosInstance";
 import "./Team.css";
-
-const STORAGE_KEY = "admin_team_members_data";
-
-const INITIAL_TEAM = [
-  {
-    id: 1,
-    name: "Dr. Robert Smith",
-    designation: "Principal / Director",
-    phone: "+91 98765 43210",
-    email: "robert.smith@institution.edu",
-    profilePic: "",
-    facebook: "https://facebook.com/robertsmith",
-    instagram: "https://instagram.com/robertsmith",
-    twitter: "https://twitter.com/robertsmith",
-    linkedin: "https://linkedin.com/in/robertsmith",
-    status: "Active",
-    createdAt: "2026-01-15",
-  },
-  {
-    id: 2,
-    name: "Sarah Jenkins",
-    designation: "Head of Academics",
-    phone: "+91 91234 56789",
-    email: "sarah.jenkins@institution.edu",
-    profilePic: "",
-    facebook: "",
-    instagram: "https://instagram.com/sarahjenkins",
-    twitter: "",
-    linkedin: "https://linkedin.com/in/sarahjenkins",
-    status: "Active",
-    createdAt: "2026-02-10",
-  },
-];
 
 const emptyForm = {
   name: "",
@@ -74,18 +42,14 @@ const emptyForm = {
 };
 
 const Team = () => {
-  const [teamMembers, setTeamMembers] = useState(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      return saved ? JSON.parse(saved) : INITIAL_TEAM;
-    } catch {
-      return INITIAL_TEAM;
-    }
-  });
+  const [teamMembers, setTeamMembers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
 
   const [formData, setFormData] = useState(emptyForm);
   const [editingId, setEditingId] = useState(null);
   const [imagePreview, setImagePreview] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
@@ -100,21 +64,54 @@ const Team = () => {
 
   const formRef = useRef(null);
 
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(teamMembers));
-  }, [teamMembers]);
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchTerm, statusFilter]);
-
   const showMessage = (text, type = "success") => {
     setMessage({ show: true, type, text });
     window.clearTimeout(window.__teamToast);
     window.__teamToast = window.setTimeout(() => {
       setMessage({ show: false, type: "", text: "" });
-    }, 3000);
+    }, 3500);
   };
+
+  // Fetch team members from Database
+  const fetchTeamMembers = useCallback(async () => {
+    try {
+      setLoading(true);
+      const res = await API.get("/teams/all");
+      if (res.data && res.data.success && Array.isArray(res.data.data)) {
+        setTeamMembers(res.data.data);
+      } else if (Array.isArray(res.data)) {
+        setTeamMembers(res.data);
+      } else if (res.data && Array.isArray(res.data.data)) {
+        setTeamMembers(res.data.data);
+      } else {
+        setTeamMembers([]);
+      }
+    } catch (err) {
+      console.error("Error fetching team members:", err);
+      // Fallback to public route if needed
+      try {
+        const fallbackRes = await API.get("/teams");
+        if (Array.isArray(fallbackRes.data)) {
+          setTeamMembers(fallbackRes.data);
+        } else if (fallbackRes.data && Array.isArray(fallbackRes.data.data)) {
+          setTeamMembers(fallbackRes.data.data);
+        }
+      } catch (fallbackErr) {
+        console.error("Fallback fetch error:", fallbackErr);
+        showMessage("Failed to load team members from server.", "error");
+      }
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchTeamMembers();
+  }, [fetchTeamMembers]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, statusFilter]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -130,22 +127,23 @@ const Team = () => {
       return;
     }
 
-    if (file.size > 5 * 1024 * 1024) {
-      showMessage("Image size should be less than 5MB.", "error");
+    if (file.size > 10 * 1024 * 1024) {
+      showMessage("Image size should be less than 10MB.", "error");
       return;
     }
 
+    setSelectedFile(file);
     const reader = new FileReader();
     reader.onloadend = () => {
       const result = reader.result;
       setImagePreview(result);
-      setFormData((prev) => ({ ...prev, profilePic: result }));
     };
     reader.readAsDataURL(file);
   };
 
   const removeImage = () => {
     setImagePreview("");
+    setSelectedFile(null);
     setFormData((prev) => ({ ...prev, profilePic: "" }));
     const fileInput = document.getElementById("team-profile-upload");
     if (fileInput) fileInput.value = "";
@@ -175,44 +173,78 @@ const Team = () => {
     setFormData(emptyForm);
     setEditingId(null);
     setImagePreview("");
+    setSelectedFile(null);
     const fileInput = document.getElementById("team-profile-upload");
     if (fileInput) fileInput.value = "";
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
 
-    if (editingId) {
-      setTeamMembers((prev) =>
-        prev.map((item) =>
-          item.id === editingId
-            ? { ...formData, id: editingId, createdAt: item.createdAt }
-            : item
-        )
-      );
-      showMessage("Team member updated successfully.");
-    } else {
-      const newMember = {
-        ...formData,
-        id: Date.now(),
-        createdAt: new Date().toISOString().split("T")[0],
-      };
-      setTeamMembers((prev) => [newMember, ...prev]);
-      showMessage("Team member added successfully.");
-    }
+    try {
+      setSubmitting(true);
+      const data = new FormData();
+      data.append("name", formData.name.trim());
+      data.append("designation", formData.designation.trim());
+      data.append("phone", formData.phone.trim());
+      data.append("email", formData.email.trim());
+      data.append("status", formData.status || "Active");
+      data.append("facebook", formData.facebook.trim());
+      data.append("instagram", formData.instagram.trim());
+      data.append("twitter", formData.twitter.trim());
+      data.append("linkedin", formData.linkedin.trim());
 
-    resetForm();
-    setTimeout(() => {
-      document.getElementById("team-list-section")?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }, 100);
+      if (selectedFile) {
+        data.append("profilePic", selectedFile);
+      } else if (formData.profilePic) {
+        data.append("profilePic", formData.profilePic);
+      }
+
+      if (editingId) {
+        const res = await API.put(`/teams/${editingId}`, data, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+        if (res.data?.success || res.status === 200) {
+          showMessage("Team member updated successfully.");
+          await fetchTeamMembers();
+          resetForm();
+        } else {
+          showMessage(res.data?.message || "Failed to update member.", "error");
+        }
+      } else {
+        const res = await API.post("/teams", data, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+        if (res.data?.success || res.status === 201) {
+          showMessage("Team member added successfully.");
+          await fetchTeamMembers();
+          resetForm();
+        } else {
+          showMessage(res.data?.message || "Failed to add member.", "error");
+        }
+      }
+
+      setTimeout(() => {
+        document.getElementById("team-list-section")?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }, 100);
+    } catch (err) {
+      console.error("Error saving team member:", err);
+      showMessage(
+        err.response?.data?.message || "Error saving team member to database.",
+        "error"
+      );
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleEdit = (member) => {
-    setEditingId(member.id);
+    const memberId = member._id || member.id;
+    setEditingId(memberId);
     setFormData({
       name: member.name || "",
       designation: member.designation || "",
@@ -226,15 +258,31 @@ const Team = () => {
       status: member.status || "Active",
     });
     setImagePreview(member.profilePic || "");
+    setSelectedFile(null);
     formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (!deleteModal) return;
-    setTeamMembers((prev) => prev.filter((item) => item.id !== deleteModal.id));
-    if (editingId === deleteModal.id) resetForm();
-    showMessage("Team member deleted successfully.");
-    setDeleteModal(null);
+    const targetId = deleteModal._id || deleteModal.id;
+    try {
+      const res = await API.delete(`/teams/${targetId}`);
+      if (res.data?.success || res.status === 200) {
+        showMessage("Team member deleted successfully.");
+        if (editingId === targetId) resetForm();
+        await fetchTeamMembers();
+      } else {
+        showMessage(res.data?.message || "Failed to delete team member.", "error");
+      }
+    } catch (err) {
+      console.error("Error deleting team member:", err);
+      showMessage(
+        err.response?.data?.message || "Error deleting team member.",
+        "error"
+      );
+    } finally {
+      setDeleteModal(null);
+    }
   };
 
   const filteredMembers = useMemo(() => {
@@ -270,6 +318,21 @@ const Team = () => {
   const goToPage = (page) => {
     if (page < 1 || page > totalPages) return;
     setCurrentPage(page);
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return "Recently";
+    try {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) return dateString;
+      return date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      });
+    } catch {
+      return dateString;
+    }
   };
 
   return (
@@ -375,7 +438,7 @@ const Team = () => {
                   </div>
                   <div className="team-page__image-preview-info">
                     <strong>Preview Ready</strong>
-                    <span>Profile image will be saved with member info.</span>
+                    <span>Profile image will be converted to WebP and saved with member info.</span>
                   </div>
                   <button
                     type="button"
@@ -404,6 +467,7 @@ const Team = () => {
                     value={formData.name}
                     onChange={handleChange}
                     placeholder="Enter full name"
+                    required
                   />
                 </div>
               </div>
@@ -420,6 +484,7 @@ const Team = () => {
                     value={formData.designation}
                     onChange={handleChange}
                     placeholder="Enter designation"
+                    required
                   />
                 </div>
               </div>
@@ -436,6 +501,7 @@ const Team = () => {
                     value={formData.phone}
                     onChange={handleChange}
                     placeholder="Enter phone number"
+                    required
                   />
                 </div>
               </div>
@@ -454,6 +520,7 @@ const Team = () => {
                     value={formData.email}
                     onChange={handleChange}
                     placeholder="Enter email address"
+                    required
                   />
                 </div>
               </div>
@@ -556,12 +623,21 @@ const Team = () => {
               type="button"
               className="team-page__reset-btn"
               onClick={resetForm}
+              disabled={submitting}
             >
               <FaUndo /> {editingId ? "Cancel Edit" : "Reset Form"}
             </button>
-            <button type="submit" className="team-page__submit-btn">
+            <button
+              type="submit"
+              className="team-page__submit-btn"
+              disabled={submitting}
+            >
               {editingId ? <FaUserEdit /> : <FaUserPlus />}
-              {editingId ? "Update Team Member" : "Add Team Member"}
+              {submitting
+                ? "Saving..."
+                : editingId
+                ? "Update Team Member"
+                : "Add Team Member"}
             </button>
           </div>
         </form>
@@ -643,88 +719,109 @@ const Team = () => {
               </tr>
             </thead>
             <tbody>
-              {paginatedMembers.length > 0 ? (
-                paginatedMembers.map((item, index) => (
-                  <tr key={item.id}>
-                    <td>
-                      <span className="team-page__serial">
-                        {(safePage - 1) * itemsPerPage + index + 1}
-                      </span>
-                    </td>
-                    <td>
-                      <div className="team-page__member-cell">
-                        <div className="team-page__member-thumb">
-                          {item.profilePic ? (
-                            <img src={item.profilePic} alt={item.name} />
-                          ) : (
-                            <FaUser />
-                          )}
-                        </div>
-                        <div className="team-page__member-info">
-                          <strong>{item.name}</strong>
-                          <span>Joined {item.createdAt}</span>
-                        </div>
+              {loading ? (
+                <tr>
+                  <td colSpan="7" className="team-page__empty-cell">
+                    <div className="team-page__empty">
+                      <div className="team-page__empty-icon">
+                        <FaUser />
                       </div>
-                    </td>
-                    <td>
-                      <span className="team-page__designation-text">
-                        {item.designation}
-                      </span>
-                    </td>
-                    <td>
-                      <span className="team-page__phone-text">{item.phone}</span>
-                    </td>
-                    <td>
-                      <span className="team-page__email-text">{item.email}</span>
-                    </td>
-                    <td>
-                      <span
-                        className={`team-page__status team-page__status--${item.status.toLowerCase()}`}
-                      >
-                        {item.status === "Active" ? <FaCheckCircle /> : <FaTimesCircle />}
-                        {item.status}
-                      </span>
-                    </td>
-                    <td>
-                      <div className="team-page__actions">
-                        <button
-                          type="button"
-                          className="team-page__action-btn team-page__action-btn--view"
-                          title="View Profile"
-                          onClick={() => setViewModal(item)}
+                      <h3>Loading Team Members...</h3>
+                      <p>Fetching records from database.</p>
+                    </div>
+                  </td>
+                </tr>
+              ) : paginatedMembers.length > 0 ? (
+                paginatedMembers.map((item, index) => {
+                  const itemId = item._id || item.id;
+                  return (
+                    <tr key={itemId}>
+                      <td>
+                        <span className="team-page__serial">
+                          {(safePage - 1) * itemsPerPage + index + 1}
+                        </span>
+                      </td>
+                      <td>
+                        <div className="team-page__member-cell">
+                          <div className="team-page__member-thumb">
+                            {item.profilePic ? (
+                              <img src={item.profilePic} alt={item.name} />
+                            ) : (
+                              <FaUser />
+                            )}
+                          </div>
+                          <div className="team-page__member-info">
+                            <strong>{item.name}</strong>
+                            <span>Joined {formatDate(item.createdAt)}</span>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <span className="team-page__designation-text">
+                          {item.designation}
+                        </span>
+                      </td>
+                      <td>
+                        <span className="team-page__phone-text">{item.phone}</span>
+                      </td>
+                      <td>
+                        <span className="team-page__email-text">{item.email}</span>
+                      </td>
+                      <td>
+                        <span
+                          className={`team-page__status team-page__status--${(
+                            item.status || "Active"
+                          ).toLowerCase()}`}
                         >
-                          <FaEye />
-                        </button>
-                        {item.profilePic && (
+                          {item.status === "Active" ? (
+                            <FaCheckCircle />
+                          ) : (
+                            <FaTimesCircle />
+                          )}
+                          {item.status || "Active"}
+                        </span>
+                      </td>
+                      <td>
+                        <div className="team-page__actions">
                           <button
                             type="button"
-                            className="team-page__action-btn team-page__action-btn--image"
-                            title="View Photo"
-                            onClick={() => setImageModal(item)}
+                            className="team-page__action-btn team-page__action-btn--view"
+                            title="View Profile"
+                            onClick={() => setViewModal(item)}
                           >
-                            <FaImage />
+                            <FaEye />
                           </button>
-                        )}
-                        <button
-                          type="button"
-                          className="team-page__action-btn team-page__action-btn--edit"
-                          title="Edit Member"
-                          onClick={() => handleEdit(item)}
-                        >
-                          <FaEdit />
-                        </button>
-                        <button
-                          type="button"
-                          className="team-page__action-btn team-page__action-btn--delete"
-                          title="Delete Member"
-                          onClick={() => setDeleteModal(item)}
-                        >
-                          <FaTrash />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))
+                          {item.profilePic && (
+                            <button
+                              type="button"
+                              className="team-page__action-btn team-page__action-btn--image"
+                              title="View Photo"
+                              onClick={() => setImageModal(item)}
+                            >
+                              <FaImage />
+                            </button>
+                          )}
+                          <button
+                            type="button"
+                            className="team-page__action-btn team-page__action-btn--edit"
+                            title="Edit Member"
+                            onClick={() => handleEdit(item)}
+                          >
+                            <FaEdit />
+                          </button>
+                          <button
+                            type="button"
+                            className="team-page__action-btn team-page__action-btn--delete"
+                            title="Delete Member"
+                            onClick={() => setDeleteModal(item)}
+                          >
+                            <FaTrash />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })
               ) : (
                 <tr>
                   <td colSpan="7" className="team-page__empty-cell">
@@ -733,7 +830,7 @@ const Team = () => {
                         <FaUser />
                       </div>
                       <h3>No Team Members Found</h3>
-                      <p>No members match your current search criteria.</p>
+                      <p>No members match your current search criteria or database is empty.</p>
                       <button
                         type="button"
                         onClick={() => {
@@ -753,81 +850,96 @@ const Team = () => {
 
         {/* MOBILE CARDS */}
         <div className="team-page__mobile-list">
-          {paginatedMembers.length > 0 ? (
-            paginatedMembers.map((item) => (
-              <article className="team-page__mobile-card" key={item.id}>
-                <div className="team-page__mobile-card-top">
-                  <div className="team-page__mobile-image">
-                    {item.profilePic ? (
-                      <img src={item.profilePic} alt={item.name} />
-                    ) : (
-                      <FaUser />
-                    )}
+          {loading ? (
+            <div className="team-page__mobile-empty">
+              <FaUser />
+              <h3>Loading Team Members...</h3>
+              <p>Fetching records from database.</p>
+            </div>
+          ) : paginatedMembers.length > 0 ? (
+            paginatedMembers.map((item) => {
+              const itemId = item._id || item.id;
+              return (
+                <article className="team-page__mobile-card" key={itemId}>
+                  <div className="team-page__mobile-card-top">
+                    <div className="team-page__mobile-image">
+                      {item.profilePic ? (
+                        <img src={item.profilePic} alt={item.name} />
+                      ) : (
+                        <FaUser />
+                      )}
+                    </div>
+                    <div className="team-page__mobile-title">
+                      <h3>{item.name}</h3>
+                      <span>{item.designation}</span>
+                    </div>
                   </div>
-                  <div className="team-page__mobile-title">
-                    <h3>{item.name}</h3>
-                    <span>{item.designation}</span>
-                  </div>
-                </div>
 
-                <div className="team-page__mobile-details">
-                  <div>
-                    <span>
-                      <FaPhone /> Phone
-                    </span>
-                    <strong>{item.phone}</strong>
+                  <div className="team-page__mobile-details">
+                    <div>
+                      <span>
+                        <FaPhone /> Phone
+                      </span>
+                      <strong>{item.phone}</strong>
+                    </div>
+                    <div>
+                      <span>
+                        <FaEnvelope /> Email
+                      </span>
+                      <strong>{item.email}</strong>
+                    </div>
                   </div>
-                  <div>
-                    <span>
-                      <FaEnvelope /> Email
-                    </span>
-                    <strong>{item.email}</strong>
-                  </div>
-                </div>
 
-                <div className="team-page__mobile-bottom">
-                  <span
-                    className={`team-page__status team-page__status--${item.status.toLowerCase()}`}
-                  >
-                    {item.status === "Active" ? <FaCheckCircle /> : <FaTimesCircle />}
-                    {item.status}
-                  </span>
-
-                  <div className="team-page__actions">
-                    <button
-                      type="button"
-                      className="team-page__action-btn team-page__action-btn--view"
-                      onClick={() => setViewModal(item)}
+                  <div className="team-page__mobile-bottom">
+                    <span
+                      className={`team-page__status team-page__status--${(
+                        item.status || "Active"
+                      ).toLowerCase()}`}
                     >
-                      <FaEye />
-                    </button>
-                    {item.profilePic && (
+                      {item.status === "Active" ? (
+                        <FaCheckCircle />
+                      ) : (
+                        <FaTimesCircle />
+                      )}
+                      {item.status || "Active"}
+                    </span>
+
+                    <div className="team-page__actions">
                       <button
                         type="button"
-                        className="team-page__action-btn team-page__action-btn--image"
-                        onClick={() => setImageModal(item)}
+                        className="team-page__action-btn team-page__action-btn--view"
+                        onClick={() => setViewModal(item)}
                       >
-                        <FaImage />
+                        <FaEye />
                       </button>
-                    )}
-                    <button
-                      type="button"
-                      className="team-page__action-btn team-page__action-btn--edit"
-                      onClick={() => handleEdit(item)}
-                    >
-                      <FaEdit />
-                    </button>
-                    <button
-                      type="button"
-                      className="team-page__action-btn team-page__action-btn--delete"
-                      onClick={() => setDeleteModal(item)}
-                    >
-                      <FaTrash />
-                    </button>
+                      {item.profilePic && (
+                        <button
+                          type="button"
+                          className="team-page__action-btn team-page__action-btn--image"
+                          onClick={() => setImageModal(item)}
+                        >
+                          <FaImage />
+                        </button>
+                      )}
+                      <button
+                        type="button"
+                        className="team-page__action-btn team-page__action-btn--edit"
+                        onClick={() => handleEdit(item)}
+                      >
+                        <FaEdit />
+                      </button>
+                      <button
+                        type="button"
+                        className="team-page__action-btn team-page__action-btn--delete"
+                        onClick={() => setDeleteModal(item)}
+                      >
+                        <FaTrash />
+                      </button>
+                    </div>
                   </div>
-                </div>
-              </article>
-            ))
+                </article>
+              );
+            })
           ) : (
             <div className="team-page__mobile-empty">
               <FaUser />
@@ -838,7 +950,7 @@ const Team = () => {
         </div>
 
         {/* PAGINATION */}
-        {filteredMembers.length > 0 && (
+        {!loading && filteredMembers.length > 0 && (
           <div className="team-page__pagination">
             <div className="team-page__pagination-info">
               Showing{" "}
@@ -926,7 +1038,7 @@ const Team = () => {
                 </div>
                 <div>
                   <span>Account Status</span>
-                  <strong>{viewModal.status}</strong>
+                  <strong>{viewModal.status || "Active"}</strong>
                 </div>
               </div>
 

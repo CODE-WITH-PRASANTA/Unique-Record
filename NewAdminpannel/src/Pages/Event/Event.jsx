@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import API from "../../api/axiosInstance";
 import { Editor } from "@tinymce/tinymce-react";
 import {
   FaCalendarAlt,
@@ -125,14 +126,8 @@ const getStatusIcon = (status) => {
 };
 
 const Event = () => {
-  const [events, setEvents] = useState(() => {
-    try {
-      const savedEvents = localStorage.getItem(STORAGE_KEY);
-      return savedEvents ? JSON.parse(savedEvents) : INITIAL_EVENTS;
-    } catch {
-      return INITIAL_EVENTS;
-    }
-  });
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const [formData, setFormData] = useState(emptyForm);
   const [editingId, setEditingId] = useState(null);
@@ -140,6 +135,47 @@ const Event = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [categoryFilter, setCategoryFilter] = useState("All");
+  const [categoriesList, setCategoriesList] = useState(DEFAULT_CATEGORIES);
+
+  // Fetch all events from database
+  const fetchEvents = async () => {
+    try {
+      setLoading(true);
+      const res = await API.get("/events");
+      const list = Array.isArray(res.data)
+        ? res.data
+        : res.data?.events || res.data?.data || [];
+      setEvents(list);
+    } catch (err) {
+      console.error("Error fetching events:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchEvents();
+  }, []);
+
+  useEffect(() => {
+    API.get('/event-categories')
+      .then((res) => {
+        const list = Array.isArray(res.data) ? res.data : res.data?.data || [];
+        if (list.length > 0) {
+          const names = list.filter((c) => c.status !== 'Inactive').map((c) => c.name);
+          if (names.length > 0) {
+            setCategoriesList(names);
+            setFormData((prev) => {
+              if (!prev.category || prev.category === 'Top Category') {
+                return { ...prev, category: names[0] };
+              }
+              return prev;
+            });
+          }
+        }
+      })
+      .catch((err) => console.warn("Using default categories, backend not reachable yet:", err));
+  }, []);
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
@@ -156,10 +192,6 @@ const Event = () => {
   const [deleteModal, setDeleteModal] = useState(null);
 
   const formRef = useRef(null);
-
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(events));
-  }, [events]);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -273,54 +305,55 @@ const Event = () => {
     if (fileInput) fileInput.value = "";
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     if (!validateForm()) return;
 
-    if (editingId) {
-      setEvents((previous) =>
-        previous.map((item) =>
-          item.id === editingId
-            ? { ...formData, id: editingId, createdAt: item.createdAt }
-            : item
-        )
-      );
-      showMessage("Event updated successfully.");
-    } else {
-      const newEvent = {
-        ...formData,
-        id: Date.now(),
-        createdAt: new Date().toISOString().split("T")[0],
-      };
-      setEvents((previous) => [newEvent, ...previous]);
-      showMessage("New event added successfully.");
-    }
+    try {
+      if (editingId) {
+        const res = await API.put(`/events/${editingId}`, formData);
+        if (res.data?.success || res.status === 200) {
+          showMessage("Event updated successfully in database.");
+          fetchEvents();
+        }
+      } else {
+        const res = await API.post("/events", formData);
+        if (res.data?.success || res.status === 201) {
+          showMessage("New event added successfully to database.");
+          fetchEvents();
+        }
+      }
 
-    resetForm();
-    setTimeout(() => {
-      document.getElementById("event-list-section")?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }, 100);
+      resetForm();
+      setTimeout(() => {
+        document.getElementById("event-list-section")?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }, 100);
+    } catch (err) {
+      console.error("Error saving event:", err);
+      showMessage(err.response?.data?.message || "Failed to save event.", "error");
+    }
   };
 
   const handleEdit = (eventItem) => {
-    setEditingId(eventItem.id);
+    const itemId = eventItem._id || eventItem.id;
+    setEditingId(itemId);
     setFormData({
       eventName: eventItem.eventName || "",
-      location: eventItem.location || "",
-      locationImage: eventItem.locationImage || "",
+      location: eventItem.location || eventItem.eventLocation || "",
+      locationImage: eventItem.locationImage || eventItem.eventImage || "",
       eventDate: eventItem.eventDate || "",
-      description: eventItem.description || "",
-      organizer: eventItem.organizer || "",
+      description: eventItem.description || eventItem.eventDescription || "",
+      organizer: eventItem.organizer || eventItem.eventOrganizer || "",
       openingDate: eventItem.openingDate || "",
       closingDate: eventItem.closingDate || "",
-      status: eventItem.status || "Ongoing",
-      registrationFee: eventItem.registrationFee || "",
+      status: eventItem.status || eventItem.currentStatus || "Ongoing",
+      registrationFee: eventItem.registrationFee || (eventItem.pricePerTicket !== undefined ? String(eventItem.pricePerTicket) : ""),
       category: eventItem.category || "Top Category",
     });
-    setImagePreview(eventItem.locationImage || "");
+    setImagePreview(eventItem.locationImage || eventItem.eventImage || "");
     setTimeout(() => {
       formRef.current?.scrollIntoView({
         behavior: "smooth",
@@ -329,12 +362,20 @@ const Event = () => {
     }, 100);
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (!deleteModal) return;
-    setEvents((previous) => previous.filter((item) => item.id !== deleteModal.id));
-    if (editingId === deleteModal.id) resetForm();
-    showMessage("Event deleted successfully.");
-    setDeleteModal(null);
+    const itemId = deleteModal._id || deleteModal.id;
+    try {
+      await API.delete(`/events/${itemId}`);
+      setEvents((previous) => previous.filter((item) => (item._id || item.id) !== itemId));
+      if (editingId === itemId) resetForm();
+      showMessage("Event deleted successfully from database.");
+    } catch (err) {
+      console.error("Error deleting event:", err);
+      showMessage("Failed to delete event.", "error");
+    } finally {
+      setDeleteModal(null);
+    }
   };
 
   const filteredEvents = useMemo(() => {
@@ -707,7 +748,7 @@ const Event = () => {
                     value={formData.category}
                     onChange={handleChange}
                   >
-                    {DEFAULT_CATEGORIES.map((category) => (
+                    {categoriesList.map((category) => (
                       <option key={category} value={category}>
                         {category}
                       </option>
@@ -787,7 +828,7 @@ const Event = () => {
               onChange={(event) => setCategoryFilter(event.target.value)}
             >
               <option value="All">All Categories</option>
-              {DEFAULT_CATEGORIES.map((category) => (
+              {categoriesList.map((category) => (
                 <option key={category} value={category}>
                   {category}
                 </option>
@@ -826,7 +867,7 @@ const Event = () => {
             <tbody>
               {paginatedEvents.length > 0 ? (
                 paginatedEvents.map((item, index) => (
-                  <tr key={item.id}>
+                  <tr key={item._id || item.id}>
                     <td>
                       <span className="event-page__serial">
                         {(safePage - 1) * itemsPerPage + index + 1}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   FaUndo,
   FaRedo,
@@ -16,36 +16,120 @@ import {
   FaAlignRight,
   FaQuoteRight,
 } from 'react-icons/fa';
+import API from '../../api/axiosInstance';
 import './ArchivementPost.css';
 
-const ArchivementPost = () => {
-  const [formData, setFormData] = useState({
-    title: '',
-    shortDesc: '',
-    content: '',
-    providerName: '',
-    achieverName: '',
-    holderLink: '',
-    address: '',
-    effortType: '',
-    category: '',
-    tags: '',
-  });
+const initialFormData = {
+  title: '',
+  shortDesc: '',
+  content: '',
+  providerName: '',
+  achieverName: '',
+  holderLink: '',
+  address: '',
+  effortType: '',
+  category: '',
+  tags: '',
+};
 
+const ArchivementPost = () => {
+  const [formData, setFormData] = useState(initialFormData);
   const [selectedFile, setSelectedFile] = useState(null);
   const [fileName, setFileName] = useState('No file chosen');
   const [imagePreview, setImagePreview] = useState(null);
   const [achievements, setAchievements] = useState([]);
+  const [categories, setCategories] = useState([
+    'Academic',
+    'Sports',
+    'Professional',
+    'Art & Culture',
+    'Science & Technology',
+    'World Record',
+    'Unique Talent',
+  ]);
   const [editingId, setEditingId] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+
+  // Fetch all categories from backend
+  const fetchCategories = useCallback(async () => {
+    try {
+      const names = [];
+      try {
+        const achCatRes = await API.get('/achievement-categories');
+        const achCatList = Array.isArray(achCatRes.data)
+          ? achCatRes.data
+          : (achCatRes.data?.data || []);
+        achCatList.forEach((c) => {
+          const n = typeof c === 'string' ? c : c.name;
+          if (n) names.push(n);
+        });
+      } catch (e) {
+        console.error('Error fetching achievement categories:', e);
+      }
+
+      try {
+        const res = await API.get('/categories');
+        const catList = Array.isArray(res.data)
+          ? res.data
+          : (res.data?.data || []);
+        catList.forEach((c) => {
+          const n = typeof c === 'string' ? c : c.name;
+          if (n) names.push(n);
+        });
+      } catch (e) {
+        console.error('Error fetching generic categories:', e);
+      }
+
+      if (names.length > 0) {
+        setCategories((prev) => [...new Set([...names, ...prev])]);
+      }
+    } catch (err) {
+      console.error('Error in category fetch:', err);
+    }
+  }, []);
+
+  // Fetch all achievements from backend
+  const fetchAchievements = useCallback(async () => {
+    try {
+      setLoading(true);
+      const res = await API.get('/achievements/all');
+      if (Array.isArray(res.data)) {
+        setAchievements(res.data);
+      } else if (res.data && Array.isArray(res.data.data)) {
+        setAchievements(res.data.data);
+      } else {
+        setAchievements([]);
+      }
+    } catch (err) {
+      console.error('Error fetching achievements:', err);
+      try {
+        const fallback = await API.get('/achievements');
+        if (Array.isArray(fallback.data)) {
+          setAchievements(fallback.data);
+        } else if (fallback.data && Array.isArray(fallback.data.data)) {
+          setAchievements(fallback.data.data);
+        }
+      } catch (fallbackErr) {
+        console.error('Fallback fetch error:', fallbackErr);
+      }
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchAchievements();
+    fetchCategories();
+  }, [fetchAchievements, fetchCategories]);
 
   // Handle standard input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Handle file selection - reads the image as a data URL so it survives
-  // form resets and can be stored/rendered per achievement record
+  // Handle file selection
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
@@ -64,85 +148,117 @@ const ArchivementPost = () => {
     }
   };
 
-  // Form Submit / Post Achievement
-  const handleSubmit = (e) => {
+  // Reset form
+  const resetForm = () => {
+    setFormData(initialFormData);
+    setSelectedFile(null);
+    setFileName('No file chosen');
+    setImagePreview(null);
+    setEditingId(null);
+  };
+
+  // Form Submit / Post Achievement to backend
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.title || !formData.achieverName || !formData.effortType || !formData.category) {
       alert('Please fill out all required fields (*).');
       return;
     }
 
-    if (editingId) {
-      // Update existing record
-      setAchievements(
-        achievements.map((item) =>
-          item.id === editingId
-            ? {
-                ...item,
-                ...formData,
-                fileName: selectedFile ? fileName : item.fileName,
-                image: selectedFile ? imagePreview : item.image,
-              }
-            : item
-        )
-      );
-      setEditingId(null);
-      alert('Achievement updated successfully!');
-    } else {
-      // Add new record
-      const newAchievement = {
-        id: Date.now(),
-        ...formData,
-        fileName,
-        image: imagePreview,
-      };
-      setAchievements([newAchievement, ...achievements]);
-      alert('Achievement posted successfully!');
-    }
+    try {
+      setSubmitting(true);
+      const data = new FormData();
+      data.append('title', formData.title.trim());
+      data.append('shortDesc', formData.shortDesc.trim());
+      data.append('shortDescription', formData.shortDesc.trim());
+      data.append('content', formData.content || '');
+      data.append('providerName', formData.providerName.trim() || 'Unique Record');
+      data.append('achieverName', formData.achieverName.trim());
+      data.append('holderLink', formData.holderLink.trim());
+      data.append('uruHolderLink', formData.holderLink.trim());
+      data.append('address', formData.address.trim());
+      data.append('effortType', formData.effortType);
+      data.append('category', formData.category);
+      data.append('tags', formData.tags);
 
-    // Reset Form
-    setFormData({
-      title: '',
-      shortDesc: '',
-      content: '',
-      providerName: '',
-      achieverName: '',
-      holderLink: '',
-      address: '',
-      effortType: '',
-      category: '',
-      tags: '',
-    });
-    setSelectedFile(null);
-    setFileName('No file chosen');
-    setImagePreview(null);
+      if (selectedFile) {
+        data.append('image', selectedFile);
+      } else if (imagePreview && typeof imagePreview === 'string') {
+        data.append('image', imagePreview);
+      }
+
+      if (editingId) {
+        const res = await API.put(`/achievements/${editingId}`, data, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
+        if (res.data?.success || res.status === 200) {
+          alert('Achievement updated successfully!');
+          resetForm();
+          fetchAchievements();
+        } else {
+          alert(res.data?.message || 'Failed to update achievement.');
+        }
+      } else {
+        const res = await API.post('/achievements', data, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
+        if (res.data?.success || res.status === 201) {
+          alert('Achievement posted successfully!');
+          resetForm();
+          fetchAchievements();
+        } else {
+          alert(res.data?.message || 'Failed to post achievement.');
+        }
+      }
+    } catch (err) {
+      console.error('Error saving achievement:', err);
+      alert(err.response?.data?.message || 'Error saving achievement into database.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
-  // Delete Record
-  const handleDelete = (id) => {
+  // Delete Record from backend
+  const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this achievement?')) {
-      setAchievements(achievements.filter((item) => item.id !== id));
+      try {
+        await API.delete(`/achievements/${id}`);
+        alert('Achievement deleted successfully!');
+        if (editingId === id) resetForm();
+        fetchAchievements();
+      } catch (err) {
+        console.error('Error deleting achievement:', err);
+        alert(err.response?.data?.message || 'Error deleting achievement from database.');
+      }
     }
   };
 
   // Edit Record
   const handleEdit = (item) => {
+    const targetId = item._id || item.id;
+    setEditingId(targetId);
+
+    const tagsStr = Array.isArray(item.tags)
+      ? item.tags.join(', ')
+      : item.tags || '';
+
     setFormData({
-      title: item.title,
-      shortDesc: item.shortDesc,
-      content: item.content,
-      providerName: item.providerName,
-      achieverName: item.achieverName,
-      holderLink: item.holderLink,
-      address: item.address,
-      effortType: item.effortType,
-      category: item.category,
-      tags: item.tags,
+      title: item.title || '',
+      shortDesc: item.shortDesc || item.shortDescription || '',
+      content: item.content || '',
+      providerName: item.providerName || '',
+      achieverName: item.achieverName || '',
+      holderLink: item.holderLink || item.uruHolderLink || '',
+      address: item.address || '',
+      effortType: item.effortType || '',
+      category: item.category || '',
+      tags: tagsStr,
     });
-    setFileName(item.fileName);
-    setImagePreview(item.image || null);
+
+    const existingImg = item.image || item.imageUrl || null;
+    setImagePreview(existingImg);
+    setFileName(existingImg ? 'Existing Image Loaded' : 'No file chosen');
     setSelectedFile(null);
-    setEditingId(item.id);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -151,7 +267,9 @@ const ArchivementPost = () => {
       <div className="ap-wrapper">
         {/* Main Title Section */}
         <header className="ap-header-section">
-          <h1 className="ap-main-title">Post Achievement</h1>
+          <h1 className="ap-main-title">
+            {editingId ? 'Edit Achievement' : 'Post Achievement'}
+          </h1>
         </header>
 
         {/* Post Achievement Form Card */}
@@ -298,7 +416,7 @@ const ArchivementPost = () => {
               <div className="ap-editor-footer">
                 <span>p</span>
                 <span>Press Alt+0 for help</span>
-                <span>{formData.content.length} words</span>
+                <span>{formData.content?.length || 0} characters</span>
               </div>
             </div>
           </div>
@@ -379,7 +497,15 @@ const ArchivementPost = () => {
 
           {/* Achievement Category */}
           <div className="ap-form-group">
-            <label className="ap-label">Achievement Category*</label>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+              <label className="ap-label" style={{ marginBottom: 0 }}>Achievement Category*</label>
+              <a
+                href="/achievements/category"
+                style={{ fontSize: '12px', color: '#6366f1', textDecoration: 'none', fontWeight: 600 }}
+              >
+                + Manage Categories
+              </a>
+            </div>
             <div className="ap-select-wrapper">
               <select
                 name="category"
@@ -391,10 +517,11 @@ const ArchivementPost = () => {
                 <option value="" disabled>
                   Select Category
                 </option>
-                <option value="Academic">Academic</option>
-                <option value="Sports">Sports</option>
-                <option value="Professional">Professional</option>
-                <option value="Art & Culture">Art & Culture</option>
+                {categories.map((cat, idx) => (
+                  <option key={idx} value={cat}>
+                    {cat}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
@@ -434,8 +561,23 @@ const ArchivementPost = () => {
 
           {/* Submit Button */}
           <div className="ap-form-actions">
-            <button type="submit" className="ap-submit-btn">
-              {editingId ? 'Update Achievement' : 'Post Achievement'}
+            {editingId && (
+              <button
+                type="button"
+                className="ap-btn-edit"
+                style={{ marginRight: '10px', padding: '10px 20px', cursor: 'pointer' }}
+                onClick={resetForm}
+                disabled={submitting}
+              >
+                Cancel Edit
+              </button>
+            )}
+            <button type="submit" className="ap-submit-btn" disabled={submitting}>
+              {submitting
+                ? 'Saving...'
+                : editingId
+                ? 'Update Achievement'
+                : 'Post Achievement'}
             </button>
           </div>
         </form>
@@ -457,45 +599,63 @@ const ArchivementPost = () => {
                 </tr>
               </thead>
               <tbody>
-                {achievements.length === 0 ? (
+                {loading ? (
+                  <tr>
+                    <td colSpan="7" className="ap-empty-row">
+                      Loading achievements from database...
+                    </td>
+                  </tr>
+                ) : achievements.length === 0 ? (
                   <tr>
                     <td colSpan="7" className="ap-empty-row">
                       No achievements found.
                     </td>
                   </tr>
                 ) : (
-                  achievements.map((item, index) => (
-                    <tr key={item.id} className="ap-table-row">
-                      <td className="ap-col-sno">{index + 1}</td>
-                      <td className="ap-col-image">
-                        {item.image ? (
-                          <img src={item.image} alt={item.title} className="ap-table-thumb" />
-                        ) : (
-                          <span className="ap-table-thumb ap-table-thumb-placeholder">
-                            <FaImage />
-                          </span>
-                        )}
-                      </td>
-                      <td className="ap-col-title">
-                        <strong>{item.title}</strong>
-                      </td>
-                      <td className="ap-col-achiever">{item.achieverName}</td>
-                      <td>{item.effortType}</td>
-                      <td>
-                        <span className="ap-category-pill">{item.category}</span>
-                      </td>
-                      <td className="ap-col-actions">
-                        <div className="ap-action-group">
-                          <button className="ap-btn-edit" onClick={() => handleEdit(item)}>
-                            Edit
-                          </button>
-                          <button className="ap-btn-delete" onClick={() => handleDelete(item.id)}>
-                            Delete
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
+                  achievements.map((item, index) => {
+                    const itemId = item._id || item.id;
+                    const itemImage = item.image || item.imageUrl;
+                    return (
+                      <tr key={itemId} className="ap-table-row">
+                        <td className="ap-col-sno">{index + 1}</td>
+                        <td className="ap-col-image">
+                          {itemImage ? (
+                            <img src={itemImage} alt={item.title} className="ap-table-thumb" />
+                          ) : (
+                            <span className="ap-table-thumb ap-table-thumb-placeholder">
+                              <FaImage />
+                            </span>
+                          )}
+                        </td>
+                        <td className="ap-col-title">
+                          <strong>{item.title}</strong>
+                        </td>
+                        <td className="ap-col-achiever">{item.achieverName}</td>
+                        <td>{item.effortType}</td>
+                        <td>
+                          <span className="ap-category-pill">{item.category}</span>
+                        </td>
+                        <td className="ap-col-actions">
+                          <div className="ap-action-group">
+                            <button
+                              type="button"
+                              className="ap-btn-edit"
+                              onClick={() => handleEdit(item)}
+                            >
+                              Edit
+                            </button>
+                            <button
+                              type="button"
+                              className="ap-btn-delete"
+                              onClick={() => handleDelete(itemId)}
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
                 )}
               </tbody>
             </table>

@@ -1,22 +1,21 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
-  FileText,
-  Wallet,
-  TrendingUp,
-  Inbox,
-  Receipt,
-  PiggyBank,
+  BookOpen,
+  Calendar,
+  Award,
+  MessageSquareText,
+  MailCheck,
+  MessagesSquare,
+  Image,
+  CheckCircle2,
 } from "lucide-react";
 
 import "./DashBoardHome.css";
 
 /* ---------------------------------------------------
    Count-up hook — animates a number from 0 to target
-   every time the component mounts (i.e. every page
-   load / refresh), with an easing curve and optional
-   stagger delay so the cards don't all pop at once.
 --------------------------------------------------- */
-function useCountUp(target, { duration = 1400, delay = 0, decimals = 0 } = {}) {
+function useCountUp(target, { duration = 1200, delay = 0, decimals = 0 } = {}) {
   const [value, setValue] = useState(0);
   const frame = useRef(null);
 
@@ -30,7 +29,6 @@ function useCountUp(target, { duration = 1400, delay = 0, decimals = 0 } = {}) {
         if (start === null) start = timestamp;
         const elapsed = timestamp - start;
         const progress = Math.min(elapsed / duration, 1);
-        // easeOutExpo — quick rise, gentle settle
         const eased = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
         setValue(from + (to - from) * eased);
 
@@ -47,7 +45,6 @@ function useCountUp(target, { duration = 1400, delay = 0, decimals = 0 } = {}) {
       clearTimeout(timer);
       if (frame.current) cancelAnimationFrame(frame.current);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [target, duration, delay]);
 
   return decimals > 0 ? value.toFixed(decimals) : Math.round(value);
@@ -88,67 +85,64 @@ function DashBoardHome_StatCard({
   );
 }
 
-const defaultStats = [
-  {
-    id: "month-forms",
-    label: "This Month Sales",
-    value: 0,
-    suffix: " Forms",
-    description: "Forms received this month",
-    icon: <FileText size={20} />,
-    theme: "blue",
-  },
-  {
-    id: "monthly-sales",
-    label: "Monthly Sales",
-    value: 0,
-    prefix: "₹",
-    description: "Amount collected this month",
-    icon: <Wallet size={20} />,
-    theme: "sunset",
-  },
-  {
-    id: "yearly-sales",
-    label: "Yearly Sales",
-    value: 0,
-    prefix: "₹",
-    description: "Amount collected this year",
-    icon: <TrendingUp size={20} />,
-    theme: "violet",
-  },
-  {
-    id: "total-forms",
-    label: "Total Forms Received",
-    value: 2,
-    description: "All-time successful forms",
-    icon: <Inbox size={20} />,
-    theme: "blue",
-  },
-  {
-    id: "total-pricing",
-    label: "Total Pricing Initiated",
-    value: 0,
-    prefix: "₹",
-    description: "Total quotations initiated",
-    icon: <Receipt size={20} />,
-    theme: "sunset",
-  },
-  {
-    id: "total-collected",
-    label: "Total Collected Money",
-    value: 0,
-    prefix: "₹",
-    description: "All-time successful collections",
-    icon: <PiggyBank size={20} />,
-    theme: "violet",
-  },
-];
-
 const DashBoardHome = ({
-  title = "URU Admin Control",
-  subtitle = "Manage records, payments, and notifications efficiently",
-  stats = defaultStats,
+  title = "Unique Records Admin Control",
+  subtitle = "Real-time ecosystem analytics, content performance, and community engagement",
+  statsData = null,
 }) => {
+  const stats = statsData || {};
+
+  const cards = [
+    {
+      id: "stat-blogs",
+      label: "Total Blogs & Articles",
+      value: stats.totalBlogs || 0,
+      description: `${stats.recentBlogs?.length || 0} recent publications`,
+      icon: <BookOpen size={20} />,
+      theme: "blue",
+    },
+    {
+      id: "stat-events",
+      label: "Events & Programs",
+      value: stats.totalEvents || 0,
+      description: "Scheduled & active events",
+      icon: <Calendar size={20} />,
+      theme: "sunset",
+    },
+    {
+      id: "stat-achievements",
+      label: "Achievements & Awards",
+      value: stats.totalAchievements || 0,
+      description: "Verified record achievements",
+      icon: <Award size={20} />,
+      theme: "violet",
+    },
+    {
+      id: "stat-opinions",
+      label: "Contact Inquiries",
+      value: stats.totalOpinions || 0,
+      description: `${stats.pendingOpinions || 0} pending admin review`,
+      icon: <MessageSquareText size={20} />,
+      theme: "blue",
+    },
+    {
+      id: "stat-subscribers",
+      label: "Newsletter Subscribers",
+      value: stats.totalSubscribers || 0,
+      description: "Active email subscribers",
+      icon: <MailCheck size={20} />,
+      theme: "sunset",
+    },
+    {
+      id: "stat-comments",
+      label: "Community Feedback",
+      value: (stats.totalBlogComments || 0) + (stats.totalAchievementComments || 0),
+      description: "Comments across blogs & awards",
+      icon: <MessagesSquare size={20} />,
+      theme: "violet",
+    },
+  ];
+
   return (
     <div className="DashBoardHome">
       <header className="DashBoardHome-header">
@@ -159,11 +153,11 @@ const DashBoardHome = ({
 
       <section className="DashBoardHome-panel">
         <div className="DashBoardHome-grid">
-          {stats.map((stat, index) => (
+          {cards.map((stat, index) => (
             <DashBoardHome_StatCard
               key={stat.id}
               {...stat}
-              delay={index * 110}
+              delay={index * 90}
             />
           ))}
         </div>

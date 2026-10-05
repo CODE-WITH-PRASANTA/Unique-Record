@@ -26,25 +26,41 @@ import ManageUru from "./Pages/ManageUru/ManageUru";
 import ApproveUru from "./Pages/ApproveUru/ApproveUru";
 import FinallUru from "./Pages/FinallUru/FinallUru";
 import ArchivementPost from "./Pages/ArchivementPost/ArchivementPost";
+import AchievementCategory from "./Pages/AchievementCategory/AchievementCategory";
 import Managecatgory from "./Pages/Managecatgory/Managecatgory";
 import BlogCommentes from "./Pages/BlogCommentes/BlogCommentes";
 import ArchivementComment from "./Pages/ArchivementComment/ArchivementComment";
 import UserOpinion from "./Pages/UserOpinion/UserOpinion";
 import Subscribe from "./Pages/Subscribe/Subscribe";
+import EventCategory from "./Pages/EventCategory/EventCategory";
+// Auth & Protection
+import { AuthProvider } from "./context/AuthContext";
+import ProtectedRoute from "./Components/ProtectedRoute";
+import Login from "./Pages/Login/Login";
 
 const App = () => {
   return (
-    <BrowserRouter>
-      <Routes>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
 
-        {/* Main Layout */}
-        <Route element={<MainLayout />}>
+          {/* Public Login Route */}
+          <Route path="/login" element={<Login />} />
 
-          {/* Root */}
+          {/* Protected Main Layout */}
           <Route
-            path="/"
-            element={<Navigate to="/dashboard" replace />}
-          />
+            element={
+              <ProtectedRoute>
+                <MainLayout />
+              </ProtectedRoute>
+            }
+          >
+
+            {/* Root */}
+            <Route
+              path="/"
+              element={<Navigate to="/dashboard" replace />}
+            />
 
           {/* Dashboard */}
           <Route
@@ -52,15 +68,21 @@ const App = () => {
             element={<DashBoard />}
           />
 
-          {/* Blog Create Route */}
+          {/* Blog Create & Edit Routes */}
           <Route 
             path="/blogs/create" 
             element={<Blog />} 
           />
-          <Route path="/blogs/manage"element={<BlogManage/>}/>
-          <Route path="/notices/add"element={<Notice/>}/>
-          <Route path="/events/add"element={<Event/>}/>
-          <Route path="/team/add"element={<Team/>}/>
+          <Route 
+            path="/blogs/edit/:id" 
+            element={<Blog />} 
+          />
+          <Route path="/blogs/manage" element={<BlogManage />} />
+          <Route path="/notices/add" element={<Notice />} />
+          <Route path="/events/add" element={<Event />} />
+          <Route path="/events/category" element={<EventCategory />} />
+          <Route path="/events/categories" element={<EventCategory />} />
+          <Route path="/team/add" element={<Team />} />
           <Route path="/donations/manage"element={<ManageDonate/>}/>
           <Route path="/gallery/events"element={<Gallery/>}/>
           <Route path="/media/youtube"element={<Youtube/>}/>
@@ -68,8 +90,9 @@ const App = () => {
           <Route path="/uru/manage"element={<ManageUru/>}/>
           <Route path="/uru/approve"element={<ApproveUru/>}/>
           <Route path="/uru/final"element={<FinallUru/>}/>
-<Route path="/achievements/post"element={<ArchivementPost/>}/>
-<Route path="/categories/manage"element={<Managecatgory/>}/>
+<Route path="/achievements/post" element={<ArchivementPost/>}/>
+<Route path="/achievements/category" element={<AchievementCategory/>}/>
+<Route path="/categories/manage" element={<Managecatgory/>}/>
 <Route  path="/comments/blogs"element={<BlogCommentes/>}/>
 <Route path="/comments/achievements"element={<ArchivementComment/>}/>
 <Route path="users/opinions"element={<UserOpinion/>}/>
@@ -85,6 +108,7 @@ const App = () => {
 
       </Routes>
     </BrowserRouter>
+  </AuthProvider>
   );
 };
 

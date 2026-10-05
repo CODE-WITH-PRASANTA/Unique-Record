@@ -1,0 +1,318 @@
+/* DashBoardTrends.css — Interactive Activity Analytics & Graphs */
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap");
+
+.DashBoardTrends {
+  --dbt-ink: #10162e;
+  --dbt-ink-dim: #6b7284;
+  --dbt-bg: #eef1f8;
+  --dbt-card-bg: #ffffff;
+  --dbt-blue: #3f6df0;
+  --dbt-violet: #8f2bf5;
+  --dbt-radius-lg: 22px;
+  --dbt-radius-md: 16px;
+
+  font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--dbt-ink);
+  background: var(--dbt-bg);
+  padding: 4px clamp(0px, 1vw, 4px) 24px;
+}
+
+.DashBoardTrends * {
+  box-sizing: border-box;
+}
+
+.DashBoardTrends-panel {
+  background: var(--dbt-card-bg);
+  border-radius: var(--dbt-radius-lg);
+  padding: clamp(20px, 3vw, 28px);
+  box-shadow: 0 14px 34px rgba(16, 22, 46, 0.07);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.DashBoardTrends-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.DashBoardTrends-titleWrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.DashBoardTrends-iconBadge {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #3f6df0 0%, #8f2bf5 100%);
+  color: #ffffff;
+  box-shadow: 0 8px 18px rgba(111, 63, 245, 0.25);
+}
+
+.DashBoardTrends-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--dbt-ink);
+  letter-spacing: -0.01em;
+}
+
+.DashBoardTrends-subtitle {
+  margin: 3px 0 0;
+  font-size: 12.5px;
+  color: var(--dbt-ink-dim);
+  font-weight: 500;
+}
+
+/* Tabs */
+.DashBoardTrends-tabs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #f1f5f9;
+  padding: 4px;
+  border-radius: 12px;
+  overflow-x: auto;
+}
+
+.DashBoardTrends-tab {
+  border: none;
+  background: transparent;
+  padding: 6px 14px;
+  border-radius: 9px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #64748b;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+}
+
+.DashBoardTrends-tab:hover {
+  color: #1e293b;
+}
+
+.DashBoardTrends-tab.is-active {
+  background: #ffffff;
+  color: #4338ca;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+/* Highlights Grid */
+.DashBoardTrends-highlights {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.DashBoardTrends-highlightCard {
+  background: #f8fafc;
+  border: 1px solid #edf2f7;
+  border-radius: 14px;
+  padding: 14px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.DashBoardTrends-highlightLabel {
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #64748b;
+}
+
+.DashBoardTrends-highlightVal {
+  font-size: 22px;
+  font-weight: 800;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.DashBoardTrends-highlightBadge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: #dcfce7;
+  color: #15803d;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.DashBoardTrends-highlightPeak {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.DashBoardTrends-highlightStatus {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: #ede9fe;
+  color: #6d28d9;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+/* Chart Canvas */
+.DashBoardTrends-chartWrap {
+  position: relative;
+  height: 240px;
+  width: 100%;
+  padding-top: 10px;
+}
+
+.DashBoardTrends-barsContainer {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  gap: 12px;
+}
+
+.DashBoardTrends-barCol {
+  position: relative;
+  flex: 1;
+  max-width: 68px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  cursor: pointer;
+}
+
+.DashBoardTrends-barTrack {
+  width: 100%;
+  max-width: 44px;
+  height: 190px;
+  display: flex;
+  align-items: flex-end;
+  background: #f1f5f9;
+  border-radius: 10px 10px 4px 4px;
+  padding: 3px;
+}
+
+.DashBoardTrends-barFill {
+  width: 100%;
+  border-radius: 8px 8px 3px 3px;
+  transition: height 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.2s ease;
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.DashBoardTrends-barCol:hover .DashBoardTrends-barFill {
+  transform: scaleY(1.02);
+}
+
+.DashBoardTrends-barValueLabel {
+  position: absolute;
+  top: -24px;
+  font-size: 11px;
+  font-weight: 800;
+  color: #334155;
+}
+
+.DashBoardTrends-barLabel {
+  margin-top: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.DashBoardTrends-barCol.is-hovered .DashBoardTrends-barLabel {
+  color: #3f6df0;
+  font-weight: 800;
+}
+
+/* Tooltip */
+.DashBoardTrends-tooltip {
+  position: absolute;
+  bottom: calc(100% - 140px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #0f172a;
+  color: #ffffff;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 12px;
+  white-space: nowrap;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  z-index: 20;
+  pointer-events: none;
+  animation: tooltipFade 0.15s ease-out;
+}
+
+@keyframes tooltipFade {
+  from { opacity: 0; transform: translate(-50%, 6px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+.DashBoardTrends-tooltipMonth {
+  font-weight: 800;
+  color: #38bdf8;
+  margin-bottom: 4px;
+  font-size: 12px;
+}
+
+.DashBoardTrends-tooltipRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 11.5px;
+  margin-bottom: 4px;
+}
+
+.DashBoardTrends-tooltipDetails {
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  padding-top: 4px;
+  font-size: 10.5px;
+  color: #94a3b8;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px 8px;
+}
+
+/* Grid Lines */
+.DashBoardTrends-gridLines {
+  position: absolute;
+  inset: 0;
+  bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.DashBoardTrends-gridLine {
+  width: 100%;
+  height: 1px;
+  background: #e2e8f0;
+  border-top: 1px dashed #cbd5e1;
+}
