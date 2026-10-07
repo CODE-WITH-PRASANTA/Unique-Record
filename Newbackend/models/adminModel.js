@@ -19,7 +19,7 @@ const adminSchema = new mongoose.Schema(
     },
     name: {
       type: String,
-      default: 'Administrator',
+      default: 'Super Administrator',
       trim: true,
     },
     password: {
@@ -33,6 +33,7 @@ const adminSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
+    collection: 'admins', // Specifically for Admin Panel administrators
   }
 );
 

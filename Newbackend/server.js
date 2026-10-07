@@ -57,10 +57,20 @@ app.use('/api/events', require('./routes/eventRoutes'));
 app.use('/api/event', require('./routes/eventRoutes'));
 app.use('/api/event-categories', require('./routes/eventCategoryRoutes'));
 app.use('/api/event-category', require('./routes/eventCategoryRoutes'));
-app.use('/api/auth', require('./routes/adminAuthRoutes'));
+// Auth Routes
 app.use('/api/admin/auth', require('./routes/adminAuthRoutes'));
+app.use('/api/auth', require('./routes/userAuthRoutes'));
+app.use('/api/user', require('./routes/userAuthRoutes'));
+app.use('/api/users', require('./routes/userAuthRoutes'));
+app.use('/api/forgot-password', require('./routes/userAuthRoutes'));
+
+// Dashboard Routes
 app.use('/api/dashboard', require('./routes/dashboardRoutes'));
 app.use('/api/admin/dashboard', require('./routes/dashboardRoutes'));
+
+// URU Application & Management Routes
+app.use('/api/uru', require('./routes/uruRoutes'));
+app.use('/api/manage-uru', require('./routes/uruRoutes'));
 
 // 404 Handler
 app.use((req, res, next) => {

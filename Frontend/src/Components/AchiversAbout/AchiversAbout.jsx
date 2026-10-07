@@ -54,9 +54,10 @@ const AchiversAbout = () => {
       try {
         const response = await fetch(`${API_URL}/uru/fetch-published-uru/${id}`);
         const data = await response.json();
-        setUru(data);
+        const uruObj = data?.data || data || {};
+        setUru(uruObj);
       } catch (error) {
-        console.error(error);
+        console.error('Error fetching published URU by ID:', error);
       }
     };
     fetchPublishedUruById();

@@ -25,18 +25,28 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const [formData, setFormData] = useState({
+  const initialFormState = {
     fullName: "",
     phoneNumber: "",
     email: "",
     password: "",
     confirmPassword: "",
     emailOrPhone: "",
-  });
+  };
+
+  const [formData, setFormData] = useState(initialFormState);
 
   // Handle Input Change
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  // Toggle Tab and reset form
+  const handleToggleTab = (registerMode) => {
+    setIsRegister(registerMode);
+    setFormData(initialFormState);
+    setShowPassword(false);
+    setShowConfirmPassword(false);
   };
 
   // Handle Submit
@@ -60,10 +70,19 @@ const Login = () => {
           password,
           confirmPassword,
         });
+
+        // Clear the form after signup
+        setFormData(initialFormState);
+        setShowPassword(false);
+        setShowConfirmPassword(false);
+
         Swal.fire({
           icon: "success",
           title: "Registration Successful 🎉",
-          text: res.data.message,
+          text: res.data.message || "Account registered successfully!",
+          confirmButtonText: "Proceed to Login",
+        }).then(() => {
+          setIsRegister(false); // Switch to Log In tab
         });
       } else {
         const { emailOrPhone, password } = formData;
@@ -74,6 +93,9 @@ const Login = () => {
 
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("user", JSON.stringify(res.data.user));
+
+        // Clear the form
+        setFormData(initialFormState);
 
         Swal.fire({
           icon: "success",
@@ -119,14 +141,16 @@ const Login = () => {
 
         <div className="login-page-toggle-buttons">
           <button
+            type="button"
             className={!isRegister ? "active login-page-button" : "login-page-button"}
-            onClick={() => setIsRegister(false)}
+            onClick={() => handleToggleTab(false)}
           >
             Log In
           </button>
           <button
+            type="button"
             className={isRegister ? "active login-page-button" : "login-page-button"}
-            onClick={() => setIsRegister(true)}
+            onClick={() => handleToggleTab(true)}
           >
             Sign Up
           </button>
@@ -138,6 +162,7 @@ const Login = () => {
             <input
               type="text"
               name="fullName"
+              value={formData.fullName}
               placeholder="Full Name"
               required
               className="login-page-input"
@@ -150,6 +175,7 @@ const Login = () => {
               <input
                 type="tel"
                 name="phoneNumber"
+                value={formData.phoneNumber}
                 placeholder="Mobile Number"
                 required
                 className="login-page-input half-width"
@@ -160,6 +186,7 @@ const Login = () => {
               <input
                 type="email"
                 name="email"
+                value={formData.email}
                 placeholder="Email Address"
                 required
                 className="login-page-input half-width"
@@ -172,7 +199,8 @@ const Login = () => {
             <input
               type="text"
               name="emailOrPhone"
-              placeholder="Enter Email / Phone"
+              value={formData.emailOrPhone}
+              placeholder="Enter Email / Phone / User ID"
               required
               className="login-page-input"
               onChange={handleChange}
@@ -184,6 +212,7 @@ const Login = () => {
             <input
               type={showPassword ? "text" : "password"}
               name="password"
+              value={formData.password}
               placeholder={isRegister ? "Create Password" : "Password"}
               required
               className="login-page-input"
@@ -203,6 +232,7 @@ const Login = () => {
               <input
                 type={showConfirmPassword ? "text" : "password"}
                 name="confirmPassword"
+                value={formData.confirmPassword}
                 placeholder="Confirm Password"
                 required
                 className="login-page-input"

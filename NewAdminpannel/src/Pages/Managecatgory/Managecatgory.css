@@ -32,7 +32,6 @@
 
 .mc-wrapper {
   width: 100%;
-  max-width: 1000px;
   background: var(--mc-surface);
   border-radius: var(--mc-radius);
   box-shadow: var(--mc-shadow);

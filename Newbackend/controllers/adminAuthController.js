@@ -1,15 +1,16 @@
 const Admin = require('../models/adminModel');
 const jwt = require('jsonwebtoken');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'unique_record_admin_jwt_secret_key_2026';
+const JWT_SECRET = process.env.JWT_SECRET || 'unique_record_jwt_secret_key_2026_super_secure';
 
-// Helper to generate JWT Token
-const generateToken = (admin) => {
+// Helper to generate JWT Token for Administrators
+const generateAdminToken = (admin) => {
   return jwt.sign(
     {
       id: admin._id,
       userId: admin.userId,
       email: admin.email,
+      name: admin.name,
       role: admin.role,
     },
     JWT_SECRET,
@@ -19,52 +20,47 @@ const generateToken = (admin) => {
 
 // Seed default admin if none exists
 const seedDefaultAdmin = async () => {
-  const count = await Admin.countDocuments();
-  if (count === 0) {
-    await Admin.create({
-      userId: 'admin',
-      email: 'admin@uniquerecord.com',
-      name: 'Super Administrator',
-      password: 'admin', // Will be hashed automatically by pre-save hook
-      role: 'admin',
-    });
-    console.log('✅ Default Admin seeded: userId=admin, password=admin');
+  try {
+    const count = await Admin.countDocuments();
+    if (count === 0) {
+      await Admin.create({
+        userId: 'admin',
+        email: 'admin@uniquerecord.com',
+        name: 'Super Administrator',
+        password: 'admin', // Pre-save hook hashes this
+        role: 'admin',
+      });
+      console.log('✅ Default Admin seeded: userId=admin, password=admin');
+    }
+  } catch (err) {
+    console.error('Error seeding default admin:', err.message);
   }
 };
 
-// @desc    Admin Login with JWT
-// @route   POST /api/auth/login, POST /api/admin/auth/login
+// @desc    Admin Login for NewAdminpannel (Authenticates from 'admins' table)
+// @route   POST /api/admin/auth/login
 // @access  Public
 const loginAdmin = async (req, res) => {
   try {
     const { userId, username, email, password } = req.body;
-
     const identifier = (userId || username || email || '').trim().toLowerCase();
     const enteredPassword = password || '';
 
-    if (!identifier) {
+    if (!identifier || !enteredPassword) {
       return res.status(400).json({
         success: false,
-        message: 'Please provide your User ID or Email',
-      });
-    }
-
-    if (!enteredPassword) {
-      return res.status(400).json({
-        success: false,
-        message: 'Please provide your Password',
+        message: 'Admin User ID / Email and password are required',
       });
     }
 
     await seedDefaultAdmin();
 
-    // Find admin by userId or email
+    // Find admin in 'admins' collection
     let admin = await Admin.findOne({
       $or: [{ userId: identifier }, { email: identifier }],
     });
 
     if (!admin) {
-      // Check if trying to login with default admin credentials
       if (identifier === 'admin' && enteredPassword === 'admin') {
         admin = await Admin.create({
           userId: 'admin',
@@ -76,7 +72,7 @@ const loginAdmin = async (req, res) => {
       } else {
         return res.status(401).json({
           success: false,
-          message: 'Invalid User ID or Password',
+          message: 'Invalid Admin User ID or Password',
         });
       }
     }
@@ -86,16 +82,16 @@ const loginAdmin = async (req, res) => {
     if (!isMatch) {
       return res.status(401).json({
         success: false,
-        message: 'Invalid User ID or Password',
+        message: 'Invalid Admin User ID or Password',
       });
     }
 
     // Generate JWT Token
-    const token = generateToken(admin);
+    const token = generateAdminToken(admin);
 
     res.status(200).json({
       success: true,
-      message: 'Login successful! Welcome back 🎉',
+      message: 'Admin login successful! Welcome back 🎉',
       token,
       user: {
         id: admin._id,
@@ -106,20 +102,20 @@ const loginAdmin = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error('Error logging in admin:', error);
+    console.error('Admin Login Error:', error);
     res.status(500).json({
       success: false,
-      message: error.message || 'Server error during login',
+      message: error.message || 'Server error during admin login',
     });
   }
 };
 
 // @desc    Get Current Admin Profile
-// @route   GET /api/auth/me
+// @route   GET /api/admin/auth/me, GET /api/admin/auth/profile
 // @access  Private (JWT)
 const getAdminProfile = async (req, res) => {
   try {
-    const authHeader = req.headers.authorization;
+    const authHeader = req.headers.authorization || req.header('Authorization');
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return res.status(401).json({
         success: false,
@@ -150,8 +146,39 @@ const getAdminProfile = async (req, res) => {
   }
 };
 
+// @desc    Get All Administrators (from 'admins' table)
+// @route   GET /api/admin/auth/list
+// @access  Private (JWT)
+const getAllAdmins = async (req, res) => {
+  try {
+    const admins = await Admin.find().select('-password').sort({ createdAt: -1 });
+    res.status(200).json({
+      success: true,
+      count: admins.length,
+      data: admins,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch admins list',
+    });
+  }
+};
+
+// @desc    Admin Logout
+// @route   POST /api/admin/auth/logout
+// @access  Private
+const logoutAdmin = async (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'Admin logged out successfully',
+  });
+};
+
 module.exports = {
   loginAdmin,
   getAdminProfile,
+  getAllAdmins,
+  logoutAdmin,
   seedDefaultAdmin,
 };

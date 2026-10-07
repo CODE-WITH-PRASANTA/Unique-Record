@@ -31,8 +31,8 @@ import "./Sidebar.css";
 const Sidebar = ({
   isCollapsed = false,
   isMobileOpen = false,
-  onToggleCollapse = () => {},
-  onProfileClick = () => {},
+  onToggleCollapse = () => { },
+  onProfileClick = () => { },
   brandName = "URU Admin Panel",
   brandTagline = "Manage Records & Content",
   user = {
@@ -106,7 +106,7 @@ const Sidebar = ({
           path: "/notices/add",
           icon: <PlusCircle size={16} strokeWidth={2} />,
         },
-       
+
       ],
     },
 
@@ -152,7 +152,7 @@ const Sidebar = ({
           path: "/team/add",
           icon: <UserPlus size={16} strokeWidth={2} />,
         },
-       
+
       ],
     },
 
@@ -187,7 +187,7 @@ const Sidebar = ({
           path: "/gallery/events",
           icon: <ImageIcon size={16} strokeWidth={2} />,
         },
-       
+
       ],
     },
     {
@@ -321,9 +321,8 @@ const Sidebar = ({
 
   return (
     <aside
-      className={`Sidebar ${isCollapsed ? "collapsed" : ""} ${
-        isMobileOpen ? "mobile-open" : ""
-      }`}
+      className={`Sidebar ${isCollapsed ? "collapsed" : ""} ${isMobileOpen ? "mobile-open" : ""
+        }`}
     >
       {/* ==========================================
           BACKGROUND SHEEN
@@ -437,16 +436,13 @@ const Sidebar = ({
                 end={item.path === "/"}
                 title={isCollapsed ? item.text : undefined}
                 className={({ isActive }) =>
-                  `Sidebar-link ${
-                    item.primary ? "primary" : ""
-                  } ${
-                    isActive && !item.primary
-                      ? "active"
-                      : ""
-                  } ${
-                    isActive && item.primary
-                      ? "primary-active"
-                      : ""
+                  `Sidebar-link ${item.primary ? "primary" : ""
+                  } ${isActive && !item.primary
+                    ? "active"
+                    : ""
+                  } ${isActive && item.primary
+                    ? "primary-active"
+                    : ""
                   }`
                 }
               >
@@ -481,9 +477,8 @@ const Sidebar = ({
           return (
             <div
               key={index}
-              className={`Sidebar-dropdown-wrapper ${
-                isDropdownOpen ? "is-open" : ""
-              }`}
+              className={`Sidebar-dropdown-wrapper ${isDropdownOpen ? "is-open" : ""
+                }`}
             >
               <button
                 type="button"
@@ -510,11 +505,10 @@ const Sidebar = ({
 
                     <ChevronDown
                       size={15}
-                      className={`Sidebar-chevron ${
-                        isDropdownOpen
+                      className={`Sidebar-chevron ${isDropdownOpen
                           ? "rotated"
                           : ""
-                      }`}
+                        }`}
                     />
                   </>
                 )}
@@ -528,8 +522,7 @@ const Sidebar = ({
                         key={subIndex}
                         to={subItem.path}
                         className={({ isActive }) =>
-                          `Sidebar-submenu-link ${
-                            isActive ? "active" : ""
+                          `Sidebar-submenu-link ${isActive ? "active" : ""
                           }`
                         }
                       >
