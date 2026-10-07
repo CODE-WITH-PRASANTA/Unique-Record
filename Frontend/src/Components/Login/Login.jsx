@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import axios from "axios";
 import { API_URL } from "../../Api";
@@ -13,13 +13,28 @@ import {
 } from "react-icons/fa";
 import "./Login.css";
 import RightSideCompanyLogo from "../../assets/UNQUE.png";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
 
 const Login = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from
+    ? (typeof location.state.from === "string"
+        ? location.state.from
+        : `${location.state.from.pathname || "/dashboard"}${location.state.from.search || ""}`)
+    : "/dashboard";
+
   const phoneNumber = "+919472351693";
   const [isRegister, setIsRegister] = useState(false);
+
+  // Auto redirect if already logged in
+  useEffect(() => {
+    const token = localStorage.getItem("token") || localStorage.getItem("authToken");
+    if (token) {
+      navigate(from, { replace: true });
+    }
+  }, [navigate, from]);
 
   // show/hide password states
   const [showPassword, setShowPassword] = useState(false);
@@ -100,11 +115,11 @@ const Login = () => {
         Swal.fire({
           icon: "success",
           title: "Login Successful ✅",
-          text: "Redirecting to Dashboard...",
-          timer: 1500,
+          text: "Redirecting...",
+          timer: 1200,
           showConfirmButton: false,
         });
-        setTimeout(() => navigate("/dashboard"), 1500);
+        setTimeout(() => navigate(from, { replace: true }), 1200);
       }
     } catch (err) {
       Swal.fire({

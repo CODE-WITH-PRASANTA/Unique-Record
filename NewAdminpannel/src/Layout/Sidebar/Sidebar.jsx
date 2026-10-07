@@ -24,6 +24,7 @@ import {
   Edit3,
   UserPlus,
   UserCheck,
+  ClipboardList,
 } from "lucide-react";
 
 import "./Sidebar.css";
@@ -126,6 +127,11 @@ const Sidebar = ({
           text: "Add Event",
           path: "/events/add",
           icon: <PlusCircle size={16} strokeWidth={2} />,
+        },
+        {
+          text: "Register Event",
+          path: "/events/registered",
+          icon: <ClipboardList size={16} strokeWidth={2} />,
         },
         {
           text: "Event Category",
@@ -250,11 +256,6 @@ const Sidebar = ({
           text: "Post Achievement",
           path: "/achievements/post",
           icon: <PlusCircle size={16} strokeWidth={2} />,
-        },
-        {
-          text: "Achievement Category",
-          path: "/achievements/category",
-          icon: <Layers size={16} strokeWidth={2} />,
         },
       ],
     },

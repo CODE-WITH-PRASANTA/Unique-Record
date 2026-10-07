@@ -38,54 +38,28 @@ const ArchivementPost = () => {
   const [fileName, setFileName] = useState('No file chosen');
   const [imagePreview, setImagePreview] = useState(null);
   const [achievements, setAchievements] = useState([]);
-  const [categories, setCategories] = useState([
-    'Academic',
-    'Sports',
-    'Professional',
-    'Art & Culture',
-    'Science & Technology',
-    'World Record',
-    'Unique Talent',
-  ]);
+  const [categories, setCategories] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
-  // Fetch all categories from backend
+  // Fetch all categories directly from /categories (categories/manage)
   const fetchCategories = useCallback(async () => {
     try {
+      const res = await API.get('/categories');
+      const catList = res.data?.data || (Array.isArray(res.data) ? res.data : []);
       const names = [];
-      try {
-        const achCatRes = await API.get('/achievement-categories');
-        const achCatList = Array.isArray(achCatRes.data)
-          ? achCatRes.data
-          : (achCatRes.data?.data || []);
-        achCatList.forEach((c) => {
+      catList.forEach((c) => {
+        if (c.isActive !== false) {
           const n = typeof c === 'string' ? c : c.name;
-          if (n) names.push(n);
-        });
-      } catch (e) {
-        console.error('Error fetching achievement categories:', e);
-      }
-
-      try {
-        const res = await API.get('/categories');
-        const catList = Array.isArray(res.data)
-          ? res.data
-          : (res.data?.data || []);
-        catList.forEach((c) => {
-          const n = typeof c === 'string' ? c : c.name;
-          if (n) names.push(n);
-        });
-      } catch (e) {
-        console.error('Error fetching generic categories:', e);
-      }
-
+          if (n && n.trim()) names.push(n.trim());
+        }
+      });
       if (names.length > 0) {
-        setCategories((prev) => [...new Set([...names, ...prev])]);
+        setCategories([...new Set(names)]);
       }
     } catch (err) {
-      console.error('Error in category fetch:', err);
+      console.error('Error fetching categories from /categories:', err);
     }
   }, []);
 
@@ -498,9 +472,9 @@ const ArchivementPost = () => {
           {/* Achievement Category */}
           <div className="ap-form-group">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-              <label className="ap-label" style={{ marginBottom: 0 }}>Achievement Category*</label>
+              <label className="ap-label" style={{ marginBottom: 0 }}>Category*</label>
               <a
-                href="/achievements/category"
+                href="/categories/manage"
                 style={{ fontSize: '12px', color: '#6366f1', textDecoration: 'none', fontWeight: 600 }}
               >
                 + Manage Categories
@@ -515,8 +489,11 @@ const ArchivementPost = () => {
                 required
               >
                 <option value="" disabled>
-                  Select Category
+                  {categories.length === 0 ? 'Loading categories...' : 'Select Category'}
                 </option>
+                {formData.category && !categories.includes(formData.category) && (
+                  <option value={formData.category}>{formData.category}</option>
+                )}
                 {categories.map((cat, idx) => (
                   <option key={idx} value={cat}>
                     {cat}

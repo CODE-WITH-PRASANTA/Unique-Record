@@ -57,6 +57,10 @@ app.use('/api/events', require('./routes/eventRoutes'));
 app.use('/api/event', require('./routes/eventRoutes'));
 app.use('/api/event-categories', require('./routes/eventCategoryRoutes'));
 app.use('/api/event-category', require('./routes/eventCategoryRoutes'));
+app.use('/api/event-registrations', require('./routes/eventRegistrationRoutes'));
+app.use('/api/event-registration', require('./routes/eventRegistrationRoutes'));
+app.use('/api/donation', require('./routes/donationRoutes'));
+app.use('/api/donations', require('./routes/donationRoutes'));
 // Auth Routes
 app.use('/api/admin/auth', require('./routes/adminAuthRoutes'));
 app.use('/api/auth', require('./routes/userAuthRoutes'));

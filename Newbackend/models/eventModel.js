@@ -71,7 +71,7 @@ const eventSchema = new mongoose.Schema(
     },
     category: {
       type: String,
-      default: 'Top Category',
+      default: '',
       trim: true,
     },
   },

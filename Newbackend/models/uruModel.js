@@ -246,6 +246,11 @@ const uruSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    slug: {
+      type: String,
+      trim: true,
+      index: true,
+    },
   },
   {
     timestamps: true,
@@ -254,6 +259,15 @@ const uruSchema = new mongoose.Schema(
 
 // Auto-sync alias fields before saving
 uruSchema.pre('save', function () {
+  if (!this.slug && (this.applicantName || this.name)) {
+    this.slug = (this.applicantName || this.name)
+      .toString()
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/[\s_]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  }
   if (!this.appNo && this.applicationNumber) {
     this.appNo = this.applicationNumber;
   }

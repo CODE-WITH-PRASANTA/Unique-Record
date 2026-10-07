@@ -1,148 +1,306 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import axios from 'axios';
+import { API_URL } from '../../Api';
+import { 
+  Search, 
+  RotateCcw, 
+  Calendar, 
+  User, 
+  Mail, 
+  Phone, 
+  MapPin, 
+  CreditCard,
+  Clock,
+  CheckCircle2,
+  AlertCircle,
+  XCircle,
+  Copy,
+  Check,
+  ShieldCheck,
+  FileCheck,
+  Sparkles,
+  Info
+} from 'lucide-react';
 import './EventStatus.css';
 
-// Mock status data base for demonstration tracking
-const MOCK_STATUS_DATABASE = {
-  'URU3778': {
-    applicantName: 'Prasanta Kumar Khuntia',
-    category: 'Unique Record',
-    applicationDate: '22nd Sep 2026',
-    status: 'Under Verification',
-    statusCode: 'verifying',
-    step: 2,
-    message: 'Your application is currently being verified by our panel of reviewers.'
-  },
-  'URU6310': {
-    applicantName: 'Ankita Nayak',
-    category: 'Unique Activity',
-    applicationDate: '22nd Sep 2026',
-    status: 'Approved & Ready',
-    statusCode: 'approved',
-    step: 4,
-    message: 'Verification complete! Your digital certificate is ready for download.'
-  }
-};
-
 const EventStatus = () => {
-  const [appNumber, setAppNumber] = useState('');
+  const [searchParams] = useSearchParams();
+  const initialId = searchParams.get('appId') || searchParams.get('id') || searchParams.get('applicationNumber') || '';
+
+  const [appNumber, setAppNumber] = useState(initialId);
   const [isLoading, setIsLoading] = useState(false);
   const [statusResult, setStatusResult] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
+  const [copied, setCopied] = useState(false);
 
-  const handleTrackSubmit = (e) => {
-    e.preventDefault();
-    const trimmedInput = appNumber.trim().toUpperCase();
-
-    if (!trimmedInput) {
-      setErrorMessage('Please enter a valid application number.');
+  const fetchStatus = useCallback(async (targetNumber) => {
+    const query = (targetNumber || '').trim().toUpperCase();
+    if (!query) {
+      setErrorMessage('Please enter an Application ID (e.g. EVT2610294).');
       setStatusResult(null);
       return;
     }
 
     setErrorMessage('');
     setIsLoading(true);
-    setStatusResult(null);
 
-    // Simulate network latency for a high-end feel
-    setTimeout(() => {
-      setIsLoading(false);
-      const foundData = MOCK_STATUS_DATABASE[trimmedInput];
-      
-      if (foundData) {
-        setStatusResult({ id: trimmedInput, ...foundData });
+    try {
+      const res = await axios.get(`${API_URL}/event-registrations/track/${encodeURIComponent(query)}`);
+      if (res.data?.success && res.data?.data) {
+        setStatusResult(res.data.data);
       } else {
-        // Fallback default response for testing any random ID
-        setStatusResult({
-          id: trimmedInput,
-          applicantName: 'Valued Contributor',
-          category: 'Unique Record / Activity',
-          applicationDate: 'Recent',
-          status: 'Under Review',
-          statusCode: 'verifying',
-          step: 2,
-          message: 'Application registered successfully in the universal archives queue.'
-        });
+        setErrorMessage(res.data?.message || 'Application not found.');
+        setStatusResult(null);
       }
-    }, 700);
+    } catch (err) {
+      console.error('Error tracking status:', err);
+      const msg = err.response?.data?.message || `No application found for "${query}". Please check your Application ID and try again.`;
+      setErrorMessage(msg);
+      setStatusResult(null);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (initialId) {
+      setAppNumber(initialId);
+      fetchStatus(initialId);
+    }
+  }, [initialId, fetchStatus]);
+
+  const handleTrackSubmit = (e) => {
+    e.preventDefault();
+    fetchStatus(appNumber);
   };
 
   const handleReset = () => {
     setAppNumber('');
     setStatusResult(null);
     setErrorMessage('');
+    setCopied(false);
   };
+
+  const handleCopyId = async (id) => {
+    if (!id) return;
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(id);
+      } else {
+        const textArea = document.createElement("textarea");
+        textArea.value = id;
+        textArea.style.position = "fixed";
+        textArea.style.opacity = "0";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+      }
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.warn('Clipboard copy fallback error:', err);
+    }
+  };
+
+  const formatDate = (dateStr) => {
+    if (!dateStr) return '-';
+    try {
+      const d = new Date(dateStr);
+      if (isNaN(d.getTime())) return dateStr;
+      return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    } catch {
+      return dateStr;
+    }
+  };
+
+  const getStatusIcon = (status) => {
+    switch (status) {
+      case 'Approved':
+        return <CheckCircle2 size={16} />;
+      case 'Refund':
+        return <RotateCcw size={16} />;
+      case 'Under Process':
+        return <Clock size={16} />;
+      default:
+        return <Clock size={16} />;
+    }
+  };
+
+  const statusKey = (statusResult?.status || 'Pending').replace(/\s+/g, '-');
 
   return (
     <div className="es-main-container">
-      <div className="es-status-card">
-        {/* Background Ambient Glow Accents */}
-        <div className="es-glow-orb es-orb-1"></div>
-        <div className="es-glow-orb es-orb-2"></div>
+      <div className="es-glow-orb es-orb-1"></div>
+      <div className="es-glow-orb es-orb-2"></div>
 
+      <div className="es-status-card">
         <div className="es-card-inner">
           <div className="es-icon-badge">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="11" cy="11" r="8" />
-              <line x1="21" y1="21" x2="16.65" y2="16.65" />
-            </svg>
+            <Search size={28} />
           </div>
 
-          <h2 className="es-title">Track Your Event Application</h2>
+          <h2 className="es-title">Event Application Tracker</h2>
           <p className="es-subtitle">
-            Enter your application number sent to your email to view status.
+            Enter your unique Application ID (e.g. <strong>EVT26XXXXX</strong>) to verify your registration status in real time.
           </p>
 
           <form className="es-form-group" onSubmit={handleTrackSubmit}>
             <div className="es-input-wrapper">
-              <svg className="es-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M4 7V4h16v3M9 20h6M12 4v16" />
-              </svg>
+              <Search className="es-input-icon" size={18} />
               <input
                 type="text"
                 className="es-text-input"
-                placeholder="Enter Application Number"
+                placeholder="Enter Application ID (e.g. EVT2610294)"
                 value={appNumber}
                 onChange={(e) => {
-                  setAppNumber(e.target.value);
+                  setAppNumber(e.target.value.toUpperCase());
                   if (errorMessage) setErrorMessage('');
                 }}
               />
             </div>
             <button type="submit" className="es-track-btn" disabled={isLoading}>
-              {isLoading ? (
-                <span className="es-loading-wrap">
-                  <span className="es-spinner"></span> Checking...
-                </span>
-              ) : (
-                'Track'
-              )}
+              {isLoading ? 'Checking...' : 'Track Status'}
             </button>
           </form>
 
-          {errorMessage && <div className="es-error-alert">{errorMessage}</div>}
+          {errorMessage && (
+            <div className="es-error-alert">
+              <AlertCircle size={16} />
+              <span>{errorMessage}</span>
+            </div>
+          )}
 
-          {/* Detailed Status Result Panel */}
+          {/* Result Panel */}
           {statusResult && (
             <div className="es-result-panel">
+              
+              {/* Top Dossier Bar */}
               <div className="es-result-header">
                 <div>
-                  <span className="es-result-id">Application ID: <strong>{statusResult.id}</strong></span>
+                  <div className="es-result-id-group">
+                    <span className="es-result-id">Application ID</span>
+                    <span className="es-id-pill">{statusResult.applicationNumber || statusResult.id}</span>
+                    <button
+                      type="button"
+                      className="es-copy-btn"
+                      onClick={() => handleCopyId(statusResult.applicationNumber || statusResult.id)}
+                      title="Copy ID"
+                    >
+                      {copied ? <Check size={12} color="#059669" /> : <Copy size={12} />}
+                      {copied ? 'Copied' : 'Copy'}
+                    </button>
+                  </div>
                   <h3 className="es-result-name">{statusResult.applicantName}</h3>
                 </div>
-                <span className={`es-status-badge ${statusResult.statusCode}`}>
+
+                <span className={`es-status-badge ${statusKey}`}>
+                  {getStatusIcon(statusResult.status)}
                   {statusResult.status}
                 </span>
               </div>
 
-              <div className="es-result-meta">
-                <span>Category: <strong>{statusResult.category}</strong></span>
-                <span>Date: <strong>{statusResult.applicationDate}</strong></span>
+              {/* Progress Tracker Bar */}
+              {statusResult.status !== 'Refund' ? (
+                <div className="es-timeline-container">
+                  <div className="es-timeline-steps es-three-steps">
+                    <div className={`es-timeline-step ${statusResult.step >= 1 ? (statusResult.step > 1 ? 'completed' : 'active') : ''}`}>
+                      <div className="es-step-circle">1</div>
+                      <div className="es-step-label">Submitted</div>
+                    </div>
+                    <div className={`es-timeline-step ${statusResult.step >= 2 ? (statusResult.step > 2 ? 'completed' : 'active') : ''}`}>
+                      <div className="es-step-circle">2</div>
+                      <div className="es-step-label">Under Process</div>
+                    </div>
+                    <div className={`es-timeline-step ${statusResult.step >= 3 ? 'completed active' : ''}`}>
+                      <div className="es-step-circle">3</div>
+                      <div className="es-step-label">Approved</div>
+                    </div>
+                  </div>
+
+                  <div className="es-progress-bar-bg">
+                    <div 
+                      className="es-progress-bar-fill" 
+                      style={{ 
+                        width: `${Math.min(100, Math.max(16, ((statusResult.step) / 3) * 100))}%`,
+                        background: 'linear-gradient(90deg, #3b82f6 0%, #10b981 100%)'
+                      }} 
+                    />
+                  </div>
+                </div>
+              ) : (
+                <div className="es-refund-banner">
+                  <RotateCcw size={20} color="#ea580c" />
+                  <div>
+                    <strong>Registration Refunded</strong>
+                    <p>{statusResult.message || 'Your event registration fee has been refunded.'}</p>
+                  </div>
+                </div>
+              )}
+
+              {/* Info Grid */}
+              <div className="es-info-grid">
+                <div className="es-info-card">
+                  <Calendar size={18} />
+                  <div>
+                    <span>Event Name</span>
+                    <strong>{statusResult.eventName}</strong>
+                  </div>
+                </div>
+
+                <div className="es-info-card">
+                  <CreditCard size={18} />
+                  <div>
+                    <span>Registration Fee</span>
+                    <strong style={{ color: '#059669' }}>{statusResult.registrationFees || '₹0'}</strong>
+                  </div>
+                </div>
+
+                <div className="es-info-card">
+                  <Phone size={18} />
+                  <div>
+                    <span>Contact WhatsApp</span>
+                    <strong>{statusResult.whatsappNumber || '-'}</strong>
+                  </div>
+                </div>
+
+                <div className="es-info-card">
+                  <MapPin size={18} />
+                  <div>
+                    <span>Location</span>
+                    <strong>{statusResult.district ? `${statusResult.district}, ${statusResult.state}` : '-'}</strong>
+                  </div>
+                </div>
+
+                <div className="es-info-card">
+                  <Clock size={18} />
+                  <div>
+                    <span>Registered Date</span>
+                    <strong>{formatDate(statusResult.registrationDate)}</strong>
+                  </div>
+                </div>
+
+                <div className="es-info-card">
+                  <Mail size={18} />
+                  <div>
+                    <span>Registered Email</span>
+                    <strong>{statusResult.email || '-'}</strong>
+                  </div>
+                </div>
               </div>
 
-              <p className="es-result-message">{statusResult.message}</p>
+              {/* Status Note */}
+              <div className="es-message-box">
+                <p>
+                  <strong>Official Status Update:</strong> {statusResult.message}
+                </p>
+              </div>
 
+              {/* Reset Button */}
               <button type="button" className="es-reset-btn" onClick={handleReset}>
-                Track Another Application 🔄
+                <RotateCcw size={16} /> Track Another Application
               </button>
             </div>
           )}

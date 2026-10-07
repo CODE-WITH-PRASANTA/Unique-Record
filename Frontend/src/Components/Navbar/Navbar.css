@@ -234,6 +234,12 @@
   gap: 25px;
 }
 
+.topbar-auth-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .topbar-login {
   background: rgba(255, 255, 255, 0.1);
   color: #fff;
@@ -243,6 +249,31 @@
   font-weight: 600;
   font-size: 16px;
   transition: all 0.3s ease;
+}
+
+.topbar-dashboard-link {
+  background: rgba(255, 215, 0, 0.15);
+  border: 1px solid rgba(255, 215, 0, 0.4);
+  color: #ffd700;
+}
+
+.topbar-logout-btn {
+  background: rgba(255, 71, 87, 0.15);
+  border: 1px solid rgba(255, 71, 87, 0.4);
+  color: #ff6b81;
+  padding: 8px 18px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.topbar-logout-btn:hover {
+  background: rgba(255, 71, 87, 0.35);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 71, 87, 0.3);
 }
 
 .topbar-login:hover {

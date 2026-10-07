@@ -1,10 +1,21 @@
 import React, { useState, useEffect } from "react";
 import "./AchiversAbout.css";
-import { FaFacebookF, FaWhatsapp, FaEnvelope, FaShareAlt , FaInstagram  } from "react-icons/fa";
-import { FaXTwitter } from "react-icons/fa6";  // modern X logo
-import { FiDownload } from "react-icons/fi";
-import { API_URL } from '../../Api';
-import { useParams } from "react-router-dom";
+import {
+  FaFacebookF,
+  FaWhatsapp,
+  FaEnvelope,
+  FaShareAlt,
+  FaInstagram,
+  FaImages,
+  FaVideo,
+  FaExpand,
+  FaTimes,
+  FaExternalLinkAlt,
+} from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6"; // modern X logo
+import { FiDownload, FiEye } from "react-icons/fi";
+import { API_URL } from "../../Api";
+import { useParams, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -15,39 +26,41 @@ import "swiper/css/pagination";
 // Import modules directly from 'swiper/modules'
 import { Navigation, Pagination } from "swiper/modules";
 
-
 const AchiversAbout = () => {
   const [activeTab, setActiveTab] = useState("summary");
   const [uru, setUru] = useState({});
   const { id } = useParams();
-  const sharableLink = `${window.location.origin}/achiever/${id}`;
+  const navigate = useNavigate();
+
+  // Helper to create URL slug from name
+  const getSlugFromName = (name) => {
+    if (!name) return "";
+    return name
+      .toString()
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9\s-]/g, "")
+      .replace(/[\s_]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+  };
+
+  const currentSlug =
+    uru.slug ||
+    getSlugFromName(uru.applicantName || uru.name) ||
+    id;
+  const sharableLink = `${window.location.origin}/achiever/${currentSlug}`;
+
   // State for read more / read less
   const [showFullPurpose, setShowFullPurpose] = useState(false);
   const [showFullDesc, setShowFullDesc] = useState(false);
   const [openPhoto, setOpenPhoto] = useState(null);
 
-
-
-
-  const shareOnInstagram = async (url, name, postUrl) => {
-    try {
-      const text = getShareMessage(name, postUrl);
-
-      if (navigator.share) {
-        await navigator.share({
-          title: `${name}'s Unique Record`,
-          text,
-          url: postUrl,
-        });
-      } else {
-        // Fallback: copy link to clipboard
-        await navigator.clipboard.writeText(postUrl);
-        alert("Link copied! Open Instagram and paste it in your post or story.");
-      }
-    } catch (error) {
-      console.error("Error sharing on Instagram:", error);
-    }
-  };
+  // Photos & Videos arrays
+  const photos = Array.isArray(uru?.photos) ? uru.photos : [];
+  const videos = Array.isArray(uru?.videos) ? uru.videos : [];
+  const youtubeLinks = Array.isArray(uru?.youtubeLink)
+    ? uru.youtubeLink.filter(Boolean)
+    : [];
 
   useEffect(() => {
     const fetchPublishedUruById = async () => {
@@ -56,12 +69,23 @@ const AchiversAbout = () => {
         const data = await response.json();
         const uruObj = data?.data || data || {};
         setUru(uruObj);
+
+        // If the route was opened with a Mongo ObjectId, seamlessly replace URL with the friendly slug
+        const targetSlug =
+          uruObj.slug ||
+          getSlugFromName(uruObj.applicantName || uruObj.name);
+
+        if (targetSlug && id !== targetSlug && /^[0-9a-fA-F]{24}$/.test(id)) {
+          navigate(`/achiever/${targetSlug}`, { replace: true });
+        }
       } catch (error) {
-        console.error('Error fetching published URU by ID:', error);
+        console.error("Error fetching published URU by ID/slug:", error);
       }
     };
-    fetchPublishedUruById();
-  }, [id]);
+    if (id) {
+      fetchPublishedUruById();
+    }
+  }, [id, navigate]);
 
       // Functions
       const downloadCertificate = (url, name) => {
@@ -86,6 +110,35 @@ const AchiversAbout = () => {
     const shareOnTwitter = (url, name, postUrl) => {
       const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(getShareMessage(name, postUrl))}`;
       window.open(twitterUrl, '_blank');
+    };
+
+    // Instagram
+    const shareOnInstagram = async (url, name, postUrl) => {
+      try {
+        const text = getShareMessage(name, postUrl);
+        if (navigator.share) {
+          await navigator.share({
+            title: `${name}'s Unique Record`,
+            text,
+            url: postUrl,
+          });
+        } else {
+          await navigator.clipboard.writeText(postUrl);
+          alert("Link copied! Open Instagram and paste it in your post or story.");
+        }
+      } catch (error) {
+        console.error("Error sharing on Instagram:", error);
+      }
+    };
+
+    // YouTube Embed Link Helper
+    const getYouTubeEmbedUrl = (url) => {
+      if (!url || typeof url !== "string") return null;
+      const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=|shorts\/)([^#&?]*).*/;
+      const match = url.match(regExp);
+      return match && match[2].length === 11
+        ? `https://www.youtube.com/embed/${match[2]}`
+        : null;
     };
 
     // WhatsApp
@@ -357,13 +410,15 @@ const AchiversAbout = () => {
           className={`tab-btn ${activeTab === "photos" ? "active" : ""}`}
           onClick={() => setActiveTab("photos")}
         >
-          Photos
+          Photos {photos.length > 0 && <span className="tab-badge">({photos.length})</span>}
         </button>
         <button
           className={`tab-btn ${activeTab === "videos" ? "active" : ""}`}
           onClick={() => setActiveTab("videos")}
         >
-          Videos
+          Videos {(videos.length + youtubeLinks.length) > 0 && (
+            <span className="tab-badge">({videos.length + youtubeLinks.length})</span>
+          )}
         </button>
       </div>
 
@@ -656,92 +711,237 @@ const AchiversAbout = () => {
                     </div>
         )}
 
-        {/* ================= Photos ================= */}
+        {/* ================= Photos Tab ================= */}
         {activeTab === "photos" && (
-          <div className="tab-section">
-            <h3>Photos</h3>
-            <div className="new-achiver-about-photo-section">
-              {uru.photos && uru.photos.length > 0 ? (
-                <>
-                  <Swiper
-                    modules={[Navigation, Pagination]}
-                    navigation={{
-                      nextEl: ".swiper-button-next-custom",
-                      prevEl: ".swiper-button-prev-custom",
-                    }}
-                    pagination={{ clickable: true }}
-                    spaceBetween={10}
-                    slidesPerView={1}
-                    loop={true}
-                    className="achiver-swiper"
-                  >
-                    {uru.photos.map((photo, index) => (
-                      <SwiperSlide key={index}>
-                        <img
-                          src={photo.url}
-                          alt={`${uru.applicantName} - ${index + 1}`}
-                          className="achiver-applicant-photo"
-                          onClick={() => setOpenPhoto(photo.url)}
-                          style={{ cursor: "pointer" }}
-                        />
-                      </SwiperSlide>
-                    ))}
-                  </Swiper>
-
-                  {/* Custom navigation */}
-                  <div className="swiper-button-prev-custom">&lt;</div>
-                  <div className="swiper-button-next-custom">&gt;</div>
-
-                  {/* Lightbox */}
-                  {openPhoto && (
-                    <div
-                      className="photo-lightbox"
-                      onClick={() => setOpenPhoto(null)}
-                    >
-                      <img src={openPhoto} alt="Original" className="lightbox-img" />
-                    </div>
-                  )}
-                </>
-              ) : (
-                <p>No photos uploaded</p>
-              )}
+          <div className="tab-section achiver-media-tab">
+            <div className="media-tab-header">
+              <div>
+                <h3 className="media-tab-title">
+                  <FaImages className="media-tab-icon" /> Evidence & Record Photos
+                </h3>
+                <p className="media-tab-subtitle">
+                  Visual evidence and photographs submitted for this Unique Record.
+                </p>
+              </div>
+              <span className="media-badge">
+                {photos.length} Photo{photos.length !== 1 ? "s" : ""}
+              </span>
             </div>
+
+            {photos.length > 0 ? (
+              <div className="achiver-media-grid photos-grid">
+                {photos.map((photo, index) => {
+                  const photoSrc = typeof photo === "string" ? photo : photo?.url;
+                  const photoName =
+                    typeof photo === "string"
+                      ? `Record Photo ${index + 1}`
+                      : photo?.filename || `Record Photo ${index + 1}`;
+
+                  return (
+                    <div key={index} className="achiver-photo-card">
+                      <div
+                        className="photo-card-img-wrap"
+                        onClick={() => setOpenPhoto(photoSrc)}
+                      >
+                        <img
+                          src={photoSrc}
+                          alt={photoName}
+                          className="photo-card-img"
+                          loading="lazy"
+                        />
+                        <div className="photo-card-hover-overlay">
+                          <span className="photo-view-action">
+                            <FaExpand /> View Fullscreen
+                          </span>
+                        </div>
+                      </div>
+                      <div className="photo-card-meta">
+                        <span className="photo-meta-name" title={photoName}>
+                          {photoName}
+                        </span>
+                        <a
+                          href={photoSrc}
+                          download={photoName}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="photo-meta-download"
+                          title="Download photo"
+                        >
+                          <FiDownload />
+                        </a>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="media-empty-card">
+                <FaImages className="media-empty-icon" />
+                <h4>No Photos Uploaded</h4>
+                <p>No photographic evidence was uploaded for this record.</p>
+              </div>
+            )}
           </div>
         )}
 
-      {/* ================= Videos ================= */}
-      {activeTab === "videos" && (
-        <div className="tab-section">
-          <h3>Videos</h3>
-          {uru.youtubeLink?.length > 0 ? (
-            uru.youtubeLink.map((link, index) => {
-              // Extract video ID from YouTube link
-              const videoId = link.includes("watch?v=")
-                ? link.split("v=")[1].split("&")[0]
-                : link.split("/").pop();
+        {/* ================= Videos Tab ================= */}
+        {activeTab === "videos" && (
+          <div className="tab-section achiver-media-tab">
+            <div className="media-tab-header">
+              <div>
+                <h3 className="media-tab-title">
+                  <FaVideo className="media-tab-icon" /> Videos & Media Recordings
+                </h3>
+                <p className="media-tab-subtitle">
+                  Video recordings and media links documenting this Unique Record attempt.
+                </p>
+              </div>
+              <span className="media-badge">
+                {videos.length + youtubeLinks.length} Video
+                {videos.length + youtubeLinks.length !== 1 ? "s" : ""}
+              </span>
+            </div>
 
-              return (
-                <div key={index} style={{ marginBottom: "20px" }}>
-                  <iframe
-                    width="300"
-                    height="250"
-                    src={`https://www.youtube.com/embed/${videoId}`}
-                    title={`YouTube video ${index}`}
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    className="tab-video"
-                  ></iframe>
+            {/* Uploaded Videos */}
+            {videos.length > 0 && (
+              <div className="media-subgroup">
+                <h4 className="media-subgroup-title">Uploaded Video Recordings</h4>
+                <div className="achiver-media-grid videos-grid">
+                  {videos.map((vid, index) => {
+                    const videoSrc = typeof vid === "string" ? vid : vid?.url;
+                    const videoName =
+                      typeof vid === "string"
+                        ? `Record Video ${index + 1}`
+                        : vid?.filename || `Record Video ${index + 1}`;
+
+                    return (
+                      <div key={index} className="achiver-video-card">
+                        <div className="video-player-frame">
+                          <video
+                            controls
+                            preload="metadata"
+                            src={videoSrc}
+                            className="achiver-html5-video"
+                          >
+                            Your browser does not support HTML5 video.
+                          </video>
+                        </div>
+                        <div className="video-card-meta">
+                          <span className="video-meta-name" title={videoName}>
+                            {videoName}
+                          </span>
+                          <a
+                            href={videoSrc}
+                            download={videoName}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="video-meta-download"
+                            title="Download video"
+                          >
+                            <FiDownload /> Download
+                          </a>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
-              );
-            })
-          ) : (
-            <p>No videos available</p>
-          )}
-        </div>
-      )}
+              </div>
+            )}
+
+            {/* YouTube Links */}
+            {youtubeLinks.length > 0 && (
+              <div className="media-subgroup">
+                <h4 className="media-subgroup-title">External & YouTube Videos</h4>
+                <div className="achiver-media-grid videos-grid">
+                  {youtubeLinks.map((link, index) => {
+                    const embedUrl = getYouTubeEmbedUrl(link);
+                    return (
+                      <div key={index} className="achiver-video-card">
+                        {embedUrl ? (
+                          <div className="video-iframe-frame">
+                            <iframe
+                              src={embedUrl}
+                              title={`YouTube video ${index + 1}`}
+                              frameBorder="0"
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                              allowFullScreen
+                              className="achiver-youtube-iframe"
+                            ></iframe>
+                          </div>
+                        ) : (
+                          <div className="video-link-frame">
+                            <a
+                              href={link}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="link-btn"
+                            >
+                              <FaExternalLinkAlt style={{ marginRight: 6 }} /> Open External Video {index + 1}
+                            </a>
+                          </div>
+                        )}
+                        <div className="video-card-meta">
+                          <span className="video-meta-name">
+                            YouTube Stream #{index + 1}
+                          </span>
+                          <a
+                            href={link}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="video-meta-download"
+                          >
+                            <FaExternalLinkAlt /> Open
+                          </a>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* Empty State */}
+            {videos.length === 0 && youtubeLinks.length === 0 && (
+              <div className="media-empty-card">
+                <FaVideo className="media-empty-icon" />
+                <h4>No Videos Available</h4>
+                <p>No video evidence or recordings were uploaded for this record.</p>
+              </div>
+            )}
+          </div>
+        )}
 
       </div>
+
+      {/* Lightbox Modal */}
+      {openPhoto && (
+        <div className="photo-lightbox" onClick={() => setOpenPhoto(null)}>
+          <div
+            className="lightbox-dialog"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className="lightbox-close-btn"
+              onClick={() => setOpenPhoto(null)}
+              aria-label="Close"
+            >
+              <FaTimes />
+            </button>
+            <img src={openPhoto} alt="Record Preview" className="lightbox-img" />
+            <div className="lightbox-footer">
+              <a
+                href={openPhoto}
+                download
+                target="_blank"
+                rel="noreferrer"
+                className="lightbox-download-link"
+              >
+                <FiDownload /> Download Original
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );

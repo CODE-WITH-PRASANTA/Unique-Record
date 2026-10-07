@@ -33,6 +33,7 @@ import ArchivementComment from "./Pages/ArchivementComment/ArchivementComment";
 import UserOpinion from "./Pages/UserOpinion/UserOpinion";
 import Subscribe from "./Pages/Subscribe/Subscribe";
 import EventCategory from "./Pages/EventCategory/EventCategory";
+import RegisterEvent from "./Pages/RegisterEvent/RegisterEvent";
 // Auth & Protection
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./Components/ProtectedRoute";
@@ -80,6 +81,8 @@ const App = () => {
             <Route path="/blogs/manage" element={<BlogManage />} />
             <Route path="/notices/add" element={<Notice />} />
             <Route path="/events/add" element={<Event />} />
+            <Route path="/events/registered" element={<RegisterEvent />} />
+            <Route path="/events/register" element={<RegisterEvent />} />
             <Route path="/events/category" element={<EventCategory />} />
             <Route path="/events/categories" element={<EventCategory />} />
             <Route path="/team/add" element={<Team />} />
@@ -91,7 +94,7 @@ const App = () => {
             <Route path="/uru/approve" element={<ApproveUru />} />
             <Route path="/uru/final" element={<FinallUru />} />
             <Route path="/achievements/post" element={<ArchivementPost />} />
-            <Route path="/achievements/category" element={<AchievementCategory />} />
+            <Route path="/achievements/category" element={<Managecatgory />} />
             <Route path="/categories/manage" element={<Managecatgory />} />
             <Route path="/comments/blogs" element={<BlogCommentes />} />
             <Route path="/comments/achievements" element={<ArchivementComment />} />

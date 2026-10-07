@@ -151,7 +151,7 @@ const AchiverSection = () => {
 
             <div className="Achiver-Details-CardBtnWrapper">
               <Link
-                to={`/achiever/${achiever._id}`}
+                to={`/achiever/${achiever.slug || (achiever.applicantName || achiever.name || '').toLowerCase().trim().replace(/[^a-z0-9\s-]/g, '').replace(/[\s_]+/g, '-').replace(/^-+|-+$/g, '') || achiever._id}`}
                 className="Achiver-Details-CardBtn"
               >
                 View Details

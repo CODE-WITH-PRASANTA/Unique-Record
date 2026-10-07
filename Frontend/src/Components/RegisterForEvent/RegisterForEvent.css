@@ -1,117 +1,202 @@
 /* =========================================================
-   EVENT REGISTRATION FORM - PREMIUM UI STYLESHEET
+   ULTRA-PREMIUM EVENT REGISTRATION FORM STYLESHEET
 ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
 .ure-page-wrapper {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
-  padding: 40px 20px;
-  font-family: 'Inter', 'Segoe UI', sans-serif;
-  color: #1e293b;
+  background: radial-gradient(120% 120% at 50% 0%, #edf4fe 0%, #f8fafc 60%, #eef2f6 100%);
+  padding: 48px 20px 80px;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  color: #0f172a;
+  position: relative;
+  overflow: hidden;
   box-sizing: border-box;
 }
 
-.ure-page-wrapper *,
-.ure-page-wrapper *::before,
-.ure-page-wrapper *::after {
+.ure-page-wrapper * {
   box-sizing: border-box;
+}
+
+/* Ambient Background Glow */
+.ure-page-wrapper::before {
+  content: '';
+  position: absolute;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 900px;
+  height: 450px;
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.15) 0%, rgba(37, 99, 235, 0.08) 50%, transparent 70%);
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
 }
 
 .ure-container {
-  max-width: 960px;
+  width: 100%;
+  max-width: 1080px;
   margin: 0 auto;
+  position: relative;
+  z-index: 1;
 }
 
-/* Header Styles */
+/* Header Section */
 .ure-header {
   text-align: center;
-  margin-bottom: 32px;
+  margin-bottom: 36px;
 }
 
 .ure-badge {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  background: rgba(14, 178, 231, 0.12);
+  gap: 8px;
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.12), rgba(37, 99, 235, 0.12));
   color: #0284c7;
-  padding: 6px 14px;
-  border-radius: 20px;
+  border: 1px solid rgba(14, 165, 233, 0.25);
+  padding: 8px 18px;
+  border-radius: 999px;
   font-size: 13px;
   font-weight: 700;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
   letter-spacing: 0.5px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.08);
 }
 
 .ure-main-title {
-  font-size: clamp(24px, 4vw, 34px);
+  font-size: clamp(26px, 4.5vw, 38px);
   font-weight: 800;
   color: #0f172a;
-  margin: 0 0 8px;
-  letter-spacing: -0.5px;
+  margin: 0 0 10px;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  background: linear-gradient(135deg, #0f172a 30%, #2563eb 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .ure-subtitle {
-  font-size: clamp(14px, 2vw, 16px);
+  font-size: clamp(14px, 2vw, 17px);
   color: #e11d48;
   font-weight: 600;
   margin: 0;
+  letter-spacing: 0.2px;
 }
 
-/* Form Card */
+/* Master Form Card */
 .ure-form-card {
-  background: #ffffff;
-  border-radius: 20px;
-  box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.08), 
-              0 0 1px 1px rgba(15, 23, 42, 0.05);
-  border: 1px solid rgba(226, 232, 240, 0.8);
-  padding: clamp(20px, 4vw, 40px);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 28px;
+  box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.08), 
+              0 0 0 1px rgba(226, 232, 240, 0.8) inset;
+  padding: clamp(24px, 5vw, 48px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
 }
 
+/* Card Header Banner */
 .ure-form-card-header {
-  margin-bottom: 30px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid #f1f5f9;
+  margin-bottom: 36px;
+  padding-bottom: 24px;
+  border-bottom: 1.5px solid #f1f5f9;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
 }
 
 .ure-form-title-group {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 8px;
+  gap: 14px;
 }
 
 .ure-blue-accent-bar {
   width: 6px;
-  height: 28px;
-  background: linear-gradient(180deg, #168df0 0%, #0eb2e7 100%);
-  border-radius: 4px;
+  height: 32px;
+  background: linear-gradient(180deg, #2563eb 0%, #06b6d4 100%);
+  border-radius: 6px;
 }
 
 .ure-form-card-header h2 {
-  font-size: clamp(18px, 2.5vw, 22px);
+  font-size: clamp(20px, 3vw, 24px);
   font-weight: 800;
   color: #0f172a;
   margin: 0;
+  letter-spacing: -0.02em;
 }
 
 .ure-form-desc {
   color: #64748b;
   font-size: 14px;
-  margin: 0 0 0 18px;
+  margin: 4px 0 0;
+  font-weight: 500;
+}
+
+.ure-pricing-pill {
+  background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+  border: 1.5px solid #a7f3d0;
+  padding: 8px 18px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 4px 10px rgba(5, 150, 105, 0.08);
+}
+
+.ure-pricing-pill span {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #047857;
+  letter-spacing: 0.5px;
+}
+
+.ure-pricing-pill strong {
+  font-size: 20px;
+  font-weight: 800;
+  color: #065f46;
+}
+
+/* Form Section Blocks */
+.ure-section-divider {
+  margin: 32px 0 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ure-section-divider-title {
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #64748b;
+  white-space: nowrap;
+}
+
+.ure-section-divider-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, #e2e8f0 0%, transparent 100%);
 }
 
 /* Grid Layout */
 .ure-form-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 22px;
+  gap: 24px 20px;
 }
 
 .ure-full-width {
   grid-column: span 2;
 }
 
-/* Input Group Styles */
+/* Input Group */
 .ure-input-group {
   display: flex;
   flex-direction: column;
@@ -119,61 +204,97 @@
 }
 
 .ure-input-group label {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 8px;
   font-size: 13.5px;
   font-weight: 700;
   color: #334155;
+  letter-spacing: -0.01em;
 }
 
 .ure-input-group label svg {
-  color: #0284c7;
+  color: #2563eb;
 }
 
-.ure-input-group input:not([type="radio"]),
+.ure-input-group label span.ure-req {
+  color: #e11d48;
+}
+
+/* Inputs, Selects, Textarea */
+.ure-input-group input[type="text"],
+.ure-input-group input[type="email"],
+.ure-input-group input[type="tel"],
+.ure-input-group input[type="url"],
+.ure-input-group input[type="date"],
 .ure-input-group select,
 .ure-input-group textarea {
   width: 100%;
-  padding: 12px 16px;
-  background: #f8fafc;
+  padding: 13px 16px;
   border: 1.5px solid #e2e8f0;
-  border-radius: 12px;
+  border-radius: 14px;
   font-size: 15px;
+  font-family: inherit;
   color: #0f172a;
+  background-color: #f8fafc;
   outline: none;
-  transition: all 0.25s ease;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
 }
 
 .ure-input-group input:hover,
 .ure-input-group select:hover,
 .ure-input-group textarea:hover {
+  background-color: #ffffff;
   border-color: #cbd5e1;
-  background: #ffffff;
 }
 
 .ure-input-group input:focus,
 .ure-input-group select:focus,
 .ure-input-group textarea:focus {
-  border-color: #0284c7;
-  background: #ffffff;
-  box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.12);
+  background-color: #ffffff;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12), 0 4px 12px rgba(37, 99, 235, 0.05);
 }
 
+.ure-input-group textarea {
+  resize: vertical;
+  min-height: 100px;
+  line-height: 1.6;
+}
+
+.ure-readonly-input {
+  background-color: #f1f5f9 !important;
+  color: #059669 !important;
+  font-weight: 800 !important;
+  font-size: 18px !important;
+  border-color: #cbd5e1 !important;
+}
+
+/* Select wrapper */
 .ure-select-wrapper {
   position: relative;
 }
 
 .ure-select-wrapper select {
   appearance: none;
+  -webkit-appearance: none;
   cursor: pointer;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 14px center;
   padding-right: 40px;
 }
 
-/* Radio Chip Styling */
+.ure-select-wrapper::after {
+  content: '▼';
+  font-size: 10px;
+  color: #64748b;
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+/* Radio Group (Sex/Gender) */
 .ure-radio-group {
   display: flex;
   gap: 12px;
@@ -182,25 +303,26 @@
 
 .ure-radio-chip {
   flex: 1;
-  min-width: 110px;
+  min-width: 120px;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 12px 16px;
+  padding: 12px 18px;
   background: #f8fafc;
   border: 1.5px solid #e2e8f0;
   border-radius: 12px;
   cursor: pointer;
-  font-weight: 600;
   font-size: 14px;
+  font-weight: 600;
   color: #475569;
   transition: all 0.2s ease;
+  user-select: none;
 }
 
 .ure-radio-chip input[type="radio"] {
-  accent-color: #0284c7;
-  margin: 0;
+  display: none;
 }
 
 .ure-radio-chip:hover {
@@ -209,12 +331,36 @@
 }
 
 .ure-radio-chip.active {
-  background: rgba(2, 132, 199, 0.08);
-  border-color: #0284c7;
-  color: #0369a1;
+  background: #eff6ff;
+  border-color: #2563eb;
+  color: #2563eb;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
 }
 
-/* File Upload Custom Styling */
+.ure-radio-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid #cbd5e1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.ure-radio-chip.active .ure-radio-dot {
+  border-color: #2563eb;
+}
+
+.ure-radio-chip.active .ure-radio-dot::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #2563eb;
+}
+
+/* File Upload Containers */
 .ure-file-upload-box {
   position: relative;
   width: 100%;
@@ -222,145 +368,210 @@
 
 .ure-file-upload-box input[type="file"] {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   opacity: 0;
   cursor: pointer;
   z-index: 2;
+  width: 100%;
+  height: 100%;
 }
 
 .ure-file-custom-btn {
   display: flex;
   align-items: center;
-  width: 100%;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 13px 18px;
   background: #f8fafc;
-  border: 1.5px solid #e2e8f0;
-  border-radius: 12px;
-  overflow: hidden;
-  transition: all 0.2s ease;
+  border: 1.5px dashed #cbd5e1;
+  border-radius: 14px;
+  transition: all 0.2s;
+  cursor: pointer;
 }
 
-.ure-file-custom-btn span:first-child {
-  background: #e2e8f0;
-  color: #334155;
-  padding: 12px 18px;
-  font-weight: 600;
-  font-size: 13.5px;
-  border-right: 1.5px solid #cbd5e1;
-  transition: background 0.2s;
+.ure-file-custom-btn:hover {
+  background: #eff6ff;
+  border-color: #2563eb;
 }
 
-.ure-file-upload-box:hover .ure-file-custom-btn {
-  border-color: #0284c7;
+.ure-file-btn-text {
   background: #ffffff;
-}
-
-.ure-file-upload-box:hover .ure-file-custom-btn span:first-child {
-  background: #0284c7;
-  color: #ffffff;
-  border-color: #0284c7;
+  border: 1px solid #cbd5e1;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #2563eb;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
 
 .ure-file-name {
-  padding: 0 16px;
+  font-size: 13px;
   color: #64748b;
-  font-size: 14px;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 220px;
+}
+
+.ure-file-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  padding: 6px 12px;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  font-size: 12.5px;
+  color: #1e40af;
+  font-weight: 600;
+}
+
+.ure-remove-btn {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #ef4444;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.ure-remove-btn:hover {
+  background: #fee2e2;
+  border-color: #fca5a5;
+}
+
+.ure-photo-preview-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 10px;
+  padding: 10px 14px;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 14px;
+}
+
+.ure-preview-img {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  object-fit: cover;
+  border: 1.5px solid #86efac;
+}
+
+.ure-preview-meta {
+  flex: 1;
+  overflow: hidden;
+}
+
+.ure-preview-meta strong {
+  display: block;
+  font-size: 13px;
+  color: #0f172a;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-/* Readonly Input */
-.ure-readonly-input {
-  background: #f1f5f9 !important;
-  color: #0f172a !important;
-  font-weight: 700;
-  cursor: not-allowed;
+.ure-preview-meta span {
+  display: block;
+  font-size: 11.5px;
+  color: #15803d;
+  font-weight: 600;
 }
 
-/* Submit Button */
+/* Submit Action Button */
 .ure-submit-wrapper {
-  margin-top: 10px;
+  margin-top: 16px;
 }
 
 .ure-submit-btn {
   width: 100%;
-  height: 56px;
+  padding: 16px 28px;
+  background: linear-gradient(135deg, #0284c7 0%, #2563eb 50%, #4f46e5 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 16px;
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 12px;
-  border: none;
-  border-radius: 14px;
-  color: #ffffff;
-  background: linear-gradient(135deg, #168df0 0%, #0eb2e7 100%);
-  box-shadow: 0 10px 25px rgba(2, 132, 199, 0.3);
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: 800;
-  letter-spacing: 0.5px;
-  transition: all 0.25s ease;
+  box-shadow: 0 12px 30px -5px rgba(37, 99, 235, 0.4);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
 }
 
-.ure-submit-btn:hover {
+.ure-submit-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+  transition: left 0.6s ease;
+}
+
+.ure-submit-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 14px 30px rgba(2, 132, 199, 0.4);
-  filter: brightness(1.05);
+  box-shadow: 0 18px 36px -6px rgba(37, 99, 235, 0.5);
 }
 
-.ure-submit-btn:active {
-  transform: translateY(0);
+.ure-submit-btn:hover:not(:disabled)::before {
+  left: 100%;
 }
 
-/* =========================================================
-   RESPONSIVE DESIGN BREAKPOINTS
-========================================================= */
+.ure-submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
 
+.spinner {
+  animation: ureSpin 1s linear infinite;
+}
+
+@keyframes ureSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Responsive */
 @media (max-width: 768px) {
   .ure-page-wrapper {
-    padding: 16px 10px;
+    padding: 24px 14px 60px;
   }
-
+  .ure-form-card {
+    padding: 24px 18px;
+    border-radius: 20px;
+  }
   .ure-form-grid {
     grid-template-columns: 1fr;
     gap: 18px;
   }
-
   .ure-full-width {
     grid-column: span 1;
   }
-
   .ure-radio-group {
     flex-direction: column;
   }
-
-  .ure-form-card {
-    padding: 20px 16px;
+  .ure-form-card-header {
+    flex-direction: column;
+    align-items: flex-start;
   }
-}
-/* =========================================================
-   EVENT REGISTRATION FORM - PREMIUM UI STYLESHEET
-========================================================= */
-
-.ure-page-wrapper {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
-  padding: 30px 24px; /* Expanded horizontal breathing room */
-  font-family: 'Inter', 'Segoe UI', sans-serif;
-  color: #1e293b;
-  box-sizing: border-box;
-}
-
-.ure-page-wrapper *,
-.ure-page-wrapper *::before,
-.ure-page-wrapper *::after {
-  box-sizing: border-box;
-}
-
-.ure-container {
-  width: 100%;
-  max-width: 1400px; /* Increased from 960px to make it wide and spacious */
-  margin: 0 auto;
 }
