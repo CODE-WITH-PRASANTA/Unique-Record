@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const path = require('path');
 const connectDB = require('./config/db');
 
 // Load environment variables
@@ -10,8 +11,6 @@ dotenv.config();
 connectDB();
 
 const app = express();
-
-const path = require('path');
 
 // Allowed Origins for CORS
 const allowedOrigins = [
@@ -86,6 +85,11 @@ app.use('/api/events', require('./routes/eventRoutes'));
 app.use('/api/event', require('./routes/eventRoutes'));
 app.use('/api/event-categories', require('./routes/eventCategoryRoutes'));
 app.use('/api/event-category', require('./routes/eventCategoryRoutes'));
+
+app.use('/api/event-registrations', require('./routes/eventRegistrationRoutes'));
+app.use('/api/event-registration', require('./routes/eventRegistrationRoutes'));
+app.use('/api/donation', require('./routes/donationRoutes'));
+app.use('/api/donations', require('./routes/donationRoutes'));
 
 // Auth Routes
 app.use('/api/admin/auth', require('./routes/adminAuthRoutes'));

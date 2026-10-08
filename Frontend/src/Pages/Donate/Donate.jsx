@@ -33,7 +33,7 @@ useEffect(() => {
   const handleShowTable = () => setShowCharityTable(prev => !prev);
   const handleMakeDonation = () => {
     setShowCharityTable(false);
-    document.querySelector('.Donate-form')?.scrollIntoView({ behavior: 'smooth' });
+    document.getElementById('donation-form-section')?.scrollIntoView({ behavior: 'smooth' });
   };
   const toggleRowExpansion = (id) => {
     setExpandedRows(prev =>
@@ -130,10 +130,10 @@ useEffect(() => {
                     <tr key={item._id}>
                       <td>{index + 1}</td>
                       <td>{item.paymentNumber || 'N/A'}</td>
-                      <td>{item.createdAt ? new Date(item.createdAt).toLocaleDateString() : 'N/A'}</td>
+                      <td>{item.createdAt ? new Date(item.createdAt).toLocaleDateString('en-IN') : 'N/A'}</td>
                       <td>{item.name || 'N/A'}</td>
                       <td>{item.address || 'N/A'}</td>
-                      <td>₹{item.amount?.toLocaleString() || 'N/A'}</td>
+                      <td>₹{Number(item.amount || 0).toLocaleString('en-IN')}</td>
                       <td className="OtherInfoCell">
                         <span className={`OtherInfoText ${expandedRows.includes(item._id) ? 'expanded' : ''}`}>
                           {item.extra || 'N/A'}
@@ -151,8 +151,8 @@ useEffect(() => {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="7" style={{ textAlign: 'center', color: 'yellow', padding: '15px' }}>
-                      No records found.
+                    <td colSpan="7" style={{ textAlign: 'center', color: '#ffb3c6', padding: '24px', fontSize: '15px' }}>
+                      No donation records found. Be the first to make a contribution!
                     </td>
                   </tr>
                 )}

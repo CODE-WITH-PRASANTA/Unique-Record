@@ -32,68 +32,6 @@ import "./Event.css";
 const STORAGE_KEY = "admin_events_data";
 const TINYMCE_API_KEY = "your-tinymce-api-key-here"; // Replace with your actual TinyMCE API key
 
-const DEFAULT_CATEGORIES = [
-  "Top Category",
-  "Academic",
-  "Cultural",
-  "Sports",
-  "Workshop",
-  "Seminar",
-  "Competition",
-  "Annual Function",
-];
-
-const INITIAL_EVENTS = [
-  {
-    id: 1,
-    eventName: "Annual Sports Day",
-    location: "School Main Ground",
-    locationImage: "",
-    eventDate: "2026-10-15",
-    description:
-      "<p>Annual Sports Day is organized to encourage students to participate in various sports and physical activities.</p>",
-    organizer: "School Administration",
-    openingDate: "2026-10-10",
-    closingDate: "2026-10-15",
-    status: "Ongoing",
-    registrationFee: "500",
-    category: "Sports",
-    createdAt: "2026-09-20",
-  },
-  {
-    id: 2,
-    eventName: "Science Exhibition",
-    location: "School Auditorium",
-    locationImage: "",
-    eventDate: "2026-11-05",
-    description:
-      "<p>Students will present innovative science projects and working models during the science exhibition.</p>",
-    organizer: "Science Department",
-    openingDate: "2026-10-25",
-    closingDate: "2026-11-05",
-    status: "Upcoming",
-    registrationFee: "300",
-    category: "Academic",
-    createdAt: "2026-09-21",
-  },
-  {
-    id: 3,
-    eventName: "Cultural Fest 2026",
-    location: "City Convention Hall",
-    locationImage: "",
-    eventDate: "2026-12-20",
-    description:
-      "<p>A grand cultural celebration featuring music, dance, drama and other creative performances.</p>",
-    organizer: "Cultural Committee",
-    openingDate: "2026-12-01",
-    closingDate: "2026-12-20",
-    status: "Upcoming",
-    registrationFee: "750",
-    category: "Cultural",
-    createdAt: "2026-09-22",
-  },
-];
-
 const emptyForm = {
   eventName: "",
   location: "",
@@ -105,7 +43,7 @@ const emptyForm = {
   closingDate: "",
   status: "Ongoing",
   registrationFee: "",
-  category: "Top Category",
+  category: "",
 };
 
 const formatDate = (date) => {
@@ -135,7 +73,7 @@ const Event = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [categoryFilter, setCategoryFilter] = useState("All");
-  const [categoriesList, setCategoriesList] = useState(DEFAULT_CATEGORIES);
+  const [categoriesList, setCategoriesList] = useState([]);
 
   // Fetch all events from database
   const fetchEvents = async () => {
@@ -163,18 +101,15 @@ const Event = () => {
         const list = Array.isArray(res.data) ? res.data : res.data?.data || [];
         if (list.length > 0) {
           const names = list.filter((c) => c.status !== 'Inactive').map((c) => c.name);
-          if (names.length > 0) {
-            setCategoriesList(names);
-            setFormData((prev) => {
-              if (!prev.category || prev.category === 'Top Category') {
-                return { ...prev, category: names[0] };
-              }
-              return prev;
-            });
-          }
+          setCategoriesList(names);
+        } else {
+          setCategoriesList([]);
         }
       })
-      .catch((err) => console.warn("Using default categories, backend not reachable yet:", err));
+      .catch((err) => {
+        console.error("Error fetching event categories:", err);
+        setCategoriesList([]);
+      });
   }, []);
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -351,7 +286,7 @@ const Event = () => {
       closingDate: eventItem.closingDate || "",
       status: eventItem.status || eventItem.currentStatus || "Ongoing",
       registrationFee: eventItem.registrationFee || (eventItem.pricePerTicket !== undefined ? String(eventItem.pricePerTicket) : ""),
-      category: eventItem.category || "Top Category",
+      category: eventItem.category || "",
     });
     setImagePreview(eventItem.locationImage || eventItem.eventImage || "");
     setTimeout(() => {
@@ -748,6 +683,7 @@ const Event = () => {
                     value={formData.category}
                     onChange={handleChange}
                   >
+                    <option value="">Select Category</option>
                     {categoriesList.map((category) => (
                       <option key={category} value={category}>
                         {category}

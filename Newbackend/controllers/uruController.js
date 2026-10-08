@@ -276,6 +276,7 @@ exports.getAllUru = async (req, res) => {
     const urus = await URU.find().sort({ createdAt: -1 }).lean();
 
     const formatted = urus.map((item, index) => ({
+      ...item,
       id: item._id,
       _id: item._id,
       serialNo: index + 1,
@@ -1194,40 +1195,111 @@ exports.updatePublishStatus = async (req, res) => {
   }
 };
 
+const generateUruSlug = (text) => {
+  if (!text) return '';
+  return text
+    .toString()
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/[\s_]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+};
+
 // ==================== FETCH PUBLISHED URU ====================
 exports.fetchPublishedUru = async (req, res) => {
   try {
     const urus = await URU.find({ isPublished: true }).sort({ updatedAt: -1, createdAt: -1 }).lean();
-    res.status(200).json(urus);
+    const urusWithSlug = urus.map((u) => ({
+      ...u,
+      slug: u.slug || generateUruSlug(u.applicantName || u.name || ''),
+    }));
+    res.status(200).json(urusWithSlug);
   } catch (error) {
     console.error('Error fetching published URU:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 };
 
-// ==================== FETCH PUBLISHED URU BY ID ====================
+// ==================== FETCH PUBLISHED URU BY ID OR SLUG ====================
 exports.fetchPublishedUruById = async (req, res) => {
   try {
     const { id } = req.params;
-    let uru;
-
-    if (id && mongoose.isValidObjectId(id)) {
-      uru = await URU.findOne({ _id: id, isPublished: true }).lean();
+    if (!id) {
+      return res.status(400).json({ success: false, message: 'ID or slug is required' });
     }
-    if (!uru && id) {
+
+    const decodedId = decodeURIComponent(id).trim();
+    let uru = null;
+
+    // 1. Try finding by MongoDB _id if valid ObjectId
+    if (mongoose.isValidObjectId(decodedId)) {
+      uru = await URU.findOne({ _id: decodedId, isPublished: true }).lean();
+    }
+
+    // 2. Try by applicationNumber, appNo, or exact slug
+    if (!uru) {
       uru = await URU.findOne({
-        $or: [{ applicationNumber: id }, { appNo: id }],
-        isPublished: true,
+        $and: [
+          { isPublished: true },
+          {
+            $or: [
+              { applicationNumber: decodedId },
+              { appNo: decodedId },
+              { slug: decodedId.toLowerCase() },
+            ],
+          },
+        ],
       }).lean();
+    }
+
+    // 3. Try matching case-insensitively with applicantName or name
+    if (!uru) {
+      const cleanParam = decodedId.replace(/[-_]+/g, ' ').trim();
+      const escapedParam = cleanParam.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const nameRegex = new RegExp(`^${escapedParam}$`, 'i');
+
+      uru = await URU.findOne({
+        $and: [
+          { isPublished: true },
+          {
+            $or: [
+              { applicantName: { $regex: nameRegex } },
+              { name: { $regex: nameRegex } },
+            ],
+          },
+        ],
+      })
+        .sort({ updatedAt: -1, createdAt: -1 })
+        .lean();
+    }
+
+    // 4. Flexible slug match across all published records
+    if (!uru) {
+      const targetSlug = generateUruSlug(decodedId);
+      if (targetSlug) {
+        const publishedList = await URU.find({ isPublished: true })
+          .sort({ updatedAt: -1, createdAt: -1 })
+          .lean();
+        uru = publishedList.find((u) => {
+          const uSlug = u.slug || generateUruSlug(u.applicantName || u.name || '');
+          return uSlug === targetSlug;
+        });
+      }
     }
 
     if (!uru) {
       return res.status(404).json({ success: false, message: 'Published URU not found' });
     }
 
+    // Ensure slug is set in returned payload
+    if (!uru.slug) {
+      uru.slug = generateUruSlug(uru.applicantName || uru.name || '');
+    }
+
     res.status(200).json(uru);
   } catch (error) {
-    console.error('Error fetching published URU by ID:', error);
+    console.error('Error fetching published URU by ID/slug:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 };

@@ -72,7 +72,7 @@ const createEvent = async (req, res) => {
       currentStatus: stat,
       registrationFee: fee,
       pricePerTicket: Number(fee) || 0,
-      category: category || 'Top Category',
+      category: category || '',
     });
 
     res.status(201).json({

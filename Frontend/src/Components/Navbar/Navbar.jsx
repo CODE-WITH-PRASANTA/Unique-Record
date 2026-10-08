@@ -25,6 +25,44 @@ const Navbar = () => {
   const menuRef = useRef();
   const lastScrollY = useRef(0);
 
+  const [user, setUser] = useState(() => {
+    try {
+      const stored = localStorage.getItem("user");
+      return stored ? JSON.parse(stored) : null;
+    } catch {
+      return null;
+    }
+  });
+  const [token, setToken] = useState(() => {
+    return localStorage.getItem("token") || localStorage.getItem("authToken");
+  });
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const currentToken = localStorage.getItem("token") || localStorage.getItem("authToken");
+      setToken(currentToken);
+      try {
+        const stored = localStorage.getItem("user");
+        setUser(stored ? JSON.parse(stored) : null);
+      } catch {
+        setUser(null);
+      }
+    };
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("user");
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("isAuthenticated");
+    setUser(null);
+    setToken(null);
+    window.location.href = "/login";
+  };
+
   // Detect scroll for Navbar only
   useEffect(() => {
     const handleScroll = () => {
@@ -81,7 +119,6 @@ const menuItems = [
   return (
     <>
       {/* ===== Top Bar ===== */}
-      {/* ===== Top Bar ===== */}
     <div className="topbar">
       <div className="topbar-container">
         <div className="topbar-content">
@@ -94,7 +131,22 @@ const menuItems = [
             </a>
           </div>
           <div className="topbar-right">
-            <Link to="/login" className="topbar-login">🔑 Login / Register</Link>
+            {token ? (
+              <div className="topbar-auth-group">
+                <Link to="/dashboard" className="topbar-login topbar-dashboard-link">
+                  👤 {user?.fullName?.split(" ")[0] || "Dashboard"}
+                </Link>
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="topbar-logout-btn"
+                >
+                  🚪 Logout
+                </button>
+              </div>
+            ) : (
+              <Link to="/login" className="topbar-login">🔑 Login / Register</Link>
+            )}
             <Link to="/donate" className="topbar-cta">💖 Donate</Link>
           </div>
         </div>
@@ -191,6 +243,56 @@ const menuItems = [
                   )}
                 </li>
               ))}
+
+              {/* Mobile Auth Items */}
+              {token ? (
+                <>
+                  <li style={{ borderTop: "1px solid rgba(255,255,255,0.1)", marginTop: "10px", paddingTop: "10px" }}>
+                    <Link
+                      to="/dashboard"
+                      className="mobile-link"
+                      onClick={() => setMobileMenuOpen(false)}
+                      style={{ color: "#ffd700", fontWeight: "700" }}
+                    >
+                      👤 My Dashboard ({user?.fullName?.split(" ")[0] || "User"})
+                    </Link>
+                  </li>
+                  <li>
+                    <button
+                      type="button"
+                      className="mobile-link"
+                      onClick={() => {
+                        setMobileMenuOpen(false);
+                        handleLogout();
+                      }}
+                      style={{
+                        background: "none",
+                        border: "none",
+                        width: "100%",
+                        textAlign: "left",
+                        color: "#ff6b6b",
+                        cursor: "pointer",
+                        fontWeight: "600",
+                        padding: "12px 15px",
+                        fontSize: "16px"
+                      }}
+                    >
+                      🚪 Logout
+                    </button>
+                  </li>
+                </>
+              ) : (
+                <li style={{ borderTop: "1px solid rgba(255,255,255,0.1)", marginTop: "10px", paddingTop: "10px" }}>
+                  <Link
+                    to="/login"
+                    className="mobile-link"
+                    onClick={() => setMobileMenuOpen(false)}
+                    style={{ color: "#ffd700", fontWeight: "700" }}
+                  >
+                    🔑 Login / Register
+                  </Link>
+                </li>
+              )}
             </ul>
 
           </div>

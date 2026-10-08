@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { FaImage, FaVideo, FaFilePdf, FaExternalLinkAlt, FaCertificate } from 'react-icons/fa';
 import API from '../../api/axiosInstance';
 import './ManageUru.css';
 
@@ -97,20 +98,28 @@ const ManageUru = () => {
   };
 
   // Helper to format date for input field
+  const [modalLoading, setModalLoading] = useState(false);
+  const [savingEdit, setSavingEdit] = useState(false);
+
+  // Helper to format date for input field safely
   const formatDateForInput = (d) => {
     if (!d) return '';
     try {
-      return new Date(d).toISOString().split('T')[0];
+      const dateObj = new Date(d);
+      if (isNaN(dateObj.getTime())) return '';
+      return dateObj.toISOString().split('T')[0];
     } catch {
       return '';
     }
   };
 
-  // Open Edit Modal with ALL application fields
-  const handleEditClick = (record) => {
-    setEditingRecord({
+  // Helper to map record into editingRecord form state
+  const mapRecordToForm = (record) => {
+    if (!record) return null;
+    return {
       ...record,
       id: record.id || record._id,
+      _id: record._id || record.id,
       appNo: record.appNo || record.applicationNumber || '',
       applicationNumber: record.appNo || record.applicationNumber || '',
       position: record.position || 'Unique Record',
@@ -124,12 +133,12 @@ const ManageUru = () => {
       country: record.country || 'India',
       pinCode: record.pinCode || '',
       educationalQualification: record.educationalQualification || '',
-      whatsappMobileNumber: record.whatsappMobileNumber || record.mobile || '',
-      mobile: record.whatsappMobileNumber || record.mobile || '',
+      whatsappMobileNumber: record.whatsappMobileNumber || record.mobile || record.phoneNumber || '',
+      mobile: record.whatsappMobileNumber || record.mobile || record.phoneNumber || '',
       emailId: record.emailId || record.email || '',
       email: record.emailId || record.email || '',
       occupation: record.occupation || '',
-      category: record.category || record.formCategory || 'Other',
+      category: record.category || record.formCategory || record.recordCategory || 'Other',
       effortType: record.effortType || 'Individual Effort',
       recordTitle: record.recordTitle || record.activityTitle || '',
       activityTitle: record.recordTitle || record.activityTitle || '',
@@ -166,57 +175,126 @@ const ManageUru = () => {
         mobileNumber: record.witness2?.mobileNumber || '',
         emailId: record.witness2?.emailId || '',
       },
+      // Uploaded Evidence Files
+      photos: Array.isArray(record.photos) ? record.photos : [],
+      videos: Array.isArray(record.videos) ? record.videos : [],
+      documents: Array.isArray(record.documents) ? record.documents : [],
+      certificateUrl: record.certificateUrl || '',
       // Status & Payment
       status: record.status || (record.approved ? 'Approved' : 'Pending'),
       approved: Boolean(record.approved || record.status === 'Approved'),
-      price: record.price || 0,
+      price: record.price !== undefined ? record.price : 0,
       paymentStatus: record.paymentStatus || 'Pending',
-    });
-    setActiveTab('applicant');
-    setIsModalOpen(true);
+    };
   };
 
-  // Save Edited Record from Modal Form
+  // Open Edit Modal & Fetch ALL application fields from Database
+  const handleEditClick = async (record) => {
+    const targetId = record.id || record._id;
+    // Immediately open modal pre-populated with row record
+    setEditingRecord(mapRecordToForm(record));
+    setActiveTab('applicant');
+    setIsModalOpen(true);
+    setModalLoading(true);
+
+    try {
+      // Fetch complete fresh data from database
+      const res = await API.get(`/uru/${targetId}`);
+      const freshData = res.data?.data || res.data?.uru || res.data;
+      if (freshData) {
+        setEditingRecord(mapRecordToForm(freshData));
+      }
+    } catch (err) {
+      console.warn('Could not fetch fresh record details from database, using row data:', err);
+    } finally {
+      setModalLoading(false);
+    }
+  };
+
+  // Save Edited Record from Modal Form to Database
   const handleSaveEdit = async (e) => {
     e.preventDefault();
+    if (!editingRecord) return;
     try {
+      setSavingEdit(true);
       const targetId = editingRecord.id || editingRecord._id;
 
-      // Parse link strings to arrays if comma-separated
-      const payload = {
-        ...editingRecord,
-        applicantName: editingRecord.name,
-        emailId: editingRecord.email,
-        whatsappMobileNumber: editingRecord.mobile,
-        recordTitle: editingRecord.activityTitle,
-        recordDescription: editingRecord.activityDescription,
-        purposeOfRecordAttempt: editingRecord.activityPurpose,
-        recordVenue: editingRecord.activityVenue,
-        dateOfAttempt: editingRecord.dateOfAttempt,
-        approved: editingRecord.status === 'Approved',
-        googleDriveLink: editingRecord.googleDriveLink ? editingRecord.googleDriveLink.split(',').map((s) => s.trim()).filter(Boolean) : [],
-        facebookLink: editingRecord.facebookLink ? editingRecord.facebookLink.split(',').map((s) => s.trim()).filter(Boolean) : [],
-        youtubeLink: editingRecord.youtubeLink ? editingRecord.youtubeLink.split(',').map((s) => s.trim()).filter(Boolean) : [],
-        instagramLink: editingRecord.instagramLink ? editingRecord.instagramLink.split(',').map((s) => s.trim()).filter(Boolean) : [],
-        linkedInLink: editingRecord.linkedInLink ? editingRecord.linkedInLink.split(',').map((s) => s.trim()).filter(Boolean) : [],
-        twitterLink: editingRecord.twitterLink ? editingRecord.twitterLink.split(',').map((s) => s.trim()).filter(Boolean) : [],
-        pinterestLink: editingRecord.pinterestLink ? editingRecord.pinterestLink.split(',').map((s) => s.trim()).filter(Boolean) : [],
-        otherMediaLink: editingRecord.otherMediaLink ? editingRecord.otherMediaLink.split(',').map((s) => s.trim()).filter(Boolean) : [],
+      const parseLinkField = (val) => {
+        if (!val) return [];
+        if (Array.isArray(val)) return val.filter(Boolean);
+        return String(val)
+          .split(',')
+          .map((s) => s.trim())
+          .filter(Boolean);
       };
 
-      await API.put(`/uru/${targetId}`, payload);
+      // Prepare complete payload with aliases mapped
+      const payload = {
+        ...editingRecord,
+        applicantName: editingRecord.name || editingRecord.applicantName,
+        name: editingRecord.name || editingRecord.applicantName,
+        emailId: editingRecord.email || editingRecord.emailId,
+        email: editingRecord.email || editingRecord.emailId,
+        whatsappMobileNumber: editingRecord.mobile || editingRecord.whatsappMobileNumber,
+        mobile: editingRecord.mobile || editingRecord.whatsappMobileNumber,
+        recordTitle: editingRecord.activityTitle || editingRecord.recordTitle,
+        activityTitle: editingRecord.activityTitle || editingRecord.recordTitle,
+        recordDescription: editingRecord.activityDescription || editingRecord.recordDescription,
+        activityDescription: editingRecord.activityDescription || editingRecord.recordDescription,
+        purposeOfRecordAttempt: editingRecord.activityPurpose || editingRecord.purposeOfRecordAttempt,
+        activityPurpose: editingRecord.activityPurpose || editingRecord.purposeOfRecordAttempt,
+        recordVenue: editingRecord.activityVenue || editingRecord.recordVenue,
+        activityVenue: editingRecord.activityVenue || editingRecord.recordVenue,
+        dateOfAttempt: editingRecord.dateOfAttempt,
+        attemptDate: editingRecord.dateOfAttempt,
+        dateOfBirth: editingRecord.dateOfBirth,
+        address: editingRecord.address,
+        district: editingRecord.district,
+        state: editingRecord.state,
+        country: editingRecord.country,
+        pinCode: editingRecord.pinCode,
+        occupation: editingRecord.occupation,
+        educationalQualification: editingRecord.educationalQualification,
+        category: editingRecord.category,
+        formCategory: editingRecord.category,
+        recordCategory: editingRecord.category,
+        effortType: editingRecord.effortType,
+        position: editingRecord.position,
+        organisationName: editingRecord.organisationName,
+        price: Number(editingRecord.price) || 0,
+        paymentStatus: editingRecord.paymentStatus,
+        status: editingRecord.status,
+        approved: editingRecord.status === 'Approved',
+        witness1: editingRecord.witness1,
+        witness2: editingRecord.witness2,
+        googleDriveLink: parseLinkField(editingRecord.googleDriveLink),
+        facebookLink: parseLinkField(editingRecord.facebookLink),
+        youtubeLink: parseLinkField(editingRecord.youtubeLink),
+        instagramLink: parseLinkField(editingRecord.instagramLink),
+        linkedInLink: parseLinkField(editingRecord.linkedInLink),
+        twitterLink: parseLinkField(editingRecord.twitterLink),
+        pinterestLink: parseLinkField(editingRecord.pinterestLink),
+        otherMediaLink: parseLinkField(editingRecord.otherMediaLink),
+      };
+
+      const res = await API.put(`/uru/${targetId}`, payload);
+      const updated = res.data?.data || payload;
 
       setRecords((prev) =>
         prev.map((rec) =>
-          (rec.id || rec._id) === targetId ? { ...rec, ...payload, approved: payload.status === 'Approved' } : rec
+          (rec.id || rec._id) === targetId
+            ? { ...rec, ...updated, approved: payload.status === 'Approved' }
+            : rec
         )
       );
       setIsModalOpen(false);
       setEditingRecord(null);
-      alert('Application record updated successfully!');
+      alert('Application record updated in database successfully!');
     } catch (err) {
-      console.error('Failed to update record:', err);
-      alert('Failed to update application record. Please try again.');
+      console.error('Failed to update record in database:', err);
+      alert(err.response?.data?.message || 'Failed to update application record. Please try again.');
+    } finally {
+      setSavingEdit(false);
     }
   };
 
@@ -386,8 +464,15 @@ const ManageUru = () => {
             <div className="mru-modal-card mru-modal-large">
               <div className="mru-modal-header">
                 <div>
-                  <h2>Edit Application Details: {editingRecord.appNo}</h2>
-                  <span style={{ fontSize: '12px', opacity: 0.85 }}>Update any field of this application record</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <h2>Edit Application Details: {editingRecord.appNo}</h2>
+                    {modalLoading && (
+                      <span style={{ fontSize: '11px', background: '#dbeafe', color: '#1d4ed8', padding: '3px 9px', borderRadius: '12px', fontWeight: 600 }}>
+                        🔄 Fetching latest from database...
+                      </span>
+                    )}
+                  </div>
+                  <span style={{ fontSize: '12px', opacity: 0.85 }}>Update any field of this application record in database</span>
                 </div>
                 <button className="mru-modal-close" onClick={() => setIsModalOpen(false)}>
                   &times;
@@ -409,6 +494,13 @@ const ManageUru = () => {
                   onClick={() => setActiveTab('record')}
                 >
                   🏆 Record / Activity
+                </button>
+                <button
+                  type="button"
+                  className={`mru-tab-btn ${activeTab === 'files' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('files')}
+                >
+                  📁 Uploaded Files ({((editingRecord.photos?.length || 0) + (editingRecord.videos?.length || 0) + (editingRecord.documents?.length || 0))})
                 </button>
                 <button
                   type="button"
@@ -654,7 +746,145 @@ const ManageUru = () => {
                   </div>
                 )}
 
-                {/* TAB 3: MEDIA & SOCIAL LINKS */}
+                {/* TAB 3: UPLOADED EVIDENCE FILES */}
+                {activeTab === 'files' && (
+                  <div className="mru-tab-pane">
+                    <h3 className="mru-section-title">Uploaded Evidence Files (Fetched From Database)</h3>
+
+                    {/* PHOTOS */}
+                    <div className="mru-file-section">
+                      <div className="mru-file-section-header">
+                        <span className="mru-file-section-title">
+                          <FaImage color="#2563eb" /> Uploaded Photos
+                        </span>
+                        <span className="mru-file-count-badge">{editingRecord.photos?.length || 0}</span>
+                      </div>
+                      {editingRecord.photos && editingRecord.photos.length > 0 ? (
+                        <div className="mru-file-grid">
+                          {editingRecord.photos.map((item, idx) => {
+                            const photoUrl = typeof item === 'string' ? item : item.url;
+                            const filename = (typeof item === 'object' && item.filename) ? item.filename : `Photo ${idx + 1}`;
+                            return (
+                              <div key={item._id || idx} className="mru-file-card">
+                                <div className="mru-file-preview-box">
+                                  <img src={photoUrl} alt={filename} className="mru-file-img-preview" />
+                                </div>
+                                <div className="mru-file-info">
+                                  <span className="mru-file-name" title={filename}>{filename}</span>
+                                  <div className="mru-file-actions">
+                                    <a href={photoUrl} target="_blank" rel="noopener noreferrer" className="mru-file-view-btn">
+                                      <FaExternalLinkAlt size={11} /> Open Photo
+                                    </a>
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      ) : (
+                        <div className="mru-file-empty">No photos uploaded for this application.</div>
+                      )}
+                    </div>
+
+                    {/* VIDEOS */}
+                    <div className="mru-file-section">
+                      <div className="mru-file-section-header">
+                        <span className="mru-file-section-title">
+                          <FaVideo color="#9333ea" /> Uploaded Videos
+                        </span>
+                        <span className="mru-file-count-badge">{editingRecord.videos?.length || 0}</span>
+                      </div>
+                      {editingRecord.videos && editingRecord.videos.length > 0 ? (
+                        <div className="mru-file-grid">
+                          {editingRecord.videos.map((item, idx) => {
+                            const videoUrl = typeof item === 'string' ? item : item.url;
+                            const filename = (typeof item === 'object' && item.filename) ? item.filename : `Video ${idx + 1}`;
+                            return (
+                              <div key={item._id || idx} className="mru-file-card">
+                                <div className="mru-file-preview-box">
+                                  <video src={videoUrl} controls preload="metadata" className="mru-file-video-preview" />
+                                </div>
+                                <div className="mru-file-info">
+                                  <span className="mru-file-name" title={filename}>{filename}</span>
+                                  <div className="mru-file-actions">
+                                    <a href={videoUrl} target="_blank" rel="noopener noreferrer" className="mru-file-view-btn">
+                                      <FaExternalLinkAlt size={11} /> Open Video
+                                    </a>
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      ) : (
+                        <div className="mru-file-empty">No videos uploaded for this application.</div>
+                      )}
+                    </div>
+
+                    {/* DOCUMENTS */}
+                    <div className="mru-file-section">
+                      <div className="mru-file-section-header">
+                        <span className="mru-file-section-title">
+                          <FaFilePdf color="#dc2626" /> Uploaded Documents
+                        </span>
+                        <span className="mru-file-count-badge">{editingRecord.documents?.length || 0}</span>
+                      </div>
+                      {editingRecord.documents && editingRecord.documents.length > 0 ? (
+                        <div className="mru-file-grid">
+                          {editingRecord.documents.map((item, idx) => {
+                            const docUrl = typeof item === 'string' ? item : item.url;
+                            const filename = (typeof item === 'object' && item.filename) ? item.filename : `Document ${idx + 1}`;
+                            return (
+                              <div key={item._id || idx} className="mru-file-card">
+                                <div className="mru-file-doc-box">
+                                  <FaFilePdf className="mru-file-doc-icon" />
+                                  <span style={{ fontSize: '11px', color: '#64748b' }}>PDF Document</span>
+                                </div>
+                                <div className="mru-file-info">
+                                  <span className="mru-file-name" title={filename}>{filename}</span>
+                                  <div className="mru-file-actions">
+                                    <a href={docUrl} target="_blank" rel="noopener noreferrer" className="mru-file-view-btn">
+                                      <FaExternalLinkAlt size={11} /> View Document
+                                    </a>
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      ) : (
+                        <div className="mru-file-empty">No documents uploaded for this application.</div>
+                      )}
+                    </div>
+
+                    {/* CERTIFICATE IF ISSUED */}
+                    {editingRecord.certificateUrl && (
+                      <div className="mru-file-section">
+                        <div className="mru-file-section-header">
+                          <span className="mru-file-section-title">
+                            <FaCertificate color="#f59e0b" /> Issued Official Certificate
+                          </span>
+                        </div>
+                        <div className="mru-file-card" style={{ maxWidth: '300px' }}>
+                          <div className="mru-file-doc-box">
+                            <FaCertificate style={{ fontSize: '38px', color: '#f59e0b' }} />
+                            <span style={{ fontSize: '11px', color: '#64748b' }}>Official Certificate</span>
+                          </div>
+                          <div className="mru-file-info">
+                            <span className="mru-file-name">Certificate.pdf</span>
+                            <div className="mru-file-actions">
+                              <a href={editingRecord.certificateUrl} target="_blank" rel="noopener noreferrer" className="mru-file-view-btn">
+                                <FaExternalLinkAlt size={11} /> View Certificate
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* TAB 4: MEDIA & SOCIAL LINKS */}
                 {activeTab === 'links' && (
                   <div className="mru-tab-pane">
                     <h3 className="mru-section-title">Evidence &amp; Media Links</h3>
@@ -942,11 +1172,11 @@ const ManageUru = () => {
                 )}
 
                 <div className="mru-modal-actions">
-                  <button type="button" className="mru-btn-cancel" onClick={() => setIsModalOpen(false)}>
+                  <button type="button" className="mru-btn-cancel" onClick={() => setIsModalOpen(false)} disabled={savingEdit}>
                     Cancel
                   </button>
-                  <button type="submit" className="mru-btn-save">
-                    Save All Changes
+                  <button type="submit" className="mru-btn-save" disabled={savingEdit}>
+                    {savingEdit ? 'Saving to Database...' : 'Save All Changes'}
                   </button>
                 </div>
               </form>

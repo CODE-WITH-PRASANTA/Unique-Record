@@ -118,7 +118,14 @@ function Layout() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/payment-success" element={<PaymentSuccess />} />
           <Route path="/donation-success" element={<DonationSuccess />} />
-          <Route path="/your-post" element={<MakeUserPost />} />
+          <Route
+            path="/your-post"
+            element={
+              <ProtectedRoute>
+                <MakeUserPost />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/admin/*" element={<AdminLogin />} />
         </Routes>
       )}
