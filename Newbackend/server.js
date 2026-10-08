@@ -13,10 +13,39 @@ const app = express();
 
 const path = require('path');
 
-// Middleware
-app.use(cors());
+// Allowed Origins for CORS
+const allowedOrigins = [
+  'https://ouruniverse.in',
+  'https://www.ouruniverse.in',
+  'https://admin.ouruniverse.in',
+  'https://backend.ouruniverse.in',
+  'http://localhost:3000',
+  'http://localhost:5173',
+  'http://localhost:5000',
+  'http://localhost:5008'
+];
+
+// CORS Middleware
+app.use(cors({
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps, Postman, or curl requests)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = `The CORS policy for this site does not allow access from the specified Origin: ${origin}`;
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+}));
+
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+
+// Trust proxy (essential since Nginx handles SSL in front of Express)
+app.set('trust proxy', 1);
 
 // Serve uploaded static files
 app.use('/upload', express.static(path.join(__dirname, 'upload')));
@@ -57,6 +86,7 @@ app.use('/api/events', require('./routes/eventRoutes'));
 app.use('/api/event', require('./routes/eventRoutes'));
 app.use('/api/event-categories', require('./routes/eventCategoryRoutes'));
 app.use('/api/event-category', require('./routes/eventCategoryRoutes'));
+
 // Auth Routes
 app.use('/api/admin/auth', require('./routes/adminAuthRoutes'));
 app.use('/api/auth', require('./routes/userAuthRoutes'));
