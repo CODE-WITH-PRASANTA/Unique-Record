@@ -10,9 +10,10 @@ const {
   deleteBlog,
 } = require('../controllers/blogController');
 const { upload, convertToWebp } = require('../middleware/uploadMiddleware');
+const { adminOnly } = require('../middleware/authMiddleware');
 
-// Dedicated image upload route (returns WebP url)
-router.post('/upload', upload.single('image'), convertToWebp, (req, res) => {
+// Dedicated image upload route (returns WebP url, Admin Only)
+router.post('/upload', adminOnly, upload.single('image'), convertToWebp, (req, res) => {
   if (!req.uploadedWebp) {
     return res.status(400).json({ success: false, message: 'No image provided' });
   }
@@ -25,19 +26,19 @@ router.post('/upload', upload.single('image'), convertToWebp, (req, res) => {
 
 router.route('/')
   .get(getBlogs)
-  .post(upload.single('image'), convertToWebp, createBlog);
+  .post(adminOnly, upload.single('image'), convertToWebp, createBlog);
 
-router.post('/create', upload.single('image'), convertToWebp, createBlog);
+router.post('/create', adminOnly, upload.single('image'), convertToWebp, createBlog);
 
-router.get('/all', getAllBlogsAdmin);
+router.get('/all', adminOnly, getAllBlogsAdmin);
 router.get('/published', getBlogs);
 
 router.route('/:id')
   .get(getBlogById)
-  .put(upload.single('image'), convertToWebp, updateBlog)
-  .delete(deleteBlog);
+  .put(adminOnly, upload.single('image'), convertToWebp, updateBlog)
+  .delete(adminOnly, deleteBlog);
 
 router.route('/:id/status')
-  .patch(toggleBlogStatus);
+  .patch(adminOnly, toggleBlogStatus);
 
 module.exports = router;

@@ -50,6 +50,7 @@ const RegisterForEvent = () => {
     sex: 'Male',
     dateOfBirth: '',
     whatsappNumber: storedUser?.phoneNumber || storedUser?.phone || '',
+    localAddress: '',
     pinCode: '',
     district: '',
     state: '',
@@ -218,6 +219,8 @@ const RegisterForEvent = () => {
       payload.append('pinCode', formData.pinCode);
       payload.append('district', formData.district);
       payload.append('state', formData.state);
+      payload.append('localAddress', formData.localAddress || '');
+      payload.append('address', formData.localAddress || '');
       payload.append('email', formData.email);
       payload.append('website', formData.website || '');
       payload.append('educationalQualification', formData.educationalQualification);
@@ -410,6 +413,15 @@ const RegisterForEvent = () => {
       };
 
       const razorpayInstance = new window.Razorpay(options);
+      razorpayInstance.on('payment.failed', function (failureResp) {
+        setSubmitting(false);
+        Swal.fire({
+          icon: 'error',
+          title: 'Payment Declined',
+          text: failureResp.error?.description || 'Your payment was declined or could not be completed. Please try again.',
+          confirmButtonColor: '#2563eb',
+        });
+      });
       razorpayInstance.open();
     } catch (payErr) {
       console.error('Payment checkout initiation error:', payErr);
@@ -575,6 +587,18 @@ const RegisterForEvent = () => {
                 <span className="ure-section-divider-title">3. Address & Location</span>
                 <span className="ure-section-divider-line"></span>
               </div>
+            </div>
+
+            <div className="ure-input-group ure-full-width">
+              <label><MapPin size={16} /> Local Address <span className="ure-req">*</span></label>
+              <input 
+                type="text" 
+                name="localAddress" 
+                placeholder="House / Flat No., Street, Colony, Landmark" 
+                value={formData.localAddress} 
+                onChange={handleChange} 
+                required 
+              />
             </div>
 
             <div className="ure-input-group">

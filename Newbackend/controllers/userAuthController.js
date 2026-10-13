@@ -178,9 +178,12 @@ const registerUser = async (req, res) => {
               </tr>
               <tr>
                 <td style="padding:30px; color:#333;">
-                  <h2 style="color:#2c3e50;">Hello ${finalName},</h2>
+                  <h2 style="color:#2c3e50;">Dear ${finalName},</h2>
+                  <p style="font-size:16px; line-height:1.6; color:#16a34a; font-weight:bold; margin-bottom:12px;">
+                    🎉 Your account has been successfully created.
+                  </p>
                   <p style="font-size:15px; line-height:1.6;">
-                    🎉 Welcome to <b>Unique Records of Universe</b>! Your account has been created successfully.
+                    Welcome to <b>Unique Records of Universe</b>! Your account has been successfully created.
                   </p>
                   <div style="background:#f9f9f9; border-left:4px solid #e67e22; padding:15px; margin:20px 0; border-radius:4px;">
                     <p style="margin:0; font-size:15px;">
@@ -547,11 +550,19 @@ const resetPasswordUser = async (req, res) => {
     const { email, otp, newPassword, confirmPassword, password } = req.body;
     const userEmail = (email || '').trim().toLowerCase();
     const targetPassword = newPassword || password || '';
+    const code = (otp || '').toString().trim();
 
     if (!userEmail) {
       return res.status(400).json({
         success: false,
         message: 'Email is required',
+      });
+    }
+
+    if (!code) {
+      return res.status(400).json({
+        success: false,
+        message: 'Valid 6-digit OTP code is required to reset password',
       });
     }
 
@@ -578,6 +589,26 @@ const resetPasswordUser = async (req, res) => {
       return res.status(404).json({
         success: false,
         message: 'Account not found',
+      });
+    }
+
+    // Verify OTP strictly against GeneratingOtp and user record
+    let isOtpValid = false;
+    const otpDoc = await GeneratingOtp.findOne({ email: userEmail, otp: code });
+    if (otpDoc && otpDoc.expiresAt && otpDoc.expiresAt >= new Date()) {
+      isOtpValid = true;
+    }
+
+    if (!isOtpValid && account.resetPasswordOtp === code) {
+      if (account.resetPasswordOtpExpire && account.resetPasswordOtpExpire >= new Date()) {
+        isOtpValid = true;
+      }
+    }
+
+    if (!isOtpValid) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid or expired OTP code. Password was not changed.',
       });
     }
 

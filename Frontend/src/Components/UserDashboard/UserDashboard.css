@@ -701,6 +701,16 @@
   background: #f0f9ff;
 }
 
+.udu-dropzone-required {
+  border-color: #fda4af;
+  background: #fff1f2;
+}
+
+.udu-dropzone-required:hover {
+  border-color: #f43f5e;
+  background: #ffe4e6;
+}
+
 .udu-choose-btn {
   display: inline-flex;
   align-items: center;

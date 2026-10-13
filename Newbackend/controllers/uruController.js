@@ -136,6 +136,24 @@ exports.createUru = async (req, res) => {
     // Extract links
     const links = body.links || {};
 
+    const rawCandidateName = (
+      body.applicantName ||
+      body.name ||
+      body.fullName ||
+      req.user?.fullName ||
+      req.user?.name ||
+      ''
+    ).trim();
+
+    // Guard against generic placeholder values like "Applicant" or "Dear Applicant"
+    let resolvedApplicantName = rawCandidateName;
+    if (!resolvedApplicantName || /^(applicant|dear applicant|anonymous|anonymous applicant|user)$/i.test(resolvedApplicantName)) {
+      resolvedApplicantName = (req.user?.fullName || req.user?.name || '').trim();
+    }
+    if (!resolvedApplicantName) {
+      resolvedApplicantName = 'Member';
+    }
+
     const uru = new URU({
       position: body.position || body.applicationType || 'Unique Record',
       userId: req.user?.id || req.user?._id || body.userId || null,
@@ -143,8 +161,8 @@ exports.createUru = async (req, res) => {
       applicationNumber,
       appNo: applicationNumber,
       regNo,
-      applicantName: body.applicantName || body.name || 'Anonymous Applicant',
-      name: body.applicantName || body.name || 'Anonymous Applicant',
+      applicantName: resolvedApplicantName,
+      name: resolvedApplicantName,
       sex: body.sex || 'Other',
       dateOfBirth: body.dateOfBirth || null,
       address: body.address || '',
@@ -213,10 +231,19 @@ exports.createUru = async (req, res) => {
           },
         });
 
+        // Fetch dynamic name cleanly (avoiding any generic "Applicant")
+        let displayName = (uru.applicantName || uru.name || resolvedApplicantName || '').trim();
+        if (/^(applicant|dear applicant|anonymous|anonymous applicant)$/i.test(displayName)) {
+          displayName = (req.user?.fullName || req.user?.name || '').trim();
+        }
+        if (!displayName) {
+          displayName = 'Member';
+        }
+
         const mailOptions = {
           from: `"Unique Records of Universe" <${process.env.EMAIL_USER}>`,
           to: applicantEmail,
-          subject: `✅ Application Received: ${applicationNumber} - Unique Records of Universe`,
+          subject: `✅ Your account has been successfully created | Unique Records of Universe`,
           html: `
             <div style="font-family: Arial, sans-serif; padding: 20px; background-color: #f4f6f8;">
               <table align="center" width="600" style="background:#ffffff; border-radius:8px; overflow:hidden; box-shadow:0 4px 10px rgba(0,0,0,0.1); padding: 20px;">
@@ -228,9 +255,12 @@ exports.createUru = async (req, res) => {
                 </tr>
                 <tr>
                   <td style="padding: 25px; color: #333333;">
-                    <h2 style="color: #2c3e50;">Dear ${uru.applicantName},</h2>
-                    <p style="font-size: 15px; line-height: 1.6;">
-                      Thank you for submitting your application to <b>Unique Records of Universe</b>. Your application has been received and is under review.
+                    <h2 style="color: #2c3e50; margin-top: 0; font-size: 20px;">Dear ${displayName},</h2>
+                    <p style="font-size: 16px; line-height: 1.6; color: #16a34a; font-weight: bold; margin: 12px 0 16px 0;">
+                      🎉 Your account has been successfully created.
+                    </p>
+                    <p style="font-size: 15px; line-height: 1.6; color: #333333;">
+                      Your account has been successfully created. Thank you for submitting your application to <b>Unique Records of Universe</b>. Your unique record details have been registered under Application Number <b>${applicationNumber}</b> and are currently under review.
                     </p>
                     <div style="background: #f9f9f9; border-left: 4px solid #0ea5e9; padding: 15px; margin: 20px 0; border-radius: 4px;">
                       <p style="margin: 0; font-size: 16px;">
@@ -239,10 +269,19 @@ exports.createUru = async (req, res) => {
                       <p style="margin: 5px 0 0 0; font-size: 14px; color: #64748b;">
                         <b>Position:</b> ${uru.position}
                       </p>
+                      ${uru.uniqueId ? `
+                      <p style="margin: 5px 0 0 0; font-size: 14px; color: #2563eb;">
+                        <b>Unique ID:</b> <span style="color: #2563eb; font-weight: bold;">${uru.uniqueId}</span>
+                      </p>` : ''}
                     </div>
                     <p style="font-size: 14px; color: #555;">
-                      You can monitor the real-time status of your application from your user dashboard.
+                      You can log in anytime to monitor the real-time status of your application from your user dashboard.
                     </p>
+                  </td>
+                </tr>
+                <tr style="background:#ecf0f1;">
+                  <td style="padding:15px; text-align:center; font-size:12px; color:#7f8c8d;">
+                    <p style="margin:5px 0;">© ${new Date().getFullYear()} Unique Records of Universe. All Rights Reserved.</p>
                   </td>
                 </tr>
               </table>
@@ -564,22 +603,26 @@ exports.updatePrice = async (req, res) => {
 // ==================== FETCH USER'S APPLIED URUS ====================
 exports.fetchAppliedUruByUser = async (req, res) => {
   try {
-    let tokenEmail = null;
-    let tokenUserId = null;
+    const isAdmin = req.user && req.user.role === 'admin';
 
-    const authHeader = req.headers.authorization;
-    if (authHeader && authHeader.startsWith('Bearer ')) {
-      const token = authHeader.split(' ')[1];
-      try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your_super_secret_jwt_key_unique_record');
-        tokenEmail = decoded.email;
-        tokenUserId = decoded.id;
-      } catch (e) {}
-    }
+    // Strictly enforce tenant isolation: regular users can ONLY see their own applications
+    const email = (
+      (!isAdmin && req.user?.email)
+        ? req.user.email
+        : (req.query.email || req.query.emailId || req.user?.email || '')
+    ).trim().toLowerCase();
 
-    const email = (req.query.email || req.query.emailId || req.user?.email || tokenEmail || '').trim().toLowerCase();
-    const userId = req.query.userId || req.query.id || req.user?.id || req.user?._id || tokenUserId;
-    const uniqueId = req.query.uniqueId || req.user?.uniqueId;
+    const userId = (
+      (!isAdmin && (req.user?.id || req.user?._id))
+        ? (req.user.id || req.user._id)
+        : (req.query.userId || req.query.id || req.user?.id || req.user?._id || '')
+    );
+
+    const uniqueId = (
+      (!isAdmin && req.user?.uniqueId)
+        ? req.user.uniqueId
+        : (req.query.uniqueId || req.user?.uniqueId || '')
+    );
 
     let queryConditions = [];
     if (email) {
@@ -813,7 +856,8 @@ exports.createRazorpayOrder = async (req, res) => {
     });
   } catch (error) {
     console.error('Error creating Razorpay order:', error);
-    res.status(500).json({ success: false, message: error.message });
+    const msg = error?.error?.description || error?.message || 'Failed to create payment order';
+    res.status(500).json({ success: false, message: msg });
   }
 };
 

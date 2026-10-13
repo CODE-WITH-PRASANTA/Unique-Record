@@ -49,6 +49,16 @@ const eventRegistrationSchema = new mongoose.Schema(
       required: [true, 'State is required'],
       trim: true,
     },
+    localAddress: {
+      type: String,
+      default: '',
+      trim: true,
+    },
+    address: {
+      type: String,
+      default: '',
+      trim: true,
+    },
     email: {
       type: String,
       required: [true, 'Email is required'],

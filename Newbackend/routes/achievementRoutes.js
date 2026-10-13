@@ -13,10 +13,12 @@ const {
   uploadAchievement,
   processAchievementImage,
 } = require('../middleware/achievementUploadMiddleware');
+const { adminOnly } = require('../middleware/authMiddleware');
 
-// Dedicated upload route
+// Dedicated upload route (Admin Only)
 router.post(
   '/upload',
+  adminOnly,
   uploadAchievement.single('image'),
   processAchievementImage,
   (req, res) => {
@@ -35,22 +37,24 @@ router.post(
 router.get('/get-published-achievements', getPublishedAchievements);
 router.get('/published', getPublishedAchievements);
 
-// All achievements routes (Admin)
-router.get('/all', getAllAchievements);
-router.get('/get-all-achievements', getAllAchievements);
+// All achievements routes (Admin Only)
+router.get('/all', adminOnly, getAllAchievements);
+router.get('/get-all-achievements', adminOnly, getAllAchievements);
 
 // Single achievement by ID route (Legacy named path)
 router.get('/get-achievement/:id', getAchievementById);
 
-// Create / Post achievement routes
+// Create / Post achievement routes (Admin Only)
 router.post(
   '/post',
+  adminOnly,
   uploadAchievement.single('image'),
   processAchievementImage,
   postAchievement
 );
 router.post(
   '/create',
+  adminOnly,
   uploadAchievement.single('image'),
   processAchievementImage,
   postAchievement
@@ -61,6 +65,7 @@ router
   .route('/')
   .get(getPublishedAchievements)
   .post(
+    adminOnly,
     uploadAchievement.single('image'),
     processAchievementImage,
     postAchievement
@@ -71,24 +76,26 @@ router
   .route('/:id')
   .get(getAchievementById)
   .put(
+    adminOnly,
     uploadAchievement.single('image'),
     processAchievementImage,
     updateAchievement
   )
-  .delete(deleteAchievement);
+  .delete(adminOnly, deleteAchievement);
 
 router.put(
   '/update/:id',
+  adminOnly,
   uploadAchievement.single('image'),
   processAchievementImage,
   updateAchievement
 );
 
-router.delete('/delete/:id', deleteAchievement);
+router.delete('/delete/:id', adminOnly, deleteAchievement);
 
-// Publish / Status toggle routes
-router.patch('/:id/publish', togglePublish);
-router.patch('/:id/status', togglePublish);
-router.patch('/publish/:id', togglePublish);
+// Publish / Status toggle routes (Admin Only)
+router.patch('/:id/publish', adminOnly, togglePublish);
+router.patch('/:id/status', adminOnly, togglePublish);
+router.patch('/publish/:id', adminOnly, togglePublish);
 
 module.exports = router;

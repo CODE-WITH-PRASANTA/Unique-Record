@@ -4,6 +4,12 @@
   box-sizing: border-box;
 }
 
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 body {
   zoom: 0.8; /* Chrome, Edge, Safari */
 }
@@ -15,7 +21,6 @@ body {
     width: 125%; /* prevent horizontal scroll after scaling */
   }
 }
-
 
 a {
   text-decoration: none;

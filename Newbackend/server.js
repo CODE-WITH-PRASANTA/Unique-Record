@@ -1,3 +1,39 @@
+// =====================================================
+// DNS CONFIGURATION & RESOLUTION FALLBACK FOR WINDOWS
+// =====================================================
+const dns = require('dns');
+
+try {
+  dns.setServers(['8.8.8.8', '1.1.1.1', '8.8.4.4']);
+} catch (e) {
+  console.warn('Could not set custom DNS servers:', e);
+}
+
+// Enhance dns.lookup so that when system getaddrinfo fails (ENOTFOUND on Windows),
+// it automatically falls back to resolving through the configured public DNS servers.
+const defaultLookup = dns.lookup;
+dns.lookup = function (hostname, options, callback) {
+  if (typeof options === 'function') {
+    callback = options;
+    options = {};
+  }
+  defaultLookup(hostname, options, (err, address, family) => {
+    if (err) {
+      dns.resolve4(hostname, (resErr, addresses) => {
+        if (resErr || !addresses || addresses.length === 0) {
+          return callback(err, address, family);
+        }
+        if (options && options.all) {
+          return callback(null, addresses.map((addr) => ({ address: addr, family: 4 })));
+        }
+        return callback(null, addresses[0], 4);
+      });
+    } else {
+      callback(null, address, family);
+    }
+  });
+};
+
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
@@ -20,6 +56,8 @@ const allowedOrigins = [
   'https://backend.ouruniverse.in',
   'http://localhost:3000',
   'http://localhost:5173',
+  'http://localhost:5174',
+  'http://localhost:5175',
   'http://localhost:5000',
   'http://localhost:5008'
 ];
@@ -29,11 +67,11 @@ app.use(cors({
   origin: function (origin, callback) {
     // Allow requests with no origin (like mobile apps, Postman, or curl requests)
     if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) === -1) {
-      const msg = `The CORS policy for this site does not allow access from the specified Origin: ${origin}`;
-      return callback(new Error(msg), false);
+    if (allowedOrigins.indexOf(origin) !== -1 || /^http:\/\/localhost(:\d+)?$/.test(origin)) {
+      return callback(null, true);
     }
-    return callback(null, true);
+    const msg = `The CORS policy for this site does not allow access from the specified Origin: ${origin}`;
+    return callback(new Error(msg), false);
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],

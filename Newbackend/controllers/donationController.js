@@ -47,9 +47,10 @@ const createDonationOrder = async (req, res) => {
     });
   } catch (error) {
     console.error('Donation order creation failed:', error);
+    const msg = error?.error?.description || error.message || 'Donation order creation failed';
     res.status(500).json({
       success: false,
-      message: error.message || 'Donation order creation failed',
+      message: msg,
     });
   }
 };
@@ -99,6 +100,20 @@ const verifyDonationPayment = async (req, res) => {
         success: false,
         message: 'Invalid payment signature. Verification failed.',
       });
+    }
+
+    // Idempotency check: prevent duplicate record on retries
+    if (paymentId) {
+      const existing = await Donation.findOne({ razorpayPaymentId: paymentId });
+      if (existing) {
+        return res.status(200).json({
+          success: true,
+          message: 'Donation payment already verified and recorded',
+          paymentNumber: existing.paymentNumber,
+          data: existing,
+          donation: existing,
+        });
+      }
     }
 
     // Generate unique payment number

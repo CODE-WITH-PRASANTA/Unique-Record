@@ -76,9 +76,13 @@ const createEventRazorpayOrder = async (req, res) => {
     });
   } catch (error) {
     console.error('Error creating Razorpay order for event:', error);
+    const errorMessage =
+      error?.error?.description ||
+      error?.message ||
+      (typeof error === 'string' ? error : 'Failed to initiate payment gateway');
     res.status(500).json({
       success: false,
-      message: error.message || 'Failed to initiate payment gateway',
+      message: errorMessage,
     });
   }
 };
@@ -194,6 +198,58 @@ const registerForEvent = async (req, res) => {
       photoUrl = req.body.photo;
     }
 
+    // Idempotency: prevent duplicate registration if same payment ID is submitted again
+    if (razorpayPaymentId) {
+      const existingPayment = await EventRegistration.findOne({ razorpayPaymentId });
+      if (existingPayment) {
+        return res.status(200).json({
+          success: true,
+          message: 'Registration already exists for this payment transaction',
+          applicationNumber: existingPayment.applicationNumber,
+          data: existingPayment,
+          registration: existingPayment,
+        });
+      }
+    }
+
+    // Enforce payment signature verification for paid registrations
+    const numericFee = parseFloat(String(registrationFees || '0').replace(/[^0-9.]/g, ''));
+    let finalPaymentStatus = 'Pending';
+    let finalPaidAt = null;
+
+    if (numericFee <= 0 || isNaN(numericFee)) {
+      finalPaymentStatus = 'Paid';
+      finalPaidAt = new Date();
+    } else if (razorpayPaymentId) {
+      if (!razorpayOrderId || !razorpaySignature) {
+        return res.status(400).json({
+          success: false,
+          message: 'Missing Razorpay order ID or digital signature for payment verification.',
+        });
+      }
+
+      const secret = process.env.RAZORPAY_KEY_SECRET || 'p02juZwOX3wcgSAoE1uZwYWv';
+      const expectedSignature = crypto
+        .createHmac('sha256', secret)
+        .update(`${razorpayOrderId}|${razorpayPaymentId}`)
+        .digest('hex');
+
+      if (expectedSignature !== razorpaySignature) {
+        return res.status(400).json({
+          success: false,
+          message: 'Payment verification failed: Digital signature mismatch.',
+        });
+      }
+
+      finalPaymentStatus = 'Paid';
+      finalPaidAt = new Date();
+    } else {
+      return res.status(400).json({
+        success: false,
+        message: 'This event requires a registration fee. Please complete the payment first.',
+      });
+    }
+
     const applicationNumber = await generateApplicationNumber();
 
     const registration = await EventRegistration.create({
@@ -206,6 +262,8 @@ const registerForEvent = async (req, res) => {
       pinCode: pinCode.trim(),
       district: district.trim(),
       state: state.trim(),
+      localAddress: (req.body.localAddress || req.body.address || '').trim(),
+      address: (req.body.localAddress || req.body.address || '').trim(),
       email: email.trim().toLowerCase(),
       website: (website || '').trim(),
       educationalQualification: educationalQualification.trim(),
@@ -215,13 +273,13 @@ const registerForEvent = async (req, res) => {
       registrationFees: registrationFees || '₹0',
       paymentPlatform: paymentPlatform || 'Razorpay',
       paymentMethod: paymentMethod || 'Online / UPI / Card',
-      paymentStatus: paymentStatus || (razorpayPaymentId ? 'Paid' : 'Pending'),
-      paidAt: razorpayPaymentId ? new Date() : null,
+      paymentStatus: finalPaymentStatus,
+      paidAt: finalPaidAt,
       razorpayOrderId: razorpayOrderId || '',
       razorpayPaymentId: razorpayPaymentId || '',
       razorpaySignature: razorpaySignature || '',
       status: 'Pending',
-      userId: userId || req.user?._id || null,
+      userId: userId || req.user?._id || req.user?.id || null,
     });
 
     res.status(201).json({

@@ -5,14 +5,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
 .ure-page-wrapper {
-  min-height: 100vh;
+  min-height: auto;
   background: radial-gradient(120% 120% at 50% 0%, #edf4fe 0%, #f8fafc 60%, #eef2f6 100%);
-  padding: 48px 20px 80px;
+  padding: 10px 0 50px;
   font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   color: #0f172a;
   position: relative;
   overflow: hidden;
   box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
 }
 
 .ure-page-wrapper * {
@@ -36,10 +38,11 @@
 
 .ure-container {
   width: 100%;
-  max-width: 1080px;
+  max-width: 100%;
   margin: 0 auto;
   position: relative;
   z-index: 1;
+  min-width: 0;
 }
 
 /* Header Section */
@@ -90,11 +93,15 @@
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-radius: 28px;
+  border-radius: 24px;
   box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.08), 
               0 0 0 1px rgba(226, 232, 240, 0.8) inset;
-  padding: clamp(24px, 5vw, 48px);
+  padding: clamp(20px, 3.5vw, 40px);
   border: 1px solid rgba(255, 255, 255, 0.8);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 /* Card Header Banner */
@@ -181,6 +188,7 @@
 
 .ure-section-divider-line {
   flex: 1;
+  min-width: 0;
   height: 1px;
   background: linear-gradient(90deg, #e2e8f0 0%, transparent 100%);
 }
@@ -188,12 +196,16 @@
 /* Grid Layout */
 .ure-form-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 24px 20px;
+  width: 100%;
+  min-width: 0;
 }
 
 .ure-full-width {
   grid-column: span 2;
+  min-width: 0;
+  width: 100%;
 }
 
 /* Input Group */
@@ -201,6 +213,8 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  min-width: 0;
+  width: 100%;
 }
 
 .ure-input-group label {
@@ -364,6 +378,8 @@
 .ure-file-upload-box {
   position: relative;
   width: 100%;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .ure-file-upload-box input[type="file"] {
@@ -387,6 +403,9 @@
   border-radius: 14px;
   transition: all 0.2s;
   cursor: pointer;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .ure-file-custom-btn:hover {
@@ -406,6 +425,7 @@
   align-items: center;
   gap: 6px;
   box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  flex-shrink: 0;
 }
 
 .ure-file-name {
@@ -415,7 +435,9 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  max-width: 220px;
+  flex: 1;
+  min-width: 0;
+  text-align: right;
 }
 
 .ure-file-chip {
@@ -430,6 +452,18 @@
   font-size: 12.5px;
   color: #1e40af;
   font-weight: 600;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.ure-file-chip span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  flex: 1;
 }
 
 .ure-remove-btn {
@@ -443,6 +477,7 @@
   place-items: center;
   cursor: pointer;
   transition: all 0.15s;
+  flex-shrink: 0;
 }
 
 .ure-remove-btn:hover {
@@ -459,6 +494,10 @@
   background: #f0fdf4;
   border: 1px solid #bbf7d0;
   border-radius: 14px;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .ure-preview-img {
@@ -467,10 +506,12 @@
   border-radius: 10px;
   object-fit: cover;
   border: 1.5px solid #86efac;
+  flex-shrink: 0;
 }
 
 .ure-preview-meta {
   flex: 1;
+  min-width: 0;
   overflow: hidden;
 }
 
@@ -481,6 +522,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 .ure-preview-meta span {
@@ -488,6 +530,9 @@
   font-size: 11.5px;
   color: #15803d;
   font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Submit Action Button */

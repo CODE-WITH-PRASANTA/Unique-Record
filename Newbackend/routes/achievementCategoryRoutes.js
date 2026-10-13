@@ -9,17 +9,19 @@ const {
   toggleCategoryStatus,
 } = require('../controllers/achievementCategoryController');
 
+const { adminOnly } = require('../middleware/authMiddleware');
+
 router
   .route('/')
   .get(getAchievementCategories)
-  .post(createAchievementCategory);
+  .post(adminOnly, createAchievementCategory);
 
 router
   .route('/:id')
   .get(getAchievementCategoryById)
-  .put(updateAchievementCategory)
-  .delete(deleteAchievementCategory);
+  .put(adminOnly, updateAchievementCategory)
+  .delete(adminOnly, deleteAchievementCategory);
 
-router.patch('/:id/status', toggleCategoryStatus);
+router.patch('/:id/status', adminOnly, toggleCategoryStatus);
 
 module.exports = router;

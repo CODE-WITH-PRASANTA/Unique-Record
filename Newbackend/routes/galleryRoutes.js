@@ -10,6 +10,7 @@ const {
   deleteGalleryItem,
 } = require('../controllers/galleryController');
 const { uploadGallery, processGalleryPhoto } = require('../middleware/galleryUploadMiddleware');
+const { adminOnly } = require('../middleware/authMiddleware');
 
 const galleryUploadHandler = (req, res, next) => {
   uploadGallery.any()(req, res, (err) => {
@@ -25,18 +26,18 @@ const galleryUploadHandler = (req, res, next) => {
 
 router.route('/')
   .get(getGalleryItems)
-  .post(galleryUploadHandler, processGalleryPhoto, createGalleryItem);
+  .post(adminOnly, galleryUploadHandler, processGalleryPhoto, createGalleryItem);
 
-router.post('/upload', galleryUploadHandler, processGalleryPhoto, createGalleryItem);
+router.post('/upload', adminOnly, galleryUploadHandler, processGalleryPhoto, createGalleryItem);
 
-router.get('/all', getAllGalleryAdmin);
+router.get('/all', adminOnly, getAllGalleryAdmin);
 
 router.route('/:id')
   .get(getGalleryById)
-  .put(galleryUploadHandler, processGalleryPhoto, updateGalleryItem)
-  .delete(deleteGalleryItem);
+  .put(adminOnly, galleryUploadHandler, processGalleryPhoto, updateGalleryItem)
+  .delete(adminOnly, deleteGalleryItem);
 
 router.route('/:id/status')
-  .patch(toggleGalleryStatus);
+  .patch(adminOnly, toggleGalleryStatus);
 
 module.exports = router;

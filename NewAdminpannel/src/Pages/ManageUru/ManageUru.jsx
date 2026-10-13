@@ -3,6 +3,111 @@ import { FaImage, FaVideo, FaFilePdf, FaExternalLinkAlt, FaCertificate } from 'r
 import API from '../../api/axiosInstance';
 import './ManageUru.css';
 
+const RECORD_CATEGORIES = [
+  'Nature & Environment',
+  'Religion and Culture',
+  'Space & Technology',
+  'Art',
+  'Painting',
+  'Research',
+  'Education',
+  'Science & Technology',
+  'Literature',
+  'Math',
+  'Physics',
+  'Chemistry',
+  'Biology',
+  'Hindi',
+  'Sanskrit',
+  'Language',
+  'History & Archeology',
+  'Geography',
+  'Civics',
+  'Political Science',
+  'Economics',
+  'Psychology',
+  'Sociology',
+  'Social Work & Development',
+  'Agriculture & Allied',
+  'Animal Welfare',
+  'Social Welfare',
+  'Entrepreneurship',
+  'Marketing and Research',
+  'Human Sciences & Behaviour',
+  'Humanity Research',
+  'Ved',
+  'Upnishad',
+  'Shastra & Puran',
+  'Spirituality',
+  'Yoga & Meditation',
+  'Religious Book',
+  'River Conservation',
+  'Forest Conservation',
+  'Water Conservation',
+  'Ocean Studies',
+  'Import & Export',
+  'Sports',
+  'Medical Service',
+  'Ayurved',
+  'Homeopathy',
+  'Unani Medicine',
+  'Allopathic',
+  'Competition',
+  'Dance',
+  'Fashion & Design',
+  'Film & Entertainment',
+  'Singing and Playing',
+  'Mountaineer',
+  'Mountain Studies & Research',
+  'Indian Civilization Culture',
+  'Astronomy',
+  'Astrology',
+  'Cosmic Energy Absorption',
+  'Brain Memory Power',
+  'Marathon',
+  'Martial Arts',
+  'Stunt',
+  'Special Talents',
+  'Talented Child',
+  'Inspiring People',
+  'Tour & Travells',
+  'Online/Virtual',
+  'Bird Science',
+  'Entomology',
+  'Journalism',
+  'Mass Communications',
+  'Communications Revolution',
+  'Geology',
+  'Food and Drink',
+  'Discover',
+  'Architecture',
+  'Sculpture Art',
+  'Website Development & Coding',
+  'Innovation',
+  'Bright & Brilliant Children',
+  'AI Technology',
+  'Science & Development',
+  'Information Technology',
+  'International Peace',
+  "World's Longest",
+  "World's Tallest",
+  "World's Smallest",
+  "World's Fattest",
+  "World's Thinnest",
+  "World's Youngest",
+  "World's Oldest",
+  "World's Slowest",
+  'Power of Yagya and Chanting',
+  'Cow Service',
+  'Prodigious Talents',
+  'Electric Vehicle',
+  'Aircrafting',
+  'Boating',
+  "Women's Empowerment & Leadership",
+  'Seven Chakras Activity of the Body',
+  'Other'
+];
+
 const ManageUru = () => {
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -443,9 +548,9 @@ const ManageUru = () => {
                             <button
                               className={`mru-btn-status ${isApproved ? 'approved' : 'pending'}`}
                               onClick={() => handleToggleApprove(recordId)}
-                              title="Click to toggle Pending / Approved"
+                              title={isApproved ? "Approved (Click to revert to Pending)" : "Click to Mark as Approved"}
                             >
-                              {isApproved ? 'Approved' : 'Pending'}
+                              {isApproved ? 'Approved' : 'Mark as Approved'}
                             </button>
                           </div>
                         </td>
@@ -667,15 +772,18 @@ const ManageUru = () => {
                       <div className="mru-form-group">
                         <label>Record Category</label>
                         <select
-                          value={editingRecord.category}
+                          value={editingRecord.category || ''}
                           onChange={(e) => setEditingRecord({ ...editingRecord, category: e.target.value })}
                         >
-                          <option value="Other">Other</option>
-                          <option value="Science & Tech">Science &amp; Tech</option>
-                          <option value="Arts & Culture">Arts &amp; Culture</option>
-                          <option value="Sports">Sports</option>
-                          <option value="Education">Education</option>
-                          <option value="Innovation">Innovation</option>
+                          <option value="">-- Select Category --</option>
+                          {editingRecord.category && !RECORD_CATEGORIES.includes(editingRecord.category) && (
+                            <option value={editingRecord.category}>{editingRecord.category}</option>
+                          )}
+                          {RECORD_CATEGORIES.map((cat) => (
+                            <option key={cat} value={cat}>
+                              {cat}
+                            </option>
+                          ))}
                         </select>
                       </div>
                       <div className="mru-form-group">

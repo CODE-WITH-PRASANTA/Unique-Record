@@ -30,10 +30,115 @@ const LINK_FIELDS = [
 ];
 
 const UPLOADS = [
-  { kind: 'photos', label: 'Upload Photos (JPG/PNG)', limit: 'Max total 10MB', maxMB: 10, accept: 'image/png,image/jpeg' },
-  { kind: 'videos', label: 'Upload Videos (MP4)', limit: 'Max total 100MB', maxMB: 100, accept: 'video/mp4' },
-  { kind: 'documents', label: 'Upload Documents (PDF)', limit: 'Total max 10MB', maxMB: 10, accept: 'application/pdf', full: true }
+  { kind: 'photos', label: 'Upload Photos (JPG/PNG)', limit: 'Max total 10MB', maxMB: 10, accept: 'image/png,image/jpeg,image/jpg,image/webp', required: false },
+  { kind: 'documents', label: 'Upload Documents (PDF)', limit: 'Total max 10MB', maxMB: 10, accept: 'application/pdf,.pdf', required: true }
 ];
+
+export const RECORD_CATEGORIES = [
+  'Nature & Environment',
+  'Religion and Culture',
+  'Space & Technology',
+  'Art',
+  'Painting',
+  'Research',
+  'Education',
+  'Science & Technology',
+  'Literature',
+  'Math',
+  'Physics',
+  'Chemistry',
+  'Biology',
+  'Hindi',
+  'Sanskrit',
+  'Language',
+  'History & Archeology',
+  'Geography',
+  'Civics',
+  'Political Science',
+  'Economics',
+  'Psychology',
+  'Sociology',
+  'Social Work & Development',
+  'Agriculture & Allied',
+  'Animal Welfare',
+  'Social Welfare',
+  'Entrepreneurship',
+  'Marketing and Research',
+  'Human Sciences & Behaviour',
+  'Humanity Research',
+  'Ved',
+  'Upnishad',
+  'Shastra & Puran',
+  'Spirituality',
+  'Yoga & Meditation',
+  'Religious Book',
+  'River Conservation',
+  'Forest Conservation',
+  'Water Conservation',
+  'Ocean Studies',
+  'Import & Export',
+  'Sports',
+  'Medical Service',
+  'Ayurved',
+  'Homeopathy',
+  'Unani Medicine',
+  'Allopathic',
+  'Competition',
+  'Dance',
+  'Fashion & Design',
+  'Film & Entertainment',
+  'Singing and Playing',
+  'Mountaineer',
+  'Mountain Studies & Research',
+  'Indian Civilization Culture',
+  'Astronomy',
+  'Astrology',
+  'Cosmic Energy Absorption',
+  'Brain Memory Power',
+  'Marathon',
+  'Martial Arts',
+  'Stunt',
+  'Special Talents',
+  'Talented Child',
+  'Inspiring People',
+  'Tour & Travells',
+  'Online/Virtual',
+  'Bird Science',
+  'Entomology',
+  'Journalism',
+  'Mass Communications',
+  'Communications Revolution',
+  'Geology',
+  'Food and Drink',
+  'Discover',
+  'Architecture',
+  'Sculpture Art',
+  'Website Development & Coding',
+  'Innovation',
+  'Bright & Brilliant Children',
+  'AI Technology',
+  'Science & Development',
+  'Information Technology',
+  'International Peace',
+  "World's Longest",
+  "World's Tallest",
+  "World's Smallest",
+  "World's Fattest",
+  "World's Thinnest",
+  "World's Youngest",
+  "World's Oldest",
+  "World's Slowest",
+  'Power of Yagya and Chanting',
+  'Cow Service',
+  'Prodigious Talents',
+  'Electric Vehicle',
+  'Aircrafting',
+  'Boating',
+  "Women's Empowerment & Leadership",
+  'Seven Chakras Activity of the Body',
+  'Other'
+];
+
 
 const ICONS = {
   user: (<><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></>),
@@ -90,14 +195,17 @@ const FilePreview = ({ file, kind, onRemove }) => {
     return () => URL.revokeObjectURL(u);
   }, [file, kind]);
 
+  const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
+
   return (
     <div className={`udu-preview udu-preview-${kind}`}>
       {kind === 'photos' && url && <img src={url} alt={file.name} />}
-      {kind === 'videos' && url && <video src={url} controls preload="metadata" />}
       {kind === 'documents' && (
         <div className="udu-doc-chip">
           <span className="udu-doc-icon">PDF</span>
-          <span className="udu-doc-name">{file.name}</span>
+          <span className="udu-doc-name" title={file.name}>
+            {file.name} <small style={{ opacity: 0.75 }}>({sizeMB} MB)</small>
+          </span>
         </div>
       )}
       <button type="button" className="udu-remove-btn" onClick={onRemove} aria-label={`Remove ${file.name}`}>×</button>
@@ -183,7 +291,7 @@ const UserDashboard = () => {
     whatsappNumber: '',
     emailId: '',
     occupation: '',
-    category: 'Other',
+    category: '',
     effortType: 'Individual Effort',
     activityTitle: '',
     activityDescription: '',
@@ -243,13 +351,78 @@ const UserDashboard = () => {
   const handleFiles = (kind, maxMB, fileList, input) => {
     const incoming = Array.from(fileList || []);
     if (!incoming.length) return;
+
+    const maxBytes = maxMB * 1024 * 1024;
+
+    // 1. File Format / Extension Validation
+    if (kind === 'photos') {
+      const invalidPhoto = incoming.find((f) => {
+        const ext = (f.name.split('.').pop() || '').toLowerCase();
+        const validExt = ['jpg', 'jpeg', 'png', 'webp'].includes(ext);
+        const validType = f.type ? f.type.startsWith('image/') : false;
+        return !validExt && !validType;
+      });
+
+      if (invalidPhoto) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Invalid Photo Format',
+          text: `"${invalidPhoto.name}" is not a valid image format. Please select JPG, PNG, or WEBP photos only.`,
+          confirmButtonColor: '#2563eb'
+        });
+        if (input) input.value = '';
+        return;
+      }
+    } else if (kind === 'documents') {
+      const invalidDoc = incoming.find((f) => {
+        const ext = (f.name.split('.').pop() || '').toLowerCase();
+        const validExt = ['pdf'].includes(ext);
+        const validType = f.type === 'application/pdf';
+        return !validExt && !validType;
+      });
+
+      if (invalidDoc) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Invalid Document Format',
+          text: `"${invalidDoc.name}" is not a valid PDF document. Please upload PDF files only.`,
+          confirmButtonColor: '#2563eb'
+        });
+        if (input) input.value = '';
+        return;
+      }
+    }
+
+    // 2. Individual File Size Validation (<= 10MB)
+    const oversizedFile = incoming.find((f) => f.size > maxBytes);
+    if (oversizedFile) {
+      const sizeMB = (oversizedFile.size / (1024 * 1024)).toFixed(2);
+      Swal.fire({
+        icon: 'warning',
+        title: 'File Size Exceeded',
+        html: `The file <strong>"${oversizedFile.name}"</strong> is <strong>${sizeMB} MB</strong>.<br/>Maximum allowed size is <strong>${maxMB} MB</strong>.`,
+        confirmButtonColor: '#2563eb'
+      });
+      if (input) input.value = '';
+      return;
+    }
+
+    // 3. Cumulative Total Size Validation (<= 10MB)
     const currentSize = files[kind].reduce((sum, f) => sum + f.size, 0);
     const incomingSize = incoming.reduce((sum, f) => sum + f.size, 0);
-    if (currentSize + incomingSize > maxMB * 1024 * 1024) {
-      alert(`Total size for this upload must be under ${maxMB}MB.`);
-    } else {
-      setFiles((prev) => ({ ...prev, [kind]: [...prev[kind], ...incoming] }));
+    if (currentSize + incomingSize > maxBytes) {
+      const totalMB = ((currentSize + incomingSize) / (1024 * 1024)).toFixed(2);
+      Swal.fire({
+        icon: 'warning',
+        title: 'Upload Limit Exceeded',
+        html: `Adding these files would make the total size <strong>${totalMB} MB</strong>.<br/>Total files for this section cannot exceed <strong>${maxMB} MB</strong>.`,
+        confirmButtonColor: '#2563eb'
+      });
+      if (input) input.value = '';
+      return;
     }
+
+    setFiles((prev) => ({ ...prev, [kind]: [...prev[kind], ...incoming] }));
     if (input) input.value = '';
   };
 
@@ -258,6 +431,45 @@ const UserDashboard = () => {
 
   const handleNext = () => {
     if (formRef.current && !formRef.current.reportValidity()) return;
+
+    // Validation for Step 4 (Evidence & Media)
+    if (currentStep === 4) {
+      if (!files.documents || files.documents.length === 0) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Document Required',
+          text: 'Please upload at least one valid supporting document (PDF, Max 10MB) before proceeding to the next step.',
+          confirmButtonColor: '#2563eb'
+        });
+        return;
+      }
+
+      const maxBytes = 10 * 1024 * 1024;
+      const totalDocSize = files.documents.reduce((sum, f) => sum + f.size, 0);
+      if (totalDocSize > maxBytes) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Document Size Limit Exceeded',
+          text: `Total uploaded documents size is ${(totalDocSize / (1024 * 1024)).toFixed(2)} MB. Maximum allowed is 10 MB. Please remove some files.`,
+          confirmButtonColor: '#2563eb'
+        });
+        return;
+      }
+
+      if (files.photos && files.photos.length > 0) {
+        const totalPhotoSize = files.photos.reduce((sum, f) => sum + f.size, 0);
+        if (totalPhotoSize > maxBytes) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Photo Size Limit Exceeded',
+            text: `Total uploaded photos size is ${(totalPhotoSize / (1024 * 1024)).toFixed(2)} MB. Maximum allowed is 10 MB. Please remove some files.`,
+            confirmButtonColor: '#2563eb'
+          });
+          return;
+        }
+      }
+    }
+
     if (currentStep < TOTAL_STEPS) {
       setCurrentStep((s) => s + 1);
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -278,6 +490,28 @@ const UserDashboard = () => {
         icon: 'warning',
         title: 'Terms & Conditions Required',
         text: 'Please accept the Terms and Conditions before submitting your application.',
+        confirmButtonColor: '#2563eb'
+      });
+    }
+
+    // Ensure valid document is attached before submitting
+    if (!files.documents || files.documents.length === 0) {
+      return Swal.fire({
+        icon: 'warning',
+        title: 'Document Required',
+        text: 'Please upload at least one valid supporting document (PDF, Max 10MB) before submitting your application.',
+        confirmButtonColor: '#2563eb'
+      });
+    }
+
+    const maxBytes = 10 * 1024 * 1024;
+    const totalDocSize = files.documents.reduce((sum, f) => sum + f.size, 0);
+    if (totalDocSize > maxBytes) {
+      return Swal.fire({
+        icon: 'error',
+        title: 'Document Size Limit Exceeded',
+        text: 'Total uploaded documents size exceeds 10 MB. Please remove some files before saving.',
+        confirmButtonColor: '#2563eb'
       });
     }
 
@@ -384,10 +618,6 @@ const UserDashboard = () => {
         <div className="udu-sidebar-inner">
           <div className="udu-sidebar-top">
             <Logo />
-            <div className="udu-sidebar-badge">
-              <span className="udu-badge-icon">i</span>
-              Instructions
-            </div>
           </div>
 
           <div className="udu-sidebar-hero">
@@ -519,11 +749,16 @@ const UserDashboard = () => {
                   <h3 className="udu-section-heading">Fill about Record/Activity Details:</h3>
                   <div className="udu-form-grid">
                     <Field label="Select Category" icon="layers" name="category" required>
-                      <select id="category" {...bind('category')}>
-                        <option value="Other">Other</option>
-                        <option value="Science & Tech">Science & Tech</option>
-                        <option value="Arts & Culture">Arts & Culture</option>
-                        <option value="Sports">Sports</option>
+                      <select id="category" {...bind('category')} required>
+                        <option value="">-- Select Category --</option>
+                        {formData.category && !RECORD_CATEGORIES.includes(formData.category) && (
+                          <option value={formData.category}>{formData.category}</option>
+                        )}
+                        {RECORD_CATEGORIES.map((cat) => (
+                          <option key={cat} value={cat}>
+                            {cat}
+                          </option>
+                        ))}
                       </select>
                     </Field>
                     <Field label="Effort Type" icon="users" name="effortType" required>
@@ -581,37 +816,47 @@ const UserDashboard = () => {
                   </div>
 
                   <div className="udu-upload-section-grid">
-                    {UPLOADS.map((u) => (
-                      <div className={`udu-upload-box ${u.full ? 'udu-full-span' : ''}`} key={u.kind}>
-                        <label className="udu-upload-label" htmlFor={u.kind}>
-                          {u.label} <small>({u.limit})</small>
-                        </label>
-                        <label className="udu-dropzone" htmlFor={u.kind}>
-                          <span className="udu-choose-btn">
-                            <Icon name="upload" className="udu-btn-svg" />
-                            Choose Files
-                          </span>
-                          <span className="udu-choose-text">
-                            {files[u.kind].length ? `${files[u.kind].length} file(s) selected` : 'No file chosen'}
-                          </span>
-                          <input
-                            id={u.kind}
-                            type="file"
-                            multiple
-                            accept={u.accept}
-                            onChange={(e) => handleFiles(u.kind, u.maxMB, e.target.files, e.target)}
-                          />
-                        </label>
+                    {UPLOADS.map((u) => {
+                      const fileCount = (files[u.kind] || []).length;
+                      const totalBytes = (files[u.kind] || []).reduce((s, f) => s + f.size, 0);
+                      const totalMB = (totalBytes / (1024 * 1024)).toFixed(2);
+                      const isRequiredEmpty = u.required && fileCount === 0;
 
-                        {files[u.kind].length > 0 && (
-                          <div className="udu-preview-grid">
-                            {files[u.kind].map((file, i) => (
-                              <FilePreview key={`${file.name}-${file.size}-${i}`} file={file} kind={u.kind} onRemove={() => removeFile(u.kind, i)} />
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    ))}
+                      return (
+                        <div className="udu-upload-box" key={u.kind}>
+                          <label className="udu-upload-label" htmlFor={u.kind}>
+                            {u.label} <small>({u.limit})</small>
+                            {u.required && <span className="udu-req">*</span>}
+                          </label>
+                          <label className={`udu-dropzone ${isRequiredEmpty ? 'udu-dropzone-required' : ''}`} htmlFor={u.kind}>
+                            <span className="udu-choose-btn">
+                              <Icon name="upload" className="udu-btn-svg" />
+                              Choose Files
+                            </span>
+                            <span className="udu-choose-text">
+                              {fileCount
+                                ? `${fileCount} file(s) selected (${totalMB} MB)`
+                                : (u.required ? 'No file chosen (Required)' : 'No file chosen')}
+                            </span>
+                            <input
+                              id={u.kind}
+                              type="file"
+                              multiple
+                              accept={u.accept}
+                              onChange={(e) => handleFiles(u.kind, u.maxMB, e.target.files, e.target)}
+                            />
+                          </label>
+
+                          {fileCount > 0 && (
+                            <div className="udu-preview-grid">
+                              {files[u.kind].map((file, i) => (
+                                <FilePreview key={`${file.name}-${file.size}-${i}`} file={file} kind={u.kind} onRemove={() => removeFile(u.kind, i)} />
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               )}

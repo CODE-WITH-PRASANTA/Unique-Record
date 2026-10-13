@@ -9,17 +9,19 @@ const {
   deleteCategory,
 } = require('../controllers/eventCategoryController');
 
+const { adminOnly } = require('../middleware/authMiddleware');
+
 router
   .route('/')
   .get(getAllCategories)
-  .post(createCategory);
+  .post(adminOnly, createCategory);
 
-router.patch('/:id/status', updateCategoryStatus);
+router.patch('/:id/status', adminOnly, updateCategoryStatus);
 
 router
   .route('/:id')
   .get(getCategoryById)
-  .put(updateCategory)
-  .delete(deleteCategory);
+  .put(adminOnly, updateCategory)
+  .delete(adminOnly, deleteCategory);
 
 module.exports = router;

@@ -187,6 +187,8 @@ const RegisterEvent = () => {
         !search ||
         item.applicationNumber?.toLowerCase().includes(search) ||
         item.applicantName?.toLowerCase().includes(search) ||
+        item.localAddress?.toLowerCase().includes(search) ||
+        item.address?.toLowerCase().includes(search) ||
         item.eventName?.toLowerCase().includes(search) ||
         item.email?.toLowerCase().includes(search) ||
         item.whatsappNumber?.includes(search) ||
@@ -281,6 +283,7 @@ const RegisterEvent = () => {
                 <th>#</th>
                 <th>Application ID</th>
                 <th>Applicant</th>
+                <th>Local Address</th>
                 <th>Event Name</th>
                 <th>Payment & Fee</th>
                 <th>Registered Date</th>
@@ -291,7 +294,7 @@ const RegisterEvent = () => {
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan="8" style={{ textAlign: 'center', padding: '48px', color: '#64748b' }}>
+                  <td colSpan="9" style={{ textAlign: 'center', padding: '48px', color: '#64748b' }}>
                     Loading registered events...
                   </td>
                 </tr>
@@ -312,13 +315,39 @@ const RegisterEvent = () => {
                         </small>
                       </td>
                       <td>
+                        <div style={{ maxWidth: '210px' }}>
+                          <span
+                            style={{
+                              fontSize: '13px',
+                              color: '#0f172a',
+                              fontWeight: '500',
+                              display: 'block',
+                              lineHeight: '1.4',
+                              wordBreak: 'break-word',
+                            }}
+                            title={item.localAddress || item.address || '—'}
+                          >
+                            {item.localAddress || item.address || '—'}
+                          </span>
+                          {(item.district || item.state || item.pinCode) && (
+                            <small
+                              style={{
+                                color: '#64748b',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '3px',
+                                marginTop: '3px',
+                              }}
+                            >
+                              <FaMapMarkerAlt size={9} />
+                              {[item.district, item.state].filter(Boolean).join(', ')}
+                              {item.pinCode ? ` (${item.pinCode})` : ''}
+                            </small>
+                          )}
+                        </div>
+                      </td>
+                      <td>
                         <span style={{ fontWeight: '600' }}>{item.eventName}</span>
-                        {item.district && (
-                          <small style={{ display: 'block', color: '#64748b' }}>
-                            <FaMapMarkerAlt size={10} style={{ marginRight: '4px' }} />
-                            {item.district}, {item.state}
-                          </small>
-                        )}
                       </td>
                       <td>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
@@ -387,7 +416,7 @@ const RegisterEvent = () => {
                 })
               ) : (
                 <tr>
-                  <td colSpan="8" style={{ textAlign: 'center', padding: '48px', color: '#64748b' }}>
+                  <td colSpan="9" style={{ textAlign: 'center', padding: '48px', color: '#64748b' }}>
                     No event registrations found matching current filter.
                   </td>
                 </tr>
@@ -460,6 +489,12 @@ const RegisterEvent = () => {
                   <label>District & State</label>
                   <p>{selectedReg.district}, {selectedReg.state} ({selectedReg.pinCode})</p>
                 </div>
+                {(selectedReg.localAddress || selectedReg.address) && (
+                  <div className="re-modal-field" style={{ gridColumn: 'span 2' }}>
+                    <label>Local Address</label>
+                    <p>{selectedReg.localAddress || selectedReg.address}</p>
+                  </div>
+                )}
                 <div className="re-modal-field">
                   <label>Website / Portfolio</label>
                   <p>{selectedReg.website || 'N/A'}</p>

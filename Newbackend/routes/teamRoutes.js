@@ -10,19 +10,20 @@ const {
   deleteTeamMember,
 } = require('../controllers/teamController');
 const { uploadTeam, processTeamPhoto } = require('../middleware/teamUploadMiddleware');
+const { adminOnly } = require('../middleware/authMiddleware');
 
 router.route('/')
   .get(getTeamMembers)
-  .post(uploadTeam.single('profilePic'), processTeamPhoto, createTeamMember);
+  .post(adminOnly, uploadTeam.single('profilePic'), processTeamPhoto, createTeamMember);
 
-router.get('/all', getAllTeamMembersAdmin);
+router.get('/all', adminOnly, getAllTeamMembersAdmin);
 
 router.route('/:id')
   .get(getTeamMemberById)
-  .put(uploadTeam.single('profilePic'), processTeamPhoto, updateTeamMember)
-  .delete(deleteTeamMember);
+  .put(adminOnly, uploadTeam.single('profilePic'), processTeamPhoto, updateTeamMember)
+  .delete(adminOnly, deleteTeamMember);
 
 router.route('/:id/status')
-  .patch(toggleTeamStatus);
+  .patch(adminOnly, toggleTeamStatus);
 
 module.exports = router;

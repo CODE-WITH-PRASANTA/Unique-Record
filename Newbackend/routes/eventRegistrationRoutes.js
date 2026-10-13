@@ -13,33 +13,34 @@ const {
   deleteEventRegistration,
 } = require('../controllers/eventRegistrationController');
 const { uploadEventRegFiles } = require('../middleware/eventRegistrationUploadMiddleware');
+const { adminOnly, optionalAuth } = require('../middleware/authMiddleware');
 
 // Payment & Refund Gateway Routes
 router.post('/create-order', createEventRazorpayOrder);
 router.post('/verify-payment', verifyEventPayment);
-router.post('/:id/refund', processEventRefund);
-router.post('/refund/:id', processEventRefund);
+router.post('/:id/refund', adminOnly, processEventRefund);
+router.post('/refund/:id', adminOnly, processEventRefund);
 
 // Public tracking routes
 router.get('/track/:appNumber', trackRegistrationStatus);
 router.get('/status/:appNumber', trackRegistrationStatus);
 
 // List & Register routes
-router.get('/', getAllEventRegistrations);
-router.get('/all', getAllEventRegistrations);
-router.post('/', uploadEventRegFiles, registerForEvent);
-router.post('/register', uploadEventRegFiles, registerForEvent);
-router.post('/add', uploadEventRegFiles, registerForEvent);
+router.get('/', adminOnly, getAllEventRegistrations);
+router.get('/all', adminOnly, getAllEventRegistrations);
+router.post('/', optionalAuth, uploadEventRegFiles, registerForEvent);
+router.post('/register', optionalAuth, uploadEventRegFiles, registerForEvent);
+router.post('/add', optionalAuth, uploadEventRegFiles, registerForEvent);
 
-// Status update
-router.patch('/:id/status', updateEventRegistrationStatus);
+// Status update (Admin Only)
+router.patch('/:id/status', adminOnly, updateEventRegistrationStatus);
 
-// Single record operations
+// Single record operations (Admin Only)
 router
   .route('/:id')
-  .get(getEventRegistrationById)
-  .put(updateEventRegistrationStatus)
-  .patch(updateEventRegistrationStatus)
-  .delete(deleteEventRegistration);
+  .get(adminOnly, getEventRegistrationById)
+  .put(adminOnly, updateEventRegistrationStatus)
+  .patch(adminOnly, updateEventRegistrationStatus)
+  .delete(adminOnly, deleteEventRegistration);
 
 module.exports = router;

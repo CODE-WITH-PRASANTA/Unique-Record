@@ -1,12 +1,26 @@
 import React, { useState, useEffect } from 'react';
+import {
+  Sparkles,
+  CheckCircle,
+  ExternalLink,
+  Trash2,
+  Globe,
+  FileSpreadsheet,
+  Search,
+  Eye
+} from 'lucide-react';
 import API from '../../api/axiosInstance';
+import UruCertificateModal from '../../Components/UruCertificateModal/UruCertificateModal';
 import './FinallUru.css';
 
 const FinallUru = () => {
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [uploadingId, setUploadingId] = useState(null);
+
+  // Dynamic Certificate Modal State
+  const [certModalOpen, setCertModalOpen] = useState(false);
+  const [selectedRecordForCert, setSelectedRecordForCert] = useState(null);
 
   // Fetch Paid URU applications from backend
   const fetchPaidRecords = async () => {
@@ -37,57 +51,25 @@ const FinallUru = () => {
     );
   });
 
-  // Handle file selection per row
-  const handleFileChange = (id, e) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      setRecords((prev) =>
-        prev.map((rec) =>
-          (rec.id || rec._id) === id ? { ...rec, file, fileName: file.name } : rec
-        )
-      );
-    }
+  // Open Certificate Designer Modal
+  const handleOpenCertModal = (record) => {
+    setSelectedRecordForCert(record);
+    setCertModalOpen(true);
   };
 
-  // Submit Certificate Upload Action
-  const handleSubmitCertificate = async (item) => {
-    const recordId = item._id || item.id || item.appNo || item.applicationNumber;
-    if (!item.file) {
-      alert('Please choose a certificate file to upload first.');
-      return;
-    }
-
-    try {
-      setUploadingId(item.id || item._id);
-      const formData = new FormData();
-      formData.append('certificate', item.file);
-
-      const res = await API.post(`/uru/upload-certificate/${recordId}`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
-
-      const updatedCertUrl = res.data?.certificateUrl || res.data?.data?.certificateUrl;
-
-      setRecords((prev) =>
-        prev.map((rec) =>
-          (rec.id || rec._id) === (item.id || item._id)
-            ? {
-                ...rec,
-                certificateUrl: updatedCertUrl || rec.certificateUrl,
-                fileName: updatedCertUrl ? updatedCertUrl.split('/').pop() : item.file.name,
-                file: null,
-              }
-            : rec
-        )
-      );
-
-      alert(`Certificate uploaded successfully for application ${item.appNo || item.applicationNumber}!`);
-    } catch (err) {
-      console.error('Error uploading certificate:', err);
-      alert(err.response?.data?.message || err.message || 'Failed to upload certificate.');
-    } finally {
-      setUploadingId(null);
-    }
+  // Callback when certificate is uploaded/generated from the modal
+  const handleCertificateUploaded = (recordId, certUrl) => {
+    setRecords((prev) =>
+      prev.map((rec) =>
+        (rec.id || rec._id) === recordId
+          ? {
+              ...rec,
+              certificateUrl: certUrl,
+              fileName: typeof certUrl === 'string' ? certUrl.split('/').pop() : 'Certificate.png',
+            }
+          : rec
+      )
+    );
   };
 
   // Publish / Unpublish Action
@@ -194,25 +176,12 @@ const FinallUru = () => {
           <div className="fin-uru-title-group">
             <h1 className="fin-uru-title">Final URU (Paid Applications)</h1>
             <div className="fin-uru-title-underline"></div>
-            <p style={{ color: '#64748b', fontSize: '14px', marginTop: '6px' }}>
-              Applications with successful payment status appear here for certificate uploads and live publication.
+            <p className="fin-uru-subtitle">
+              Confirmed applications with verified payment. Generate and publish dynamic certificates with official QR verification.
             </p>
           </div>
           <button className="fin-uru-btn-excel" onClick={handleDownloadExcel}>
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-              <polyline points="7 10 12 15 17 10"></polyline>
-              <line x1="12" y1="15" x2="12" y2="3"></line>
-            </svg>
+            <FileSpreadsheet size={18} />
             <span>Download Excel Sheet</span>
           </button>
         </header>
@@ -220,6 +189,7 @@ const FinallUru = () => {
         {/* Search Toolbar */}
         <div className="fin-uru-toolbar-section">
           <div className="fin-uru-search-wrapper">
+            <Search size={18} color="#94a3b8" />
             <input
               type="text"
               className="fin-uru-search-input"
@@ -241,7 +211,7 @@ const FinallUru = () => {
                   <th>Application Date</th>
                   <th>Applicant Name</th>
                   <th>Payment Status</th>
-                  <th>Upload Certificate</th>
+                  <th>Official Certificate</th>
                   <th className="fin-uru-text-center">Action</th>
                 </tr>
               </thead>
@@ -262,7 +232,7 @@ const FinallUru = () => {
                   filteredRecords.map((item, index) => {
                     const recordId = item.id || item._id;
                     const isPublished = Boolean(item.published || item.isPublished);
-                    const isUploading = uploadingId === recordId;
+                    const hasCertificate = Boolean(item.certificateUrl && item.certificateUrl.trim().length > 0);
 
                     return (
                       <tr key={recordId || index} className="fin-uru-table-row">
@@ -270,61 +240,71 @@ const FinallUru = () => {
                         <td className="fin-uru-col-appno">
                           <strong>{item.appNo || item.applicationNumber}</strong>
                         </td>
-                        <td>{item.date}</td>
+                        <td>{item.date || 'Recent'}</td>
                         <td className="fin-uru-col-name">{item.name || item.applicantName}</td>
                         <td>
                           <span className="fin-uru-status-badge success">
                             {item.paymentStatus || 'Success'}
                           </span>
                         </td>
-                        <td className="fin-uru-col-upload">
-                          <div className="fin-uru-file-picker">
-                            <label className="fin-uru-file-btn">
-                              Choose File
-                              <input
-                                type="file"
-                                accept=".pdf,.png,.jpg,.jpeg,.doc,.docx"
-                                className="fin-uru-hidden-input"
-                                onChange={(e) => handleFileChange(recordId, e)}
-                              />
-                            </label>
-                            <span className="fin-uru-file-name" title={item.fileName || 'No file chosen'}>
-                              {item.certificateUrl ? (
-                                <a
-                                  href={item.certificateUrl}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  style={{ color: '#7c3aed', textDecoration: 'underline' }}
-                                  title="Click to view existing certificate"
-                                >
-                                  {item.fileName || 'View Certificate'}
-                                </a>
-                              ) : (
-                                item.fileName || 'No file chosen'
-                              )}
-                            </span>
+
+                        {/* Official Dynamic Certificate Column */}
+                        <td className="fin-uru-col-cert-manager">
+                          <div className="fin-uru-cert-action-stack">
+                            {hasCertificate ? (
+                              <div className="fin-uru-cert-active-card">
+                                <span className="fin-uru-cert-ready-pill">
+                                  <CheckCircle size={13} /> Certificate Ready
+                                </span>
+                                <div className="fin-uru-cert-links-row">
+                                  <button
+                                    type="button"
+                                    className="fin-uru-btn-edit-cert"
+                                    onClick={() => handleOpenCertModal(item)}
+                                    title="Open certificate designer to preview, customize, or re-download"
+                                  >
+                                    <Eye size={13} /> Preview / Edit
+                                  </button>
+                                  <a
+                                    href={item.certificateUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="fin-uru-btn-view-file"
+                                    title="View raw uploaded certificate file"
+                                  >
+                                    <ExternalLink size={13} /> View File
+                                  </a>
+                                </div>
+                              </div>
+                            ) : (
+                              <button
+                                type="button"
+                                className="fin-uru-btn-generate"
+                                onClick={() => handleOpenCertModal(item)}
+                              >
+                                <Sparkles size={15} /> Generate Dynamic Certificate
+                              </button>
+                            )}
                           </div>
                         </td>
+
+                        {/* Actions (Delete, Publish) */}
                         <td className="fin-uru-col-action">
                           <div className="fin-uru-action-group">
                             <button
-                              className="fin-uru-btn-submit"
-                              onClick={() => handleSubmitCertificate(item)}
-                              disabled={isUploading}
+                              className={`fin-uru-btn-publish ${isPublished ? 'published' : ''}`}
+                              onClick={() => handlePublish(recordId)}
+                              title={isPublished ? 'Click to unpublish' : 'Click to publish certificate live'}
                             >
-                              {isUploading ? 'Uploading…' : 'Submit'}
+                              <Globe size={13} />
+                              {isPublished ? 'Published' : 'Publish'}
                             </button>
                             <button
                               className="fin-uru-btn-delete"
                               onClick={() => handleDelete(recordId)}
+                              title="Delete this application"
                             >
-                              Delete
-                            </button>
-                            <button
-                              className={`fin-uru-btn-publish ${isPublished ? 'published' : ''}`}
-                              onClick={() => handlePublish(recordId)}
-                            >
-                              {isPublished ? 'Published' : 'Publish'}
+                              <Trash2 size={13} />
                             </button>
                           </div>
                         </td>
@@ -337,8 +317,16 @@ const FinallUru = () => {
           </div>
         </section>
       </div>
+
+      {/* Dynamic Certificate Designer / Preview Modal */}
+      <UruCertificateModal
+        isOpen={certModalOpen}
+        onClose={() => setCertModalOpen(false)}
+        record={selectedRecordForCert}
+        onCertificateUploaded={handleCertificateUploaded}
+      />
     </div>
   );
 };
 
-export default FinallUru;
+export default FinallUru;

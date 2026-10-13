@@ -10,21 +10,23 @@ const {
   processDonationRefund,
 } = require('../controllers/donationController');
 
-// Razorpay Order Creation & Verification
+const { adminOnly } = require('../middleware/authMiddleware');
+
+// Razorpay Order Creation & Verification (Public)
 router.post('/create-order', createDonationOrder);
 router.post('/verify-payment', verifyDonationPayment);
 
-// List all donations
-router.get('/', getAllDonations);
-router.get('/all', getAllDonations);
+// List all donations (Admin Only)
+router.get('/', adminOnly, getAllDonations);
+router.get('/all', adminOnly, getAllDonations);
 
-// Single donation operations & delete
-router.get('/:id', getDonationById);
-router.delete('/:id', deleteDonation);
-router.delete('/delete/:donationId', deleteDonation);
+// Single donation operations & delete (Admin Only)
+router.get('/:id', adminOnly, getDonationById);
+router.delete('/:id', adminOnly, deleteDonation);
+router.delete('/delete/:donationId', adminOnly, deleteDonation);
 
-// Refund
-router.post('/:id/refund', processDonationRefund);
-router.post('/refund/:id', processDonationRefund);
+// Refund (Admin Only)
+router.post('/:id/refund', adminOnly, processDonationRefund);
+router.post('/refund/:id', adminOnly, processDonationRefund);
 
 module.exports = router;

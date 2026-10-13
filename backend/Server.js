@@ -3,7 +3,34 @@
 // =====================================================
 const dns = require("dns");
 
-dns.setServers(["1.1.1.1", "8.8.8.8"]);
+try {
+  dns.setServers(["8.8.8.8", "1.1.1.1", "8.8.4.4"]);
+} catch (e) {
+  console.warn("Could not set custom DNS servers:", e);
+}
+
+const defaultLookup = dns.lookup;
+dns.lookup = function (hostname, options, callback) {
+  if (typeof options === "function") {
+    callback = options;
+    options = {};
+  }
+  defaultLookup(hostname, options, (err, address, family) => {
+    if (err) {
+      dns.resolve4(hostname, (resErr, addresses) => {
+        if (resErr || !addresses || addresses.length === 0) {
+          return callback(err, address, family);
+        }
+        if (options && options.all) {
+          return callback(null, addresses.map((addr) => ({ address: addr, family: 4 })));
+        }
+        return callback(null, addresses[0], 4);
+      });
+    } else {
+      callback(null, address, family);
+    }
+  });
+};
 
 console.log("DNS servers configured:", dns.getServers());
 

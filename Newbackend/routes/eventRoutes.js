@@ -9,13 +9,14 @@ const {
   deleteEvent,
 } = require('../controllers/eventController');
 const { upload, convertEventImageToWebp } = require('../middleware/eventUploadMiddleware');
+const { adminOnly } = require('../middleware/authMiddleware');
 
 // List & Create
 router.get('/', getAllEvents);
 router.get('/all', getAllEvents);
-router.post('/', upload.single('locationImage'), convertEventImageToWebp, createEvent);
-router.post('/add', upload.single('locationImage'), convertEventImageToWebp, createEvent);
-router.post('/create', upload.single('locationImage'), convertEventImageToWebp, createEvent);
+router.post('/', adminOnly, upload.single('locationImage'), convertEventImageToWebp, createEvent);
+router.post('/add', adminOnly, upload.single('locationImage'), convertEventImageToWebp, createEvent);
+router.post('/create', adminOnly, upload.single('locationImage'), convertEventImageToWebp, createEvent);
 
 // Status filter for Frontend
 router.get('/status/:status', getEventsByStatus);
@@ -24,7 +25,7 @@ router.get('/status/:status', getEventsByStatus);
 router
   .route('/:id')
   .get(getEventById)
-  .put(upload.single('locationImage'), convertEventImageToWebp, updateEvent)
-  .delete(deleteEvent);
+  .put(adminOnly, upload.single('locationImage'), convertEventImageToWebp, updateEvent)
+  .delete(adminOnly, deleteEvent);
 
 module.exports = router;

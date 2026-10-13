@@ -7,11 +7,13 @@ const {
   logoutAdmin,
 } = require('../controllers/adminAuthController');
 
+const { adminOnly } = require('../middleware/authMiddleware');
+
 // Admin Portal Authentication (for NewAdminpannel in 'admins' table)
 router.post('/login', loginAdmin);
-router.get('/me', getAdminProfile);
-router.get('/profile', getAdminProfile);
-router.get('/list', getAllAdmins);
-router.post('/logout', logoutAdmin);
+router.get('/me', adminOnly, getAdminProfile);
+router.get('/profile', adminOnly, getAdminProfile);
+router.get('/list', adminOnly, getAllAdmins);
+router.post('/logout', adminOnly, logoutAdmin);
 
 module.exports = router;
