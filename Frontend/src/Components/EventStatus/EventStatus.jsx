@@ -20,8 +20,10 @@ import {
   ShieldCheck,
   FileCheck,
   Sparkles,
-  Info
+  Info,
+  Download
 } from 'lucide-react';
+import EventPaymentReceipt from '../RegisterForEvent/EventPaymentReceipt';
 import './EventStatus.css';
 
 const EventStatus = () => {
@@ -33,6 +35,7 @@ const EventStatus = () => {
   const [statusResult, setStatusResult] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
   const [copied, setCopied] = useState(false);
+  const [showReceipt, setShowReceipt] = useState(false);
 
   const fetchStatus = useCallback(async (targetNumber) => {
     const query = (targetNumber || '').trim().toUpperCase();
@@ -298,14 +301,71 @@ const EventStatus = () => {
                 </p>
               </div>
 
-              {/* Reset Button */}
-              <button type="button" className="es-reset-btn" onClick={handleReset}>
-                <RotateCcw size={16} /> Track Another Application
-              </button>
+              {/* Actions Row */}
+              <div className="es-actions-row">
+                <button
+                  type="button"
+                  className="es-receipt-download-btn"
+                  onClick={() => setShowReceipt(true)}
+                >
+                  <Download size={16} /> Download Official Payment Receipt
+                </button>
+                <button type="button" className="es-reset-btn" onClick={handleReset}>
+                  <RotateCcw size={16} /> Track Another Application
+                </button>
+              </div>
             </div>
           )}
         </div>
       </div>
+
+      {/* Official Receipt Modal */}
+      {showReceipt && statusResult && (
+        <EventPaymentReceipt
+          receiptData={{
+            receiptNo: `REC-${statusResult.applicationNumber || statusResult.id}`,
+            applicationNumber: statusResult.applicationNumber || statusResult.id,
+            eventName: statusResult.eventName,
+            applicantName: statusResult.applicantName,
+            sex: statusResult.sex,
+            gender: statusResult.sex,
+            dateOfBirth: statusResult.dateOfBirth,
+            whatsappNumber: statusResult.whatsappNumber,
+            phone: statusResult.whatsappNumber,
+            email: statusResult.email,
+            localAddress: statusResult.localAddress || statusResult.address || '',
+            district: statusResult.district,
+            state: statusResult.state,
+            pinCode: statusResult.pinCode,
+            educationalQualification: statusResult.educationalQualification,
+            expertise: statusResult.expertise,
+            registrationFees: statusResult.registrationFees || '₹0',
+            paymentStatus: statusResult.paymentStatus || 'Paid',
+            paymentPlatform: statusResult.paymentPlatform || 'Razorpay Gateway',
+            paymentMethod: statusResult.paymentMethod || 'Online Checkout',
+            razorpayPaymentId: statusResult.razorpayPaymentId || '',
+            razorpayOrderId: statusResult.razorpayOrderId || '',
+            status: statusResult.status || 'Verified',
+            date: statusResult.registrationDate
+              ? new Date(statusResult.registrationDate).toLocaleDateString('en-IN', {
+                  day: '2-digit',
+                  month: 'short',
+                  year: 'numeric',
+                })
+              : new Date().toLocaleDateString('en-IN'),
+            time: statusResult.registrationDate
+              ? new Date(statusResult.registrationDate).toLocaleTimeString('en-IN', {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  hour12: true,
+                })
+              : '',
+          }}
+          isOpen={showReceipt}
+          autoDownload={false}
+          onClose={() => setShowReceipt(false)}
+        />
+      )}
     </div>
   );
 };

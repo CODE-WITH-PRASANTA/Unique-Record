@@ -15,8 +15,11 @@ import {
   FaSave,
   FaCreditCard,
   FaUndoAlt,
-  FaShieldAlt
+  FaShieldAlt,
+  FaReceipt,
+  FaPrint
 } from 'react-icons/fa';
+import companyLogo from '../../assets/UNQUE.png';
 import API from '../../api/axiosInstance';
 import './RegisterEvent.css';
 
@@ -38,6 +41,7 @@ const RegisterEvent = () => {
   const [refundReason, setRefundReason] = useState('');
   const [processingRefund, setProcessingRefund] = useState(false);
   const [updatingId, setUpdatingId] = useState(null);
+  const [receiptModal, setReceiptModal] = useState(null);
 
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
 
@@ -403,6 +407,14 @@ const RegisterEvent = () => {
                           </button>
                           <button
                             type="button"
+                            className="re-action-btn"
+                            title="View / Print Payment Receipt"
+                            onClick={() => setReceiptModal(item)}
+                          >
+                            <FaReceipt />
+                          </button>
+                          <button
+                            type="button"
                             className="re-action-btn re-action-btn--delete"
                             title="Delete Record"
                             onClick={() => setDeleteModal(item)}
@@ -564,6 +576,14 @@ const RegisterEvent = () => {
               <button
                 type="button"
                 className="re-refresh-btn"
+                onClick={() => setReceiptModal(selectedReg)}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+              >
+                <FaReceipt /> Official Receipt
+              </button>
+              <button
+                type="button"
+                className="re-refresh-btn"
                 onClick={() => setSelectedReg(null)}
               >
                 Close
@@ -691,6 +711,145 @@ const RegisterEvent = () => {
                 onClick={confirmDelete}
               >
                 Delete Record
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Official Payment Receipt Modal */}
+      {receiptModal && (
+        <div className="re-modal-backdrop" onClick={() => setReceiptModal(null)}>
+          <div className="re-modal" style={{ maxWidth: '820px' }} onClick={(e) => e.stopPropagation()}>
+            <div className="re-modal-header" style={{ borderBottom: '1px solid #e2e8f0' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <FaReceipt color="#2563eb" size={18} />
+                <h3 style={{ margin: 0 }}>Official Event Payment Receipt</h3>
+              </div>
+              <button type="button" className="re-modal-close" onClick={() => setReceiptModal(null)}>
+                <FaTimes />
+              </button>
+            </div>
+
+            <div className="re-modal-body" style={{ background: '#f8fafc', padding: '24px' }}>
+              <div
+                id="admin-receipt-print-area"
+                style={{
+                  background: '#ffffff',
+                  border: '2px solid #1e3a8a',
+                  borderRadius: '10px',
+                  padding: '24px',
+                  color: '#1e293b',
+                  boxShadow: '0 4px 20px rgba(0,0,0,0.06)'
+                }}
+              >
+                {/* Header Branding */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '2px solid #e2e8f0', paddingBottom: '14px', gap: '16px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                    <img src={companyLogo} alt="Logo" style={{ height: '54px', objectFit: 'contain' }} />
+                    <div>
+                      <h2 style={{ margin: 0, fontSize: '18px', fontWeight: 800, color: '#1e3a8a' }}>UNIQUE RECORDS OF UNIVERSE</h2>
+                      <p style={{ margin: '2px 0 0', fontSize: '11.5px', fontWeight: 700, color: '#d97706' }}>Unit of Divya Prerak Kahaniyan Humanity Research Centre Trust</p>
+                      <small style={{ color: '#64748b', fontSize: '10px' }}>Reg. 80G Humanitarian Organization · Thekma, Azamgarh (U.P.) - 276303</small>
+                    </div>
+                  </div>
+                  <div style={{ textAlign: 'right' }}>
+                    <span style={{ display: 'inline-block', background: '#ecfdf5', color: '#047857', border: '1px solid #a7f3d0', padding: '4px 10px', borderRadius: '9999px', fontSize: '11px', fontWeight: 800 }}>
+                      {receiptModal.paymentStatus === 'Refunded' ? 'REFUNDED' : 'PAID & CONFIRMED'}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Ribbon */}
+                <div style={{ background: 'linear-gradient(135deg, #1e3a8a, #2563eb)', color: '#fff', padding: '8px 14px', borderRadius: '6px', margin: '14px 0', fontSize: '12px', fontWeight: 800, display: 'flex', justifyContent: 'space-between' }}>
+                  <span>OFFICIAL EVENT REGISTRATION RECEIPT</span>
+                  <span>STATUS: {receiptModal.status || 'Pending'}</span>
+                </div>
+
+                {/* Metadata Grid */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '6px', padding: '10px 14px', marginBottom: '14px', fontSize: '11.5px' }}>
+                  <div>
+                    <span style={{ display: 'block', fontSize: '10px', color: '#64748b', fontWeight: 700 }}>RECEIPT NO</span>
+                    <strong style={{ color: '#2563eb' }}>REC-{receiptModal.applicationNumber}</strong>
+                  </div>
+                  <div>
+                    <span style={{ display: 'block', fontSize: '10px', color: '#64748b', fontWeight: 700 }}>APPLICATION ID</span>
+                    <strong style={{ color: '#2563eb' }}>{receiptModal.applicationNumber}</strong>
+                  </div>
+                  <div>
+                    <span style={{ display: 'block', fontSize: '10px', color: '#64748b', fontWeight: 700 }}>DATE</span>
+                    <strong>{receiptModal.createdAt ? new Date(receiptModal.createdAt).toLocaleDateString('en-IN') : 'N/A'}</strong>
+                  </div>
+                  <div>
+                    <span style={{ display: 'block', fontSize: '10px', color: '#64748b', fontWeight: 700 }}>PAYMENT GATEWAY</span>
+                    <strong>{receiptModal.paymentPlatform || 'Razorpay Gateway'}</strong>
+                  </div>
+                </div>
+
+                {/* Details */}
+                <div style={{ border: '1px solid #e2e8f0', borderRadius: '6px', overflow: 'hidden', marginBottom: '14px', fontSize: '11.5px' }}>
+                  <div style={{ background: '#f1f5f9', padding: '6px 12px', fontWeight: 800, color: '#334155' }}>
+                    REGISTERED EVENT: <span style={{ color: '#1e3a8a' }}>{receiptModal.eventName}</span>
+                  </div>
+                  <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                    <tbody>
+                      <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
+                        <td style={{ padding: '6px 12px', width: '25%', background: '#f8fafc', fontWeight: 700, color: '#64748b' }}>Applicant Name</td>
+                        <td style={{ padding: '6px 12px', fontWeight: 600 }}>{receiptModal.applicantName} ({receiptModal.sex}, DOB: {receiptModal.dateOfBirth})</td>
+                      </tr>
+                      <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
+                        <td style={{ padding: '6px 12px', background: '#f8fafc', fontWeight: 700, color: '#64748b' }}>Contact</td>
+                        <td style={{ padding: '6px 12px' }}>WhatsApp: {receiptModal.whatsappNumber} · Email: {receiptModal.email}</td>
+                      </tr>
+                      <tr>
+                        <td style={{ padding: '6px 12px', background: '#f8fafc', fontWeight: 700, color: '#64748b' }}>Address</td>
+                        <td style={{ padding: '6px 12px' }}>{[receiptModal.localAddress || receiptModal.address, receiptModal.district, receiptModal.state, receiptModal.pinCode].filter(Boolean).join(', ')}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Fee Statement */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: '6px', padding: '12px 16px', marginBottom: '14px' }}>
+                  <div>
+                    <span style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: '#475569' }}>REGISTRATION FEE RECEIVED</span>
+                    <small style={{ color: '#64748b' }}>Transaction ID: {receiptModal.razorpayPaymentId || 'N/A'}</small>
+                  </div>
+                  <div style={{ fontSize: '18px', fontWeight: 800, color: '#059669' }}>
+                    {receiptModal.registrationFees || '₹0'}
+                  </div>
+                </div>
+
+                {/* Footer Notes */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', paddingTop: '10px', borderTop: '1px solid #e2e8f0', fontSize: '9px', color: '#64748b' }}>
+                  <div>
+                    <p style={{ margin: 0 }}>✓ This is an authentic computer-generated official receipt issued by Unique Records of Universe.</p>
+                    <p style={{ margin: '2px 0 0' }}>✓ No physical signature required.</p>
+                  </div>
+                  <div style={{ textAlign: 'center', minWidth: '130px' }}>
+                    <div style={{ width: '120px', height: '1px', background: '#94a3b8', margin: '0 auto 3px' }}></div>
+                    <strong style={{ color: '#1e3a8a', fontSize: '10px' }}>Authorized Signatory</strong>
+                    <div style={{ fontSize: '8px' }}>Unique Records of Universe</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="re-modal-footer">
+              <button
+                type="button"
+                className="re-refresh-btn"
+                onClick={() => setReceiptModal(null)}
+              >
+                Close
+              </button>
+              <button
+                type="button"
+                className="re-save-btn"
+                onClick={() => window.print()}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+              >
+                <FaPrint /> Print Official Receipt
               </button>
             </div>
           </div>

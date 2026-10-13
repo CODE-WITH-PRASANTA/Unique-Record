@@ -21,6 +21,7 @@ import {
   AlertCircle,
   X
 } from 'lucide-react';
+import EventPaymentReceipt from './EventPaymentReceipt';
 import './RegisterForEvent.css';
 
 const RegisterForEvent = () => {
@@ -43,6 +44,9 @@ const RegisterForEvent = () => {
   const [loadingEvents, setLoadingEvents] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [photoPreview, setPhotoPreview] = useState(null);
+  const [receiptData, setReceiptData] = useState(null);
+  const [showReceiptModal, setShowReceiptModal] = useState(false);
+  const [autoDownloadReceipt, setAutoDownloadReceipt] = useState(false);
 
   const [formData, setFormData] = useState({
     eventName: urlEventName,
@@ -248,11 +252,65 @@ const RegisterForEvent = () => {
 
       const appNumber = res.data?.applicationNumber || res.data?.data?.applicationNumber || `EVT26${Math.floor(10000 + Math.random() * 90000)}`;
 
+      // Generate complete official receipt data
+      const newReceiptData = {
+        receiptNo: `REC-${appNumber}`,
+        applicationNumber: appNumber,
+        eventName: formData.eventName,
+        applicantName: formData.applicantName,
+        sex: formData.sex,
+        gender: formData.sex,
+        dateOfBirth: formData.dateOfBirth,
+        dob: formData.dateOfBirth,
+        whatsappNumber: formData.whatsappNumber,
+        phone: formData.whatsappNumber,
+        email: formData.email,
+        localAddress: formData.localAddress || '',
+        address: formData.localAddress || '',
+        district: formData.district,
+        state: formData.state,
+        pinCode: formData.pinCode,
+        educationalQualification: formData.educationalQualification,
+        expertise: formData.expertise || '',
+        registrationFees: formData.registrationFees || '₹0',
+        paymentStatus: 'Paid',
+        paymentPlatform: paymentDetails?.razorpay_payment_id ? 'Razorpay Payment Gateway' : 'Direct Registration',
+        paymentMethod: paymentDetails?.razorpay_payment_id ? 'Online Checkout (UPI/Card/NetBanking)' : 'Complimentary Slot',
+        razorpayPaymentId: paymentDetails?.razorpay_payment_id || '',
+        razorpayOrderId: paymentDetails?.razorpay_order_id || '',
+        status: 'Pending Review',
+        date: new Date().toLocaleDateString('en-IN', {
+          day: '2-digit',
+          month: 'short',
+          year: 'numeric'
+        }),
+        time: new Date().toLocaleTimeString('en-IN', {
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true
+        })
+      };
+
+      setReceiptData(newReceiptData);
+      setAutoDownloadReceipt(true);
+      setShowReceiptModal(true);
+
+      try {
+        sessionStorage.setItem('lastEventReceipt', JSON.stringify(newReceiptData));
+      } catch (storageErr) {
+        console.warn('Session storage error:', storageErr);
+      }
+
       await Swal.fire({
         icon: 'success',
         title: 'Registration Successful! 🎉',
         html: `
           <div style="text-align: left; font-size: 14px; line-height: 1.6; padding: 16px; background: #f8fafc; border-radius: 14px; border: 1px solid #e2e8f0; margin-top: 12px;">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid #e2e8f0;">
+              <span style="background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; padding: 3px 8px; border-radius: 6px; font-size: 11.5px; font-weight: 700;">
+                ✓ Official Payment Receipt Auto-Downloaded
+              </span>
+            </div>
             <p style="margin: 0 0 8px;"><strong>Application ID:</strong> <span style="color: #2563eb; font-weight: 800; font-size: 18px; letter-spacing: 1px; font-family: monospace;">${appNumber}</span></p>
             <p style="margin: 0 0 6px;"><strong>Event:</strong> ${formData.eventName}</p>
             <p style="margin: 0 0 6px;"><strong>Applicant:</strong> ${formData.applicantName}</p>
@@ -262,17 +320,18 @@ const RegisterForEvent = () => {
               Status: Pending Review
             </div>
           </div>
-          <p style="color: #475569; font-size: 13px; margin-top: 14px;">Use this Application ID anytime to check current verification progress.</p>
+          <p style="color: #475569; font-size: 13px; margin-top: 14px;">Your official payment receipt PDF with verification QR &amp; organization logo has been generated and downloaded. You can also view or print it anytime.</p>
         `,
-        confirmButtonText: 'Track Status Now 🔍',
+        confirmButtonText: 'View & Print Receipt 📄',
         showCancelButton: true,
-        cancelButtonText: 'Go to Dashboard',
+        cancelButtonText: 'Track Status Now 🔍',
         confirmButtonColor: '#2563eb',
+        cancelButtonColor: '#059669',
       }).then((result) => {
         if (result.isConfirmed) {
-          navigate(`/event/registration-status?appId=${appNumber}`);
+          setShowReceiptModal(true);
         } else {
-          navigate('/dashboard');
+          navigate(`/event/registration-status?appId=${appNumber}`);
         }
       });
     } catch (err) {
@@ -782,6 +841,17 @@ const RegisterForEvent = () => {
           </form>
         </div>
       </div>
+
+      {/* Official Payment Receipt Modal / Auto-Downloader */}
+      {showReceiptModal && receiptData && (
+        <EventPaymentReceipt
+          receiptData={receiptData}
+          isOpen={showReceiptModal}
+          autoDownload={autoDownloadReceipt}
+          onClose={() => setShowReceiptModal(false)}
+          onDownloadComplete={() => setAutoDownloadReceipt(false)}
+        />
+      )}
     </div>
   );
 };
