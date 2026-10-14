@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
@@ -6,8 +7,10 @@ import {
   useLocation,
 } from "react-router-dom";
 
+import Topbar from "./Components/Topbar/Topbar";
 import Navbar from "./Components/Navbar/Navbar";
 import Footer from "./Components/Footer/Footer";
+
 import Home from "./Pages/Home/Home";
 import AboutUs from "./Pages/About/About";
 import Contact from "./Pages/Contact/Contact";
@@ -20,25 +23,31 @@ import OurAchivments from "./Pages/OurAchivments/OurAchivments";
 import LearnMore from "./Pages/LearnMore/LearnMore";
 import TermandCondition from "./Pages/TermandCondition/TermandCondition";
 import Notice from "./Pages/Notice/Notice";
+
 import Login from "./Components/Login/Login";
-import Event from "./Pages/Event/Event";
 import ForgotPassword from "./Components/ForgotPassword/ForgotPassword";
 import UserDashboard from "./Components/UserDashboard/UserDashboard";
 import Sidebar from "./Components/Sidebar/Sidebar";
 import ProtectedRoute from "./Components/ProtectedRoute";
+
+import Event from "./Pages/Event/Event";
 import Donate from "./Pages/Donate/Donate";
 import PaymentSuccess from "./Components/PaymentSuccess/PaymentSuccess";
 import DonationSuccess from "./Components/DonationSuccess/DonationSuccess";
+
 import MakeUserPost from "./Components/MakeUserPost/MakeUserPost";
 import ApplicationStatus from "./Components/ApplicationStatus/ApplicationStatus";
 import DownCertificate from "./Components/DownCertificate/DownCertificate";
+
 import AchivmentDetails from "./Components/AchivmentDetails/AchivmentDetails";
-import AdminLogin from "./Components/AdminLogin/AdminLogin";
 import AchiverDetails from "./Pages/AchiverDetails/AchiverDetails";
 import AchiversAbout from "./Components/AchiversAbout/AchiversAbout";
-import Loader from "./Loader";
+
+import AdminLogin from "./Components/AdminLogin/AdminLogin";
 import RegisterForEvent from "./Components/RegisterForEvent/RegisterForEvent";
 import EventStatus from "./Components/EventStatus/EventStatus";
+
+import Loader from "./Loader";
 import "./App.css";
 
 function Layout() {
@@ -46,44 +55,71 @@ function Layout() {
   const [loading, setLoading] = useState(false);
 
   const isAdminPage = location.pathname.startsWith("/admin");
+
   const isDashboardPage =
     location.pathname.startsWith("/dashboard") ||
     location.pathname.startsWith("/uru") ||
     location.pathname.startsWith("/event/");
 
-  // 🌀 Show loader on every route change
+  // Loader on route change
   useEffect(() => {
     setLoading(true);
-    const timer = setTimeout(() => setLoading(false), 1000); // loader duration
+
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+
     return () => clearTimeout(timer);
   }, [location.pathname]);
+
+  // Hide Topbar, Navbar and Footer on admin/dashboard pages
+  const showPublicLayout = !isAdminPage && !isDashboardPage;
 
   return (
     <>
       <Loader loading={loading} />
 
-      {!isAdminPage && !isDashboardPage && <Navbar />}
+      {/* ===== Public Website Header ===== */}
+      {showPublicLayout && (
+        <>
+          <Topbar />
+          <Navbar />
+        </>
+      )}
 
+      {/* ===== Dashboard Layout ===== */}
       {isDashboardPage ? (
         <div className="dashboard-container">
           <Sidebar />
+
           <div className="dashboard-content">
             <Routes>
               <Route element={<ProtectedRoute />}>
-                <Route path="/dashboard" element={<UserDashboard />} />
-                <Route path="/uru/apply" element={<UserDashboard />} />
+                <Route
+                  path="/dashboard"
+                  element={<UserDashboard />}
+                />
+
+                <Route
+                  path="/uru/apply"
+                  element={<UserDashboard />}
+                />
+
                 <Route
                   path="/uru/application-status"
                   element={<ApplicationStatus />}
                 />
+
                 <Route
                   path="/uru/download-certificate"
                   element={<DownCertificate />}
                 />
+
                 <Route
                   path="/event/register"
                   element={<RegisterForEvent />}
                 />
+
                 <Route
                   path="/event/registration-status"
                   element={<EventStatus />}
@@ -93,31 +129,95 @@ function Layout() {
           </div>
         </div>
       ) : (
+        /* ===== Public Website Routes ===== */
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/learnmore" element={<LearnMore />} />
-          <Route path="/termandcondition" element={<TermandCondition />} />
+
+          <Route
+            path="/learnmore"
+            element={<LearnMore />}
+          />
+
+          <Route
+            path="/termandcondition"
+            element={<TermandCondition />}
+          />
+
           <Route path="/about" element={<AboutUs />} />
+
           <Route path="/contact" element={<Contact />} />
+
           <Route path="/notice" element={<Notice />} />
+
           <Route path="/faq" element={<FaqPage />} />
+
           <Route path="/media" element={<Media />} />
+
           <Route path="/vision" element={<Vision />} />
-          <Route path="/achivments" element={<OurAchivments />} />
-          <Route path="/achievements" element={<OurAchivments />} />
-          <Route path="/archivement/:name" element={<AchivmentDetails />} />
-          <Route path="/achievement/:name" element={<AchivmentDetails />} />
-          <Route path="/achievers" element={<AchiverDetails />} />
-          <Route path="/achiever/:id" element={<AchiversAbout />} />
-          <Route path="/achivment-details/:id" element={<AchivmentDetails />} />
+
+          <Route
+            path="/achivments"
+            element={<OurAchivments />}
+          />
+
+          <Route
+            path="/achievements"
+            element={<OurAchivments />}
+          />
+
+          <Route
+            path="/archivement/:name"
+            element={<AchivmentDetails />}
+          />
+
+          <Route
+            path="/achievement/:name"
+            element={<AchivmentDetails />}
+          />
+
+          <Route
+            path="/achievers"
+            element={<AchiverDetails />}
+          />
+
+          <Route
+            path="/achiever/:id"
+            element={<AchiversAbout />}
+          />
+
+          <Route
+            path="/achivment-details/:id"
+            element={<AchivmentDetails />}
+          />
+
           <Route path="/blog" element={<Blog />} />
-          <Route path="/blog/:slug" element={<BlogDetails />} />
+
+          <Route
+            path="/blog/:slug"
+            element={<BlogDetails />}
+          />
+
           <Route path="/login" element={<Login />} />
+
           <Route path="/event" element={<Event />} />
+
           <Route path="/donate" element={<Donate />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/payment-success" element={<PaymentSuccess />} />
-          <Route path="/donation-success" element={<DonationSuccess />} />
+
+          <Route
+            path="/forgot-password"
+            element={<ForgotPassword />}
+          />
+
+          <Route
+            path="/payment-success"
+            element={<PaymentSuccess />}
+          />
+
+          <Route
+            path="/donation-success"
+            element={<DonationSuccess />}
+          />
+
           <Route
             path="/your-post"
             element={
@@ -126,11 +226,16 @@ function Layout() {
               </ProtectedRoute>
             }
           />
-          <Route path="/admin/*" element={<AdminLogin />} />
+
+          <Route
+            path="/admin/*"
+            element={<AdminLogin />}
+          />
         </Routes>
       )}
 
-      {!isAdminPage && !isDashboardPage && <Footer />}
+      {/* ===== Public Website Footer ===== */}
+      {showPublicLayout && <Footer />}
     </>
   );
 }
@@ -138,15 +243,22 @@ function Layout() {
 function App() {
   const [initialLoad, setInitialLoad] = useState(true);
 
-  // 🕓 Loader shows only once on very first app load
+  // Initial application loader
   useEffect(() => {
-    const timer = setTimeout(() => setInitialLoad(false), 1500);
+    const timer = setTimeout(() => {
+      setInitialLoad(false);
+    }, 1500);
+
     return () => clearTimeout(timer);
   }, []);
 
   return (
     <Router>
-      {initialLoad ? <Loader loading={true} /> : <Layout />}
+      {initialLoad ? (
+        <Loader loading={true} />
+      ) : (
+        <Layout />
+      )}
     </Router>
   );
 }
