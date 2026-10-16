@@ -1,0 +1,442 @@
+/* =========================================================
+   Topbar.css
+   All class names are prefixed with "Topbar-" (component name)
+   Space + gold theme, same font and width as Navbar
+   ========================================================= */
+
+.Topbar-wrapper {
+  --Topbar-gold: #f5c45d;
+  --Topbar-gold-light: #ffe9a3;
+  --Topbar-gold-deep: #e8a92f;
+  --Topbar-text: rgba(255, 255, 255, 0.9);
+  --Topbar-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  position: relative;
+  z-index: 900;
+  width: 100%;
+  font-family: "Plus Jakarta Sans", "Segoe UI", system-ui, -apple-system,
+    "Helvetica Neue", Arial, sans-serif;
+  color: var(--Topbar-text);
+  /* layers: stars, dark overlay, your space photo (optional) */
+  background:
+    radial-gradient(1px 1px at 6% 30%, rgba(255, 255, 255, 0.75), transparent),
+    radial-gradient(1px 1px at 14% 72%, rgba(255, 255, 255, 0.5), transparent),
+    radial-gradient(1.5px 1.5px at 23% 42%, rgba(255, 233, 163, 0.8), transparent),
+    radial-gradient(1px 1px at 34% 78%, rgba(255, 255, 255, 0.55), transparent),
+    radial-gradient(1px 1px at 47% 24%, rgba(255, 255, 255, 0.6), transparent),
+    radial-gradient(1.5px 1.5px at 58% 66%, rgba(255, 255, 255, 0.7), transparent),
+    radial-gradient(1px 1px at 69% 34%, rgba(255, 233, 163, 0.7), transparent),
+    radial-gradient(1px 1px at 78% 80%, rgba(255, 255, 255, 0.5), transparent),
+    radial-gradient(1.5px 1.5px at 88% 28%, rgba(255, 255, 255, 0.75), transparent),
+    radial-gradient(1px 1px at 95% 64%, rgba(255, 255, 255, 0.55), transparent),
+    linear-gradient(95deg, rgba(2, 10, 26, 0.96) 0%, rgba(3, 28, 46, 0.93) 55%, rgba(8, 24, 56, 0.95) 100%),
+    url("/images/space-bg.jpg") center 35% / cover,
+    #04101f;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* thin gold light line along the bottom edge */
+.Topbar-wrapper::after {
+  position: absolute;
+  right: 0;
+  bottom: -1px;
+  left: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(245, 196, 93, 0.75) 25%,
+    rgba(255, 233, 163, 0.95) 50%,
+    rgba(245, 196, 93, 0.75) 75%,
+    transparent
+  );
+  content: "";
+  pointer-events: none;
+}
+
+.Topbar-wrapper *,
+.Topbar-wrapper *::before,
+.Topbar-wrapper *::after {
+  box-sizing: border-box;
+}
+
+/* same width as Navbar so everything lines up */
+.Topbar-container {
+  width: min(96%, 1760px);
+  margin: 0 auto;
+}
+
+.Topbar-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 52px;
+  padding: 7px 0;
+}
+
+/* ---------- Left: contact ---------- */
+.Topbar-left {
+  display: flex;
+  align-items: center;
+  gap: clamp(12px, 1.6vw, 24px);
+  min-width: 0;
+}
+
+.Topbar-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  padding: 3px 2px;
+  border-radius: 999px;
+  color: var(--Topbar-text);
+  font-size: clamp(0.76rem, 0.15vw + 0.72rem, 0.86rem);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.25s ease;
+}
+
+.Topbar-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border: 1px solid rgba(245, 196, 93, 0.38);
+  border-radius: 50%;
+  background: rgba(245, 196, 93, 0.1);
+  color: var(--Topbar-gold);
+  font-size: 14px;
+  transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease,
+    box-shadow 0.3s ease, transform 0.3s var(--Topbar-ease);
+}
+
+.Topbar-item:hover {
+  color: var(--Topbar-gold-light);
+}
+
+.Topbar-item:hover .Topbar-icon {
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--Topbar-gold-light), var(--Topbar-gold));
+  color: #2b1d07;
+  box-shadow: 0 0 16px rgba(245, 196, 93, 0.5);
+  transform: translateY(-1px);
+}
+
+.Topbar-item-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.Topbar-divider {
+  width: 1px;
+  height: 18px;
+  flex-shrink: 0;
+  background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+}
+
+/* ---------- Right: actions ---------- */
+.Topbar-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: clamp(8px, 0.9vw, 14px);
+  flex-shrink: 0;
+}
+
+.Topbar-auth-group {
+  display: flex;
+  align-items: center;
+  gap: clamp(6px, 0.8vw, 10px);
+}
+
+.Topbar-login,
+.Topbar-logout-btn,
+.Topbar-cta {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 18px;
+  overflow: hidden;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: clamp(0.76rem, 0.15vw + 0.72rem, 0.84rem);
+  font-weight: 650;
+  letter-spacing: 0.01em;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease,
+    box-shadow 0.3s ease, transform 0.3s var(--Topbar-ease);
+}
+
+.Topbar-btn-icon {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+}
+
+/* Login / dashboard: frosted glass pill */
+.Topbar-login {
+  border-color: rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.07);
+  color: #ffffff;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+.Topbar-login:hover {
+  border-color: rgba(245, 196, 93, 0.85);
+  background: rgba(245, 196, 93, 0.12);
+  color: var(--Topbar-gold-light);
+  transform: translateY(-1px);
+}
+
+.Topbar-dashboard-link {
+  padding-left: 5px;
+  border-color: rgba(245, 196, 93, 0.55);
+  color: var(--Topbar-gold-light);
+}
+
+.Topbar-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--Topbar-gold-light), var(--Topbar-gold-deep));
+  color: #2b1d07;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.Topbar-username {
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Logout: soft red ghost */
+.Topbar-logout-btn {
+  border-color: rgba(255, 120, 135, 0.4);
+  background: rgba(255, 80, 100, 0.08);
+  color: #ffb9c1;
+  padding: 0 15px;
+}
+
+.Topbar-logout-btn:hover {
+  border-color: transparent;
+  background: #d9364b;
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+/* Donate: gold CTA with soft glow + shimmer on hover */
+.Topbar-cta {
+  border-color: rgba(255, 233, 163, 0.9);
+  background: linear-gradient(135deg, var(--Topbar-gold-light), var(--Topbar-gold) 55%, var(--Topbar-gold-deep));
+  color: #2b1d07;
+  font-weight: 800;
+  padding: 0 22px;
+  box-shadow: 0 0 0 3px rgba(245, 196, 93, 0.12), 0 8px 22px rgba(245, 196, 93, 0.3);
+}
+
+.Topbar-cta::before {
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(105deg, transparent, rgba(255, 255, 255, 0.65), transparent);
+  content: "";
+  transform: skewX(-20deg);
+  transition: left 0.7s var(--Topbar-ease);
+}
+
+.Topbar-cta:hover::before {
+  left: 130%;
+}
+
+.Topbar-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 0 4px rgba(245, 196, 93, 0.2), 0 12px 28px rgba(245, 196, 93, 0.45);
+}
+
+.Topbar-cta .Topbar-btn-icon {
+  color: #c4213f;
+  fill: rgba(196, 33, 63, 0.25);
+}
+
+/* ---------- Keyboard focus ---------- */
+.Topbar-item:focus-visible,
+.Topbar-login:focus-visible,
+.Topbar-logout-btn:focus-visible,
+.Topbar-cta:focus-visible {
+  outline: 2px solid var(--Topbar-gold-light);
+  outline-offset: 2px;
+}
+
+/* ---------- Responsive ---------- */
+
+/* Ultra-wide */
+@media (min-width: 1700px) {
+  .Topbar-content {
+    min-height: 56px;
+  }
+}
+
+/* Laptops / tablets landscape */
+@media (max-width: 1180px) {
+  .Topbar-container {
+    width: min(94%, 1100px);
+  }
+}
+
+/* Tablets */
+@media (max-width: 992px) {
+  .Topbar-login,
+  .Topbar-logout-btn,
+  .Topbar-cta {
+    height: 34px;
+    padding: 0 14px;
+  }
+
+  .Topbar-dashboard-link {
+    padding-left: 4px;
+  }
+}
+
+/* Small tablets: email shows as icon only */
+@media (max-width: 768px) {
+  .Topbar-container {
+    width: 92%;
+  }
+
+  .Topbar-content {
+    min-height: 48px;
+    gap: 10px;
+  }
+
+  .Topbar-divider {
+    display: none;
+  }
+
+  .Topbar-item-email .Topbar-item-text {
+    display: none;
+  }
+
+  .Topbar-item-email {
+    padding: 0;
+  }
+}
+
+/* Phones: icon-only contact, compact buttons */
+@media (max-width: 576px) {
+  .Topbar-content {
+    min-height: 46px;
+    gap: 8px;
+    padding: 5px 0;
+  }
+
+  .Topbar-item {
+    padding: 0;
+  }
+
+  .Topbar-item-text {
+    display: none;
+  }
+
+  .Topbar-left {
+    gap: 8px;
+  }
+
+  .Topbar-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .Topbar-login,
+  .Topbar-logout-btn,
+  .Topbar-cta {
+    height: 32px;
+    padding: 0 12px;
+    font-size: 0.76rem;
+  }
+
+  /* logout becomes icon-only */
+  .Topbar-logout-btn {
+    width: 32px;
+    padding: 0;
+  }
+
+  .Topbar-logout-btn .Topbar-btn-text {
+    display: none;
+  }
+
+  .Topbar-dashboard-link {
+    padding-left: 3px;
+  }
+
+  .Topbar-username {
+    max-width: 70px;
+  }
+}
+
+/* Small phones: shorten "Login / Register" to "Login" */
+@media (max-width: 420px) {
+  .Topbar-extra {
+    display: none;
+  }
+
+  .Topbar-right,
+  .Topbar-auth-group {
+    gap: 6px;
+  }
+
+  .Topbar-cta {
+    padding: 0 12px;
+  }
+}
+
+/* Very small phones (320px) */
+@media (max-width: 360px) {
+  .Topbar-container {
+    width: 95%;
+  }
+
+  .Topbar-icon {
+    width: 28px;
+    height: 28px;
+    font-size: 13px;
+  }
+
+  .Topbar-login,
+  .Topbar-cta {
+    gap: 5px;
+    padding: 0 10px;
+  }
+
+  .Topbar-username {
+    max-width: 56px;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .Topbar-wrapper,
+  .Topbar-wrapper *,
+  .Topbar-wrapper *::before {
+    transition: none !important;
+  }
+}
