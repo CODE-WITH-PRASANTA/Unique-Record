@@ -178,6 +178,53 @@
   color: #cbd5e1;
 }
 
+.udu-sidebar-instruction-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 20px;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.16), rgba(99, 102, 241, 0.2));
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 14px;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(56, 189, 248, 0.15);
+  transition: all 0.25s ease;
+}
+
+.udu-sidebar-instruction-btn:hover {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.3), rgba(99, 102, 241, 0.35));
+  border-color: #38bdf8;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(56, 189, 248, 0.3);
+}
+
+.udu-sib-icon {
+  font-size: 18px;
+  margin-right: 8px;
+}
+
+.udu-sib-label {
+  flex: 1;
+  text-align: left;
+  letter-spacing: 0.2px;
+}
+
+.udu-sib-badge {
+  background: #38bdf8;
+  color: #0f172a;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 4px 9px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
 .udu-sidebar-progress {
   margin-top: auto;
   display: flex;
@@ -914,6 +961,317 @@
   width: 20px;
   height: 20px;
   accent-color: var(--udu-blue);
+  cursor: pointer;
+}
+
+.udu-terms-link-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: #2563eb;
+  font-weight: 700;
+  text-decoration: underline;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.udu-terms-link-btn:hover {
+  color: #1d4ed8;
+}
+
+/* ================= Terms & Conditions Panel ================= */
+.udu-terms-panel {
+  margin-top: 24px;
+  background: #ffffff;
+  border: 1.5px solid var(--udu-line);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
+}
+
+.udu-terms-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--udu-line);
+  margin-bottom: 14px;
+}
+
+.udu-terms-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.udu-terms-badge-icon {
+  font-size: 26px;
+  line-height: 1;
+}
+
+.udu-terms-heading {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--udu-ink);
+}
+
+.udu-terms-subheading {
+  margin: 2px 0 0;
+  font-size: 13px;
+  color: var(--udu-muted);
+}
+
+.udu-terms-view-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #2563eb;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.udu-terms-view-btn:hover {
+  background: #2563eb;
+  color: #ffffff;
+  border-color: #2563eb;
+}
+
+.udu-terms-scroll-box {
+  max-height: 230px;
+  overflow-y: auto;
+  padding-right: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.udu-terms-scroll-box::-webkit-scrollbar {
+  width: 6px;
+}
+
+.udu-terms-scroll-box::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.udu-term-item {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 10px 14px;
+  background: #f8fafc;
+  border-radius: 10px;
+  border-left: 3.5px solid #2563eb;
+}
+
+.udu-term-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  margin-top: 1px;
+}
+
+.udu-term-item strong {
+  display: block;
+  font-size: 13.5px;
+  color: #0f172a;
+  margin-bottom: 2px;
+  font-weight: 700;
+}
+
+.udu-term-item p {
+  margin: 0;
+  font-size: 13px;
+  color: #475569;
+  line-height: 1.5;
+}
+
+/* ================= Terms Modal Dialog ================= */
+.udu-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  padding: 20px;
+  animation: uduFadeIn 0.25s ease;
+}
+
+.udu-modal-card {
+  background: #ffffff;
+  border-radius: 20px;
+  max-width: 760px;
+  width: 100%;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  animation: uduSlideUp 0.3s ease;
+}
+
+.udu-modal-header {
+  padding: 20px 26px;
+  border-bottom: 1px solid var(--udu-line);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+.udu-modal-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: #e0e7ff;
+  color: #3730a3;
+  padding: 3px 8px;
+  border-radius: 6px;
+  margin-bottom: 6px;
+}
+
+.udu-modal-title-wrap h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.udu-modal-title-wrap p {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.udu-modal-close-btn {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.udu-modal-close-btn:hover {
+  background: #fee2e2;
+  color: #dc2626;
+  border-color: #fca5a5;
+}
+
+.udu-modal-body {
+  padding: 24px 26px;
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.udu-modal-intro {
+  padding: 14px 18px;
+  background: #eff6ff;
+  border-left: 4px solid #2563eb;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #1e3a8a;
+  line-height: 1.55;
+}
+
+.udu-modal-section h4 {
+  margin: 0 0 4px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.udu-modal-section p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #475569;
+  line-height: 1.55;
+}
+
+.udu-modal-footer {
+  padding: 16px 26px;
+  border-top: 1px solid var(--udu-line);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  background: #f8fafc;
+}
+
+.udu-modal-secondary-btn {
+  padding: 10px 18px;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #475569;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.udu-modal-secondary-btn:hover {
+  background: #f1f5f9;
+}
+
+.udu-modal-accept-btn {
+  padding: 10px 22px;
+  border: none;
+  background: #2563eb;
+  color: #ffffff;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+  transition: all 0.2s ease;
+}
+
+.udu-modal-accept-btn:hover {
+  background: #1d4ed8;
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+}
+
+@keyframes uduFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes uduSlideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* ================= Action Buttons ================= */
@@ -970,6 +1328,126 @@
   background: #94a3b8;
   box-shadow: none;
   cursor: not-allowed;
+}
+
+/* ================= Instructions Modal Specifics ================= */
+.udu-instructions-modal-card {
+  max-width: 860px;
+}
+
+.udu-instructions-modal-body {
+  gap: 20px;
+}
+
+.udu-instructions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.udu-inst-item {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 12px 16px;
+  background: #f8fafc;
+  border-radius: 12px;
+  border-left: 3.5px solid #0ea5e9;
+  transition: background 0.2s ease;
+}
+
+.udu-inst-item:hover {
+  background: #f1f5f9;
+}
+
+.udu-inst-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0ea5e9, #2563eb);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 800;
+  margin-top: 1px;
+}
+
+.udu-inst-content {
+  flex: 1;
+}
+
+.udu-inst-content strong {
+  display: block;
+  font-size: 14.5px;
+  color: #0f172a;
+  margin-bottom: 3px;
+  font-weight: 700;
+}
+
+.udu-inst-content p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #475569;
+  line-height: 1.6;
+}
+
+.udu-inst-link {
+  color: #2563eb;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.udu-inst-fee-item {
+  background: #fefce8;
+  border-left-color: #eab308;
+}
+
+.udu-fee-old {
+  text-decoration: line-through;
+  color: #ef4444;
+  font-weight: 700;
+}
+
+.udu-fee-new {
+  color: #15803d;
+  font-weight: 800;
+  background: #dcfce7;
+  padding: 2px 7px;
+  border-radius: 6px;
+}
+
+.udu-inst-note-box {
+  padding: 16px 20px;
+  background: #fffbeb;
+  border: 1.5px solid #fde68a;
+  border-radius: 14px;
+}
+
+.udu-inst-note-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.udu-inst-note-title span {
+  font-size: 20px;
+}
+
+.udu-inst-note-title h4 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 800;
+  color: #92400e;
+}
+
+.udu-inst-note-box p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #78350f;
+  line-height: 1.65;
 }
 
 /* ================= Responsive Layout ================= */

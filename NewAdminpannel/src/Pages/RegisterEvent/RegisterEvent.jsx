@@ -20,7 +20,7 @@ import {
   FaPrint
 } from 'react-icons/fa';
 import companyLogo from '../../assets/UNQUE.png';
-import API from '../../api/axiosInstance';
+import API, { getImageUrl } from '../../api/axiosInstance';
 import './RegisterEvent.css';
 
 const RegisterEvent = () => {
@@ -53,12 +53,19 @@ const RegisterEvent = () => {
     }, 3500);
   };
 
-  // Fetch all registrations
+  // Fetch all registrations with automatic fallback
   const fetchRegistrations = useCallback(async () => {
     try {
       setLoading(true);
-      const res = await API.get('/event-registrations');
-      const list = res.data?.registrations || res.data?.data || (Array.isArray(res.data) ? res.data : []);
+      let list = [];
+      try {
+        const res = await API.get('/event-registrations');
+        list = res.data?.registrations || res.data?.data || (Array.isArray(res.data) ? res.data : []);
+      } catch (firstErr) {
+        console.warn('Primary fetch to /event-registrations failed, attempting fallback to /event-registrations/all:', firstErr);
+        const res = await API.get('/event-registrations/all');
+        list = res.data?.registrations || res.data?.data || (Array.isArray(res.data) ? res.data : []);
+      }
       setRegistrations(list);
 
       // Extract unique event names
@@ -459,7 +466,7 @@ const RegisterEvent = () => {
               <div className="re-dossier-banner">
                 {selectedReg.photo ? (
                   <img
-                    src={selectedReg.photo}
+                    src={getImageUrl(selectedReg.photo)}
                     alt={selectedReg.applicantName}
                     className="re-dossier-photo"
                   />
@@ -527,7 +534,7 @@ const RegisterEvent = () => {
                   <div className="re-modal-field" style={{ gridColumn: 'span 2' }}>
                     <label>Bio-Data Document</label>
                     <a
-                      href={selectedReg.bioData}
+                      href={getImageUrl(selectedReg.bioData)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="re-file-link"

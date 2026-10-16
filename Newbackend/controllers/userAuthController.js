@@ -340,9 +340,12 @@ const loginUser = async (req, res) => {
     // Generate JWT Token for user
     const token = generateUserToken(user, 'user');
 
-    // Update tokens and lastLogin
+    // Update tokens and lastLogin (bounded to last 10 sessions to prevent document bloat)
     if (!user.tokens) user.tokens = [];
     user.tokens.push(token);
+    if (user.tokens.length > 10) {
+      user.tokens = user.tokens.slice(-10);
+    }
     user.lastLogin = new Date();
     await user.save({ validateBeforeSave: false });
 

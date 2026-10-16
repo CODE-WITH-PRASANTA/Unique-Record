@@ -12,6 +12,7 @@ import {
   FiBookOpen,
   FiHelpCircle,
   FiPhone,
+  FiChevronDown,
 } from "react-icons/fi"; // ✅ All Fi icons
 import { FaRegNewspaper } from "react-icons/fa"; // ✅ For URU Post submenu
 import "./Navbar.css";
@@ -89,6 +90,18 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Prevent background scrolling when mobile menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileMenuOpen]);
+
   const toggleDropdown = (index) => {
     setMobileDropdownOpen(mobileDropdownOpen === index ? null : index);
   };
@@ -99,7 +112,7 @@ const menuItems = [
   { name: "About Us", path: "/about", icon: <FiInfo /> },
   { name: "Our Vision", path: "/vision", icon: <FiEye /> },
   { name: "Achievements", path: "/achivments", icon: <FiAward /> },
-  { name: "URU Holder's", path: "/achievers", icon: <FiStar /> },
+  { name: "URU Holder", path: "/achievers", icon: <FiStar /> },
   { name: "Notice", path: "/notice", icon: <FiClipboard /> },
   { name: "Event Registration", path: "/event", icon: <FiCalendar /> },
   { name: "Media", path: "/media", icon: <FiImage /> },
@@ -184,17 +197,35 @@ const menuItems = [
               </ul>
             </div>
           </nav>
+        </header>
+
+        {/* ===== Mobile Menu Backdrop ===== */}
+        <div 
+          className={`Nav-mobile-backdrop ${mobileMenuOpen ? "open" : ""}`} 
+          onClick={() => setMobileMenuOpen(false)}
+          aria-hidden="true"
+        />
 
         {/* ===== Mobile Menu ===== */}
         <div className={`Nav-mobile-menu ${mobileMenuOpen ? "open" : ""}`} ref={menuRef}>
           <div className="Nav-mobile-wrapper">
             <div className="Nav-mobile-top">
-              <div className="Nav-mobile-logo"><img src={logo} alt="EduBlink" /></div>
-              <button className="Nav-close" onClick={() => setMobileMenuOpen(false)}>✕</button>
+              <div className="Nav-mobile-logo">
+                <img src={logo} alt="URU Logo" />
+              </div>
+              <button 
+                type="button"
+                className="Nav-close" 
+                onClick={() => setMobileMenuOpen(false)}
+                aria-label="Close menu"
+              >
+                ✕
+              </button>
             </div>
+
             <ul className="Nav-mobile-list">
               {menuItems.map((item, i) => (
-                <li key={i}>
+                <li key={i} className="Nav-mobile-item">
                   {item.name === "Get a Quote" ? (
                     <Link
                       to={item.path}
@@ -206,12 +237,23 @@ const menuItems = [
                   ) : item.sub ? (
                     <>
                       <div
-                        className="mobile-link"
+                        className={`mobile-link mobile-dropdown-toggle ${
+                          mobileDropdownOpen === i ? "active" : ""
+                        }`}
                         onClick={() => toggleDropdown(i)}
                       >
-                        {item.name}{" "}
-                        <span className="nav-arrow">
-                          {mobileDropdownOpen === i ? "▲" : "▼"}
+                        <span className="mobile-link-content">
+                          {item.icon && (
+                            <span className="mobile-link-icon">{item.icon}</span>
+                          )}
+                          <span className="mobile-link-text">{item.name}</span>
+                        </span>
+                        <span
+                          className={`nav-arrow ${
+                            mobileDropdownOpen === i ? "open" : ""
+                          }`}
+                        >
+                          <FiChevronDown />
                         </span>
                       </div>
                       <ul
@@ -223,83 +265,72 @@ const menuItems = [
                           <li key={idx}>
                             <Link
                               to={sub.path}
+                              className="mobile-sublink"
                               onClick={() => setMobileMenuOpen(false)}
                             >
-                              {sub.name}
+                              {sub.icon && (
+                                <span className="mobile-sublink-icon">{sub.icon}</span>
+                              )}
+                              <span>{sub.name}</span>
                             </Link>
                           </li>
                         ))}
                       </ul>
                     </>
                   ) : (
-                    // ✅ Fix: Direct route for normal links (like Contact Us, Blog, Home, etc.)
                     <Link
                       to={item.path}
                       className="mobile-link"
                       onClick={() => setMobileMenuOpen(false)}
                     >
-                      {item.name}
+                      <span className="mobile-link-content">
+                        {item.icon && (
+                          <span className="mobile-link-icon">{item.icon}</span>
+                        )}
+                        <span className="mobile-link-text">{item.name}</span>
+                      </span>
                     </Link>
                   )}
                 </li>
               ))}
+            </ul>
 
-              {/* Mobile Auth Items */}
+            {/* Mobile Auth Section */}
+            <div className="mobile-auth-section">
               {token ? (
                 <>
-                  <li style={{ borderTop: "1px solid rgba(255,255,255,0.1)", marginTop: "10px", paddingTop: "10px" }}>
-                    <Link
-                      to="/dashboard"
-                      className="mobile-link"
-                      onClick={() => setMobileMenuOpen(false)}
-                      style={{ color: "#ffd700", fontWeight: "700" }}
-                    >
-                      👤 My Dashboard ({user?.fullName?.split(" ")[0] || "User"})
-                    </Link>
-                  </li>
-                  <li>
-                    <button
-                      type="button"
-                      className="mobile-link"
-                      onClick={() => {
-                        setMobileMenuOpen(false);
-                        handleLogout();
-                      }}
-                      style={{
-                        background: "none",
-                        border: "none",
-                        width: "100%",
-                        textAlign: "left",
-                        color: "#ff6b6b",
-                        cursor: "pointer",
-                        fontWeight: "600",
-                        padding: "12px 15px",
-                        fontSize: "16px"
-                      }}
-                    >
-                      🚪 Logout
-                    </button>
-                  </li>
+                  <Link
+                    to="/dashboard"
+                    className="mobile-auth-btn mobile-dashboard-btn"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <span>👤 My Dashboard ({user?.fullName?.split(" ")[0] || "User"})</span>
+                  </Link>
+                  <button
+                    type="button"
+                    className="mobile-auth-btn mobile-logout-btn"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      handleLogout();
+                    }}
+                  >
+                    <span>🚪 Logout</span>
+                  </button>
                 </>
               ) : (
-                <li style={{ borderTop: "1px solid rgba(255,255,255,0.1)", marginTop: "10px", paddingTop: "10px" }}>
-                  <Link
-                    to="/login"
-                    className="mobile-link"
-                    onClick={() => setMobileMenuOpen(false)}
-                    style={{ color: "#ffd700", fontWeight: "700" }}
-                  >
-                    🔑 Login / Register
-                  </Link>
-                </li>
+                <Link
+                  to="/login"
+                  className="mobile-auth-btn mobile-login-btn"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <span>🔑 Login / Register</span>
+                </Link>
               )}
-            </ul>
+            </div>
 
           </div>
         </div>
-        
-      </header>
-    </>
+      </>
   );
 };
 

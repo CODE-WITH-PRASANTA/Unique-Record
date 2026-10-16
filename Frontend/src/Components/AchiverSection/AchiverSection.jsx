@@ -29,7 +29,18 @@ const AchiverSection = () => {
   const filteredByCategory =
     filter === "All"
       ? achievers
-      : achievers.filter((achiever) => achiever.position === filter);
+      : achievers.filter((achiever) => {
+          const pos = (
+            achiever.position ||
+            achiever.positionType ||
+            achiever.applicationType ||
+            ""
+          ).trim().toLowerCase();
+          if (filter.trim().toLowerCase() === "unique activity") {
+            return pos === "unique activity" || pos === "unique record";
+          }
+          return pos === filter.trim().toLowerCase();
+        });
 
   // Apply Search (by name, application number, or serial number)
   const filteredAchievers = filteredByCategory.filter((achiever, index) => {
@@ -66,8 +77,20 @@ const AchiverSection = () => {
         >
           All
         </button>
-        {[...new Set(achievers.map((achiever) => achiever.position))].map(
-          (position) => (
+        <button
+          className={`Achiver-Filter-Btn ${filter === "Unique Activity" ? "active" : ""}`}
+          onClick={() => setFilter("Unique Activity")}
+        >
+          Unique Activity
+        </button>
+        {[...new Set(achievers.map((achiever) => achiever.position))]
+          .filter(
+            (pos) =>
+              pos &&
+              pos.trim().toLowerCase() !== "unique record" &&
+              pos.trim().toLowerCase() !== "unique activity"
+          )
+          .map((position) => (
             <button
               key={position}
               className={`Achiver-Filter-Btn ${filter === position ? "active" : ""}`}
@@ -75,8 +98,7 @@ const AchiverSection = () => {
             >
               {position}
             </button>
-          )
-        )}
+          ))}
       </div>
 
       {/* Cards */}
@@ -103,62 +125,57 @@ const AchiverSection = () => {
                   e.target.src = 'https://placehold.co/400x300/1e293b/ffffff?text=Unique+Record';
                 }}
               />
-                      <div className="Achiver-Details-Info">
-            <p className="Achiver-Details-Application">
-              <strong>Application No:</strong> {achiever.applicationNumber}
-            </p>
+              <div className="Achiver-Details-Info">
+                <p className="Achiver-Details-Application">
+                  <strong>Application No:</strong> {achiever.applicationNumber}
+                </p>
 
-            <p className="Achiver-Details-Name">
-              <strong>URU Holder's Name:</strong> {achiever.applicantName}
-            </p>
+                <p className="Achiver-Details-Name">
+                  <strong>URU Holder's Name:</strong> {achiever.applicantName}
+                </p>
 
-          
+                <p className="Achiver-Details-Type">
+                  <strong>Effort Type:</strong>{" "}
+                  {achiever.recordCategory
+                    ? achiever.recordCategory.charAt(0).toUpperCase() + achiever.recordCategory.slice(1)
+                    : ""}
+                </p>
 
-            <p className="Achiver-Details-Type">
-  <strong>Effort Type:</strong>{" "}
-  {achiever.recordCategory
-    ? achiever.recordCategory.charAt(0).toUpperCase() + achiever.recordCategory.slice(1)
-    : ""}
-</p>
+                <p className="Achiver-Details-Category">
+                  <strong>Category:</strong>{" "}
+                  {(achiever.position || "").trim().toLowerCase() === "unique record"
+                    ? "Unique Activity"
+                    : (achiever.position || "Unique Activity")}
+                </p>
 
-
-            <p className="Achiver-Details-Category">
-              <strong>Category:</strong> {achiever.position}
-            </p>
-
-          <p className="Achiver-Details-Address">
-                    <strong>Address:</strong> 
-                    <br />
-                    <span>{achiever.address}</span>
-                  </p>
+                <p className="Achiver-Details-Address">
+                  <strong>Address:</strong> <span>{achiever.address}</span>
+                </p>
                   
-            <p className="Achiver-Section-Title">
-              <strong>Title:</strong> 
-              <br />
-              <span>{achiever.recordTitle}</span>
-            </p>
+                <p className="Achiver-Section-Title">
+                  <strong>Title:</strong> <span>{achiever.recordTitle}</span>
+                </p>
 
-          <p className="Achiver-Details-Date">
-            <strong>Date of Digitalization:</strong>{" "}
-            {achiever.createdAt
-              ? new Date(achiever.createdAt).toLocaleDateString("en-GB", {
-                  day: "2-digit",
-                  month: "2-digit",
-                  year: "numeric",
-                })
-              : "N/A"}
-          </p>
+                <p className="Achiver-Details-Date">
+                  <strong>Date of Digitalization:</strong>{" "}
+                  {achiever.createdAt
+                    ? new Date(achiever.createdAt).toLocaleDateString("en-GB", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "numeric",
+                      })
+                    : "N/A"}
+                </p>
 
-            <div className="Achiver-Details-CardBtnWrapper">
-              <Link
-                to={`/achiever/${achiever.slug || (achiever.applicantName || achiever.name || '').toLowerCase().trim().replace(/[^a-z0-9\s-]/g, '').replace(/[\s_]+/g, '-').replace(/^-+|-+$/g, '') || achiever._id}`}
-                className="Achiver-Details-CardBtn"
-              >
-                View Details
-              </Link>
-            </div>
-                        </div>
-
+                <div className="Achiver-Details-CardBtnWrapper">
+                  <Link
+                    to={`/achiever/${achiever.slug || (achiever.applicantName || achiever.name || '').toLowerCase().trim().replace(/[^a-z0-9\s-]/g, '').replace(/[\s_]+/g, '-').replace(/^-+|-+$/g, '') || achiever._id}`}
+                    className="Achiver-Details-CardBtn"
+                  >
+                    View Details
+                  </Link>
+                </div>
+              </div>
             </div>
           ))
         ) : (

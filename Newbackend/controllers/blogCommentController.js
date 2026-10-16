@@ -32,6 +32,14 @@ const submitBlogFeedback = async (req, res) => {
       });
     }
 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email.trim())) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide a valid email address',
+      });
+    }
+
     if (!message || !message.trim()) {
       return res.status(400).json({
         success: false,

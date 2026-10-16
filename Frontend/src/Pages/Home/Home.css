@@ -95,6 +95,16 @@
   }
 }
 
+/* Hide floating social media icons on mobile and tablet views */
+@media (max-width: 992px) {
+  .banner-social-area {
+    display: none !important;
+  }
+  .banner-content {
+    padding-left: 0 !important;
+  }
+}
+
 
 /* Sub Title */
 .sub-title {

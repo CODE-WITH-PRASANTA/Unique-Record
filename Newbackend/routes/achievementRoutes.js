@@ -13,7 +13,7 @@ const {
   uploadAchievement,
   processAchievementImage,
 } = require('../middleware/achievementUploadMiddleware');
-const { adminOnly } = require('../middleware/authMiddleware');
+const { adminOnly, optionalAuth } = require('../middleware/authMiddleware');
 
 // Dedicated upload route (Admin Only)
 router.post(
@@ -37,9 +37,9 @@ router.post(
 router.get('/get-published-achievements', getPublishedAchievements);
 router.get('/published', getPublishedAchievements);
 
-// All achievements routes (Admin Only)
-router.get('/all', adminOnly, getAllAchievements);
-router.get('/get-all-achievements', adminOnly, getAllAchievements);
+// All achievements routes (Admin / Optional Auth)
+router.get('/all', optionalAuth, getAllAchievements);
+router.get('/get-all-achievements', optionalAuth, getAllAchievements);
 
 // Single achievement by ID route (Legacy named path)
 router.get('/get-achievement/:id', getAchievementById);

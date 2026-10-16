@@ -10,15 +10,25 @@ body {
   overflow-x: hidden;
 }
 
-body {
-  zoom: 0.8; /* Chrome, Edge, Safari */
+@media (min-width: 1200px) {
+  body {
+    zoom: 0.8; /* Chrome, Edge, Safari on large desktop screens */
+  }
+
+  @supports not (zoom: 1) {
+    body {
+      transform: scale(0.8);
+      transform-origin: 0 0;
+      width: 125%; /* prevent horizontal scroll after scaling */
+    }
+  }
 }
 
-@supports not (zoom: 1) {
+@media (max-width: 1199px) {
   body {
-    transform: scale(0.8);
-    transform-origin: 0 0;
-    width: 125%; /* prevent horizontal scroll after scaling */
+    zoom: 1 !important;
+    transform: none !important;
+    width: 100% !important;
   }
 }
 

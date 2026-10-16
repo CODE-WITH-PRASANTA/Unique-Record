@@ -8,20 +8,23 @@ const ApproveUru = () => {
   const [filterOption, setFilterOption] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Fetch approved records from backend (records marked as Approved or Paid)
+  // Fetch approved records from backend (records marked as Approved or Paid) with automatic fallback
   const fetchApprovedRecords = async () => {
     try {
       setLoading(true);
-      const res = await API.get('/uru/approved');
-      if (res.data && Array.isArray(res.data.data)) {
-        setRecords(res.data.data);
-      } else if (Array.isArray(res.data)) {
-        setRecords(res.data);
-      } else {
-        setRecords([]);
+      let list = [];
+      try {
+        const res = await API.get('/uru/approved');
+        list = res.data?.data || (Array.isArray(res.data) ? res.data : []);
+      } catch (err1) {
+        console.warn('Fallback to /uru/fetch-approved-uru:', err1);
+        const res = await API.get('/uru/fetch-approved-uru');
+        list = res.data?.data || (Array.isArray(res.data) ? res.data : []);
       }
+      setRecords(list);
     } catch (error) {
       console.error('Error fetching approved URU records:', error);
+      setRecords([]);
     } finally {
       setLoading(false);
     }

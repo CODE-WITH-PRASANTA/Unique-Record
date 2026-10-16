@@ -60,6 +60,13 @@ const adminOnly = async (req, res, next) => {
     }
 
     const token = authHeader.split(' ')[1];
+    if (!token || token === 'null' || token === 'undefined') {
+      return res.status(401).json({
+        success: false,
+        message: 'Administrator authentication required. Please log in.',
+      });
+    }
+
     const decoded = jwt.verify(token, JWT_SECRET);
 
     // Verify role is admin
@@ -101,8 +108,10 @@ const optionalAuth = (req, res, next) => {
     const authHeader = req.headers.authorization || req.header('Authorization');
     if (authHeader && authHeader.startsWith('Bearer ')) {
       const token = authHeader.split(' ')[1];
-      const decoded = jwt.verify(token, JWT_SECRET);
-      req.user = decoded;
+      if (token && token !== 'null' && token !== 'undefined') {
+        const decoded = jwt.verify(token, JWT_SECRET);
+        req.user = decoded;
+      }
     }
   } catch (e) {
     // Ignore invalid/expired tokens for optional routes

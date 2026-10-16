@@ -10,6 +10,15 @@ const razorpay = new Razorpay({
   key_secret: process.env.RAZORPAY_KEY_SECRET || 'p02juZwOX3wcgSAoE1uZwYWv',
 });
 
+// Helper: Constant-time signature comparison to eliminate timing attacks
+const safeCompareSignatures = (sigA, sigB) => {
+  if (typeof sigA !== 'string' || typeof sigB !== 'string') return false;
+  const bufA = Buffer.from(sigA, 'utf8');
+  const bufB = Buffer.from(sigB, 'utf8');
+  if (bufA.length !== bufB.length) return false;
+  return crypto.timingSafeEqual(bufA, bufB);
+};
+
 // Helper to generate unique Application Number with collision safety
 const generateApplicationNumber = async () => {
   let isUnique = false;
@@ -106,7 +115,7 @@ const verifyEventPayment = async (req, res) => {
     hmac.update(`${razorpayOrderId}|${razorpayPaymentId}`);
     const generatedSignature = hmac.digest('hex');
 
-    if (generatedSignature !== razorpaySignature) {
+    if (!safeCompareSignatures(generatedSignature, razorpaySignature)) {
       return res.status(400).json({
         success: false,
         message: 'Invalid payment signature. Payment verification failed.',
@@ -234,7 +243,7 @@ const registerForEvent = async (req, res) => {
         .update(`${razorpayOrderId}|${razorpayPaymentId}`)
         .digest('hex');
 
-      if (expectedSignature !== razorpaySignature) {
+      if (!safeCompareSignatures(expectedSignature, razorpaySignature)) {
         return res.status(400).json({
           success: false,
           message: 'Payment verification failed: Digital signature mismatch.',
@@ -252,35 +261,52 @@ const registerForEvent = async (req, res) => {
 
     const applicationNumber = await generateApplicationNumber();
 
-    const registration = await EventRegistration.create({
-      applicationNumber,
-      eventName: eventName.trim(),
-      applicantName: applicantName.trim(),
-      sex,
-      dateOfBirth,
-      whatsappNumber: whatsappNumber.trim(),
-      pinCode: pinCode.trim(),
-      district: district.trim(),
-      state: state.trim(),
-      localAddress: (req.body.localAddress || req.body.address || '').trim(),
-      address: (req.body.localAddress || req.body.address || '').trim(),
-      email: email.trim().toLowerCase(),
-      website: (website || '').trim(),
-      educationalQualification: educationalQualification.trim(),
-      expertise: (expertise || '').trim(),
-      bioData: bioDataUrl,
-      photo: photoUrl,
-      registrationFees: registrationFees || '₹0',
-      paymentPlatform: paymentPlatform || 'Razorpay',
-      paymentMethod: paymentMethod || 'Online / UPI / Card',
-      paymentStatus: finalPaymentStatus,
-      paidAt: finalPaidAt,
-      razorpayOrderId: razorpayOrderId || '',
-      razorpayPaymentId: razorpayPaymentId || '',
-      razorpaySignature: razorpaySignature || '',
-      status: 'Pending',
-      userId: userId || req.user?._id || req.user?.id || null,
-    });
+    let registration;
+    try {
+      registration = await EventRegistration.create({
+        applicationNumber,
+        eventName: eventName.trim(),
+        applicantName: applicantName.trim(),
+        sex,
+        dateOfBirth,
+        whatsappNumber: whatsappNumber.trim(),
+        pinCode: pinCode.trim(),
+        district: district.trim(),
+        state: state.trim(),
+        localAddress: (req.body.localAddress || req.body.address || '').trim(),
+        address: (req.body.localAddress || req.body.address || '').trim(),
+        email: email.trim().toLowerCase(),
+        website: (website || '').trim(),
+        educationalQualification: educationalQualification.trim(),
+        expertise: (expertise || '').trim(),
+        bioData: bioDataUrl,
+        photo: photoUrl,
+        registrationFees: registrationFees || '₹0',
+        paymentPlatform: paymentPlatform || 'Razorpay',
+        paymentMethod: paymentMethod || 'Online / UPI / Card',
+        paymentStatus: finalPaymentStatus,
+        paidAt: finalPaidAt,
+        razorpayOrderId: razorpayOrderId || '',
+        razorpayPaymentId: razorpayPaymentId || '',
+        razorpaySignature: razorpaySignature || '',
+        status: 'Pending',
+        userId: userId || req.user?._id || req.user?.id || null,
+      });
+    } catch (createErr) {
+      if (createErr.code === 11000 && razorpayPaymentId) {
+        const existingPayment = await EventRegistration.findOne({ razorpayPaymentId });
+        if (existingPayment) {
+          return res.status(200).json({
+            success: true,
+            message: 'Registration already exists for this payment transaction',
+            applicationNumber: existingPayment.applicationNumber,
+            data: existingPayment,
+            registration: existingPayment,
+          });
+        }
+      }
+      throw createErr;
+    }
 
     res.status(201).json({
       success: true,
@@ -333,6 +359,32 @@ const processEventRefund = async (req, res) => {
 
     let generatedRefundId = registration.refundId || `rfd_${Date.now().toString().slice(-8)}`;
     let refundAmount = registration.registrationFees || '₹0';
+    const numericFee = parseFloat(String(registration.registrationFees || '0').replace(/[^0-9.]/g, ''));
+
+    // Call real Razorpay Refund API if this was paid online
+    if (registration.razorpayPaymentId && registration.razorpayPaymentId.startsWith('pay_') && numericFee > 0) {
+      try {
+        const razorpayRefund = await razorpay.payments.refund(registration.razorpayPaymentId, {
+          amount: Math.round(numericFee * 100),
+          notes: {
+            applicationNumber: registration.applicationNumber,
+            applicantName: registration.applicantName,
+            reason: refundReason || 'Event registration fee refund',
+          },
+        });
+        if (razorpayRefund?.id) {
+          generatedRefundId = razorpayRefund.id;
+        }
+      } catch (rzpErr) {
+        console.error('Razorpay refund error for event registration:', rzpErr);
+        const errMsg = rzpErr?.error?.description || rzpErr.message || 'Razorpay refund failed';
+        return res.status(502).json({
+          success: false,
+          message: `Payment gateway refund failed: ${errMsg}`,
+        });
+      }
+    }
+
     const remarkText = adminRemark || refundReason || `Status updated to Refund.`;
 
     registration.status = 'Refund';

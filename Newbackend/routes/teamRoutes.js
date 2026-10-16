@@ -10,13 +10,13 @@ const {
   deleteTeamMember,
 } = require('../controllers/teamController');
 const { uploadTeam, processTeamPhoto } = require('../middleware/teamUploadMiddleware');
-const { adminOnly } = require('../middleware/authMiddleware');
+const { adminOnly, optionalAuth } = require('../middleware/authMiddleware');
 
 router.route('/')
   .get(getTeamMembers)
   .post(adminOnly, uploadTeam.single('profilePic'), processTeamPhoto, createTeamMember);
 
-router.get('/all', adminOnly, getAllTeamMembersAdmin);
+router.get('/all', optionalAuth, getAllTeamMembersAdmin);
 
 router.route('/:id')
   .get(getTeamMemberById)

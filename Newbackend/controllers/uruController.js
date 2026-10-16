@@ -11,19 +11,29 @@ const razorpay = new Razorpay({
   key_secret: process.env.RAZORPAY_KEY_SECRET || 'p02juZwOX3wcgSAoE1uZwYWv',
 });
 
-// Helper to generate Unique Application Number
+// Helper: Constant-time signature comparison to eliminate timing attacks
+const safeCompareSignatures = (sigA, sigB) => {
+  if (typeof sigA !== 'string' || typeof sigB !== 'string') return false;
+  const bufA = Buffer.from(sigA, 'utf8');
+  const bufB = Buffer.from(sigB, 'utf8');
+  if (bufA.length !== bufB.length) return false;
+  return crypto.timingSafeEqual(bufA, bufB);
+};
+
+// Helper to generate Unique Application Number with collision safety
 const generateApplicationNumber = async () => {
-  let applicationNumber;
-  let isUnique = false;
-  while (!isUnique) {
-    const randomNumber = Math.floor(1000 + Math.random() * 9000);
-    applicationNumber = `URU${randomNumber}`;
+  const currentYear = new Date().getFullYear().toString().slice(-2);
+  let attempts = 0;
+  while (attempts < 10) {
+    attempts++;
+    const randomDigits = Math.floor(10000 + Math.random() * 90000);
+    const candidate = `URU${currentYear}${randomDigits}`;
     const existing = await URU.findOne({
-      $or: [{ applicationNumber }, { appNo: applicationNumber }],
+      $or: [{ applicationNumber: candidate }, { appNo: candidate }],
     });
-    if (!existing) isUnique = true;
+    if (!existing) return candidate;
   }
-  return applicationNumber;
+  return `URU${currentYear}${Date.now().toString().slice(-5)}`;
 };
 
 // Helper to generate Reg Number
@@ -332,8 +342,9 @@ exports.getAllUru = async (req, res) => {
       emailId: item.emailId || item.email || 'N/A',
       country: item.country || 'India',
       state: item.state || 'N/A',
-      approved: item.approved || item.status === 'Approved',
-      status: item.status || (item.approved ? 'Approved' : 'Pending'),
+      approved: Boolean(item.approved || item.isApproved || item.status === 'Approved'),
+      isApproved: Boolean(item.approved || item.isApproved || item.status === 'Approved'),
+      status: item.status || (item.approved || item.isApproved ? 'Approved' : 'Pending'),
       price: item.price || 0,
       paymentStatus: item.paymentStatus || 'Pending',
       transactionId: item.paymentStatus === 'Paid' ? 'TXN_' + item._id.toString().slice(-6) : 'N/A',
@@ -509,13 +520,15 @@ exports.updateUru = async (req, res) => {
 exports.toggleApproveUru = async (req, res) => {
   try {
     const { id } = req.params;
-    let uru;
+    const cleanId = (id || '').trim();
 
-    if (id.match(/^[0-9a-fA-F]{24}$/)) {
-      uru = await URU.findById(id);
-    } else {
+    let uru;
+    if (cleanId.match(/^[0-9a-fA-F]{24}$/)) {
+      uru = await URU.findById(cleanId);
+    }
+    if (!uru) {
       uru = await URU.findOne({
-        $or: [{ applicationNumber: id }, { appNo: id }],
+        $or: [{ applicationNumber: cleanId }, { appNo: cleanId }],
       });
     }
 
@@ -523,12 +536,27 @@ exports.toggleApproveUru = async (req, res) => {
       return res.status(404).json({ success: false, message: 'URU record not found' });
     }
 
-    // Toggle approved state
-    const newStatus = !uru.approved;
-    uru.approved = newStatus;
-    uru.status = newStatus ? 'Approved' : 'Pending';
-    if (newStatus) {
+    // Determine target approved state (supports explicit body overrides as well as direct toggle)
+    let targetApproved;
+    if (typeof req.body?.approved === 'boolean') {
+      targetApproved = req.body.approved;
+    } else if (typeof req.body?.isApproved === 'boolean') {
+      targetApproved = req.body.isApproved;
+    } else if (typeof req.body?.status === 'string') {
+      targetApproved = req.body.status.toLowerCase() === 'approved';
+    } else {
+      // Toggle current state
+      const currentlyApproved = Boolean(uru.approved || uru.isApproved || uru.status === 'Approved');
+      targetApproved = !currentlyApproved;
+    }
+
+    uru.approved = targetApproved;
+    uru.isApproved = targetApproved;
+    uru.status = targetApproved ? 'Approved' : 'Pending';
+    if (targetApproved) {
       uru.approvedDate = new Date();
+    } else {
+      uru.approvedDate = null;
     }
 
     await uru.save();
@@ -537,6 +565,9 @@ exports.toggleApproveUru = async (req, res) => {
       success: true,
       message: `Application marked as ${uru.status}`,
       data: uru,
+      approved: uru.approved,
+      isApproved: uru.isApproved,
+      status: uru.status,
     });
   } catch (error) {
     console.error('Error toggling URU approval:', error);
@@ -893,7 +924,7 @@ exports.verifyRazorpayPayment = async (req, res) => {
     hmac.update(`${orderId}|${paymentId}`);
     const generatedSignature = hmac.digest('hex');
 
-    if (generatedSignature !== signature) {
+    if (!safeCompareSignatures(generatedSignature, signature)) {
       console.error('Payment signature mismatch:', { generated: generatedSignature, received: signature });
       return res.status(400).json({
         success: false,
@@ -918,6 +949,8 @@ exports.verifyRazorpayPayment = async (req, res) => {
       return res.status(404).json({ success: false, message: 'URU application not found for this payment' });
     }
 
+    const wasAlreadyPaid = uru.paymentStatus === 'Paid';
+
     // Mark as paid & approved
     uru.paymentStatus = 'Paid';
     uru.status = 'Paid';
@@ -931,9 +964,9 @@ exports.verifyRazorpayPayment = async (req, res) => {
 
     await uru.save();
 
-    // Send confirmation email
+    // Send confirmation email only on first successful confirmation (idempotent)
     const applicantEmail = uru.emailId || uru.email;
-    if (applicantEmail && process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+    if (!wasAlreadyPaid && applicantEmail && process.env.EMAIL_USER && process.env.EMAIL_PASS) {
       try {
         const transporter = nodemailer.createTransport({
           service: 'gmail',

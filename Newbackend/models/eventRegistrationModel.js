@@ -163,8 +163,14 @@ const eventRegistrationSchema = new mongoose.Schema(
 );
 
 // Helpful indexes
+eventRegistrationSchema.index(
+  { razorpayPaymentId: 1 },
+  { unique: true, partialFilterExpression: { razorpayPaymentId: { $type: 'string', $gt: '' } } }
+);
 eventRegistrationSchema.index({ eventName: 1 });
 eventRegistrationSchema.index({ email: 1 });
 eventRegistrationSchema.index({ status: 1 });
+eventRegistrationSchema.index({ createdAt: -1 });
+eventRegistrationSchema.index({ userId: 1 });
 
 module.exports = mongoose.model('EventRegistration', eventRegistrationSchema);

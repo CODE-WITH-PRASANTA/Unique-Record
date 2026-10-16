@@ -206,6 +206,10 @@ const uruSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    isApproved: {
+      type: Boolean,
+      default: false,
+    },
     status: {
       type: String,
       enum: ['Pending', 'Approved', 'Rejected', 'Paid'],
@@ -308,12 +312,25 @@ uruSchema.pre('save', function () {
     this.dateOfAttempt = this.attemptDate;
   }
 
-  // Sync approved flag with status
-  if (this.status === 'Approved') {
+  // Sync approved and isApproved flags with status
+  if (this.status === 'Approved' || this.status === 'Paid') {
     this.approved = true;
-  } else if (this.status === 'Pending') {
+    this.isApproved = true;
+  } else if (this.status === 'Pending' || this.status === 'Rejected') {
     this.approved = false;
+    this.isApproved = false;
   }
 });
+
+// Indexes for performance and duplicate payment protection
+uruSchema.index(
+  { razorpayPaymentId: 1 },
+  { unique: true, partialFilterExpression: { razorpayPaymentId: { $type: 'string', $gt: '' } } }
+);
+uruSchema.index({ userId: 1 });
+uruSchema.index({ status: 1 });
+uruSchema.index({ paymentStatus: 1 });
+uruSchema.index({ isPublished: 1 });
+uruSchema.index({ createdAt: -1 });
 
 module.exports = mongoose.model('URU', uruSchema);

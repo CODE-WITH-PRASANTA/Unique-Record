@@ -852,10 +852,89 @@
   text-align: center;
 }
 
-.receipt-footer-tax-note p {
-  margin: 0 0 4px 0;
-  color: #15803d;
-  font-weight: 600;
+.receipt-signatures-block {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin: 18px 0 14px 0;
+  padding: 10px 4px 0 4px;
+}
+
+.receipt-seal-stamp {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  border: 2px dashed #0284c7;
+  padding: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f0f9ff;
+}
+
+.receipt-seal-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 1px solid #0284c7;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  line-height: 1.1;
+  color: #0369a1;
+}
+
+.receipt-seal-inner span {
+  font-size: 7.5px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.receipt-seal-inner small {
+  font-size: 6.5px;
+  font-weight: 700;
+}
+
+.receipt-seal-inner strong {
+  font-size: 6.5px;
+  font-weight: 900;
+  color: #0284c7;
+  margin-top: 1px;
+}
+
+.receipt-signature-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 180px;
+}
+
+.receipt-sign-placeholder {
+  font-family: 'Brush Script MT', 'Segoe Script', cursive, sans-serif;
+  font-size: 19px;
+  color: #0f172a;
+  margin-bottom: 2px;
+}
+
+.receipt-sign-line {
+  width: 100%;
+  height: 1.5px;
+  background: #64748b;
+  margin-bottom: 4px;
+}
+
+.receipt-sign-title {
+  font-size: 11px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.receipt-sign-trust {
+  font-size: 9.5px;
+  color: #64748b;
 }
 
 /* Modal Footer */
@@ -1015,27 +1094,175 @@
   }
 }
 
-/* Print Styles */
+/* =========================================================
+   STRICT SINGLE-PAGE A4 RECEIPT PRINT STYLES
+   ========================================================= */
+@page {
+  size: A4 portrait;
+  margin: 8mm 10mm;
+}
+
 @media print {
+  html,
+  body {
+    width: 210mm !important;
+    height: 100% !important;
+    max-height: 297mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    background: #ffffff !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Hide entire page UI */
   body * {
-    visibility: hidden;
+    visibility: hidden !important;
   }
-  .donate-modal-card,
-  .donate-modal-card * {
-    visibility: visible;
+
+  /* Unhide only receipt paper and its contents */
+  .receipt-paper,
+  .receipt-paper * {
+    visibility: visible !important;
   }
+
+  /* Flatten modal containers so they take zero extra height */
+  .donate-modal-overlay {
+    position: static !important;
+    display: block !important;
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
   .donate-modal-card {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    max-width: 100%;
-    box-shadow: none;
-    border: none;
+    position: static !important;
+    box-shadow: none !important;
+    border: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    overflow: visible !important;
   }
+
+  .donate-modal-body {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  /* Hide modal chrome and page elements */
   .donate-modal-header,
   .donate-modal-footer,
-  .modal-close-btn {
+  .modal-close-btn,
+  .donate-admin-container,
+  .donate-header,
+  .donate-stats-grid,
+  .donate-table-card,
+  nav,
+  aside,
+  header {
     display: none !important;
+  }
+
+  /* A4 Receipt Paper exact single page layout */
+  .receipt-paper {
+    position: relative !important;
+    width: 100% !important;
+    max-width: 190mm !important;
+    margin: 0 auto !important;
+    padding: 16px 20px !important;
+    box-shadow: none !important;
+    border: 2px solid #0f172a !important;
+    border-radius: 10px !important;
+    background: #ffffff !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+    page-break-before: avoid !important;
+    break-before: avoid !important;
+    max-height: 275mm !important;
+    box-sizing: border-box !important;
+  }
+
+  .receipt-header-branding {
+    border-bottom: 2px solid #0f172a !important;
+    padding-bottom: 10px !important;
+    margin-bottom: 12px !important;
+  }
+
+  .receipt-logo-title h2 {
+    font-size: 19px !important;
+    color: #0f172a !important;
+  }
+
+  .receipt-meta-grid {
+    gap: 8px 16px !important;
+    margin-bottom: 12px !important;
+    font-size: 12px !important;
+  }
+
+  .receipt-divider {
+    margin: 10px 0 !important;
+  }
+
+  .receipt-donor-box h4 {
+    font-size: 13px !important;
+    margin-bottom: 8px !important;
+  }
+
+  .donor-details-grid {
+    gap: 8px 16px !important;
+    font-size: 12px !important;
+  }
+
+  .receipt-amount-banner {
+    margin: 12px 0 !important;
+    padding: 10px 16px !important;
+    background: #0f172a !important;
+    color: #ffffff !important;
+    border-radius: 8px !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .amount-large {
+    font-size: 22px !important;
+    color: #22c55e !important;
+  }
+
+  .receipt-signatures-block {
+    margin: 12px 0 10px 0 !important;
+    padding: 6px 4px 0 4px !important;
+  }
+
+  .receipt-seal-stamp {
+    width: 64px !important;
+    height: 64px !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .receipt-footer-tax-note {
+    padding-top: 8px !important;
+    font-size: 10.5px !important;
+  }
+
+  .badge-verified {
+    border: 1px solid #16a34a !important;
+    color: #166534 !important;
+    background: #dcfce7 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 }
