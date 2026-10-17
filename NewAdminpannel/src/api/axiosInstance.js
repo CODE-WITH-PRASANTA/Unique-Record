@@ -1,17 +1,11 @@
 import axios from 'axios';
 
-/**
- * Dynamically resolves the API base URL based on environment variables,
- * current window location (localhost vs remote production), and safe fallbacks.
- */
 const resolveApiUrl = () => {
-  // 1. Explicit Vite environment variable (e.g. VITE_API_URL=http://localhost:5000/api)
   const envApiUrl = import.meta.env.VITE_API_URL;
   if (envApiUrl && typeof envApiUrl === 'string' && envApiUrl.trim()) {
     return envApiUrl.trim().replace(/\/+$/, '');
   }
 
-  // 2. Fallback to VITE_BACKEND_URL (e.g. VITE_BACKEND_URL=http://localhost:5000)
   const envBackendUrl = import.meta.env.VITE_BACKEND_URL;
   if (envBackendUrl && typeof envBackendUrl === 'string' && envBackendUrl.trim()) {
     const clean = envBackendUrl.trim().replace(/\/+$/, '');
@@ -27,19 +21,16 @@ const resolveApiUrl = () => {
       return 'http://localhost:5000/api';
     }
 
-    // Production environment
     if (hostname.includes('ouruniverse.in')) {
       return 'https://backend.ouruniverse.in/api';
     }
 
-    // Generic production: use current origin + /api
     return `${origin}/api`;
   }
 
   return 'http://localhost:5000/api';
 };
 
-// Exported Dynamic Base URLs
 export const API_URL = resolveApiUrl();
 export const BASE_URL = API_URL;
 
@@ -89,10 +80,12 @@ const API = axios.create({
 API.interceptors.request.use(
   (config) => {
     // 1. Auto-attach JWT token from localStorage
-    const token =
-      localStorage.getItem('admin_token') ||
-      localStorage.getItem('token') ||
-      localStorage.getItem('authToken');
+    // ✅ Correct code
+const token =
+  localStorage.getItem('admin_token') ||
+  localStorage.getItem('token') ||
+  localStorage.getItem('authToken') ||
+  localStorage.getItem('accessToken');
 
     if (token) {
       config.headers = config.headers || {};

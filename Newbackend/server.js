@@ -1,6 +1,4 @@
-// =====================================================
-// DNS CONFIGURATION & RESOLUTION FALLBACK FOR WINDOWS
-// =====================================================
+
 const dns = require('dns');
 
 try {

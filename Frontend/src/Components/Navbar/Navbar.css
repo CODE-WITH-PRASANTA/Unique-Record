@@ -1,4 +1,3 @@
-
 .Navbar-placeholder,
 .Navbar-wrapper {
   --Navbar-primary: #0069e0;
@@ -13,8 +12,7 @@
   --Navbar-ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* Keeps the navbar's space in the page so content never jumps
-   when the navbar switches to fixed. */
+/* Keeps the navbar's space so content never jumps when it becomes fixed */
 .Navbar-placeholder {
   position: relative;
   width: 100%;
@@ -38,9 +36,7 @@
   box-sizing: border-box;
 }
 
-/* Fixed state: pinned to the top of the screen after the topbar is gone.
-   (No backdrop-filter / transform on this element: they would break the
-   position of the mobile drawer. The glass effect lives on .Navbar-nav::before.) */
+/* Fixed state (no backdrop-filter/transform here: it would break the drawer) */
 .Navbar-wrapper.Navbar-fixed {
   position: fixed;
   top: 0;
@@ -57,7 +53,6 @@
   width: 100%;
 }
 
-/* Background layer (becomes frosted glass when fixed) */
 .Navbar-nav::before {
   position: absolute;
   inset: 0;
@@ -67,24 +62,19 @@
   transition: background-color 0.35s ease;
 }
 
+.Navbar-fixed .Navbar-nav {
+  animation: Navbar-slide-in 0.4s var(--Navbar-ease);
+}
+
 .Navbar-fixed .Navbar-nav::before {
   background: rgba(255, 255, 255, 0.88);
   -webkit-backdrop-filter: saturate(180%) blur(14px);
   backdrop-filter: saturate(180%) blur(14px);
 }
 
-/* The bar slides down once when it becomes fixed */
-.Navbar-fixed .Navbar-nav {
-  animation: Navbar-slide-in 0.4s var(--Navbar-ease);
-}
-
 @keyframes Navbar-slide-in {
-  from {
-    transform: translateY(-100%);
-  }
-  to {
-    transform: translateY(0);
-  }
+  from { transform: translateY(-100%); }
+  to { transform: translateY(0); }
 }
 
 .Navbar-container {
@@ -155,7 +145,7 @@
   background: transparent;
   color: var(--Navbar-text);
   font-family: inherit;
-  font-size: 18px;
+  font-size: clamp(16px, 1.05vw, 18px);
   font-weight: 700;
   letter-spacing: 0.005em;
   line-height: 1.4;
@@ -193,16 +183,15 @@
 
 .Navbar-link.Navbar-active {
   color: var(--Navbar-primary);
-  font-weight: 700;
 }
 
-/* Contact call-to-action */
+/* Call-to-action */
 .Navbar-link.Navbar-cta {
   margin-left: clamp(4px, 0.6vw, 10px);
-  padding-right: clamp(14px, 1.2vw, 20px);
-  padding-left: clamp(14px, 1.2vw, 20px);
+  padding-right: clamp(16px, 1.3vw, 22px);
+  padding-left: clamp(16px, 1.3vw, 22px);
   background: linear-gradient(135deg, var(--Navbar-primary), var(--Navbar-primary-dark));
-  color: #ffffff;
+  color: #fff;
   box-shadow: 0 6px 16px rgba(0, 105, 224, 0.28);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
@@ -213,10 +202,10 @@
 
 .Navbar-link.Navbar-cta:hover,
 .Navbar-link.Navbar-cta.Navbar-active {
-  color: #ffffff;
+  color: #fff;
   background: linear-gradient(135deg, var(--Navbar-primary), var(--Navbar-primary-dark));
-  transform: translateY(-1px);
-  box-shadow: 0 10px 22px rgba(0, 105, 224, 0.35);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(0, 105, 224, 0.38);
 }
 
 .Navbar-chevron {
@@ -236,7 +225,7 @@
   top: 100%;
   left: 50%;
   z-index: 20;
-  min-width: 230px;
+  min-width: 250px;
   margin: 0;
   padding: 8px;
   border: 1px solid var(--Navbar-border);
@@ -251,7 +240,7 @@
     visibility 0.22s ease;
 }
 
-/* invisible bridge so hover is not lost between trigger and panel */
+/* Hover bridge + small arrow notch */
 .Navbar-dropdown::before {
   position: absolute;
   top: -12px;
@@ -259,6 +248,19 @@
   left: 0;
   height: 12px;
   content: "";
+}
+
+.Navbar-dropdown::after {
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  width: 11px;
+  height: 11px;
+  border-top: 1px solid var(--Navbar-border);
+  border-left: 1px solid var(--Navbar-border);
+  background: var(--Navbar-surface);
+  content: "";
+  transform: translateX(-50%) rotate(45deg);
 }
 
 .Navbar-dropdown-open > .Navbar-dropdown {
@@ -274,11 +276,11 @@
   padding: 11px 12px;
   border-radius: 9px;
   color: var(--Navbar-text);
-  font-size: 0.875rem;
-  font-weight: 500;
+  font-size: 0.95rem;
+  font-weight: 600;
   text-decoration: none;
   white-space: nowrap;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.25s var(--Navbar-ease);
 }
 
 .Navbar-dropdown-link:hover,
@@ -287,19 +289,23 @@
   color: var(--Navbar-primary);
 }
 
+.Navbar-dropdown-link:hover {
+  transform: translateX(3px);
+}
+
 .Navbar-sub-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
   background: var(--Navbar-primary-soft);
   color: var(--Navbar-primary);
-  font-size: 15px;
+  font-size: 16px;
 }
 
-/* ---------- Mobile toggler (hamburger) ---------- */
+/* ---------- Hamburger ---------- */
 .Navbar-toggler {
   display: none;
   flex-direction: column;
@@ -335,17 +341,9 @@
   background: var(--Navbar-primary);
 }
 
-.Navbar-toggler-open span:nth-child(1) {
-  transform: translateY(7px) rotate(45deg);
-}
-
-.Navbar-toggler-open span:nth-child(2) {
-  opacity: 0;
-}
-
-.Navbar-toggler-open span:nth-child(3) {
-  transform: translateY(-7px) rotate(-45deg);
-}
+.Navbar-toggler-open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.Navbar-toggler-open span:nth-child(2) { opacity: 0; }
+.Navbar-toggler-open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
 /* ---------- Mobile overlay ---------- */
 .Navbar-overlay {
@@ -370,12 +368,11 @@
   position: fixed;
   top: 0;
   right: 0;
+  bottom: 0;
   z-index: 1101;
   display: flex;
   flex-direction: column;
   width: min(400px, 90vw);
-  height: 100vh;
-  height: 100dvh;
   padding: 18px 18px calc(24px + env(safe-area-inset-bottom, 0px));
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -444,10 +441,11 @@
 }
 
 .Navbar-mobile-item {
-  margin: 2px 0;
+  margin: 3px 0;
 }
 
 .Navbar-mobile-link {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -459,7 +457,7 @@
   background: transparent;
   color: var(--Navbar-text);
   font-family: inherit;
-  font-size: 0.95rem;
+  font-size: 1.05rem;
   font-weight: 600;
   text-align: left;
   text-decoration: none;
@@ -477,13 +475,13 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 34px;
-  height: 34px;
+  width: 38px;
+  height: 38px;
   flex-shrink: 0;
-  border-radius: 10px;
+  border-radius: 11px;
   background: var(--Navbar-primary-soft);
   color: var(--Navbar-primary);
-  font-size: 16px;
+  font-size: 17px;
   transition: background-color 0.25s ease, color 0.25s ease;
 }
 
@@ -492,27 +490,40 @@
   color: var(--Navbar-primary);
 }
 
+/* Active item with blue accent bar */
 .Navbar-mobile-link.Navbar-mobile-active {
   background: var(--Navbar-primary-soft);
   color: var(--Navbar-primary);
   font-weight: 700;
 }
 
+.Navbar-mobile-link.Navbar-mobile-active::before {
+  position: absolute;
+  top: 22%;
+  bottom: 22%;
+  left: 0;
+  width: 4px;
+  border-radius: 0 4px 4px 0;
+  background: var(--Navbar-primary);
+  content: "";
+}
+
 .Navbar-mobile-link.Navbar-mobile-active .Navbar-mobile-icon {
   background: var(--Navbar-primary);
-  color: #ffffff;
+  color: #fff;
 }
 
 .Navbar-mobile-link.Navbar-mobile-cta {
-  margin-top: 12px;
+  justify-content: center;
+  margin-top: 14px;
   background: linear-gradient(135deg, var(--Navbar-primary), var(--Navbar-primary-dark));
-  color: #ffffff;
-  box-shadow: 0 8px 20px rgba(0, 105, 224, 0.28);
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(0, 105, 224, 0.3);
 }
 
 .Navbar-mobile-link.Navbar-mobile-cta .Navbar-mobile-icon {
   background: rgba(255, 255, 255, 0.2);
-  color: #ffffff;
+  color: #fff;
 }
 
 .Navbar-arrow {
@@ -525,7 +536,7 @@
   transform: rotate(180deg);
 }
 
-/* Animated accordion (no fixed max-height needed) */
+/* Animated accordion */
 .Navbar-mobile-dropdown {
   display: grid;
   grid-template-rows: 0fr;
@@ -556,16 +567,16 @@
   padding: 10px 12px;
   border-radius: 10px;
   color: var(--Navbar-text-muted);
-  font-size: 0.9rem;
+  font-size: 1rem;
   font-weight: 500;
   text-decoration: none;
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .Navbar-mobile-sublink .Navbar-mobile-icon {
-  width: 30px;
-  height: 30px;
-  font-size: 14px;
+  width: 32px;
+  height: 32px;
+  font-size: 15px;
 }
 
 .Navbar-mobile-sublink:hover,
@@ -574,7 +585,7 @@
   color: var(--Navbar-primary);
 }
 
-/* ---------- Keyboard focus (accessibility) ---------- */
+/* ---------- Keyboard focus ---------- */
 .Navbar-logo:focus-visible,
 .Navbar-link:focus-visible,
 .Navbar-dropdown-link:focus-visible,
@@ -588,27 +599,10 @@
 }
 
 /* ---------- Responsive ---------- */
-
-/* Large desktops / ultra-wide */
-@media (min-width: 1700px) {
-  .Navbar-link {
-    font-size: 0.95rem;
-  }
-}
-
-/* Small desktops & landscape tablets: hamburger */
 @media (max-width: 1180px) {
-  .Navbar-menu {
-    display: none;
-  }
-
-  .Navbar-toggler {
-    display: flex;
-  }
-
-  .Navbar-container {
-    width: min(94%, 1100px);
-  }
+  .Navbar-menu { display: none; }
+  .Navbar-toggler { display: flex; }
+  .Navbar-container { width: min(94%, 1100px); }
 
   .Navbar-placeholder,
   .Navbar-wrapper {
@@ -616,101 +610,42 @@
   }
 }
 
-/* Tablets */
 @media (max-width: 768px) {
-  .Navbar-container {
-    width: 92%;
-  }
+  .Navbar-container { width: 92%; }
 
-  .Navbar-logo img {
-    max-width: 160px;
-    height: 52px;
-  }
-
-  .Navbar-fixed .Navbar-logo img {
-    height: 46px;
-  }
+  .Navbar-logo img { max-width: 160px; height: 52px; }
+  .Navbar-fixed .Navbar-logo img { height: 46px; }
 }
 
-/* Phones */
 @media (max-width: 576px) {
   .Navbar-placeholder,
   .Navbar-wrapper {
     --Navbar-height: 66px;
   }
 
-  .Navbar-inner {
-    padding: 6px 0;
-  }
+  .Navbar-inner { padding: 6px 0; }
+  .Navbar-fixed .Navbar-inner { min-height: 60px; }
 
-  .Navbar-fixed .Navbar-inner {
-    min-height: 60px;
-  }
+  .Navbar-logo img { max-width: 140px; height: 46px; }
+  .Navbar-fixed .Navbar-logo img { height: 42px; }
 
-  .Navbar-logo img {
-    max-width: 140px;
-    height: 46px;
-  }
-
-  .Navbar-fixed .Navbar-logo img {
-    height: 42px;
-  }
-
-  .Navbar-toggler {
-    width: 42px;
-    height: 42px;
-  }
-
-  .Navbar-toggler span {
-    width: 18px;
-  }
-
-  .Navbar-toggler-open span:nth-child(1) {
-    transform: translateY(7px) rotate(45deg);
-  }
-
-  .Navbar-toggler-open span:nth-child(3) {
-    transform: translateY(-7px) rotate(-45deg);
-  }
+  .Navbar-toggler { width: 42px; height: 42px; }
+  .Navbar-toggler span { width: 18px; }
 
   .Navbar-mobile-menu {
     width: 100%;
-    max-width: 100%;
     padding-right: 14px;
     padding-left: 14px;
   }
 }
 
-/* Very small phones (320px) */
 @media (max-width: 360px) {
-  .Navbar-logo img {
-    max-width: 120px;
-    height: 40px;
-  }
+  .Navbar-logo img { max-width: 120px; height: 40px; }
 
-  .Navbar-mobile-link {
-    padding: 12px 8px;
-    font-size: 0.9rem;
-  }
-
-  .Navbar-mobile-link-content {
-    gap: 10px;
-  }
+  .Navbar-mobile-link { padding: 12px 8px; font-size: 1rem; }
+  .Navbar-mobile-link-content { gap: 10px; }
 }
 
-/* Short landscape phones */
-@media (max-height: 480px) and (orientation: landscape) {
-  .Navbar-mobile-menu {
-    width: min(380px, 70vw);
-  }
-
-  .Navbar-mobile-link {
-    padding-top: 9px;
-    padding-bottom: 9px;
-  }
-}
-
-/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .Navbar-wrapper,
   .Navbar-wrapper *,

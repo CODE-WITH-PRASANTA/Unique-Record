@@ -29,7 +29,6 @@
 
 /* ================= Header Section ================= */
 .dc-header-section {
-  max-width: 1200px;
   margin: 0 auto 40px;
   display: flex;
   flex-direction: column;
@@ -150,7 +149,6 @@
 
 /* ================= Cards Grid Section ================= */
 .dc-cards-grid-section {
-  max-width: 1200px;
   margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
