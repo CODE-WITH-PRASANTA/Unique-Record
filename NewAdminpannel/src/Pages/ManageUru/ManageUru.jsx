@@ -115,21 +115,25 @@ const ManageUru = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('applicant');
   const [editingRecord, setEditingRecord] = useState(null);
+  const [togglingId, setTogglingId] = useState(null);
 
-  // Fetch real records from backend
+  // Fetch real records from backend with automatic fallback
   const fetchRecords = async () => {
     try {
       setLoading(true);
-      const res = await API.get('/uru/all');
-      if (res.data && Array.isArray(res.data.data)) {
-        setRecords(res.data.data);
-      } else if (Array.isArray(res.data)) {
-        setRecords(res.data);
-      } else {
-        setRecords([]);
+      let list = [];
+      try {
+        const res = await API.get('/uru/all');
+        list = res.data?.data || (Array.isArray(res.data) ? res.data : []);
+      } catch (err1) {
+        console.warn('Fallback to /uru/manage:', err1);
+        const res = await API.get('/uru/manage');
+        list = res.data?.data || (Array.isArray(res.data) ? res.data : []);
       }
+      setRecords(list);
     } catch (error) {
       console.error('Error fetching URU records:', error);
+      setRecords([]);
     } finally {
       setLoading(false);
     }
@@ -418,17 +422,32 @@ const ManageUru = () => {
 
   // Toggle Approval Status
   const handleToggleApprove = async (id) => {
+    if (togglingId) return;
+    setTogglingId(id);
     try {
       const res = await API.patch(`/uru/${id}/approve`);
-      const updatedApproved = res.data?.data?.approved;
+      const updatedData = res.data?.data || res.data;
+      const updatedApproved =
+        typeof updatedData?.approved === 'boolean'
+          ? updatedData.approved
+          : typeof updatedData?.isApproved === 'boolean'
+          ? updatedData.isApproved
+          : undefined;
+      const updatedStatus = updatedData?.status;
+
       setRecords((prev) =>
         prev.map((rec) => {
-          if ((rec.id || rec._id) === id) {
-            const nextState = updatedApproved !== undefined ? updatedApproved : !rec.approved;
+          const recId = String(rec.id || rec._id || '');
+          const targetId = String(id || '');
+          const appNo = String(rec.applicationNumber || rec.appNo || '');
+          if (recId === targetId || appNo === targetId) {
+            const nextApproved = updatedApproved !== undefined ? updatedApproved : !rec.approved;
+            const nextStatus = updatedStatus || (nextApproved ? 'Approved' : 'Pending');
             return {
               ...rec,
-              approved: nextState,
-              status: nextState ? 'Approved' : 'Pending',
+              approved: nextApproved,
+              isApproved: nextApproved,
+              status: nextStatus,
             };
           }
           return rec;
@@ -436,7 +455,9 @@ const ManageUru = () => {
       );
     } catch (err) {
       console.error('Failed to toggle approval:', err);
-      alert('Failed to toggle approval status.');
+      alert(err.response?.data?.message || 'Failed to toggle approval status. Please try again.');
+    } finally {
+      setTogglingId(null);
     }
   };
 
@@ -548,9 +569,14 @@ const ManageUru = () => {
                             <button
                               className={`mru-btn-status ${isApproved ? 'approved' : 'pending'}`}
                               onClick={() => handleToggleApprove(recordId)}
+                              disabled={togglingId === recordId}
+                              style={{
+                                opacity: togglingId === recordId ? 0.7 : 1,
+                                cursor: togglingId === recordId ? 'wait' : 'pointer',
+                              }}
                               title={isApproved ? "Approved (Click to revert to Pending)" : "Click to Mark as Approved"}
                             >
-                              {isApproved ? 'Approved' : 'Mark as Approved'}
+                              {togglingId === recordId ? 'Updating...' : (isApproved ? 'Approved' : 'Mark as Approved')}
                             </button>
                           </div>
                         </td>

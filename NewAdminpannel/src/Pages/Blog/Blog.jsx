@@ -51,11 +51,21 @@ const Blog = () => {
   const fetchBlogs = async () => {
     try {
       const res = await API.get("/blogs/all");
-      if (res.data && res.data.success) {
-        setBlogsList(res.data.data || []);
+      if (res.data) {
+        const list = res.data.data || res.data.blogs || (Array.isArray(res.data) ? res.data : []);
+        setBlogsList(list);
       }
     } catch (err) {
-      console.error("Error fetching blogs:", err);
+      console.warn("Error fetching /blogs/all, falling back to /blogs:", err);
+      try {
+        const fallbackRes = await API.get("/blogs");
+        if (fallbackRes.data) {
+          const list = fallbackRes.data.data || fallbackRes.data.blogs || (Array.isArray(fallbackRes.data) ? fallbackRes.data : []);
+          setBlogsList(list);
+        }
+      } catch (fallbackErr) {
+        console.error("Error fetching blogs fallback:", fallbackErr);
+      }
     }
   };
 

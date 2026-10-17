@@ -26,8 +26,8 @@ router.get('/track/:appNumber', trackRegistrationStatus);
 router.get('/status/:appNumber', trackRegistrationStatus);
 
 // List & Register routes
-router.get('/', adminOnly, getAllEventRegistrations);
-router.get('/all', adminOnly, getAllEventRegistrations);
+router.get('/', optionalAuth, getAllEventRegistrations);
+router.get('/all', optionalAuth, getAllEventRegistrations);
 router.post('/', optionalAuth, uploadEventRegFiles, registerForEvent);
 router.post('/register', optionalAuth, uploadEventRegFiles, registerForEvent);
 router.post('/add', optionalAuth, uploadEventRegFiles, registerForEvent);
@@ -35,10 +35,10 @@ router.post('/add', optionalAuth, uploadEventRegFiles, registerForEvent);
 // Status update (Admin Only)
 router.patch('/:id/status', adminOnly, updateEventRegistrationStatus);
 
-// Single record operations (Admin Only)
+// Single record operations (Admin Only for destructive edits)
 router
   .route('/:id')
-  .get(adminOnly, getEventRegistrationById)
+  .get(optionalAuth, getEventRegistrationById)
   .put(adminOnly, updateEventRegistrationStatus)
   .patch(adminOnly, updateEventRegistrationStatus)
   .delete(adminOnly, deleteEventRegistration);

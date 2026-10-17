@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import API from "../../api/axiosInstance";
 import DashBoardHome from "../../Componenets/DashBoardHome/DashBoardHome";
 import DashBoardTrends from "../../Componenets/DashBoardTrends/DashBoardTrends";
 import DashBoardSec from "../../Componenets/DashBoardSec/DashBoardSec";
 import DashboardHistory from "../../Componenets/DashboardHistory/DashboardHistory";
-
-const API_BASE_URL = "http://localhost:5000/api";
 
 const DashBoard = () => {
   const [analyticsData, setAnalyticsData] = useState(null);
@@ -14,7 +12,7 @@ const DashBoard = () => {
   const fetchDashboardStats = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(`${API_BASE_URL}/dashboard/stats`);
+      const res = await API.get("/dashboard/stats");
       if (res.data && res.data.success) {
         setAnalyticsData(res.data);
       }

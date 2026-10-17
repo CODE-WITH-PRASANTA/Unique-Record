@@ -7,14 +7,14 @@ const subscribeNewsletter = async (req, res) => {
   try {
     const { email } = req.body;
 
-    if (!email || !email.trim()) {
+    const trimmedEmail = email.trim().toLowerCase();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(trimmedEmail)) {
       return res.status(400).json({
         success: false,
         message: 'Please provide a valid email address',
       });
     }
-
-    const trimmedEmail = email.trim().toLowerCase();
 
     // Check if already subscribed
     const existing = await Newsletter.findOne({ email: trimmedEmail });

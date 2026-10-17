@@ -10,7 +10,7 @@ const AchiverDetails = () => {
 <div className="Achiver-Details-section">
       <div className="Achiver-Details-content">
         <h1>
-        Achiver's Details
+        URU Holder
         </h1>
         <p>Unique Records & Unique Activity</p>
       </div>

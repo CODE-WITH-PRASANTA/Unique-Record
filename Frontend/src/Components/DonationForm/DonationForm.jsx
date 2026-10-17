@@ -124,10 +124,17 @@ const DonateForm = () => {
         return;
       }
 
-      // Step 1: Create Order in backend
+      // Step 1: Create Order in backend with full donor metadata
       const orderEndpoint = `${API_URL}/donation/create-order`;
       const { data: orderData } = await axios.post(orderEndpoint, {
         amount: form.amount,
+        name: form.name,
+        email: form.email,
+        phone: form.phone,
+        certificate: form.certificate,
+        panNumber: form.panNumber,
+        address: form.address,
+        extra: form.extra,
       });
 
       if (!orderData || !orderData.order) {
@@ -150,8 +157,13 @@ const DonateForm = () => {
           contact: form.phone,
         },
         notes: {
+          donorName: form.name,
+          email: form.email,
+          phone: form.phone,
+          address: form.address,
           certificate: form.certificate,
           panNumber: form.panNumber || 'N/A',
+          extra: form.extra || '',
           purpose: 'Spiritual & Social Development Donation',
         },
         theme: {

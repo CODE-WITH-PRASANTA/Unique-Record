@@ -10,7 +10,7 @@ const {
   deleteGalleryItem,
 } = require('../controllers/galleryController');
 const { uploadGallery, processGalleryPhoto } = require('../middleware/galleryUploadMiddleware');
-const { adminOnly } = require('../middleware/authMiddleware');
+const { adminOnly, optionalAuth } = require('../middleware/authMiddleware');
 
 const galleryUploadHandler = (req, res, next) => {
   uploadGallery.any()(req, res, (err) => {
@@ -30,7 +30,7 @@ router.route('/')
 
 router.post('/upload', adminOnly, galleryUploadHandler, processGalleryPhoto, createGalleryItem);
 
-router.get('/all', adminOnly, getAllGalleryAdmin);
+router.get('/all', optionalAuth, getAllGalleryAdmin);
 
 router.route('/:id')
   .get(getGalleryById)

@@ -22,15 +22,23 @@ const FinallUru = () => {
   const [certModalOpen, setCertModalOpen] = useState(false);
   const [selectedRecordForCert, setSelectedRecordForCert] = useState(null);
 
-  // Fetch Paid URU applications from backend
+  // Fetch Paid URU applications from backend with automatic fallback
   const fetchPaidRecords = async () => {
     try {
       setLoading(true);
-      const res = await API.get('/uru/paid');
-      const list = res.data?.data || (Array.isArray(res.data) ? res.data : []);
+      let list = [];
+      try {
+        const res = await API.get('/uru/paid');
+        list = res.data?.data || (Array.isArray(res.data) ? res.data : []);
+      } catch (err1) {
+        console.warn('Fallback to /uru/final:', err1);
+        const res = await API.get('/uru/final');
+        list = res.data?.data || (Array.isArray(res.data) ? res.data : []);
+      }
       setRecords(list);
     } catch (error) {
       console.error('Error fetching paid URU records:', error);
+      setRecords([]);
     } finally {
       setLoading(false);
     }

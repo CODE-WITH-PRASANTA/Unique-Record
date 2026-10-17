@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import API from "../../api/axiosInstance";
+import API, { getImageUrl } from "../../api/axiosInstance";
 import { 
   FiSearch, 
   FiGrid, 
@@ -25,16 +25,36 @@ const BlogManage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [statusFilter, setStatusFilter] = useState("All"); // 'All', 'Published', 'Draft'
+  const [loading, setLoading] = useState(true);
 
-  // Fetch blogs from database (including Drafts and Published)
+  // Fetch blogs from database (including Drafts and Published) with automatic fallback
   const fetchBlogs = async () => {
+    setLoading(true);
     try {
       const res = await API.get("/blogs/all");
-      if (res.data && res.data.success) {
-        setBlogs(res.data.data || []);
+      if (res.data) {
+        const blogList =
+          res.data.data ||
+          res.data.blogs ||
+          (Array.isArray(res.data) ? res.data : []);
+        setBlogs(blogList);
       }
     } catch (err) {
-      console.error("Error fetching blogs from database:", err);
+      console.warn("Could not load from /blogs/all, trying fallback to /blogs:", err);
+      try {
+        const fallbackRes = await API.get("/blogs");
+        if (fallbackRes.data) {
+          const blogList =
+            fallbackRes.data.data ||
+            fallbackRes.data.blogs ||
+            (Array.isArray(fallbackRes.data) ? fallbackRes.data : []);
+          setBlogs(blogList);
+        }
+      } catch (fallbackErr) {
+        console.error("Error fetching blogs from database:", fallbackErr);
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -43,12 +63,11 @@ const BlogManage = () => {
     try {
       const res = await API.get("/categories");
       if (res.data && res.data.success) {
-        const catNames = res.data.data.map((c) => c.name);
-        setCategories(["All", ...catNames]);
+        const catNames = (res.data.data || []).map((c) => c.name);
+        setCategories((prev) => Array.from(new Set(["All", ...prev, ...catNames])));
       }
     } catch (err) {
-      console.warn("Could not load categories for filter:", err);
-      setCategories(["All", "Apartments", "Commercial", "Villas"]);
+      console.warn("Could not load categories from /categories:", err);
     }
   };
 
@@ -56,6 +75,16 @@ const BlogManage = () => {
     fetchBlogs();
     fetchCategories();
   }, []);
+
+  // Merge unique categories directly from loaded blogs so all categories appear as filter tabs
+  useEffect(() => {
+    if (blogs && blogs.length > 0) {
+      const blogCategories = blogs
+        .map((b) => b.category)
+        .filter((c) => c && typeof c === "string" && c.trim() !== "");
+      setCategories((prev) => Array.from(new Set([...prev, ...blogCategories])));
+    }
+  }, [blogs]);
 
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this blog?")) {
@@ -100,10 +129,25 @@ const BlogManage = () => {
   };
 
   const filteredBlogs = blogs.filter((blog) => {
-    const title = blog.title || "";
-    const matchesSearch = title.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCat = selectedCategory === "All" || blog.category === selectedCategory;
-    const matchesStatus = statusFilter === "All" || blog.status === statusFilter;
+    const title = (blog.title || "").toLowerCase();
+    const search = searchTerm.toLowerCase();
+    const matchesSearch =
+      !searchTerm ||
+      title.includes(search) ||
+      (blog.author || "").toLowerCase().includes(search) ||
+      (blog.shortDesc || "").toLowerCase().includes(search) ||
+      (blog.category || "").toLowerCase().includes(search);
+
+    const matchesCat =
+      selectedCategory === "All" ||
+      (blog.category &&
+        blog.category.trim().toLowerCase() === selectedCategory.trim().toLowerCase());
+
+    const matchesStatus =
+      statusFilter === "All" ||
+      (blog.status &&
+        blog.status.trim().toLowerCase() === statusFilter.trim().toLowerCase());
+
     return matchesSearch && matchesCat && matchesStatus;
   });
 
@@ -181,7 +225,12 @@ const BlogManage = () => {
       </div>
 
       {/* CONTENT AREA: GRID OR LIST VIEW */}
-      {filteredBlogs.length > 0 ? (
+      {loading ? (
+        <div style={{ textAlign: "center", padding: "60px 20px", color: "#64748b" }}>
+          <div style={{ fontSize: "28px", marginBottom: "12px" }}>⏳</div>
+          <p style={{ fontSize: "16px", fontWeight: 600 }}>Loading blogs from database...</p>
+        </div>
+      ) : filteredBlogs.length > 0 ? (
         viewMode === "grid" ? (
           /* ================= GRID VIEW ================= */
           <div className="blog-grid-view">
@@ -189,10 +238,7 @@ const BlogManage = () => {
               <div key={blog._id || blog.id} className="blog-grid-card">
                 <div className="blog-grid-img-wrap">
                   <img
-                    src={
-                      blog.image ||
-                      "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=600&q=80"
-                    }
+                    src={getImageUrl(blog.image)}
                     alt={blog.title}
                     className="blog-grid-img"
                     onError={(e) => {
@@ -283,10 +329,7 @@ const BlogManage = () => {
                     <tr key={blog._id || blog.id}>
                       <td>
                         <img
-                          src={
-                            blog.image ||
-                            "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=600&q=80"
-                          }
+                          src={getImageUrl(blog.image)}
                           alt=""
                           className="blog-list-thumb"
                           onError={(e) => {

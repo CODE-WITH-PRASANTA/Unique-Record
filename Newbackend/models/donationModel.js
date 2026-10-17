@@ -113,4 +113,13 @@ const donationSchema = new mongoose.Schema(
   }
 );
 
+// Indexes for high performance and duplicate payment prevention
+donationSchema.index(
+  { razorpayPaymentId: 1 },
+  { unique: true, partialFilterExpression: { razorpayPaymentId: { $type: 'string', $gt: '' } } }
+);
+donationSchema.index({ createdAt: -1 });
+donationSchema.index({ email: 1 });
+donationSchema.index({ paymentStatus: 1 });
+
 module.exports = mongoose.model('Donation', donationSchema);

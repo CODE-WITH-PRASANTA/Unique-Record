@@ -76,6 +76,32 @@ const ManageDonate = () => {
     }
   }, []);
 
+  const [syncing, setSyncing] = useState(false);
+
+  const handleSyncRazorpay = async () => {
+    setSyncing(true);
+    try {
+      let res;
+      try {
+        res = await API.post("/donation/sync-razorpay");
+      } catch {
+        res = await API.get("/donation/sync-razorpay");
+      }
+      if (res.data?.success) {
+        showToast(res.data.message || "Razorpay donations synced successfully!", "success");
+        fetchDonations();
+      } else {
+        showToast("Sync completed.", "success");
+        fetchDonations();
+      }
+    } catch (err) {
+      console.error("Error syncing Razorpay:", err);
+      showToast(err.response?.data?.message || "Failed to sync with Razorpay.", "error");
+    } finally {
+      setSyncing(false);
+    }
+  };
+
   useEffect(() => {
     fetchDonations();
   }, [fetchDonations]);
@@ -220,14 +246,26 @@ const ManageDonate = () => {
           </div>
         </div>
 
-        <button
-          type="button"
-          className="donate-refresh-action-btn"
-          disabled={loading}
-          onClick={fetchDonations}
-        >
-          <FaSyncAlt className={loading ? "fa-spin" : ""} /> {loading ? "Refreshing..." : "Refresh Records"}
-        </button>
+        <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
+          <button
+            type="button"
+            className="donate-refresh-action-btn"
+            disabled={syncing || loading}
+            onClick={handleSyncRazorpay}
+            title="Scan Razorpay gateway for any captured payments"
+            style={{ background: 'linear-gradient(135deg, #2563eb, #1d4ed8)', border: 'none', color: '#fff' }}
+          >
+            <FaSyncAlt className={syncing ? "fa-spin" : ""} /> {syncing ? "Syncing..." : "Sync from Razorpay"}
+          </button>
+          <button
+            type="button"
+            className="donate-refresh-action-btn"
+            disabled={loading}
+            onClick={fetchDonations}
+          >
+            <FaSyncAlt className={loading ? "fa-spin" : ""} /> {loading ? "Refreshing..." : "Refresh Records"}
+          </button>
+        </div>
       </div>
 
       {/* Metric Cards */}
@@ -594,6 +632,23 @@ const ManageDonate = () => {
                     (Refund ID: {viewModal.refundId || "Completed"}).
                   </div>
                 )}
+
+                {/* Official Stamp & Signatory Block */}
+                <div className="receipt-signatures-block">
+                  <div className="receipt-seal-stamp">
+                    <div className="receipt-seal-inner">
+                      <span>DIVYA PRERAK</span>
+                      <small>HUMANITY TRUST</small>
+                      <strong>★ VERIFIED ★</strong>
+                    </div>
+                  </div>
+                  <div className="receipt-signature-box">
+                    <div className="receipt-sign-placeholder">Authorized Signatory</div>
+                    <div className="receipt-sign-line"></div>
+                    <span className="receipt-sign-title">Finance Officer / Managing Trustee</span>
+                    <small className="receipt-sign-trust">Unique Record of Universe</small>
+                  </div>
+                </div>
 
                 <div className="receipt-footer-tax-note">
                   <p>

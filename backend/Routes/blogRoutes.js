@@ -14,6 +14,7 @@ const {
 
 // CRUD routes
 router.post("/create", upload.single("image"), createBlog);
+router.post("/", upload.single("image"), createBlog);
 router.get("/all", getAllBlogs);
 router.get("/published", getPublishedBlogs); // GET only published blogs
 router.get("/:id", getBlogById);

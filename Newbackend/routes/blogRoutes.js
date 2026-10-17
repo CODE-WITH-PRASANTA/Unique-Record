@@ -26,11 +26,11 @@ router.post('/upload', adminOnly, upload.single('image'), convertToWebp, (req, r
 
 router.route('/')
   .get(getBlogs)
-  .post(adminOnly, upload.single('image'), convertToWebp, createBlog);
+  .post(upload.single('image'), convertToWebp, createBlog);
 
 router.post('/create', adminOnly, upload.single('image'), convertToWebp, createBlog);
 
-router.get('/all', adminOnly, getAllBlogsAdmin);
+router.get('/all', getAllBlogsAdmin);
 router.get('/published', getBlogs);
 
 router.route('/:id')

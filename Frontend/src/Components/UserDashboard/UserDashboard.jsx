@@ -30,112 +30,112 @@ const LINK_FIELDS = [
 ];
 
 const UPLOADS = [
-  { kind: 'photos', label: 'Upload Photos (JPG/PNG)', limit: 'Max total 10MB', maxMB: 10, accept: 'image/png,image/jpeg,image/jpg,image/webp', required: false },
-  { kind: 'documents', label: 'Upload Documents (PDF)', limit: 'Total max 10MB', maxMB: 10, accept: 'application/pdf,.pdf', required: true }
+  { kind: 'photos', label: 'Upload Photos (JPG/PNG)', limit: 'Max total 10MB', maxMB: 10, accept: 'image/png,image/jpeg,image/jpg,image/webp', required: true },
+  { kind: 'documents', label: 'Upload Documents (PDF)', limit: 'Total max 10MB', maxMB: 10, accept: 'application/pdf,.pdf', required: false }
 ];
 
 export const RECORD_CATEGORIES = [
-  'Nature & Environment',
-  'Religion and Culture',
-  'Space & Technology',
-  'Art',
-  'Painting',
-  'Research',
-  'Education',
-  'Science & Technology',
-  'Literature',
-  'Math',
-  'Physics',
-  'Chemistry',
-  'Biology',
-  'Hindi',
-  'Sanskrit',
-  'Language',
-  'History & Archeology',
-  'Geography',
-  'Civics',
-  'Political Science',
-  'Economics',
-  'Psychology',
-  'Sociology',
-  'Social Work & Development',
   'Agriculture & Allied',
-  'Animal Welfare',
-  'Social Welfare',
-  'Entrepreneurship',
-  'Marketing and Research',
-  'Human Sciences & Behaviour',
-  'Humanity Research',
-  'Ved',
-  'Upnishad',
-  'Shastra & Puran',
-  'Spirituality',
-  'Yoga & Meditation',
-  'Religious Book',
-  'River Conservation',
-  'Forest Conservation',
-  'Water Conservation',
-  'Ocean Studies',
-  'Import & Export',
-  'Sports',
-  'Medical Service',
-  'Ayurved',
-  'Homeopathy',
-  'Unani Medicine',
+  'AI Technology',
+  'Aircrafting',
   'Allopathic',
+  'Animal Welfare',
+  'Architecture',
+  'Art',
+  'Astrology',
+  'Astronomy',
+  'Ayurved',
+  'Biology',
+  'Bird Science',
+  'Boating',
+  'Brain Memory Power',
+  'Bright & Brilliant Children',
+  'Chemistry',
+  'Civics',
+  'Communications Revolution',
   'Competition',
+  'Cosmic Energy Absorption',
+  'Cow Service',
   'Dance',
+  'Discover',
+  'Economics',
+  'Education',
+  'Electric Vehicle',
+  'Entomology',
+  'Entrepreneurship',
   'Fashion & Design',
   'Film & Entertainment',
-  'Singing and Playing',
-  'Mountaineer',
-  'Mountain Studies & Research',
-  'Indian Civilization Culture',
-  'Astronomy',
-  'Astrology',
-  'Cosmic Energy Absorption',
-  'Brain Memory Power',
-  'Marathon',
-  'Martial Arts',
-  'Stunt',
-  'Special Talents',
-  'Talented Child',
-  'Inspiring People',
-  'Tour & Travells',
-  'Online/Virtual',
-  'Bird Science',
-  'Entomology',
-  'Journalism',
-  'Mass Communications',
-  'Communications Revolution',
-  'Geology',
   'Food and Drink',
-  'Discover',
-  'Architecture',
-  'Sculpture Art',
-  'Website Development & Coding',
-  'Innovation',
-  'Bright & Brilliant Children',
-  'AI Technology',
-  'Science & Development',
+  'Forest Conservation',
+  'Geography',
+  'Geology',
+  'Hindi',
+  'History & Archeology',
+  'Homeopathy',
+  'Human Sciences & Behaviour',
+  'Humanity Research',
+  'Import & Export',
+  'Indian Civilization Culture',
   'Information Technology',
+  'Innovation',
+  'Inspiring People',
   'International Peace',
-  "World's Longest",
-  "World's Tallest",
-  "World's Smallest",
+  'Journalism',
+  'Language',
+  'Literature',
+  'Marathon',
+  'Marketing and Research',
+  'Martial Arts',
+  'Mass Communications',
+  'Math',
+  'Medical Service',
+  'Mountain Studies & Research',
+  'Mountaineer',
+  'Nature & Environment',
+  'Ocean Studies',
+  'Online/Virtual',
+  'Painting',
+  'Physics',
+  'Political Science',
+  'Power of Yagya and Chanting',
+  'Prodigious Talents',
+  'Psychology',
+  'Religion and Culture',
+  'Religious Book',
+  'Research',
+  'River Conservation',
+  'Sanskrit',
+  'Science & Development',
+  'Science & Technology',
+  'Sculpture Art',
+  'Seven Chakras Activity of the Body',
+  'Shastra & Puran',
+  'Singing and Playing',
+  'Social Welfare',
+  'Social Work & Development',
+  'Sociology',
+  'Space & Technology',
+  'Special Talents',
+  'Spirituality',
+  'Sports',
+  'Stunt',
+  'Talented Child',
+  'Tour & Travells',
+  'Unani Medicine',
+  'Upnishad',
+  'Ved',
+  'Water Conservation',
+  'Website Development & Coding',
+  "Women's Empowerment & Leadership",
   "World's Fattest",
-  "World's Thinnest",
-  "World's Youngest",
+  "World's Longest",
   "World's Oldest",
   "World's Slowest",
-  'Power of Yagya and Chanting',
-  'Cow Service',
-  'Prodigious Talents',
-  'Electric Vehicle',
-  'Aircrafting',
-  'Boating',
-  "Women's Empowerment & Leadership",
-  'Seven Chakras Activity of the Body',
+  "World's Smallest",
+  "World's Tallest",
+  "World's Thinnest",
+  "World's Youngest",
+  'Yoga & Meditation',
   'Other'
 ];
 
@@ -334,6 +334,8 @@ const UserDashboard = () => {
     LINK_FIELDS.reduce((acc, f) => ({ ...acc, [f.name]: [''] }), {})
   );
   const [files, setFiles] = useState({ photos: [], videos: [], documents: [] });
+  const [showTermsModal, setShowTermsModal] = useState(false);
+  const [showInstructionsModal, setShowInstructionsModal] = useState(false);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -434,35 +436,35 @@ const UserDashboard = () => {
 
     // Validation for Step 4 (Evidence & Media)
     if (currentStep === 4) {
-      if (!files.documents || files.documents.length === 0) {
+      if (!files.photos || files.photos.length === 0) {
         Swal.fire({
           icon: 'warning',
-          title: 'Document Required',
-          text: 'Please upload at least one valid supporting document (PDF, Max 10MB) before proceeding to the next step.',
+          title: 'Photo Required',
+          text: 'Please upload at least one valid supporting photo (JPG, PNG, or WEBP, Max 10MB) before proceeding to the next step.',
           confirmButtonColor: '#2563eb'
         });
         return;
       }
 
       const maxBytes = 10 * 1024 * 1024;
-      const totalDocSize = files.documents.reduce((sum, f) => sum + f.size, 0);
-      if (totalDocSize > maxBytes) {
+      const totalPhotoSize = files.photos.reduce((sum, f) => sum + f.size, 0);
+      if (totalPhotoSize > maxBytes) {
         Swal.fire({
           icon: 'error',
-          title: 'Document Size Limit Exceeded',
-          text: `Total uploaded documents size is ${(totalDocSize / (1024 * 1024)).toFixed(2)} MB. Maximum allowed is 10 MB. Please remove some files.`,
+          title: 'Photo Size Limit Exceeded',
+          text: `Total uploaded photos size is ${(totalPhotoSize / (1024 * 1024)).toFixed(2)} MB. Maximum allowed is 10 MB. Please remove some files.`,
           confirmButtonColor: '#2563eb'
         });
         return;
       }
 
-      if (files.photos && files.photos.length > 0) {
-        const totalPhotoSize = files.photos.reduce((sum, f) => sum + f.size, 0);
-        if (totalPhotoSize > maxBytes) {
+      if (files.documents && files.documents.length > 0) {
+        const totalDocSize = files.documents.reduce((sum, f) => sum + f.size, 0);
+        if (totalDocSize > maxBytes) {
           Swal.fire({
             icon: 'error',
-            title: 'Photo Size Limit Exceeded',
-            text: `Total uploaded photos size is ${(totalPhotoSize / (1024 * 1024)).toFixed(2)} MB. Maximum allowed is 10 MB. Please remove some files.`,
+            title: 'Document Size Limit Exceeded',
+            text: `Total uploaded documents size is ${(totalDocSize / (1024 * 1024)).toFixed(2)} MB. Maximum allowed is 10 MB. Please remove some files.`,
             confirmButtonColor: '#2563eb'
           });
           return;
@@ -494,25 +496,37 @@ const UserDashboard = () => {
       });
     }
 
-    // Ensure valid document is attached before submitting
-    if (!files.documents || files.documents.length === 0) {
+    // Ensure valid photo is attached before submitting
+    if (!files.photos || files.photos.length === 0) {
       return Swal.fire({
         icon: 'warning',
-        title: 'Document Required',
-        text: 'Please upload at least one valid supporting document (PDF, Max 10MB) before submitting your application.',
+        title: 'Photo Required',
+        text: 'Please upload at least one valid supporting photo (JPG, PNG, or WEBP, Max 10MB) before submitting your application.',
         confirmButtonColor: '#2563eb'
       });
     }
 
     const maxBytes = 10 * 1024 * 1024;
-    const totalDocSize = files.documents.reduce((sum, f) => sum + f.size, 0);
-    if (totalDocSize > maxBytes) {
+    const totalPhotoSize = files.photos.reduce((sum, f) => sum + f.size, 0);
+    if (totalPhotoSize > maxBytes) {
       return Swal.fire({
         icon: 'error',
-        title: 'Document Size Limit Exceeded',
-        text: 'Total uploaded documents size exceeds 10 MB. Please remove some files before saving.',
+        title: 'Photo Size Limit Exceeded',
+        text: 'Total uploaded photos size exceeds 10 MB. Please remove some files before saving.',
         confirmButtonColor: '#2563eb'
       });
+    }
+
+    if (files.documents && files.documents.length > 0) {
+      const totalDocSize = files.documents.reduce((sum, f) => sum + f.size, 0);
+      if (totalDocSize > maxBytes) {
+        return Swal.fire({
+          icon: 'error',
+          title: 'Document Size Limit Exceeded',
+          text: 'Total uploaded documents size exceeds 10 MB. Please remove some files before saving.',
+          confirmButtonColor: '#2563eb'
+        });
+      }
     }
 
     try {
@@ -616,10 +630,6 @@ const UserDashboard = () => {
       {/* ================= Premium Sidebar ================= */}
       <aside className="udu-sidebar-section">
         <div className="udu-sidebar-inner">
-          <div className="udu-sidebar-top">
-            <Logo />
-          </div>
-
           <div className="udu-sidebar-hero">
             <ClipboardIllustration />
           </div>
@@ -631,6 +641,16 @@ const UserDashboard = () => {
               Unique Records Universe (URU) empowers extraordinary, inspiring human achievements and innovations worldwide through digital archival preservation and global recognition.
             </p>
           </div>
+
+          <button
+            type="button"
+            className="udu-sidebar-instruction-btn"
+            onClick={() => setShowInstructionsModal(true)}
+          >
+            <span className="udu-sib-icon">📋</span>
+            <span className="udu-sib-label">Important Instructions</span>
+            <span className="udu-sib-badge">View</span>
+          </button>
 
           <div className="udu-sidebar-progress">
             <div className="udu-sp-row">
@@ -902,17 +922,118 @@ const UserDashboard = () => {
                   </div>
 
                   <div className="udu-terms-checkbox-wrap">
-                    <label>
+                    <label htmlFor="acceptTerms">
                       <input
+                        id="acceptTerms"
                         type="checkbox"
                         name="acceptTerms"
                         checked={formData.acceptTerms}
                         onChange={handleChange}
                         required
                       />
-                      <span>I accept the Terms and Conditions and verify all data provided is accurate.</span>
+                      <span>
+                        I have read and accept the{' '}
+                        <button
+                          type="button"
+                          className="udu-terms-link-btn"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setShowTermsModal(true);
+                          }}
+                        >
+                          Terms and Conditions
+                        </button>{' '}
+                        and verify all data provided is accurate.
+                      </span>
                     </label>
                   </div>
+
+                  {/* Terms & Conditions Modal */}
+                  {showTermsModal && (
+                    <div className="udu-modal-overlay" onClick={() => setShowTermsModal(false)}>
+                      <div className="udu-modal-card" onClick={(e) => e.stopPropagation()}>
+                        <div className="udu-modal-header">
+                          <div className="udu-modal-title-wrap">
+                            <span className="udu-modal-badge">📜 Official Policy</span>
+                            <h3>Unique Records of Universe (URU)</h3>
+                            <p>Terms and Conditions &amp; Applicant Undertaking</p>
+                          </div>
+                          <button
+                            type="button"
+                            className="udu-modal-close-btn"
+                            onClick={() => setShowTermsModal(false)}
+                            aria-label="Close Terms"
+                          >
+                            ×
+                          </button>
+                        </div>
+
+                        <div className="udu-modal-body">
+                          <div className="udu-modal-intro">
+                            <p>
+                              By submitting this application to <strong>Unique Records of Universe (URU)</strong> (operated under <em>DIVYA PRERAK KAHANIYAN HUMANITY RESEARCH CENTRE TRUST</em>), you solemnly agree and adhere to the following Terms, Conditions, and Guidelines:
+                            </p>
+                          </div>
+
+                          <div className="udu-modal-section">
+                            <h4>1. Authenticity &amp; Declaration of Truth</h4>
+                            <p>All information, personal particulars, attempt descriptions, timelines, and venues provided in this application are strictly authentic, truthful, and accurate. Any intentional exaggeration or fabricated information will lead to immediate disqualification.</p>
+                          </div>
+
+                          <div className="udu-modal-section">
+                            <h4>2. Evidentiary Proof &amp; Media Rights</h4>
+                            <p>All uploaded photographs, video links, certificates, and supporting documents must be original. You warrant that you hold full rights, permissions, or ownership of the submitted materials, and that they do not infringe upon any third-party copyright, privacy, or intellectual property rights.</p>
+                          </div>
+
+                          <div className="udu-modal-section">
+                            <h4>3. Scrutiny, Verification &amp; Adjudication</h4>
+                            <p>Submission of an application does not guarantee record confirmation or certification. URU's editorial and verification board reserves the full and unfettered right to assess, verify with experts/witnesses, and approve or reject any record claim at its sole discretion.</p>
+                          </div>
+
+                          <div className="udu-modal-section">
+                            <h4>4. Worldwide Publication &amp; Digital Archival</h4>
+                            <p>Upon approval, you grant URU the worldwide, non-exclusive, perpetual right to digitally archive, display, publish, and promote the record title, your name, photograph, and achievement narrative across the official website, record database, certificates, and promotional publications.</p>
+                          </div>
+
+                          <div className="udu-modal-section">
+                            <h4>5. Safety &amp; Risk Indemnity</h4>
+                            <p>Any record, activity, or stunt was attempted entirely of the applicant's own free will, judgment, and risk. URU and its trustees or associates assume no liability or responsibility for any injury, accident, loss, or legal complication arising during or following the attempt.</p>
+                          </div>
+
+                          <div className="udu-modal-section">
+                            <h4>6. Revocation Policy</h4>
+                            <p>If at any time post-approval a record is discovered to have been achieved through fraud, forged documents, unethical practices, or copyright infringement, URU reserves the right to immediately revoke the record and nullify any issued certificates.</p>
+                          </div>
+
+                          <div className="udu-modal-section">
+                            <h4>7. Governing Law &amp; Jurisdiction</h4>
+                            <p>All disputes, claims, and inquiries shall be subject to the exclusive jurisdiction of the competent courts of India and governed by the laws of India.</p>
+                          </div>
+                        </div>
+
+                        <div className="udu-modal-footer">
+                          <button
+                            type="button"
+                            className="udu-modal-secondary-btn"
+                            onClick={() => setShowTermsModal(false)}
+                          >
+                            Close
+                          </button>
+                          <button
+                            type="button"
+                            className="udu-modal-accept-btn"
+                            onClick={() => {
+                              setFormData((prev) => ({ ...prev, acceptTerms: true }));
+                              setShowTermsModal(false);
+                            }}
+                          >
+                            ✓ I Read &amp; Accept Terms
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -937,6 +1058,174 @@ const UserDashboard = () => {
           </form>
         </div>
       </main>
+      {/* ================= Important Instructions Modal ================= */}
+      {showInstructionsModal && (
+        <div className="udu-modal-overlay" onClick={() => setShowInstructionsModal(false)}>
+          <div className="udu-modal-card udu-instructions-modal-card" onClick={(e) => e.stopPropagation()}>
+            <div className="udu-modal-header">
+              <div className="udu-modal-title-wrap">
+                <span className="udu-modal-badge">📋 Official Guidelines</span>
+                <h3>Important Instructions for Filling Out the Online Application Form</h3>
+                <p>Please review these detailed instructions and guidelines before submitting</p>
+              </div>
+              <button
+                type="button"
+                className="udu-modal-close-btn"
+                onClick={() => setShowInstructionsModal(false)}
+                aria-label="Close Instructions"
+              >
+                ×
+              </button>
+            </div>
+
+            <div className="udu-modal-body udu-instructions-modal-body">
+              <div className="udu-instructions-list">
+                <div className="udu-inst-item">
+                  <span className="udu-inst-num">1</span>
+                  <div className="udu-inst-content">
+                    <strong>Start Your Application:</strong>
+                    <p>Log in to the website using the login ID created during account registration. Click on the “Apply for URU Holder” tab to open the application form.</p>
+                  </div>
+                </div>
+
+                <div className="udu-inst-item">
+                  <span className="udu-inst-num">2</span>
+                  <div className="udu-inst-content">
+                    <strong>Enter Personal Information:</strong>
+                    <p>Accurately provide your full name, email address, residential address, and contact number.</p>
+                  </div>
+                </div>
+
+                <div className="udu-inst-item">
+                  <span className="udu-inst-num">3</span>
+                  <div className="udu-inst-content">
+                    <strong>Provide Record Details:</strong>
+                    <p>Enter a brief description of your unique achievement, activity, or record and upload the relevant supporting documents.</p>
+                  </div>
+                </div>
+
+                <div className="udu-inst-item">
+                  <span className="udu-inst-num">4</span>
+                  <div className="udu-inst-content">
+                    <strong>Complete All Sections:</strong>
+                    <p>Carefully complete all five steps of the application form. Ensure that no mandatory field is left blank and provide accurate information after due consideration. Once the final form has been submitted, you will not be able to edit or update it.</p>
+                  </div>
+                </div>
+
+                <div className="udu-inst-item">
+                  <span className="udu-inst-num">5</span>
+                  <div className="udu-inst-content">
+                    <strong>Read the Terms and Conditions:</strong>
+                    <p>Before submitting the form, carefully read and accept the terms and conditions.</p>
+                  </div>
+                </div>
+
+                <div className="udu-inst-item">
+                  <span className="udu-inst-num">6</span>
+                  <div className="udu-inst-content">
+                    <strong>Review Your Application:</strong>
+                    <p>Use the “Previous” button to review the information you have entered and make any necessary corrections before final submission.</p>
+                  </div>
+                </div>
+
+                <div className="udu-inst-item">
+                  <span className="udu-inst-num">7</span>
+                  <div className="udu-inst-content">
+                    <strong>Submit the Application:</strong>
+                    <p>After verifying all the information, click the “Submit” button. You will receive a confirmation email after successful submission.</p>
+                  </div>
+                </div>
+
+                <div className="udu-inst-item">
+                  <span className="udu-inst-num">8</span>
+                  <div className="udu-inst-content">
+                    <strong>Contact for Assistance:</strong>
+                    <p>
+                      If you encounter any problems, contact our administrative team at{' '}
+                      <a href="mailto:uruonline2025@gmail.com" className="udu-inst-link">uruonline2025@gmail.com</a> or call{' '}
+                      <a href="tel:+919472351693" className="udu-inst-link">+91 9472351693</a>.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="udu-inst-item">
+                  <span className="udu-inst-num">9</span>
+                  <div className="udu-inst-content">
+                    <strong>Verification of Application:</strong>
+                    <p>After successful submission, the URU Jury Team will thoroughly examine the unique record or unique activity described in your application. Recognition will be granted only if the application meets the required criteria and is approved; otherwise, your application may be rejected.</p>
+                  </div>
+                </div>
+
+                <div className="udu-inst-item">
+                  <span className="udu-inst-num">10</span>
+                  <div className="udu-inst-content">
+                    <strong>Application Status and Publication:</strong>
+                    <p>If your application is verified by the Scrutiny Committee and the Jury Committee, you can check its updated status by opening the “Application Status” tab. After payment of the prescribed fee mentioned there, your unique record or unique activity, along with the details and information provided by you, will be officially published on the URU worldwide website, and a digital certificate will also be issued.</p>
+                  </div>
+                </div>
+
+                <div className="udu-inst-item udu-inst-fee-item">
+                  <span className="udu-inst-num">11</span>
+                  <div className="udu-inst-content">
+                    <strong>Application and Certification Fees:</strong>
+                    <p>
+                      The application and certification fee for URU is <span className="udu-fee-old">₹9,639</span>. However, as per the committee's decision, until further notice, applicants whose applications are approved will be required to pay only <span className="udu-fee-new">₹3,693</span>. Concessions on this revised fee may also be granted to genuinely deserving and meritorious applicants from economically weaker backgrounds who have accomplished something unique.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="udu-inst-item">
+                  <span className="udu-inst-num">12</span>
+                  <div className="udu-inst-content">
+                    <strong>Updating Published Records:</strong>
+                    <p>
+                      If you wish to add any additional information to your successfully published unique record or activity in the future, you may do so. To request an update, send an email from your previously registered email address to the official URU email address:{' '}
+                      <a href="mailto:uruonline2025@gmail.com" className="udu-inst-link">uruonline2025@gmail.com</a>.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="udu-inst-item">
+                  <span className="udu-inst-num">13</span>
+                  <div className="udu-inst-content">
+                    <strong>Reclassification from Unique Record to Unique Activity:</strong>
+                    <p>If you apply under the Unique Record category but the Jury Committee determines that your application is more suitable for the Unique Activity category, your application will be registered under the Unique Activity category.</p>
+                  </div>
+                </div>
+
+                <div className="udu-inst-item">
+                  <span className="udu-inst-num">14</span>
+                  <div className="udu-inst-content">
+                    <strong>Reclassification from Unique Activity to Unique Record:</strong>
+                    <p>If you apply under the Unique Activity category but the Jury Committee determines that your application is more suitable for the Unique Record category, your application will be registered under the Unique Record category.</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Note Alert Card */}
+              <div className="udu-inst-note-box">
+                <div className="udu-inst-note-title">
+                  <span>⚠️</span>
+                  <h4>Note</h4>
+                </div>
+                <p>
+                  All information provided must be accurate and truthful. Applications containing incomplete or incorrect information may be rejected. Even if your unique record or unique activity has already been published on the URU website, if the information is subsequently found to be false, the published details may be removed from the website. In such cases, you will be informed separately and given an opportunity to present your explanation.
+                </p>
+              </div>
+            </div>
+
+            <div className="udu-modal-footer">
+              <button
+                type="button"
+                className="udu-modal-accept-btn"
+                onClick={() => setShowInstructionsModal(false)}
+              >
+                ✓ Understood, Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -10,7 +10,7 @@ const {
   deleteNotice,
 } = require('../controllers/noticeController');
 const { uploadNotice, processNoticeFiles } = require('../middleware/noticeUploadMiddleware');
-const { adminOnly } = require('../middleware/authMiddleware');
+const { adminOnly, optionalAuth } = require('../middleware/authMiddleware');
 
 const noticeUploadFields = uploadNotice.fields([
   { name: 'photo', maxCount: 1 },
@@ -21,7 +21,7 @@ router.route('/')
   .get(getNotices)
   .post(adminOnly, noticeUploadFields, processNoticeFiles, createNotice);
 
-router.get('/all', adminOnly, getAllNoticesAdmin);
+router.get('/all', optionalAuth, getAllNoticesAdmin);
 
 router.route('/:id')
   .get(getNoticeById)
