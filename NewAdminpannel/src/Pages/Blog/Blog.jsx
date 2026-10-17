@@ -451,7 +451,7 @@ const Blog = () => {
 
               <div style={{ marginTop: "6px", borderRadius: "10px", overflow: "hidden", border: "1px solid #cbd5e1" }}>
                 <Editor
-                  apiKey="jeq7g2k84sqpi9364o8x9ptqf09aoesaq8jxmp49dl4sh57z"
+                  apiKey="38wljwg2resc6xba8ypjqp4duobboibboshf3czbuyv5iulv"
                   value={formData.content}
                   onEditorChange={(content) =>
                     setFormData((prev) => ({

@@ -30,7 +30,7 @@ import {
 import "./Event.css";
 
 const STORAGE_KEY = "admin_events_data";
-const TINYMCE_API_KEY = "your-tinymce-api-key-here"; // Replace with your actual TinyMCE API key
+const TINYMCE_API_KEY = "38wljwg2resc6xba8ypjqp4duobboibboshf3czbuyv5iulv";
 
 const emptyForm = {
   eventName: "",
@@ -551,7 +551,7 @@ const Event = () => {
 
             <div className="event-page__editor-wrapper">
               <Editor
-                apiKey="jeq7g2k84sqpi9364o8x9ptqf09aoesaq8jxmp49dl4sh57z"
+                apiKey="38wljwg2resc6xba8ypjqp4duobboibboshf3czbuyv5iulv"
                 value={formData.description}
                 onEditorChange={(content) =>
                   setFormData((previous) => ({
