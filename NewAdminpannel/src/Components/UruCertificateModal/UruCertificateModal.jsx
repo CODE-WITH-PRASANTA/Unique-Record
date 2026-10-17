@@ -4,7 +4,6 @@ import {
   X,
   Download,
   UploadCloud,
-  Printer,
   Sparkles,
   Edit3,
   CheckCircle,
@@ -220,11 +219,6 @@ const UruCertificateModal = ({ isOpen, onClose, record, onCertificateUploaded })
       alert('Failed to generate and upload certificate.');
       setSaving(false);
     }
-  };
-
-  // Direct Print
-  const handlePrint = () => {
-    window.print();
   };
 
   return (
@@ -451,15 +445,6 @@ const UruCertificateModal = ({ isOpen, onClose, record, onCertificateUploaded })
           </div>
 
           <div className="uru-cert-footer-actions">
-            <button
-              type="button"
-              className="uru-cert-btn-secondary"
-              onClick={handlePrint}
-              title="Print Certificate"
-            >
-              <Printer size={15} /> Print
-            </button>
-
             <button
               type="button"
               className="uru-cert-btn-download"

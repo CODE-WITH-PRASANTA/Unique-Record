@@ -109,15 +109,15 @@ const UruCertificate = forwardRef(({ data = {}, scale = 1, id = "uru-printable-c
             <div className="uru-cert-qr-card">
               <QRCodeCanvas
                 value={qrUrl || 'https://uniquerecordsofuniverse.com'}
-                size={230}
+                size={260}
                 level="H"
                 includeMargin={false}
                 imageSettings={{
                   src: logoImg,
                   x: undefined,
                   y: undefined,
-                  height: 38,
-                  width: 38,
+                  height: 32,
+                  width: 110,
                   excavate: true,
                 }}
               />

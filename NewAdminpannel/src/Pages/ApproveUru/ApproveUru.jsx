@@ -112,42 +112,6 @@ const ApproveUru = () => {
     }
   };
 
-  // Download Excel Action
-  const handleDownloadExcel = () => {
-    if (records.length === 0) {
-      alert('No data available to export.');
-      return;
-    }
-
-    const headers = [
-      'Serial No.',
-      'Application Number',
-      'Application Date',
-      'Name',
-      'Updated Price',
-      'Transaction ID',
-      'Payment Status',
-    ];
-    const rows = filteredRecords.map((item, index) => [
-      index + 1,
-      item.appNo || item.applicationNumber,
-      item.date || 'N/A',
-      `"${item.name || item.applicantName || ''}"`,
-      item.price || 0,
-      item.transactionId || 'N/A',
-      item.paymentStatus || 'Pending',
-    ]);
-
-    const csvContent = [headers.join(','), ...rows.map((row) => row.join(','))].join('\n');
-    const blob = new Blob([csvContent], { type: 'application/vnd.ms-excel;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.setAttribute('href', url);
-    link.setAttribute('download', `Approve_URU_Report_${new Date().toISOString().slice(0, 10)}.xls`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
 
   // Send Reminder Action
   const handleSendReminder = async () => {
@@ -172,23 +136,6 @@ const ApproveUru = () => {
             </p>
           </div>
           <div className="app-uru-header-actions">
-            <button className="app-uru-btn-excel" onClick={handleDownloadExcel}>
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="7 10 12 15 17 10"></polyline>
-                <line x1="12" y1="15" x2="12" y2="3"></line>
-              </svg>
-              <span>Download Excel</span>
-            </button>
             <button className="app-uru-btn-reminder" onClick={handleSendReminder}>
               <svg
                 width="16"

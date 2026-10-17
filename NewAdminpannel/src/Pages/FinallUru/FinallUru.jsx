@@ -5,7 +5,6 @@ import {
   ExternalLink,
   Trash2,
   Globe,
-  FileSpreadsheet,
   Search,
   Eye
 } from 'lucide-react';
@@ -137,44 +136,6 @@ const FinallUru = () => {
     }
   };
 
-  // Excel Download Action
-  const handleDownloadExcel = () => {
-    if (records.length === 0) {
-      alert('No data available to export.');
-      return;
-    }
-
-    const headers = [
-      'Sl No.',
-      'Application No.',
-      'Application Date',
-      'Applicant Name',
-      'Payment Status',
-      'Transaction ID',
-      'Certificate URL',
-      'Published Status',
-    ];
-    const rows = filteredRecords.map((item, index) => [
-      index + 1,
-      item.appNo || item.applicationNumber,
-      item.date || 'N/A',
-      `"${item.name || item.applicantName || ''}"`,
-      item.paymentStatus || 'Success',
-      item.transactionId || 'N/A',
-      item.certificateUrl || 'No Certificate',
-      item.published || item.isPublished ? 'Published' : 'Draft',
-    ]);
-
-    const csvContent = [headers.join(','), ...rows.map((row) => row.join(','))].join('\n');
-    const blob = new Blob([csvContent], { type: 'application/vnd.ms-excel;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.setAttribute('href', url);
-    link.setAttribute('download', `Final_Paid_URU_Records_${new Date().toISOString().slice(0, 10)}.xls`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
 
   return (
     <div className="fin-uru-container">
@@ -188,10 +149,6 @@ const FinallUru = () => {
               Confirmed applications with verified payment. Generate and publish dynamic certificates with official QR verification.
             </p>
           </div>
-          <button className="fin-uru-btn-excel" onClick={handleDownloadExcel}>
-            <FileSpreadsheet size={18} />
-            <span>Download Excel Sheet</span>
-          </button>
         </header>
 
         {/* Search Toolbar */}
